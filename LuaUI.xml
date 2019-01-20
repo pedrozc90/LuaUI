@@ -1,0 +1,88 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- Engine -->
+    <Script file="core\init.lua"/>
+
+    <!-- Config -->
+    <Script file="config\config.lua"/>
+    <Script file="config\medias.lua"/>
+
+    <!-- Core -->
+    <Script file="core\api.lua"/>
+    <Script file="core\functions.lua"/>
+    <Script file="core\colors.lua"/>
+    <Script file="core\commands.lua"/>
+    <Script file="core\development.lua"/>
+    <Script file="core\install.lua"/>
+
+    <!-- Modules -->
+
+        <!-- Panels -->
+        <Script file="modules\panels\panels.lua"/>
+
+        <!-- Inventory -->
+        <Script file="modules\inventory\bags.lua"/>
+
+        <!-- Action Bars -->
+        <Script file="modules\actionbars\core.lua"/>
+        <Script file="modules\actionbars\bar1.lua"/>
+        <Script file="modules\actionbars\bar2.lua"/>
+        <Script file="modules\actionbars\bar3.lua"/>
+        <Script file="modules\actionbars\bar4.lua"/>
+        <Script file="modules\actionbars\bar5.lua"/>
+        <Script file="modules\actionbars\petbar.lua"/>
+        <Script file="modules\actionbars\stancebar.lua"/>
+        <Script file="modules\actionbars\buttons.lua"/>
+        <Script file="modules\actionbars\extra.lua"/>
+
+        <!-- Misc. -->
+        <Script file="modules\misc\threat.lua"/>
+        <Script file="modules\misc\experience.lua"/>
+        <Script file="modules\misc\reputation.lua"/>
+
+        <!-- Auras -->
+        <Script file="modules\auras\auras.lua"/>
+
+        <!-- Maps -->
+        <Script file="modules\maps\maps.lua"/>
+
+        <!-- Data Text -->
+        <Script file="modules\datatexts\core.lua"/>
+
+        <!-- ChatFrames -->
+        <Script file="modules\chatframes\core.lua"/>
+
+        <!-- UnitFrames -->
+        <Script file="modules\unitframes\core.lua"/>
+        <Script file="modules\unitframes\tags.lua"/>
+
+        <Script file="modules\unitframes\classes\deathknight.lua"/>
+        <Script file="modules\unitframes\classes\demonhunter.lua"/>
+        <Script file="modules\unitframes\classes\druid.lua"/>
+        <Script file="modules\unitframes\classes\hunter.lua"/>
+        <Script file="modules\unitframes\classes\mage.lua"/>
+        <Script file="modules\unitframes\classes\monk.lua"/>
+        <Script file="modules\unitframes\classes\paladin.lua"/>
+        <Script file="modules\unitframes\classes\priest.lua"/>
+        <Script file="modules\unitframes\classes\rogue.lua"/>
+        <Script file="modules\unitframes\classes\shaman.lua"/>
+        <Script file="modules\unitframes\classes\warlock.lua"/>
+        <Script file="modules\unitframes\classes\warrior.lua"/>
+        
+        <Script file="modules\unitframes\units\player.lua"/>
+        <Script file="modules\unitframes\units\target.lua"/>
+        <Script file="modules\unitframes\units\tot.lua"/>
+        <Script file="modules\unitframes\units\pet.lua"/>
+        <Script file="modules\unitframes\units\focus.lua"/>
+        <Script file="modules\unitframes\units\focustarget.lua"/>
+        <Script file="modules\unitframes\units\arena.lua"/>
+        <Script file="modules\unitframes\units\boss.lua"/>
+        <Script file="modules\unitframes\units\nameplates.lua"/>
+
+        <Script file="modules\unitframes\groups\party.lua"/>
+        <Script file="modules\unitframes\groups\raid.lua"/>
+    
+    <!-- Plugins -->
+    <Include file="modules\plugins\init.xml"/>
+
+</Ui>
