@@ -1,31 +1,35 @@
 local T, C, L = Tukui:unpack()
 
 ----------------------------------------------------------------
--- Development (write anything here)
+-- Spell Announce
 ----------------------------------------------------------------
-local Enable = true
-if (not Enable) then return end
+if (not C.SpellAnnounce.Enable) then return end
 
-local Options = {
-    ["showSolo"] = true,
-    ["iconSize"] = 16,
+local chatType = "SAY"
+local playerName, playerGUID
+local format = string.format
+
+local COMBAT_EVENTS = {
+    SPELL_CAST_SUCCESS = true,
+    SPELL_CAST_FAILED = true,
+    SPELL_AURA_APPLIED = true,
+    SPELL_AURA_REMOVED = true,
+    SPELL_SUMMON = true,
+    SPELL_HEAL = true,
+    UNIT_DESTROYED = true,
+    UNIT_DIED = true,
 }
 
-local playerGUID = UnitGUID("player")
-
-local CombatLogHandler = function(self)
+local OnEvent = function(self, event)
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags,
     sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID,
     spellName, spellSchool, amount, overkill, school, resisted, blocked,
     absorbed, critical, glancing, crushing = CombatLogGetCurrentEventInfo()
 
-    T.Print(eventType, sourceName, destName, spellName .. "[" .. spellID .. "]")
-end
+    -- check if event has been set
+    if (not COMBAT_EVENTS[eventType]) then return end
 
-local OnEvent = function(self, event, ...)
-    if (event == "COMBAT_LOG_EVENT_UNFILTERED") then
-        CombatLogHandler(self)
-    end
+    -- code
 end
 
 local f = CreateFrame("Frame")

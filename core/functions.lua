@@ -14,6 +14,10 @@ T.Print = function(...)
     print("|cff00FF96LuaUI|r: ", ...)
 end
 
+T.Debug = function(...)
+    print("|cffB04F4FLuaUI WARNING: |r", ...)
+end
+
 -- returns a round number
 T.RoundValue = function(number, decimals)
 	if (not decimals) then decimals = 0 end

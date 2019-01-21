@@ -2,13 +2,9 @@
 
 ## Pendent:
 1. Add Plugins:
-    + Achievement ScreenShot
     + Filger
     + xCT
-    + Dispel Announce
     + Spell Announce
-    + Loss of Control
-    + Interrupt Announce
     + Raid Cooldowns
 2. Quest:
     + Move quest tracker anchor.
@@ -18,8 +14,9 @@
     + Setup channel by code.
 4. ActionBar3:
     + Define layout.
-    + Define anchor.
+    + Define anchor. (try to create a overlay frame)
     + Make visible on mouse over.
-5. Set tooltip anchor right above chatframe or above pet unit.
+5. Fix tooltip anchor. (above right chatframe or above pet unit).
+6. Check target stealable/dispelable buffs border.
 
 ## Bugs:
