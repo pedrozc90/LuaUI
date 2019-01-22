@@ -52,22 +52,25 @@ C["Raid"].TestAuraWatch = false                     -- force to show aurawatch d
 -- Plugins
 C["Dispels"] = {
     ["Enable"] = true,                              -- enables dispel announce plugin.
-        ["SpellLink"] = true,                        -- display spell link.
+    ["SpellLink"] = true,                           -- display spell link, else just the spell name.
 }
 
 C["Interrupts"] = {
     ["Enable"] = true,                              -- enables interrupt annouce plugins.
+    ["SpellLink"] = true,                           -- display spell link, else just the spell name.
 }
 
 C["ScreenShots"] = {
-    ["Enable"] = true,                              -- enables achievement/encounter screen shot plugin.
-    ["BossKills"] = true,
-    ["Achievements"] = true,
-    ["LevelUp"] = true,
+    ["Enable"] = true,                              -- enables achievement/encounter screenshot plugin.
+    ["BossKills"] = true,                           -- enables screenshots of successful raid encounters.
+    ["ChallendeMode"] = true,                       -- enables screenshots of successful challenge modes.
+    ["Achievements"] = true,                        -- enables screenshots of earned achievements.
+    ["LevelUp"] = true,                             -- enables screenshots when player level up.
+    ["Debug"] = true,                               -- enables print messages.
 }
 
 C["SpellAnnounce"] = {
-    ["Enable"] = false,                             -- enables spell announce plugins.
+    ["Enable"] = true,                             -- enables spell announce plugins.
 }
 ----------------------------------------------------------------
 -- Default Tukui Settings

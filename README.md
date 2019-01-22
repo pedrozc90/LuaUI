@@ -13,8 +13,11 @@ Release Date: 01/20/2019
 ## Features:
 
 + Supports **Tukui 18.21+**
-+ Achievement ScreenShots plugin.
-+ Interrupts announce plugin.
++ Embedded Plugins:
+    - Achievement/Raid Encounters/Level Up ScreenShots.
+    - Interrupt Announce
+    - Dispel Announce
+    - Spell Announce
 
 ## Install:
 

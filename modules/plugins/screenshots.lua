@@ -11,6 +11,7 @@ local tinsert = table.insert
 local DIFFICULTY_NORMAL_RAID = 14
 local DIFFICULTY_HEROIC_RAID = 15
 local DIFFICULTY_MYTHIC_RAID = 16
+
 ----------------------------------------------------------------
 -- Wait Function
     -- delay: amount of time to wait (in seconds) before the provided function is triggered.
@@ -50,9 +51,37 @@ local function Wait(delay, func, ...)
     return true
 end
 
--- Handling events
+----------------------------------------------------------------
+-- Plugin
+----------------------------------------------------------------
+local function Initialize(self)
+    if (C.ScreenShots.Debug) then
+        self:RegisterEvent("SCREENSHOT_FAILED")
+        self:RegisterEvent("SCREENSHOT_SUCCEEDED")
+    end
+
+    if (C.ScreenShots.Achievements) then
+        self:RegisterEvent("ACHIEVEMENT_EARNED")
+    end
+
+    if (C.ScreenShots.ChallengeMode) then
+        self:RegisterEvent("CHALLENGE_MODE_COMPLETED")
+    end
+
+    if (C.ScreenShots.BossKills) then
+        self:RegisterEvent("ENCOUNTER_START")
+        self:RegisterEvent("ENCOUNTER_END")
+    end
+
+    if (C.ScreenShots.LevelUp) then
+        self:RegisterEvent("PLAYER_LEVEL_UP")
+    end
+end
+
 local function OnEvent(self, event, ...)
-    if (event == "SCREENSHOT_FAILED") then
+    if (event == "PLAYER_LOGIN") then
+        Initialize(self)
+    elseif (event == "SCREENSHOT_FAILED") then
         T.Debug("ScreenShot Failed!")
     elseif (event == "SCREENSHOT_SUCCEEDED") then
         T.Print("ScreenShot Taken Successfully!")
@@ -75,7 +104,7 @@ local function OnEvent(self, event, ...)
         if (difficultyID == DIFFICULTY_NORMAL_RAID) or
             (difficultyID == DIFFICULTY_HEROIC_RAID) or
             (difficultyID == DIFFICULTY_MYTHIC_RAID) then
-            -- display info
+            -- display encounter info
             T.Print("Encounter Defeted:", encounterName)
             T.Print("Encounter Date:", date("%m/%d/%y %H:%M:%S"))
             T.Print("Encounter Time:", string.format("%d minutes %d seconds", math.ceil(self.EncounterElapsedTimer / 60), math.ceil(self.EncounterElapsedTimer % 60)))
@@ -83,21 +112,15 @@ local function OnEvent(self, event, ...)
             Wait(1, Screenshot)
         end
     elseif (event == "PLAYER_LEVEL_UP") then
-        -- take only one screen shot
+        -- wait for the golden glow ends
         Wait(2.7, Screenshot)
     else
-        -- take event screen shots
+        -- takes two screen shot to make sure
         Wait(1, Screenshot)
         Wait(1.5, Screenshot)
     end
 end
 
 local f = CreateFrame("Frame")
-f:RegisterEvent("SCREENSHOT_FAILED")
-f:RegisterEvent("SCREENSHOT_SUCCEEDED")
-f:RegisterEvent("PLAYER_LEVEL_UP")
-f:RegisterEvent("ACHIEVEMENT_EARNED")
-f:RegisterEvent("CHALLENGE_MODE_COMPLETED")
-f:RegisterEvent("ENCOUNTER_START")
-f:RegisterEvent("ENCOUNTER_END")
+f:RegisterEvent("PLAYER_LOGIN")
 f:SetScript("OnEvent", OnEvent)

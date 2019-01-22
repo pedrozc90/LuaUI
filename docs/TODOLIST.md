@@ -4,9 +4,8 @@
 1. Add Plugins:
     + Filger
     + xCT
-    + Spell Announce
     + Raid Cooldowns
-2. Quest:
+2. Quest Tracker:
     + Move quest tracker anchor.
     + Add a toggle button to hide quest tracker.
 3. ChatFrame:
@@ -18,5 +17,6 @@
     + Make visible on mouse over.
 5. Fix tooltip anchor. (above right chatframe or above pet unit).
 6. Check target stealable/dispelable buffs border.
+7. **Spell Announce**: Review functions *GetAuraInfo(spellID, unit, filter)*
 
 ## Bugs:

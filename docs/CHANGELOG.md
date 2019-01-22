@@ -6,3 +6,4 @@
 + Added: plugin Dispels Announce.
 + Added: plugin Interrupts Announce.
 + Added: plugin ScreenShots.
++ Added: plugin Spell Announce.
