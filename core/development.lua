@@ -3,6 +3,10 @@ local T, C, L = Tukui:unpack()
 ----------------------------------------------------------------
 -- Development (write anything here)
 ----------------------------------------------------------------
+local ICON_SIZE = 16
+local playerGUID = UnitGUID("player")
+local format = string.format
+
 local CombatEvents = {
     SPELL_DAMAGE = true,
     SPELL_PERIODIC_DAMAGE = true,
@@ -20,8 +24,59 @@ local CombatEvents = {
     SPELL_CREATE = true,
     SPELL_SUMMON = true,
     SPELL_RESURRECT = true,
+
+    UNIT_DIED = true,
+    UNIT_DESTROYED = true,
 }
 
+-- text color based on spell school
+local SpellSchoolColors = {
+	[0]  = { 1., 1., 1. },		-- NONE
+	[1]	 = { 1., 1., .0 },		-- PHYSICAL
+	[2]  = { 1., .9, .5 },		-- HOLY
+	[4]  = { 1., .5, .0 },		-- FIRE
+	[8]  = { .3, 1., .3 },		-- NATURE
+	[16] = { .5, 1., 1. },		-- FROST
+	[32] = { .5, .5, 1. },		-- SHADOW
+	[64] = { 1., .5, 1. },		-- ARCANE
+}
+----------------------------------------------------------------
+-- Functions
+----------------------------------------------------------------
+local function UnitIsMine(unitFlags)
+    return (CombatLog_Object_IsA(unitFlags, COMBATLOG_FILTER_ME) or
+            CombatLog_Object_IsA(unitFlags, COMBATLOG_FILTER_MINE) or
+            CombatLog_Object_IsA(unitFlags, COMBATLOG_FILTER_MY_PET))
+end
+
+-- create an escape sequence to insert icon texture into a string.
+local function CreateIcon(texture, size, ...)
+    local xoffset, yoffset, dimx, dimy, coordx1, coordx2, coordy1, coordy2 = ...
+    if (not xoffset) then xoffset = 0 end
+    if (not yoffset) then yoffset = 0 end
+    if (not dimx) then dimx = 64 end
+    if (not dimy) then dimy = 64 end
+    if (not coordx1) then coordx1 = 5 end
+    if (not coordx2) then coordx2 = 59 end
+    if (not coordy1) then coordy1 = 5 end
+    if (not coordy2) then coordy2 = 59 end
+	local fmt = "|T%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d|t"
+	return string.format(fmt, texture, size, size, xoffset, yoffset, dimx, dimy, coordx1, coordx2, coordy1, coordy2)
+end
+
+-- display message
+local function Display(fmt, r, g, b, sourceName, eventType, destName, spellID, ...)
+    local spellIcon = GetSpellTexture(spellID)
+    local spellLink = GetSpellLink(spellID)
+    local icon = CreateIcon(spellIcon, ICON_SIZE)
+    local color = format("|cff%02x%02x%02x", 255 * r, 255 * g, 255 * b)
+    local spell = format("%s %s (%d)", icon, spellLink, spellID)
+    T.Print(color, format(fmt, sourceName, eventType, spell, destName), ...)
+end
+
+----------------------------------------------------------------
+-- Events
+----------------------------------------------------------------
 local events = {}
 function events:COMBAT_LOG_EVENT_UNFILTERED(self, ...)
     -- get 1st to 11th parameter
@@ -40,15 +95,17 @@ function events:COMBAT_LOG_EVENT_UNFILTERED(self, ...)
     end
 
     -- spells casted by others are just important if destination is my character.
-    if ((sourceGUID ~= playerGUID) and (destGUID ~= playerGUID)) then return end
+    if (not UnitIsMine(sourceFlags)) then return end
 
     -- get 12th to 15th parameters
     local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
-    local spellIcon = GetSpellTexture(spellID)
-    local spellLink = GetSpellLink(spellID)
 
     -- print event information for testing
-    T.Print(spellID, spellLink, eventType, sourceName, destName, select(15, CombatLogGetCurrentEventInfo()))
+    local r, g, b = unpack(T.Colors.class[T.MyClass])
+    T.Debug(CombatLogGetCurrentEventInfo())
+    if (spellID and type(spellID) == "number") then
+        Display("%s %s %s on %s", r, g, b, sourceName, eventType, destName, spellID)
+    end
 
     if (eventType == "SPELL_DAMAGE") or (eventType == "SPELL_PERIODIC_DAMAGE") then
         local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())

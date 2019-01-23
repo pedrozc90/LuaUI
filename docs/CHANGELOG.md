@@ -7,3 +7,7 @@
 + Added: plugin Interrupts Announce.
 + Added: plugin ScreenShots.
 + Added: plugin Spell Announce.
+
+## Changes in 1.1-Release:
+
++ Fixed: Spell Announce summoned units table was not updating.

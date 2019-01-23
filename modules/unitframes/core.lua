@@ -278,11 +278,11 @@ local function CreateUnits()
     local RaidPet = UnitFrames.Headers.RaidPet
 
     Player:ClearAllPoints()
-    Player:SetPoint("BOTTOMLEFT", Anchor, "TOPLEFT", 2, 34)
+    Player:SetPoint("BOTTOMLEFT", Anchor, "TOPLEFT", 0, 34)
     Player:Size(unpack(C.Units.Player))
     
     Target:ClearAllPoints()
-    Target:SetPoint("BOTTOMRIGHT",  Anchor, "TOPRIGHT", -2, 34)
+    Target:SetPoint("BOTTOMRIGHT",  Anchor, "TOPRIGHT", 0, 34)
     Target:Size(unpack(C.Units.Target))
     
     TargetOfTarget:ClearAllPoints()

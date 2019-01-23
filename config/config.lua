@@ -66,11 +66,12 @@ C["ScreenShots"] = {
     ["ChallendeMode"] = true,                       -- enables screenshots of successful challenge modes.
     ["Achievements"] = true,                        -- enables screenshots of earned achievements.
     ["LevelUp"] = true,                             -- enables screenshots when player level up.
-    ["Debug"] = true,                               -- enables print messages.
+    ["Debug"] = false,                              -- enables print messages.
 }
 
 C["SpellAnnounce"] = {
-    ["Enable"] = true,                             -- enables spell announce plugins.
+    ["Enable"] = true,                              -- enables spell announce plugins.
+    ["Chat"] = "SAY",                               -- set chat channel to announce.
 }
 ----------------------------------------------------------------
 -- Default Tukui Settings

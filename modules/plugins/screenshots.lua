@@ -52,9 +52,74 @@ local function Wait(delay, func, ...)
 end
 
 ----------------------------------------------------------------
--- Plugin
+-- Event Handlers
 ----------------------------------------------------------------
-local function Initialize(self)
+local events = {}
+
+function events:SCREENSHOT_FAILED(self, ...)
+    T.Debug("ScreenShot Failed!")
+end
+
+function events:SCREENSHOT_SUCCEEDED(self, ...)
+    T.Print("ScreenShot Taken Successfully!")
+end
+
+function events:ENCOUNTER_START(self, ...)
+    local encounterID, encounterName, difficultyID, groupSize = ...
+    -- record encounter start time
+    self.EncounterStartTime = time()
+end
+
+function events:ENCOUNTER_END(self, ...)
+    local ecounterID, encounterName, difficultyID, groupSize, sucess = ...
+
+    -- calculate total time until encounter wipe/success
+    self.EncounterElapsedTimer = time() - self.EncounterStartTimer
+
+    -- check if encounter was a wipe
+    if (sucess == 0) then
+        T.Print("Wipe in ", T.FormatTime(self.EncounterElapsedTimer))
+        return
+    end
+
+    -- check encounter difficulty to take screenshot just on raid encounters.
+    if (difficultyID == DIFFICULTY_NORMAL_RAID) or
+        (difficultyID == DIFFICULTY_HEROIC_RAID) or
+        (difficultyID == DIFFICULTY_MYTHIC_RAID) then
+        -- display encounter info
+        T.Print("Encounter Defeted:", encounterName)
+        T.Print("Encounter Date:", date("%m/%d/%y %H:%M:%S"))
+        T.Print("Encounter Time:", string.format("%d minutes %d seconds", math.ceil(self.EncounterElapsedTimer / 60), math.ceil(self.EncounterElapsedTimer % 60)))
+        -- take screenshot
+        Wait(1, Screenshot)
+    end
+end
+
+function events:PLAYER_LEVEL_UP(self, ...)
+    -- take an instant screenshot.
+    Screenshot()
+    -- wait for the golden glow ends.
+    Wait(2.7, Screenshot)
+end
+
+local f = CreateFrame("Frame", "Plugin_ScreenShot")
+f:SetScript("OnEvent", function(self, event, ...)
+    if (event == "PLAYER_LOGIN") then
+        self:Initialize()
+    elseif (events[event]) then
+        -- call one of the functions above
+        events[event](self, ...)
+    else
+        -- take an instant screenshot.
+        Screenshot()
+        -- takes two screen shot to make sure we get the right moment.
+        Wait(1, Screenshot)
+        Wait(1.5, Screenshot)
+    end
+end)
+
+-- register events defined at configuration file
+function f:Initialize()
     if (C.ScreenShots.Debug) then
         self:RegisterEvent("SCREENSHOT_FAILED")
         self:RegisterEvent("SCREENSHOT_SUCCEEDED")
@@ -78,49 +143,9 @@ local function Initialize(self)
     end
 end
 
-local function OnEvent(self, event, ...)
-    if (event == "PLAYER_LOGIN") then
-        Initialize(self)
-    elseif (event == "SCREENSHOT_FAILED") then
-        T.Debug("ScreenShot Failed!")
-    elseif (event == "SCREENSHOT_SUCCEEDED") then
-        T.Print("ScreenShot Taken Successfully!")
-    elseif (event == "ENCOUNTER_START") then
-        -- record encounter start time
-        self.EncounterStartTimer = time()
-    elseif (event == "ENCOUNTER_END") then
-        local ecounterID, encounterName, difficultyID, groupSize, sucess = ...
-
-        -- compute encounter elpased time
-        self.EncounterElapsedTimer = time() - self.EncounterStartTimer
-
-        -- check if encounter was a wipe
-        if (sucess == 0) then
-            T.Print("Wipe in ", T.FormatTime(self.EncounterElapsedTimer))
-            return
-        end
-
-        -- check encounter difficulty
-        if (difficultyID == DIFFICULTY_NORMAL_RAID) or
-            (difficultyID == DIFFICULTY_HEROIC_RAID) or
-            (difficultyID == DIFFICULTY_MYTHIC_RAID) then
-            -- display encounter info
-            T.Print("Encounter Defeted:", encounterName)
-            T.Print("Encounter Date:", date("%m/%d/%y %H:%M:%S"))
-            T.Print("Encounter Time:", string.format("%d minutes %d seconds", math.ceil(self.EncounterElapsedTimer / 60), math.ceil(self.EncounterElapsedTimer % 60)))
-            -- take screen shot
-            Wait(1, Screenshot)
-        end
-    elseif (event == "PLAYER_LEVEL_UP") then
-        -- wait for the golden glow ends
-        Wait(2.7, Screenshot)
-    else
-        -- takes two screen shot to make sure
-        Wait(1, Screenshot)
-        Wait(1.5, Screenshot)
-    end
+-- initialize plugin only when player log in
+if (IsLoggedIn()) then
+    f:Initialize()
+else
+    f:RegisterEvent("PLAYER_LOGIN")
 end
-
-local f = CreateFrame("Frame")
-f:RegisterEvent("PLAYER_LOGIN")
-f:SetScript("OnEvent", OnEvent)

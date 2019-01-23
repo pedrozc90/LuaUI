@@ -5,25 +5,28 @@ local T, C, L = Tukui:unpack()
 ----------------------------------------------------------------
 if (not C.SpellAnnounce.Enable) then return end
 
+local threshold = 30                        -- threshold time to clear summons table.
+
 local playerGUID
 local playerName
-local chatType = "SAY"
+local chatType
 local format = string.format
 local tremove = table.remove
 local tinsert = table.insert
 local tsort = table.sort
 
---[[
-    AURAS   - announce spells that apply an aura (buff) on the target.
-    RAID    - announce spells that apply an aura in area.
-    CAST    - announce spells casted by the player only, that don't necessary
-            apply any aura. (e.g: Power Word: Barrier, Healing Rain, ...)
-    CHANNEL - annnounce chanelling spells casted by the player only.
-    (e.g: Divine Hymn, Tranquility, ...)
-    SUMMON  - announce spells casted by the player only that summon an unit. (e.g: Totems, ...)
-    CC      - announce crowd control or debuffs casted on player.
---]]
-local SPELL_ANNOUNCE = {
+----------------------------------------------------------------
+--  AURAS   - spells that apply any aura (buff) on the player/target.
+--  RAID    - spells that apply an aura in area, so announce just
+--          when player if affected. (e.g: Bloodlust, ...)
+--  CAST    - spells casted by the player only, that don't necessary
+--          apply any buff/debuff. (e.g: Power Word: Barrier, Healing Rain, ...)
+--  CHANNEL - chanelling spells casted by the player only. (e.g: Divine Hymn, Tranquility, ...)
+--  SUMMON  - spells casted by the player only that summon an unit. (e.g: Totems, ...)
+--  CC      - crowd control or debuffs casted on the player.
+----------------------------------------------------------------
+-- list of spells to announce when casted/received
+local SpellList = {
     ["AURAS"] = {
     -- Priest
         -- Discipline
@@ -57,6 +60,13 @@ local SPELL_ANNOUNCE = {
         [108281] = true,                        -- Ancestral Guidance
         -- Restoration
         [114052] = false,                       -- Ascendance
+    
+    -- Paladin
+        -- Holy
+        [642] = true,                           -- Divine Shield
+        [1022] = true,                          -- Blessing of Protection
+        [1044] = true,                          -- Blessing of Freedom
+        [31821] = true,                         -- Aura Masterys
     },
     ["RAID"] = {
         [2825] = true,			                -- Bloodlust (Shaman Horde)
@@ -74,6 +84,9 @@ local SPELL_ANNOUNCE = {
 
         -- Shaman Restoration
         [73920] = 10,                           -- Healing Rain
+
+        -- Paladin Holy
+        [114158] = 14,                          -- Light's Hammer
     },
     ["CHANNEL"] = {
         -- Priest Holy
@@ -105,8 +118,12 @@ local SPELL_ANNOUNCE = {
 		[205364] = true,                        -- Mind Control (Talent)
     },
 }
-local SUMMONED_UNITS = {}
-local COMBAT_EVENTS = {
+
+-- list of summoned units by the player
+local SummonedUnits = {}
+
+-- list of combat events to moditor
+local CombatEvents = {
     -- Healing
     SPELL_HEAL = true,
     -- Auras
@@ -122,6 +139,9 @@ local COMBAT_EVENTS = {
     UNIT_DIED = true
 }
 
+----------------------------------------------------------------
+-- Functions
+----------------------------------------------------------------
 -- scan unit auras to fint spell that matches spellID.
 local function GetAuraInfo(spell, unit, filter)
     if ((not spell) or (not unit) or (not filter)) then return end
@@ -144,6 +164,13 @@ local function GetAuraInfo(spell, unit, filter)
     end
 end
 
+-- checks if unit belongs to player.
+local function UnitIsMine(unitFlags)
+    return (CombatLog_Object_IsA(unitFlags, COMBATLOG_FILTER_ME) or
+            CombatLog_Object_IsA(unitFlags, COMBATLOG_FILTER_MINE) or
+            CombatLog_Object_IsA(unitFlags, COMBATLOG_FILTER_MY_PET))
+end
+
 ----------------------------------------------------------------
 -- OnUpdate
 -- Reference: http://wowwiki.wikia.com/wiki/Using_OnUpdate_correctly on January 21th, 2019
@@ -155,14 +182,22 @@ local function OnUpdate(self, elapsed)
 
     while (self.LastUpdate > UpdateInterval) do
         
-        -- run though wait table
-        for index, item in ipairs(WaitTable) do
-            item.duration = item.duration - self.LastUpdate
+        -- updates spell remaining duration.
+        for index, spell in ipairs(WaitTable) do
+            spell.duration = spell.duration - self.LastUpdate
 
-            -- if duration expires, then remove from wait table
-            if (item.duration <= 0) then
-                SendChatMessage(format(item.fmt, unpack(item.args)), chatType)
+            -- checks if spell duration has expired
+            if (spell.duration <= 0) then
+                SendChatMessage(format(spell.fmt, unpack(spell.args)), chatType)
                 tremove(WaitTable, index)
+            end
+        end
+
+        -- stupid totems do not fire combat log event UNIT_DIED
+        -- so delete from table, if this unit was summoned 30 or more secongs ago.
+        for index, unit in ipairs(SummonedUnits) do
+            if (time() - unit.timestamp >= threshold) then
+                tremove(SummonedUnits, index)
             end
         end
 
@@ -171,15 +206,16 @@ local function OnUpdate(self, elapsed)
 end
 
 ----------------------------------------------------------------
--- Combat Log Handler
+-- Events
 ----------------------------------------------------------------
-local CombatLogHandler = function(self)
+local events = {}
+function events:COMBAT_LOG_EVENT_UNFILTERED(self, ...)
     -- 1st to 11th parameters
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
     destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
     
     -- check combat event filter
-    if (not COMBAT_EVENTS[eventType]) then return end
+    if (not CombatEvents[eventType]) then return end
 
     -- some spells return destName as nil if you don't have a target.
     if (not destName) then
@@ -190,7 +226,8 @@ local CombatLogHandler = function(self)
     end
 
     -- spells casted by others are just important if destination is my character.
-    if ((sourceGUID ~= playerGUID) and (destGUID ~= playerGUID)) then return end
+    -- if ((sourceGUID ~= playerGUID) and (destGUID ~= playerGUID)) then return end
+    if (not UnitIsMine(sourceFlags)) then return end
 
     -- 12th to 14th parameters
     local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
@@ -198,7 +235,7 @@ local CombatLogHandler = function(self)
     local spellIcon = select(3, GetSpellInfo(spellID))
 
     -- Buffs
-    if (SPELL_ANNOUNCE.AURAS[spellID]) then
+    if (SpellList.AURAS[spellID]) then
         if (eventType == "SPELL_AURA_APPLIED") then
             local auraType, amount = select(15, CombatLogGetCurrentEventInfo())
 
@@ -255,7 +292,7 @@ local CombatLogHandler = function(self)
     end
 
     -- Raid Spells
-    if (SPELL_ANNOUNCE.RAID[spellID]) then
+    if (SpellList.RAID[spellID]) then
         if (destGUID ~= playerGUID) then return end
 
         if (eventType == "SPELL_AURA_APPLIED") then
@@ -274,18 +311,16 @@ local CombatLogHandler = function(self)
     end
 
     -- Casted Spells
-    if (SPELL_ANNOUNCE.CAST[spellID]) then
+    if (SpellList.CAST[spellID]) then
         -- filter caster
         if (not sourceGUID == playerGUID) then return end
 
         if (eventType == "SPELL_CAST_SUCCESS") then
-            local duration = SPELL_ANNOUNCE.CAST[spellID]
+            local duration = SpellList.CAST[spellID]
 
             SendChatMessage(format("%s (%ds) up!", spellLink, duration), chatType)
 
             if (type(duration) == "number" and duration > 0) then
-                -- Delay(duration, "%s over!", spellName)
-                T.Debug(spellName .. ", " .. duration)
                 tinsert(WaitTable, { duration = duration, fmt = "%s over!", args = { spellName } })
             end
         elseif (eventType == "SPELL_AURA_REMOVED") then
@@ -294,7 +329,7 @@ local CombatLogHandler = function(self)
     end
 
     -- Channeling Spells
-    if (SPELL_ANNOUNCE.CHANNEL[spellID]) then
+    if (SpellList.CHANNEL[spellID]) then
         if (not sourceGUID == playerGUID) then return end
         
         if (eventType == "SPELL_CAST_SUCCESS") then
@@ -307,16 +342,16 @@ local CombatLogHandler = function(self)
     end
 
     -- Summons
-    if (SPELL_ANNOUNCE.SUMMON[spellID]) then
+    if (SpellList.SUMMON[spellID]) then
         if (eventType == "SPELL_SUMMON") then
             SendChatMessage(format("%s up!", spellLink), chatType)
 
             -- save summoned unitGUID and unitName
-            tinsert(SUMMONED_UNITS, { timestamp = timestamp, GUID = destGUID, Name = destName, delay = 0 })
+            tinsert(SummonedUnits, { timestamp = timestamp, GUID = destGUID, Name = destName })
 
-            if (#SUMMONED_UNITS > 1) then
+            if (#SummonedUnits > 1) then
                 -- sort by timestamp
-                tsort(SUMMONED_UNITS, function(a, b)
+                tsort(SummonedUnits, function(a, b)
                     if (a.timestamp == b.timestamp) then
                         return a.Name < b.Name
                     end
@@ -327,17 +362,17 @@ local CombatLogHandler = function(self)
 
     -- if an unit dies, verify if it was any of the summoned units.
 	if (eventType == "UNIT_DIED") then
-		for index, unit in ipairs(SUMMONED_UNITS) do
+		for index, unit in ipairs(SummonedUnits) do
             if (unit.GUID == destGUID and unit.Name == destName) then
 				SendChatMessage(format("%s over!", destName), chatType)
 				-- remove unit from table.
-				tremove(SUMMONED_UNITS, index)
+				tremove(SummonedUnits, index)
 			end
 		end
 	end
 
     -- Debuffs
-    if (SPELL_ANNOUNCE.DEBUFF[spellID]) then
+    if (SpellList.DEBUFF[spellID]) then
         if (not destGUID == playerGUID) then return end
         if (eventType == "SPELL_AURA_APPLIED") then
             local duration = select(5, GetAuraInfo(spellID, "player", "HARMFUL"))
@@ -348,29 +383,27 @@ local CombatLogHandler = function(self)
     end
 end
 
-----------------------------------------------------------------
--- OnEvent
-----------------------------------------------------------------
 local function OnEvent(self, event, ...)
-    if (event == "COMBAT_LOG_EVENT_UNFILTERED") then
-        CombatLogHandler(self)
-    elseif (event == "PLAYER_LOGIN") then
+    if (event == "PLAYER_LOGIN") then
         self:Initialize()
+    else
+        events[event](self, ...)
     end
 end
-
 
 local f = CreateFrame("Frame")
 f:SetScript("OnEvent", OnEvent)
 f:SetScript("OnUpdate", OnUpdate)
 
+-- get variable only when initializing
 function f:Initialize()
     playerGUID = UnitGUID("player")
     playerName = UnitName("player")
-    chatType = "SAY"
+    chatType = C.SpellAnnounce.Chat or "SAY"
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
+-- initialize plugin only when player log in
 if IsLoggedIn() then
     f:Initialize()
 else
