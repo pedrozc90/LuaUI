@@ -54,72 +54,15 @@ end
 ----------------------------------------------------------------
 -- Event Handlers
 ----------------------------------------------------------------
-local events = {}
-
-function events:SCREENSHOT_FAILED(self, ...)
-    T.Debug("ScreenShot Failed!")
-end
-
-function events:SCREENSHOT_SUCCEEDED(self, ...)
-    T.Print("ScreenShot Taken Successfully!")
-end
-
-function events:ENCOUNTER_START(self, ...)
-    local encounterID, encounterName, difficultyID, groupSize = ...
-    -- record encounter start time
-    self.EncounterStartTime = time()
-end
-
-function events:ENCOUNTER_END(self, ...)
-    local ecounterID, encounterName, difficultyID, groupSize, sucess = ...
-
-    -- calculate total time until encounter wipe/success
-    self.EncounterElapsedTimer = time() - self.EncounterStartTimer
-
-    -- check if encounter was a wipe
-    if (sucess == 0) then
-        T.Print("Wipe in ", T.FormatTime(self.EncounterElapsedTimer))
-        return
-    end
-
-    -- check encounter difficulty to take screenshot just on raid encounters.
-    if (difficultyID == DIFFICULTY_NORMAL_RAID) or
-        (difficultyID == DIFFICULTY_HEROIC_RAID) or
-        (difficultyID == DIFFICULTY_MYTHIC_RAID) then
-        -- display encounter info
-        T.Print("Encounter Defeted:", encounterName)
-        T.Print("Encounter Date:", date("%m/%d/%y %H:%M:%S"))
-        T.Print("Encounter Time:", string.format("%d minutes %d seconds", math.ceil(self.EncounterElapsedTimer / 60), math.ceil(self.EncounterElapsedTimer % 60)))
-        -- take screenshot
-        Wait(1, Screenshot)
-    end
-end
-
-function events:PLAYER_LEVEL_UP(self, ...)
-    -- take an instant screenshot.
-    Screenshot()
-    -- wait for the golden glow ends.
-    Wait(2.7, Screenshot)
-end
-
-local f = CreateFrame("Frame", "Plugin_ScreenShot")
+local f = CreateFrame("Frame")
 f:SetScript("OnEvent", function(self, event, ...)
-    if (event == "PLAYER_LOGIN") then
-        self:Initialize()
-    elseif (events[event]) then
-        -- call one of the functions above
-        events[event](self, ...)
-    else
-        -- take an instant screenshot.
-        Screenshot()
-        -- takes two screen shot to make sure we get the right moment.
-        Wait(1, Screenshot)
-        Wait(1.5, Screenshot)
-    end
+    
+    -- call one of the functions above
+    self[event](self, ...)
 end)
 
 -- register events defined at configuration file
-function f:Initialize()
+function f:PLAYER_LOGIN()
     if (C.ScreenShots.Debug) then
         self:RegisterEvent("SCREENSHOT_FAILED")
         self:RegisterEvent("SCREENSHOT_SUCCEEDED")
@@ -143,9 +86,63 @@ function f:Initialize()
     end
 end
 
--- initialize plugin only when player log in
-if (IsLoggedIn()) then
-    f:Initialize()
-else
-    f:RegisterEvent("PLAYER_LOGIN")
+function f:SCREENSHOT_FAILED(...)
+    T.Debug("ScreenShot Failed!")
+end
+
+function f:SCREENSHOT_SUCCEEDED(...)
+    T.Print("ScreenShot Taken Successfully!")
+end
+
+function f:ACHIEVEMENT_EARNED()
+    -- takes two screen shot to make sure we get the right moment.
+    Wait(1, Screenshot)
+    Wait(1.5, Screenshot)
+end
+
+function f:CHALLENGE_MODE_COMPLETED()
+    -- take an instant screenshot.
+    Screenshot()
+    -- takes two screen shot to make sure we get the right moment.
+    Wait(1, Screenshot)
+    Wait(1.5, Screenshot)
+end
+
+function f:PLAYER_LEVEL_UP()
+    -- take an instant screenshot.
+    Screenshot()
+    -- wait for the golden glow ends.
+    Wait(2.7, Screenshot)
+end
+
+function f:ENCOUNTER_START(...)
+    local encounterID, encounterName, difficultyID, groupSize = ...
+
+    -- record encounter start time
+    self.EncounterStartTime = time()
+end
+
+function f:ENCOUNTER_END(...)
+    local ecounterID, encounterName, difficultyID, groupSize, sucess = ...
+
+    -- calculate total time until encounter wipe/success
+    self.EncounterElapsedTimer = time() - self.EncounterStartTimer
+
+    -- check if encounter was a wipe
+    if (sucess == 0) then
+        T.Print("Wipe in ", T.FormatTime(self.EncounterElapsedTimer))
+        return
+    end
+
+    -- check encounter difficulty to take screenshot just on raid encounters.
+    if (difficultyID == DIFFICULTY_NORMAL_RAID) or
+        (difficultyID == DIFFICULTY_HEROIC_RAID) or
+        (difficultyID == DIFFICULTY_MYTHIC_RAID) then
+        -- display encounter info
+        T.Print("Encounter Defeted:", encounterName)
+        T.Print("Encounter Date:", date("%m/%d/%y %H:%M:%S"))
+        T.Print("Encounter Time:", string.format("%d minutes %d seconds", math.ceil(self.EncounterElapsedTimer / 60), math.ceil(self.EncounterElapsedTimer % 60)))
+        -- take screenshot
+        Wait(1, Screenshot)
+    end
 end

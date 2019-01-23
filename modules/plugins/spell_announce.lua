@@ -5,10 +5,9 @@ local T, C, L = Tukui:unpack()
 ----------------------------------------------------------------
 if (not C.SpellAnnounce.Enable) then return end
 
-local threshold = 30                        -- threshold time to clear summons table.
+local threshold = 30                            -- threshold time to clear summons table.
 
 local playerGUID
-local playerName
 local chatType
 local format = string.format
 local tremove = table.remove
@@ -62,11 +61,14 @@ local SpellList = {
         [114052] = false,                       -- Ascendance
     
     -- Paladin
+        [642] = true,                           -- Divine Shield    
         -- Holy
-        [642] = true,                           -- Divine Shield
         [1022] = true,                          -- Blessing of Protection
         [1044] = true,                          -- Blessing of Freedom
         [31821] = true,                         -- Aura Masterys
+        -- Guardian
+        [31850] = true,                         -- Ardent Defender
+        [86659] = true,                         -- Guardian of Ancient Kings
     },
     ["RAID"] = {
         [2825] = true,			                -- Bloodlust (Shaman Horde)
@@ -208,8 +210,22 @@ end
 ----------------------------------------------------------------
 -- Events
 ----------------------------------------------------------------
-local events = {}
-function events:COMBAT_LOG_EVENT_UNFILTERED(self, ...)
+local f = CreateFrame("Frame")
+f:RegisterEvent("PLAYER_LOGIN")
+f:SetScript("OnUpdate", OnUpdate)
+f:SetScript("OnEvent", function (self, event, ...)
+    -- call one of the functions above
+    self[event](self, ...)
+end)
+
+-- initialize plugin
+function f:PLAYER_LOGIN()
+    playerGUID = UnitGUID("player")
+    chatType = C.SpellAnnounce.Chat or "SAY"
+    self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+end
+
+function f:COMBAT_LOG_EVENT_UNFILTERED()
     -- 1st to 11th parameters
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
     destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
@@ -381,31 +397,4 @@ function events:COMBAT_LOG_EVENT_UNFILTERED(self, ...)
             SendChatMessage(format("%s over!", spellLink), chatType)
         end
     end
-end
-
-local function OnEvent(self, event, ...)
-    if (event == "PLAYER_LOGIN") then
-        self:Initialize()
-    else
-        events[event](self, ...)
-    end
-end
-
-local f = CreateFrame("Frame")
-f:SetScript("OnEvent", OnEvent)
-f:SetScript("OnUpdate", OnUpdate)
-
--- get variable only when initializing
-function f:Initialize()
-    playerGUID = UnitGUID("player")
-    playerName = UnitName("player")
-    chatType = C.SpellAnnounce.Chat or "SAY"
-    self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-end
-
--- initialize plugin only when player log in
-if IsLoggedIn() then
-    f:Initialize()
-else
-    f:RegisterEvent("PLAYER_LOGIN")
 end

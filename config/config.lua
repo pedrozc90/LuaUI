@@ -49,14 +49,16 @@ C["Party"].ShowSolo = false
 C["Raid"].ShowSolo = false
 C["Raid"].TestAuraWatch = false                     -- force to show aurawatch debuff.
 
--- Plugins
+----------------------------------------------------------------
+-- Plugins Settings
+----------------------------------------------------------------
 C["Dispels"] = {
     ["Enable"] = true,                              -- enables dispel announce plugin.
     ["SpellLink"] = true,                           -- display spell link, else just the spell name.
 }
 
 C["Interrupts"] = {
-    ["Enable"] = true,                              -- enables interrupt annouce plugins.
+    ["Enable"] = true,                              -- enables interrupt annouce plugin.
     ["SpellLink"] = true,                           -- display spell link, else just the spell name.
 }
 
@@ -66,13 +68,18 @@ C["ScreenShots"] = {
     ["ChallendeMode"] = true,                       -- enables screenshots of successful challenge modes.
     ["Achievements"] = true,                        -- enables screenshots of earned achievements.
     ["LevelUp"] = true,                             -- enables screenshots when player level up.
-    ["Debug"] = false,                              -- enables print messages.
+    ["Debug"] = false,                              -- enables print messages when screenshot is taken or failed.
 }
 
 C["SpellAnnounce"] = {
-    ["Enable"] = true,                              -- enables spell announce plugins.
+    ["Enable"] = true,                              -- enables spell announce plugin.
     ["Chat"] = "SAY",                               -- set chat channel to announce.
 }
+
+C["PvPAlert"] = {
+    ["Enable"] = true,                              -- enables pvp alert plugin.
+}
+
 ----------------------------------------------------------------
 -- Default Tukui Settings
 ----------------------------------------------------------------

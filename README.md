@@ -14,10 +14,11 @@ Release Date: 01/20/2019
 
 + Supports **Tukui 18.21+**
 + Embedded Plugins:
-    - Achievement/Raid Encounters/Level Up ScreenShots.
+    - Achievement/Raid Encounters/Level Up automatic screenshots.
     - Interrupt Announce
     - Dispel Announce
     - Spell Announce
+    - PvP Alert
 
 ## Install:
 

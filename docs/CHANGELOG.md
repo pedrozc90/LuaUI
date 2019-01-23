@@ -10,4 +10,6 @@
 
 ## Changes in 1.1-Release:
 
++ Added: plugin PvP Alert.
 + Fixed: Spell Announce summoned units table was not updating.
++ Fixed: Interrupt Announce chatType selection

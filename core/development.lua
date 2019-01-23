@@ -1,8 +1,11 @@
 local T, C, L = Tukui:unpack()
 
+local CombatLog = true
 ----------------------------------------------------------------
 -- Development (write anything here)
 ----------------------------------------------------------------
+if (not CombatLog) then return end
+
 local ICON_SIZE = 16
 local playerGUID = UnitGUID("player")
 local format = string.format
@@ -25,8 +28,9 @@ local CombatEvents = {
     SPELL_SUMMON = true,
     SPELL_RESURRECT = true,
 
-    UNIT_DIED = true,
-    UNIT_DESTROYED = true,
+    -- UNIT_DIED = true,
+    -- UNIT_DESTROYED = true,
+    -- UNIT_DISSIPATES = true,
 }
 
 -- text color based on spell school
@@ -74,11 +78,50 @@ local function Display(fmt, r, g, b, sourceName, eventType, destName, spellID, .
     T.Print(color, format(fmt, sourceName, eventType, spell, destName), ...)
 end
 
+-- create/send alert message
+local function Message(isPlayer, eventType, sourceName, destName, spellID, ...)
+    local spellName = GetSpellInfo(spellID)
+    local spellIcon = GetSpellTexture(spellID)
+    local spellLink = GetSpellLink(spellID)
+
+    local r, g, b
+    if (isPlayer) then
+        r, g, b = unpack(T.Colors.class[T.MyClass])
+    else
+        r, g, b = 1, 1, 1
+    end
+
+    local color = format("|cff%02x%02x%02x", 255 * r, 255 * r, 255 * b)
+
+    eventType = color .. eventType .. "|r"
+    sourceName = color .. sourceName .. "|r"
+    destName = color .. destName .. "|r"
+    spellName = color .. spellName .. "|r"
+
+    if (isPlayer) then
+        spellID = color .. spellID .. "|r"
+    else
+        spellID = "|cffff0000" .. spellID .. "|r"
+    end
+
+    T.Print(sourceName, eventType, spellName, "on", destName, spellID, spellLink)
+end
+
 ----------------------------------------------------------------
 -- Events
 ----------------------------------------------------------------
-local events = {}
-function events:COMBAT_LOG_EVENT_UNFILTERED(self, ...)
+local f = CreateFrame("Frame")
+-- f:RegisterEvent("PLAYER_LOGIN")
+f:SetScript("OnEvent", function(self, event, ...)
+    -- call one of the functions below
+    self[event](self, ...);
+end);
+
+function f:PLAYER_LOGIN()
+    self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+end
+
+function f:COMBAT_LOG_EVENT_UNFILTERED()
     -- get 1st to 11th parameter
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
     destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
@@ -95,17 +138,12 @@ function events:COMBAT_LOG_EVENT_UNFILTERED(self, ...)
     end
 
     -- spells casted by others are just important if destination is my character.
-    if (not UnitIsMine(sourceFlags)) then return end
+    if (not UnitIsMine(sourceFlags) and destGUID ~= playerGUID) then return end
 
     -- get 12th to 15th parameters
     local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
-
-    -- print event information for testing
-    local r, g, b = unpack(T.Colors.class[T.MyClass])
-    T.Debug(CombatLogGetCurrentEventInfo())
-    if (spellID and type(spellID) == "number") then
-        Display("%s %s %s on %s", r, g, b, sourceName, eventType, destName, spellID)
-    end
+    local isPlayer = (sourceGUID == playerGUID)
+    Message(isPlayer, eventType, sourceName, destName, spellID)
 
     if (eventType == "SPELL_DAMAGE") or (eventType == "SPELL_PERIODIC_DAMAGE") then
         local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
@@ -167,13 +205,34 @@ function events:COMBAT_LOG_EVENT_UNFILTERED(self, ...)
     end
 end
 
-function events:PLAYER_LEAVING_WORLD(self, ...)
-    -- handle PLAYER_LEAVING_WORLD here
-    T.Debug("Development #2")
+----------------------------------------------------------------
+-- Slash Command
+----------------------------------------------------------------
+function f:Start()
+    T.Print("Starting Spell Tracing ...")
+    self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
-local f = CreateFrame("Frame")
-f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-f:SetScript("OnEvent", function(self, event, ...)
-    events[event](self, ...); -- call one of the functions above
-end);
+function f:Stop()
+    T.Print("Spell Tracing Ended!")
+    self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+end
+
+local function SplitCmd(args)
+    if (args:find("%s")) then
+        return strsplit(" ", args)
+    else
+        return args
+    end
+end
+
+SLASH_LUASLASHHANDLER1, LUASLASHHANDLER2 = "/dev", "/dev-spells"
+SlashCmdList["LUASLASHHANDLER"] = function(cmd)
+    local arg1, arg2 = SplitCmd(cmd)
+
+    if (arg1 == "start") then
+        f:Start()
+    elseif (arg1 == "stop") then
+        f:Stop()
+    end
+end
