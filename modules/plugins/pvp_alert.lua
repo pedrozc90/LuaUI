@@ -113,8 +113,8 @@ f:SetScript("OnEvent", function(self, event, ...)
 end)
 
 function f:Initialize()
-    inInstance, instanceType = IsInInstance()
-    -- if (instanceType and (instanceType == "pvp" or instanceType == "arena")) then
+    local inInstance, instanceType = IsInInstance()
+    if (instanceType and (instanceType == "pvp" or instanceType == "arena")) then
         if (instanceType == "arena") then
             chatType = "ARENA"
         else
@@ -125,9 +125,9 @@ function f:Initialize()
             end
         end
         self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    -- else
-    --     self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    -- end
+    else
+        self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    end
 end
 
 function f:PLAYER_LOGIN()
