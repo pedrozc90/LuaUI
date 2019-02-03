@@ -85,4 +85,7 @@
     <!-- Plugins -->
     <Include file="modules\plugins\init.xml"/>
 
+    <!-- Tooltip -->
+    <Script file="modules/tooltip/tooltip.lua"/>
+
 </Ui>

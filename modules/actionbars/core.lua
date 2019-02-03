@@ -115,6 +115,12 @@ hooksecurefunc(ActionBars, "AddPanels", AddPanels)
 ----------------------------------------------------------------
 -- Editing ActionBars Panels Layout and Anchor
 ----------------------------------------------------------------
+local function EnableBlizzardActionBars()
+    for _, v in pairs({ "BottomLeft", "BottomRight", "Right", "RightTwo"}) do
+        _G["InterfaceOptionsActionBarsPanel" .. v]:Enable()
+    end
+end
+
 local function Enable(self)
     local Bar1 = Panels.ActionBar1
 	local Bar2 = Panels.ActionBar2
@@ -127,20 +133,11 @@ local function Enable(self)
     local Size = C.ActionBars.NormalButtonSize
 	local PetSize = C.ActionBars.PetButtonSize
     local Spacing = C.ActionBars.ButtonSpacing
-    
-    local xOffset, yOffset = 5, 5
-
-    -- Bar #3
-    Bar3:ClearAllPoints()
-    Bar3:Point("BOTTOMLEFT", Panels.ActionBar1, "BOTTOMRIGHT", 7, 0)
-    Bar3:Width(Bar2:GetWidth())
-    Bar3:Height(Bar2:GetHeight())
-    Bar3.Backdrop:StripTextures(true)
-    Bar3.Backdrop = nil
-    Bar3:CreateBackdrop("Transparent")
 
     -- Move Pet Bar if Bar 5 hidden
 	PetBar:SetScript("OnShow", self.MovePetBar)
     PetBar:SetScript("OnHide", self.MovePetBar)
+
+    EnableBlizzardActionBars()
 end
 hooksecurefunc(ActionBars, "Enable", Enable)

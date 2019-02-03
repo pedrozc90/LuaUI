@@ -1,12 +1,12 @@
 ## Interface: 80100
 ## Author: Luaerror
-## Version: 1.1
+## Version: 1.3
 ## Title: |cff00FF96LuaUI|r
 ## Notes: External Tukui Edit
 ## Website: https://github.com/PedroZC90/LuaUI
 ## RequiredDeps: Tukui
 ## SavedVariables: LuaUIData
-## SavedVariablesPerCharacter: LuaUIDataChar
+## SavedVariablesPerCharacter: LuaUIDataPerChar
 ## X-Website: http://www.tukui.org
 ## X-Maintainer: PedroZC90
 

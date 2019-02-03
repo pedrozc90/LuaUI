@@ -1,130 +1,122 @@
 local T, C, L = Tukui:unpack()
 
 ----------------------------------------------------------------
--- Spell Announce
+-- LSA (Lua Spell Announce)
+-- Author: Luaerror
 ----------------------------------------------------------------
 if (not C.SpellAnnounce.Enable) then return end
 
-local threshold = 30                            -- threshold time to clear summons table.
-
-local playerGUID
-local chatType
-local format = string.format
-local tremove = table.remove
-local tinsert = table.insert
-local tsort = table.sort
-
-----------------------------------------------------------------
---  AURAS   - spells that apply any aura (buff) on the player/target.
---  RAID    - spells that apply an aura in area, so announce just
---          when player if affected. (e.g: Bloodlust, ...)
---  CAST    - spells casted by the player only, that don't necessary
---          apply any buff/debuff. (e.g: Power Word: Barrier, Healing Rain, ...)
---  CHANNEL - chanelling spells casted by the player only. (e.g: Divine Hymn, Tranquility, ...)
---  SUMMON  - spells casted by the player only that summon an unit. (e.g: Totems, ...)
---  CC      - crowd control or debuffs casted on the player.
-----------------------------------------------------------------
--- list of spells to announce when casted/received
 local SpellList = {
-    ["AURAS"] = {
-    -- Priest
+    ["DEATHKNIGHT"] = {
+        { spellID = 61999, type = "resurrect", announce = true },  -- Raise Ally
+
+        -- Blood
+        { spellID = 48707, type = "defensive", announce = true },  -- Anti-Magic Shell
+        { spellID = 48792, type = "defensive", announce = true },  -- Icebound Fortitude
+        { spellID = 55233, type = "defensive", announce = true },  -- Vampiric Blood
+    },
+    ["DEMONHUNTER"] = {
+        -- Havoc
+        { spellID = 196718, type = "raid", announce = true, duration = 8 },  -- Darkness
+    },
+    ["DRUID"] = {
+        { spellID = 20484, type = "resurrect", announce = true },  -- Rebirth
+        { spellID = 29166, type = "external", announce = true },  -- Innervate
+
+        -- Restoration
+        { spellID = 740   , type = "raid,channeled", announce = true },  -- Tranquility
+        { spellID = 102342, type = "external", announce = true },  -- Ironbark
+    },
+    ["HUNTER"] = {
+        { spellID = 264667, type = "raid", announce = true },     -- Primal Rage
+    },
+    ["MAGE"] = {
+        { spellID = 80353 , type = "raid", announce = true },     -- Time Warp
+    },
+    ["MONK"] = {
+        { spellID = 116841, type = "external", announce = false },	-- Tiger's Lust
+
+        -- Brewmaster
+        { spellID = 115295, type = "defensive", announce = false },	-- Guard
+        { spellID = 120954, type = "defensive", announce = true  },	-- Fortigying Brew
+        { spellID = 122278, type = "defensive", announce = false },	-- Dampen Harm
+        { spellID = 215479, type = "defensive", announce = false },	-- Ironskin Brew
+        { spellID = 115176, type = "raid,channeled", announce = true },   -- Zen Meditation
+
+        -- Mistweaver
+        { spellID = 122783, type = "defensive", announce = false }, -- Diffuse Magic
+        { spellID = 243435, type = "defensive", announce = false }, -- Fortifying Brew
+        { spellID = 116849, type = "external", announce = true },   -- Life Cocoon
+        { spellID = 191837, type = "raid,channeled", announce = false },  -- Essence Font
+    },
+    ["PALADIN"] = {
+        { spellID = 642   , type = "defensive", announce = true },   -- Divine Shield
+        { spellID = 1022  , type = "external", announce = true },   -- Blessing of Protection
+        { spellID = 1044  , type = "external", announce = true },   -- Blessing of Freedom
+        { spellID = 6940  , type = "external", announce = true },   -- Blessing of Sacrifice
+        { spellID = 204018, type = "external", announce = true },   -- Blessing of Spellwarding
+
+        -- Holy
+        { spellID = 498   , type = "defensive", announce = true },  -- Divine Protection
+        { spellID = 31821 , type = "raid", announce = true },       -- Aura Mastery
+        { spellID = 114158, type = "raid,cast", announce = true, duration = 14 },    -- Light's Hammer (Holy)
+
+        -- Protection
+        { spellID = 31850 , type = "defensive", announce = true },  -- Ardent Defender
+        { spellID = 86659 , type = "defensive", announce = true },  -- Guardian of Ancient Kings
+        { spellID = 204150, type = "raid,channeled", announce = true },   -- Aegis of Light (Protection)
+    },
+    ["PRIEST"] = {
+        { spellID = 586   , type = "defensive", announce = false },	-- Fade
+        { spellID = 19236 , type = "defensive", announce = false },  -- Desperate Prayer
+
         -- Discipline
-        [33206] = true,                         -- Pain Suppression
-        [47536] = false,                        -- Rapture
+        { spellID = 33206 , type = "external", announce = true },   -- Pain Suppresion
+        { spellID = 62618 , type = "raid,cast", announce = true, duration =  10 },   -- Power Word: Barrier
+        { spellID = 271466, type = "raid", announce = true },   -- Luminous Barrier
+        
         -- Holy
-		[27827] = true,		                    -- Spirit of Redemption
-		[47788] = true,		                    -- Guardian Spirit
-        [64901] = true,		                    -- Symbol of Hope
-        [200183] = true,                        -- Apotheosis
-		-- Shadow
-		[15286] = true,		                    -- Vampiric Embrace
-		[47585] = true,		                    -- Dispersion
+        { spellID = 47788 , type = "external" , announce = true },  -- Guardian Spirit
+        { spellID = 27827 , type = "defensive", announce = true },  -- Spirit of Redemption
+        { spellID = 64843 , type = "raid,channeled", announce = true },	-- Divine Hymn
+		{ spellID = 64901 , type = "raid,channeled", announce = true },	-- Symbol of Hope
+        -- { spellID = 265202, type = "raid,cast", announce = true },   -- Holy Word: Salvation
+        
+        -- Shadow
+        { spellID = 15286 , type = "raid", announce = true },   -- Vampiric Embrace
+		{ spellID = 47585 , type = "defensive", announce = true },  -- Dispersion
+    },
+    ["ROGUE"] = {},
+    ["SHAMAN"] = {
+        { spellID = 2825  , type = "raid", announce = true },     -- Bloodlust (Horde)
+        { spellID = 32182 , type = "raid", announce = true },     -- Heroism (Alliance)
+        { spellID = 108271, type = "defensive", announce = true },     -- Astral Shift
 
-    -- Druid
-        [22812] = false,                        -- Barkskin
-        [29166] = true,                         -- Innervate
-        -- Feral
-        [61336] = false,                        -- Survival Instincts
-        -- Guardian
-        -- Restoration
-        [33891] = false,                        -- Incarnation: Tree of Life
-        [117679] = true,                        -- Incarnation
-        [102342] = true,                        -- Ironbark
-        [102351] = true,                        -- Cenarion Ward
-        [197721] = false,                       -- Flourish
-
-    -- Shaman
-        [108271] = false,                       -- Astral Shift
         -- Elemental
-        [108281] = true,                        -- Ancestral Guidance
+        { spellID = 108281, type = "raid", announce = true },     -- Ancestral Guidance
+        
         -- Restoration
-        [114052] = false,                       -- Ascendance
-    
-    -- Paladin
-        [642] = true,                           -- Divine Shield    
-        -- Holy
-        [1022] = true,                          -- Blessing of Protection
-        [1044] = true,                          -- Blessing of Freedom
-        [31821] = true,                         -- Aura Masterys
-        -- Guardian
-        [31850] = true,                         -- Ardent Defender
-        [86659] = true,                         -- Guardian of Ancient Kings
+        { spellID = 98008 , type = "raid,summon", announce = true },     -- Spirit Link Totem
+        { spellID = 108280, type = "raid,summon", announce = true },     -- Healing Tide Totem
+        { spellID = 157153, type = "raid,summon", announce = true },     -- Cloudburst Totem
+        { spellID = 198838, type = "raid,summon", announce = true },     -- Earthen Wall Totem
+        { spellID = 207399, type = "raid,summon", announce = true },     -- Ancestral Protection Totem
     },
-    ["RAID"] = {
-        [2825] = true,			                -- Bloodlust (Shaman Horde)
-		[32182] = true,			                -- Heroism (Shaman Alliance)
-		[80353] = true,			                -- Time Warp (Mage)
-		[90355] = true,			                -- Ancient Hysteria	(Core Hound)
-        [160452] = true,		                -- Netherwinds (Nether Ray)
-        
-        -- Druid
-        [77764] = true,                         -- Stampeding Roar (Feral)
+    ["WARLOCK"] = {
+        { spellID = 20707 , type = "resurrect", announce = true },  -- Soulstone
     },
-    ["CAST"] = {
-        -- Priest Discipline
-        [62618] = 10,                           -- Power Word: Barrier
+    ["WARRIOR"] = {
+        { spellID = 97462 , type = "raid", announce = true },       -- Rallying Cry
 
-        -- Shaman Restoration
-        [73920] = 10,                           -- Healing Rain
-
-        -- Paladin Holy
-        [114158] = 14,                          -- Light's Hammer
+        -- Protection
+        { spellID = 871   , type = "defensive", announce = true },  -- Shield Wall
+        { spellID = 132404, type = "defensive", announce = true },  -- Shield Block
     },
-    ["CHANNEL"] = {
-        -- Priest Holy
-        [64843] = true,		                    -- Divine Hymn
-
-        -- Druid Restoration
-		[740] = true,		                    -- Tranquility
-    },
-    ["SUMMON"] = {
-        -- Druid Restoration
-        [145205] = true,                        -- Efflorescence
-
-        -- Shaman Restoration
-        [5394] = false,                         -- Healing Stream Totem
-        [98008] = true,                         -- Spirit Link Totem
-        [108280] = true,                        -- Healing Tide Totem
-        [157153] = true,                        -- Cloudburst Totem
-        [192077] = false,                       -- Wind Rush Totem
-        [198838] = true,                        -- Earthen Wall Totem
-        [207399] = true,                        -- Ancestral Protection Totem
-        
-    },
-    ["DEBUFF"] = {
-        -- Priest
-		[605] = true,                           -- Mind Control
-        [8122] = true,                          -- Psychic Scream
-        [15487] = true,                         -- Silence
-        [64044] = true,                         -- Psychic Horror
-		[205364] = true,                        -- Mind Control (Talent)
-    },
+    ["ALL"] = {
+        { spellID = 6907, type = "debuff", announce = true },  -- Deseased Slime
+    }
 }
 
--- list of summoned units by the player
-local SummonedUnits = {}
-
--- list of combat events to moditor
 local CombatEvents = {
     -- Healing
     SPELL_HEAL = true,
@@ -132,52 +124,36 @@ local CombatEvents = {
     SPELL_AURA_APPLIED = true,
     SPELL_AURA_REMOVED = true,
     -- Cast
-    SPELL_CAST_STARTED = false,
+    SPELL_CAST_START = true,
     SPELL_CAST_SUCCESS = true,
     SPELL_CAST_FAILED = false,
     -- Others
     SPELL_SUMMON = true,
+    SPELL_RESURRECT = true,
     UNIT_DESTROYED = true,
-    UNIT_DIED = true
+    UNIT_DIED = true,
+    -- UNIT_DISSIPATES = true,
 }
 
-----------------------------------------------------------------
--- Functions
-----------------------------------------------------------------
--- scan unit auras to fint spell that matches spellID.
-local function GetAuraInfo(spell, unit, filter)
-    if ((not spell) or (not unit) or (not filter)) then return end
-    -- run though all unit auras
-    for index = 1, 40 do
-        -- UnitAura(unit, index, filter)
-        -- unit = unitID string (e.g: "player", "target", "focus", ...)
-        -- index = from 1 to 40
-        -- filter = string combination ("HELPFUL", "HARMFUL", "PLAYER", "RAID", "CANCELABLE", "NOT_CANCELABLE")
-        local spellName, _, _, _, _, _, _, _, _, spellID = UnitAura(unit, index, filter)
+local playerGUID = nil
+local playerClass = nil
+local chatType = nil
 
-        if (not spellID) then
-            -- no auras left
-            break
-        elseif ((type(spell) == "number" and spell == spellID) or
-                (type(spell) == "string" and spell == spellName)) then
-            -- return all
-            return UnitAura(unit, index, filter)
-        end
-    end
-end
+local band = bit.band
+local bor = bit.bor
+local format = string.format
+local tremove = table.remove
+local tinsert = table.insert
+local tsort = table.sort
 
--- checks if unit belongs to player.
-local function UnitIsMine(unitFlags)
-    return (CombatLog_Object_IsA(unitFlags, COMBATLOG_FILTER_ME) or
-            CombatLog_Object_IsA(unitFlags, COMBATLOG_FILTER_MINE) or
-            CombatLog_Object_IsA(unitFlags, COMBATLOG_FILTER_MY_PET))
-end
-
+local COMBATLOG_FILTER_TOTEM = bor(COMBATLOG_OBJECT_TYPE_GUARDIAN, COMBATLOG_OBJECT_AFFILIATION_MINE)
 ----------------------------------------------------------------
 -- OnUpdate
 -- Reference: http://wowwiki.wikia.com/wiki/Using_OnUpdate_correctly on January 21th, 2019
 ----------------------------------------------------------------
-local UpdateInterval = 1.0              -- how often the OnUpdate code will run.
+local SummonedUnits = {}
+local SummonThreshold = 30                          -- threshold time to clear summons table.
+local UpdateInterval = 1.0                          -- how often the OnUpdate code will run.
 local WaitTable = {}
 local function OnUpdate(self, elapsed)
     self.LastUpdate = (self.LastUpdate or 0) + elapsed
@@ -198,203 +174,292 @@ local function OnUpdate(self, elapsed)
         -- stupid totems do not fire combat log event UNIT_DIED
         -- so delete from table, if this unit was summoned 30 or more secongs ago.
         for index, unit in ipairs(SummonedUnits) do
-            if (time() - unit.timestamp >= threshold) then
+            if (unit.duration <= 0) then
                 tremove(SummonedUnits, index)
             end
+            unit.duration = unit.duration - self.LastUpdate
         end
 
         self.LastUpdate = self.LastUpdate - UpdateInterval;
     end
 end
+----------------------------------------------------------------
+-- Funtions
+----------------------------------------------------------------
+
+-- search spell in the class spell list
+local function GetSpellListInfo(spellID, class)
+    if (not spellID) then return end
+
+    for _, v in pairs(SpellList[class or "ALL"]) do
+        if (v.spellID == spellID) then
+            return v.spellID, v.type, v.announce, v.duration
+        end
+    end
+end
+
+local function SearchUnitAura(spell, unit, filter)
+    for index = 1, 40 do
+        local spellName, _, _, _, _, _, _, _, _, spellID = UnitAura(unit, index, filter)
+
+        if (not spellID) then
+            -- no auras left
+        elseif (type(spell) == "number" and spell == spellID) or
+                (type(spell) == "string"and spell == spellName) then
+            return UnitAura(unit, index, filter)
+        end
+    end
+end
+
+local COMBATLOG_FILTER_PLAYER = bor(COMBATLOG_OBJECT_TYPE_PLAYER, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_AFFILIATION_MINE)
+
+local function GetUnit(unitFlags)
+    if (band(unitFlags, COMBATLOG_OBJECT_TARGET) > 0) then
+        return "target"
+    elseif (band(unitFlags, COMBATLOG_OBJECT_FOCUS) > 0) then
+        return "focus"
+    elseif (band(unitFlags, COMBATLOG_FILTER_PLAYER) > 0) then
+        return "player"
+    end
+end
 
 ----------------------------------------------------------------
--- Events
+-- Frame
 ----------------------------------------------------------------
 local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_LOGIN")
+f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:SetScript("OnUpdate", OnUpdate)
 f:SetScript("OnEvent", function (self, event, ...)
-    -- call one of the functions above
+    -- call one of the functions below
     self[event](self, ...)
 end)
 
--- initialize plugin
 function f:PLAYER_LOGIN()
     playerGUID = UnitGUID("player")
-    chatType = C.SpellAnnounce.Chat or "SAY"
+    playerClass = select(2, UnitClass("player"))
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
+function f:PLAYER_ENTERING_WORLD()
+    local inInstance, instanceType = IsInInstance()
+    
+    if (inInstance) and (C.SpellAnnounce.GroupChat) then
+        if (instanceType == "raid") then
+            if (IsInRaid()) then
+                chatType = "RAID"
+            else
+                chatType = "SAY"
+            end
+        elseif (inInstance == "party") then
+            if (IsInGroup(LE_PARTY_CATEGORY_INSTANCE)) then
+                chatType = "INSTANCE_CHAT"
+            elseif (IsInGroup()) then
+                chatType = "PARTY"
+            else
+                chatType = "SAY"
+            end
+        end
+    else
+        chatType = "SAY"
+    end
+end
+
 function f:COMBAT_LOG_EVENT_UNFILTERED()
-    -- 1st to 11th parameters
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
     destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
-    
-    -- check combat event filter
-    if (not CombatEvents[eventType]) then return end
 
-    -- some spells return destName as nil if you don't have a target.
-    if (not destName) then
-        destGUID = sourceGUID
-        destName = sourceName
-        destFlags = sourceFlags
-        destRaidFlags = sourceRaidFlags
-    end
-
-    -- spells casted by others are just important if destination is my character.
-    -- if ((sourceGUID ~= playerGUID) and (destGUID ~= playerGUID)) then return end
-    if (not UnitIsMine(sourceFlags)) then return end
-
-    -- 12th to 14th parameters
-    local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
-    local spellLink = GetSpellLink(spellID)
-    local spellIcon = select(3, GetSpellInfo(spellID))
-
-    -- Buffs
-    if (SpellList.AURAS[spellID]) then
-        if (eventType == "SPELL_AURA_APPLIED") then
-            local auraType, amount = select(15, CombatLogGetCurrentEventInfo())
-
-            -- need to get spell duration
-            local unit = (destGUID == playerGUID) and "player" or "target"
-            local filter = (sourceGUID == playerGUID) and "HELPFUL|PLAYER" or "HELPFUL"
-            local duration = select(5, GetAuraInfo(spellID, unit, filter))
-
-            if (sourceGUID == playerGUID) then
-                if (destGUID ~= playerGUID) then
-
-                    if (type(duration) == "number" and duration > 0) then
-                        SendChatMessage(format("%s (%ds) casted on %s!", spellLink, duration, destName), chatType)
-                    else
-                        SendChatMessage(format("%s casted on %s!", spellLink, destName), chatType)
-                    end
-                else
-                    if (type(duration) == "number" and duration > 0) then
-                        SendChatMessage(format("%s (%ds) up!", spellLink, duration), chatType)
-                    else
-                        SendChatMessage(format("%s up!", spellLink), chatType)
-                    end
-                end
-            else
-                if (destGUID == playerGUID) then
-                    if (type(duration) == "number" and duration > 0) then
-                        SendChatMessage(format("%s (%ds) on me!", spellLink, duration), chatType)
-                    else
-                        SendChatMessage(format("%s on me!", spellLink), chatType)
-                    end
-                end
-            end
-        elseif (eventType == "SPELL_HEAL") then
-            local amount, overhealing, absorbed, critical = select(15, CombatLogGetCurrentEventInfo())
-
-            if (sourceGUID == playerGUID) then
-                SendChatMessage(format("%s healed %s for %d!", spellName, destName, amount), chatType)
-            end
-        elseif (eventType == "SPELL_AURA_REMOVED") then
-            local auraType, amount = select(15, CombatLogGetCurrentEventInfo())
-
-            if (sourceGUID == playerGUID) then
-                if (destGUID ~= playerGUID) then
-                    SendChatMessage(format("%s on %s is over!", spellName, destName), chatType)
-                else
-                    SendChatMessage(format("%s over!", spellName), chatType)
-                end
-            else
-                if (destGUID == playerGUID) then
-                    SendChatMessage(format("%s on me is over!", spellName), chatType)
-                end
-            end
-        end
-    end
-
-    -- Raid Spells
-    if (SpellList.RAID[spellID]) then
-        if (destGUID ~= playerGUID) then return end
-
-        if (eventType == "SPELL_AURA_APPLIED") then
-            
-            -- need to get spell duration
-            local duration = select(5, GetAuraInfo(spellID, "player", "HELPFUL"))
-
-            if (type(duration) == "number" and duration > 0) then
-                SendChatMessage(format("%s (%ds) up!", spellLink, duration), chatType)
-            else
-                SendChatMessage(format("%s up!", spellLink), chatType)
-            end
-        elseif (eventType == "SPELL_AURA_REMOVED") then
-            SendChatMessage(format("%s is over!", spellLink), chatType)
-        end
-    end
-
-    -- Casted Spells
-    if (SpellList.CAST[spellID]) then
-        -- filter caster
-        if (not sourceGUID == playerGUID) then return end
-
-        if (eventType == "SPELL_CAST_SUCCESS") then
-            local duration = SpellList.CAST[spellID]
-
-            SendChatMessage(format("%s (%ds) up!", spellLink, duration), chatType)
-
-            if (type(duration) == "number" and duration > 0) then
-                tinsert(WaitTable, { duration = duration, fmt = "%s over!", args = { spellName } })
-            end
-        elseif (eventType == "SPELL_AURA_REMOVED") then
-            SendChatMessage(format("%s over!", spellLink), chatType)
-        end
-    end
-
-    -- Channeling Spells
-    if (SpellList.CHANNEL[spellID]) then
-        if (not sourceGUID == playerGUID) then return end
+    if (eventType:find("SPELL")) then
         
-        if (eventType == "SPELL_CAST_SUCCESS") then
-            SendChatMessage(format("Channeling %s!", spellLink), chat)
-        elseif (eventType == "SPELL_AURA_REMOVED") then
-            if (destGUID == playerGUID) then
-                SendChatMessage(format("%s over!", spellLink), chat)
-            end
+        -- some spells return nil destination if casted with out a locked target
+        if (not destName) then
+            destGUID = sourceGUID
+            destName = sourceName
+            destFlags = sourceFlags
+            destRaidFlags = sourceRaidFlags
         end
-    end
 
-    -- Summons
-    if (SpellList.SUMMON[spellID]) then
-        if (eventType == "SPELL_SUMMON") then
-            SendChatMessage(format("%s up!", spellLink), chatType)
+        -- ignore spell casted by others and aren't targeting the player
+        if (sourceGUID ~= playerGUID) and (destGUID ~= playerGUID) then return end
 
-            -- save summoned unitGUID and unitName
-            tinsert(SummonedUnits, { timestamp = timestamp, GUID = destGUID, Name = destName })
+        -- get caster class
+        local class = nil
+        if (CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MINE)) then
+            class = playerClass
+        elseif (band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0) then
+            class = select(2, GetPlayerInfoByGUID(sourceGUID))
+        end
 
-            if (#SummonedUnits > 1) then
-                -- sort by timestamp
-                tsort(SummonedUnits, function(a, b)
-                    if (a.timestamp == b.timestamp) then
-                        return a.Name < b.Name
+        -- get extra combatlog info
+        local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
+
+        -- check spell list
+        local _, types, announce, uptime = GetSpellListInfo(spellID, class)
+
+        if (announce) then
+            -- split spell types
+            local type, arg1 = strsplit(",", types)
+
+            -- set which spell text will be displayed
+            local spellLink = GetSpellLink(spellID)
+            local spellText = (C.SpellAnnounce.SpellLink) and spellLink or spellName
+            
+            -- raid cooldowns
+            if (type == "raid") then
+                if (eventType == "SPELL_CAST_SUCCESS") then
+                    -- announce only spell casted by the player
+                    if  (sourceGUID == playerGUID) then
+                        if (arg1 == "channeled") then
+                            SendChatMessage(format("Channeling %s!", spellText), chat)
+                        elseif (arg1 == "cast") then
+                            local duration = uptime
+                            SendChatMessage(format("%s (%ds) up!", spellText, duration), chatType)
+
+                            if (duration and duration > 0) then
+                                tinsert(WaitTable, { duration = duration, fmt = "%s over!", args = { spellName } })
+                            end
+                        end
                     end
-                end)
+                elseif (eventType == "SPELL_AURA_APPLIED") and (not arg1) then
+                    -- announce spells that apply affects a large group of people
+                    local unit = GetUnit(destFlags)
+                    local filter = (sourceGUID == playerGUID) and "HELPFUL|PLAYER" or "HELPFUL"
+                    local duration = select(5, SearchUnitAura(spellID, unit, filter))
+                    if (sourceGUID == playerGUID) then
+                        if (destGUID == playerGUID) then
+                            SendChatMessage(format("%s (%ds) up!", spellText, duration), chatType)
+                        end
+                    else
+                        if (destGUID == playerGUID) then
+                            SendChatMessage(format("%s (%s) on me!", spellText, duration), chatType)
+                        end
+                    end
+                elseif (eventType == "SPELL_AURA_REMOVED") and (arg1 ~= "summon") then
+                    if (sourceGUID == playerGUID) then
+                        if (destGUID == playerGUID) then
+                            SendChatMessage(format("%s over!", spellText), chatType)
+                        else
+                            SendChatMessage(format("%s on %s is over!", spellText, destName), chatType)
+                        end
+                    else
+                        if (destGUID == playerGUID) then
+                            SendChatMessage(format("%s on me is over!", spellText), chatType)
+                        end
+                    end
+                elseif (eventType == "SPELL_SUMMON") then
+                    if (sourceGUID == playerGUID) then
+                        SendChatMessage(format("%s up!", spellText), chatType)
+
+                        -- define a limit
+                        local duration = SummonThreshold
+                        -- get duration of the last totem summoned
+                        for i = 1, MAX_TOTEMS do
+                            local haveTotem, totemName, startTime, totemDuration = GetTotemInfo(i)
+                            if (not haveTotem) then
+                                break
+                            else
+                                duration = totemDuration + 3
+                            end
+                        end
+
+                        -- save summoned unit GUID and Name
+                        tinsert(SummonedUnits, { timestamp = timestamp, GUID = destGUID, name = destName, duration = duration })
+
+                        -- sort table by timestamp
+                        if (#SummonedUnits > 1) then
+                            tsort(SummonedUnits, function(a, b)
+                                if (a.timestamp == b.timestamp) then
+                                    return a.name < b.name
+                                end
+                                return a.timestamp < b.timestamp
+                            end)
+                        end
+                    end
+                end
+            
+            -- external cooldowns
+            elseif (type == "external") then
+                if (eventType == "SPELL_AURA_APPLIED") then
+                    local unit = GetUnit(destFlags)
+                    local filter = (sourceGUID == playerGUID) and "HELPFUL|PLAYER" or "HELPFUL"
+                    local duration = select(5, SearchUnitAura(spellID, unit, filter))
+                    if (sourceGUID == playerGUID) then
+                        if (destGUID == playerGUID) then
+                            SendChatMessage(format("%s (%ds) up!", spellText, duration), chatType)
+                        else
+                            SendChatMessage(format("%s (%ds) casted on %s!", spellText, duration, destName), chatType)
+                        end
+                    else
+                        if (destGUID == playerGUID) then
+                            SendChatMessage(format("%s (%s) on me!", spellText, duration), chatType)
+                        end
+                    end
+                elseif (eventType == "SPELL_AURA_REMOVED") then
+                    if (sourceGUID == playerGUID) then
+                        if (destGUID == playerGUID) then
+                            SendChatMessage(format("%s over!", spellText), chatType)
+                        else
+                            SendChatMessage(format("%s on %s is over!", spellText, destName), chatType)
+                        end
+                    else
+                        if (destGUID == playerGUID) then
+                            SendChatMessage(format("%s on me is over!", spellText), chatType)
+                        end
+                    end
+                elseif (eventType == "SPELL_HEAL") then
+                    if (sourceGUID == playerGUID) then
+                        local amount, overhealing, absorbed, critical = select(15, CombatLogGetCurrentEventInfo())
+                        SendChatMessage(format("%s healed %s for %d!", spellText, destName, amount), chatType)
+                    end
+                end
+
+            -- defensive cooldowns
+            elseif (type == "defensive") or (type == "buff") then
+                if (sourceGUID == playerGUID) and (destGUID == playerGUID) then
+                    if (eventType == "SPELL_AURA_APPLIED") then
+                        local duration = select(5, SearchUnitAura(spellID, "player", "HELPFUL"))
+                        SendChatMessage(format("%s (%ds) up!", spellText, duration))
+                    elseif (eventType == "SPELL_AURA_REMOVED") then
+                        SendChatMessage(format("%s over!", spellText))
+                    end
+                end
+            
+            -- resurrect
+            elseif (type == "resurrect") then
+                if (sourceGUID == playerGUID) then
+                    if (eventType == "SPELL_RESURRECT") then
+                        SendChatMessage(format("Casting %s on %s!", spellText, destName), chatType)
+                    end
+                end
+
+            -- debuffs
+            elseif (type == "debuff") then
+                if (sourceGUID ~= playerGUID) and (destGUID == playerGUID) then
+                    if (eventType == "SPELL_AURA_APPLIED") then
+                        local duration = select(5, SearchUnitAura(spellID, "player", "HARMFUL"))
+                        SendChatMessage(format("%s (%ds) up!", spellText, duration))
+                    elseif (eventType == "SPELL_AURA_REMOVED") then
+                        SendChatMessage(format("%s over!", spellText))
+                    end
+                end
             end
         end
-    end
 
-    -- if an unit dies, verify if it was any of the summoned units.
-	if (eventType == "UNIT_DIED") then
-		for index, unit in ipairs(SummonedUnits) do
-            if (unit.GUID == destGUID and unit.Name == destName) then
-				SendChatMessage(format("%s over!", destName), chatType)
-				-- remove unit from table.
-				tremove(SummonedUnits, index)
-			end
-		end
-	end
+    elseif (eventType:find("UNIT")) then
+        
+        -- filter units that belong to player
+        if (band(destFlags, COMBATLOG_FILTER_TOTEM) > 0) then 
 
-    -- Debuffs
-    if (SpellList.DEBUFF[spellID]) then
-        if (not destGUID == playerGUID) then return end
-        if (eventType == "SPELL_AURA_APPLIED") then
-            local duration = select(5, GetAuraInfo(spellID, "player", "HARMFUL"))
-            SendChatMessage(format("%s (%ds) on me!", spellLink, duration), chatType)
-        elseif (eventType == "SPELL_AURA_REMOVED") then
-            SendChatMessage(format("%s over!", spellLink), chatType)
+            -- check if unit was one of the summoned units
+            if (eventType == "UNIT_DIED") or (eventType == "UNIT_DESTROYED") then
+                for index, unit in pairs(SummonedUnits) do
+                    if (unit.name == destName) then
+                        SendChatMessage(format("%s is over!", destName), chatType)
+                        -- remove unit from table
+                        tremove(SummonedUnits, index)
+                    end
+                end
+            end
         end
     end
 end

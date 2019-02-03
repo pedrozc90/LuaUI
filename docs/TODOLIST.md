@@ -11,12 +11,9 @@
 3. ChatFrame:
     + Anchor chat by code.
     + Setup channel by code.
-4. ActionBar3:
-    + Define layout.
-    + Define anchor. (try to create a overlay frame)
-    + Make visible on mouse over.
-5. Fix tooltip anchor. (above right chatframe or above pet unit).
-6. Check target stealable/dispelable buffs border.
-7. **Spell Announce**: Review functions *GetAuraInfo(spellID, unit, filter)*
+4. Tooltip:
+    + Fix Anchor (above right chatframe or above pet unit).
+    + Add spellID
+5. Check target stealable/dispelable buffs border.
 
 ## Bugs:

@@ -1,7 +1,7 @@
 local T, C, L = Tukui:unpack()
 
 ----------------------------------------------------------------
--- Interrupt Announce bt Elv22
+-- Interrupt Announce by Elv22
 ----------------------------------------------------------------
 if (not C.Interrupts.Enable) then return end
 
@@ -11,7 +11,7 @@ local CHANNELS = {
     ["PARTY"] = true,
     ["RAID"] = true,
     ["RAID_WARNNING"] = false,
-    ["INSTANCE_CHAT"] = true
+    ["INSTANCE_CHAT"] = false
 }
 
 local f = CreateFrame("Frame")
@@ -39,6 +39,11 @@ function f:PLAYER_ENTERING_WORLD()
     else
         chatType = "SAY"
     end
+
+    -- check if channel is enable for announcing
+    if (not CHANNELS[chatType]) then
+        chatType = "SAY"
+    end
 end
 
 function f:COMBAT_LOG_EVENT_UNFILTERED()
@@ -48,13 +53,8 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
 
     -- check if event is interrupt
     if ((eventType == "SPELL_INTERRUPT") and (sourceGUID == UnitGUID("player"))) then
-        local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
-        local extraSpellID, extraSpellName, extraSchool = select(15, CombatLogGetCurrentEventInfo())
-
-        -- check if channel is enable for announcing
-        if (not CHANNELS[chatType]) then
-            chatType = "SAY"
-        end
+        local spellID, spellName, spellSchool, extraSpellID, extraSpellName,
+        extraSchool = select(12, CombatLogGetCurrentEventInfo())
 
         if (C.Interrupts.SpellLink) then
             local extraSpellLink = GetSpellLink(extraSpellID)

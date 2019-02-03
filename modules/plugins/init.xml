@@ -5,5 +5,8 @@
     <Script file="pvp_alert.lua"/>
     <Script file="screenshots.lua"/>
     <Script file="spell_announce.lua"/>
+    <Script file="raidcd.lua"/>
+
+    <Script file="combatlog.lua"/>
 
 </Ui>

@@ -1,5 +1,6 @@
 local T, C, L = Tukui:unpack()
+local Tooltips = T.Tooltips
 
 ----------------------------------------------------------------
--- LuaUI Initialization
+-- ToolTip
 ----------------------------------------------------------------

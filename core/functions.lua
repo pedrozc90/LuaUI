@@ -2,6 +2,7 @@ local T, C, L = Tukui:unpack()
 
 local format = string.format
 local floor = math.floor
+local pow = math.pow
 local gsub = string.gsub
 local ceil = math.ceil
 
@@ -22,7 +23,7 @@ end
 T.RoundValue = function(number, decimals)
 	if (not decimals) then decimals = 0 end
     local mult = pow(10, decimals)
-	return ceil(mult * number) / mult
+	return floor(mult * number) / mult
 end
 
 -- returns the size of frames such as combo-points/runes/chi, where

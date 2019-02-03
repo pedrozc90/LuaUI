@@ -1,5 +1,29 @@
 # ChangeLog:
 
+## Changes in 1.3-Release:
+
++ Added: plugin Raid Cooldowns.
++ Changes: plugin Spell Announce complete rewriten.
++ Changes: plugin ScreenShots enables only for selected instances difficulties.
++ Changes: plugin ScreenShots take screenshots of world bosses.
++ Changes: plugin Interrupt chat selection.
++ Changes: plugin PvP Alert code clearing.
++ Changes: **raid frame player names colored by class, not by role.**
+
+## Changes in 1.2-Release:
+
++ Added: Enabled Saved Variables
++ Fixed: All extra actionbars are enabled by default.
++ Fixed: ActionBar5 and ActionBar6 toggle buttons.
+
+## Changes in 1.1-Release:
+
++ Added: plugin PvP Alert.
++ Fixed: Spell Announce summoned units table was not updating.
++ Fixed: Interrupt Announce chatType selection
++ Added: plugin RaidCD.
++ Fixed: PvP Alert intialize function was verifying instance corretly.
+
 ## Changes in 1.0-Release:
 
 + Update: to **Tukui 18.21+**
@@ -7,9 +31,3 @@
 + Added: plugin Interrupts Announce.
 + Added: plugin ScreenShots.
 + Added: plugin Spell Announce.
-
-## Changes in 1.1-Release:
-
-+ Added: plugin PvP Alert.
-+ Fixed: Spell Announce summoned units table was not updating.
-+ Fixed: Interrupt Announce chatType selection

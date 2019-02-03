@@ -36,9 +36,11 @@ local function CreateBar2()
     LeftBar:CreateBackdrop("Transparent")
 
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
-		local Button = _G["MultiBarBottomLeftButton"..i]
+        local Button = _G["MultiBarBottomLeftButton"..i]
+        Button:Show()
         Button:ClearAllPoints()
         Button:Size(Size)
+        -- Button:SetAttribute("showgrid", 1)
 
         local Offset = Spacing - 1
 		if (i == 1) then
@@ -56,3 +58,24 @@ local function CreateBar2()
 	RegisterStateDriver(LeftBar, "visibility", "[vehicleui][petbattle][overridebar] hide; show")
 end
 hooksecurefunc(ActionBars, "CreateBar2", CreateBar2)
+
+----------------------------------------------------------------
+-- ActionBar3 Backdrop
+----------------------------------------------------------------
+local function CreateBar3()
+    local Bar = Panels.ActionBar3
+    local Size = C.ActionBars.NormalButtonSize
+    local Spacing = C.ActionBars.ButtonSpacing
+
+    local Width = (Size * 6) + (Spacing * 7) - 2
+    local Height = (Size * 1) + (Spacing * 2) - 2
+    
+    Bar:ClearAllPoints()
+    Bar:Point("BOTTOMLEFT", Panels.ActionBar1, "BOTTOMRIGHT", 7, 0)
+    Bar:Width(Width)
+    Bar:Height(Height)
+    Bar.Backdrop:StripTextures(true)
+    Bar.Backdrop = nil
+    Bar:CreateBackdrop("Transparent")
+end
+hooksecurefunc(ActionBars, "CreateBar3", CreateBar3)

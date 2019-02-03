@@ -11,7 +11,7 @@ C["Lua"] = {
     ["ColorPower"] = true,                          -- enable power bar color based on power type.
 
     -- System
-    ["UIScale"] = 0.71,                             -- set ui scale (temporary fix for tukui auot-scale).
+    ["uiScale"] = 0.71111,                          -- set ui scale (temporary fix for tukui auot-scale).
     ["Setup"] = true,                               -- set console variables preferences.
     ["Mute"] = false,                               -- set system master sounds to 0.
 
@@ -68,16 +68,26 @@ C["ScreenShots"] = {
     ["ChallendeMode"] = true,                       -- enables screenshots of successful challenge modes.
     ["Achievements"] = true,                        -- enables screenshots of earned achievements.
     ["LevelUp"] = true,                             -- enables screenshots when player level up.
-    ["Debug"] = false,                              -- enables print messages when screenshot is taken or failed.
+    ["Messages"] = true,                            -- enables print messages when screenshot is taken or failed.
 }
 
 C["SpellAnnounce"] = {
     ["Enable"] = true,                              -- enables spell announce plugin.
-    ["Chat"] = "SAY",                               -- set chat channel to announce.
+    ["GroupChat"] = true,                          -- set announce chat channel to by group type and instance.
+    ["SpellLink"] = true,                           -- enable spell link one messages.
 }
 
 C["PvPAlert"] = {
     ["Enable"] = true,                              -- enables pvp alert plugin.
+}
+
+C["RaidCD"] = {
+    ["Enable"] = true,
+    ["MaxBars"] = 10,
+    ["BarSize"] = { 230, 23 },
+    ["BarSpacing"] = 7,
+    ["StatusBarHeight"] = 3,
+    ["Anchor"] = { "TOPLEFT", UIParent, "TOPLEFT", 7, -35 },
 }
 
 ----------------------------------------------------------------

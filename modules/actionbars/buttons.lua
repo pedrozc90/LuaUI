@@ -5,6 +5,9 @@ local Panels = T.Panels
 ----------------------------------------------------------------
 -- ActionBars Buttons
 ----------------------------------------------------------------
+local IsShiftKeyDown = IsShiftKeyDown
+local InCombatLockdown = InCombatLockdown
+local error = ERR_NOT_IN_COMBAT
 local BarButtons = {}
 
 local OnEnter = function(self)
@@ -16,44 +19,58 @@ local OnLeave = function(self)
 end
 
 local OnClick = function(self, button)
-    if InCombatLockdown() then
-		return T.Print(ERR_NOT_IN_COMBAT)
+    if (InCombatLockdown()) then
+        return T.Print(error)
     end
-    
+
+    local Data = LuaUIData[GetRealmName()][UnitName("player")]
+
     local ShiftClick = IsShiftKeyDown()
-    local ID = self.ID
+    local Num = self.Num
     local Bar = self.Bar
     local Anchor = self.Anchor
+    local Text = self.Text
 
-    if (Bar:IsVisible() or (ShiftClick and ID == 1)) then
-        -- Visibility
-        UnregisterStateDriver(Bar, "visibility")
-        Bar:Hide()
+    local Offset = 7
 
+    if (Bar:IsVisible()) then
         if (ShiftClick) then
-            -- hide anchor as well
-            UnregisterStateDriver(Anchor, "visibility")
-            Anchor:Hide()
-        end
+            if (Num == 5) then
+                -- Visibility
+                UnregisterStateDriver(Panels.ActionBar4, "visibility")
+                UnregisterStateDriver(Panels.ActionBar5, "visibility")
+                Panels.ActionBar4:Hide()
+                Panels.ActionBar5:Hide()
 
-        -- Move the button
-        self:ClearAllPoints()
-
-        if (ID == 1) then
-            if (Anchor:IsVisible()) then
-                self:Point("TOP", Anchor, "BOTTOM", 0, -7)
-                self:Size(Anchor:GetWidth(), 16)
-            else
+                -- Move the button
+                self:ClearAllPoints()
                 self:Point("RIGHT", Anchor, "RIGHT", 0, 0)
-                self:Size(16, Anchor:GetHeight() / 2)
+                self:Size(16, Anchor:GetHeight() / 3)
+                Text:SetText("<<")
+
+                -- Set value
+			    Data["HideBar5"] = true
             end
-            self.Text:Point("CENTER", self, "CENTER", 2, 1)
-            self.Text:SetText("<")
-        elseif (ID == 2) then
-            self:Point("LEFT", Anchor, "LEFT", 0, 0)
-            self:Size(16, Anchor:GetHeight() / 2)
-            self.Text:Point("CENTER", self, "CENTER", 1, 1)
-            self.Text:SetText(">")
+        else
+            -- Visibility
+			UnregisterStateDriver(Bar, "visibility")
+            Bar:Hide()
+            
+            -- Move the button
+            self:ClearAllPoints()
+            
+            if (Num == 5) then
+                self:Point("TOP", Anchor, "BOTTOM", 0, -Offset)
+                self:Size(Anchor:GetWidth(), 16)
+                Text:SetText("<")
+            elseif (Num == 6) then
+                self:Point("LEFT", Anchor, "LEFT", 0, 0)
+                self:Size(16, Anchor:GetHeight() / 3)
+                Text:SetText(">")
+            end
+
+            -- Set value
+			Data["HideBar"..Num] = true
         end
     else
         -- Visibility
@@ -61,73 +78,101 @@ local OnClick = function(self, button)
         Bar:Show()
 
         if (not Anchor:IsVisible()) then
+            -- Visibility
             RegisterStateDriver(Anchor, "visibility", "[vehicleui][petbattle][overridebar] hide; show")
             Anchor:Show()
         end
         
         -- Move the button
         self:ClearAllPoints()
-
-        if (ID == 1) then
-            self:Point("TOP", Anchor, "BOTTOM", 0, -7)
+        
+        if (Num == 5) then
+            self:Point("TOP", Anchor, "BOTTOM", 0, -Offset)
             self:Size(Anchor:GetWidth(), 16)
-            self.Text:Point("CENTER", self, "CENTER", 1, 1)
-            self.Text:SetText(">")
-        elseif (ID == 2) then
-            self:Point("TOP", Anchor, "BOTTOM", 0, -7)
+            Text:SetText(">")
+        elseif (Num == 6) then
+            self:Point("TOP", Anchor, "BOTTOM", 0, -Offset)
             self:Size(Anchor:GetWidth(), 16)
-            self.Text:Point("CENTER", self, "CENTER", 2, 1)
-            self.Text:SetText("<")
+            Text:SetText("<")
         end
+
+        -- Set value
+		Data["HideBar"..Num] = false
     end
 end
 
-function ActionBars:CreateToggleButtons()
+local function CreateToggleButtons()
     local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
 
-    -- remove existing buttons
-    for i = 1, 2 do
-        -- local Bar = Panels["ActionBar" .. i]
-        -- local Width = Bar:GetWidth()
-        -- local Height = Bar:GetHeight()
+    for i = 2, 5 do
+        local Button = Panels["ActionBar" .. i .. "ToggleButton"]
+        Button:SetScript("OnClick", nil)
+		Button:SetScript("OnEnter", nil)
+		Button:SetScript("OnLeave", nil)
+        Button:Kill()
+    end
 
-        -- toggle button to show/hide actionbar5 (RightBar)
+    for i = 5, 6 do
+        local Bar = Panels["ActionBar" .. i]
+        local Width = Bar:GetWidth()
+        local Height = Bar:GetHeight()
+
         local Button = CreateFrame("Button", nil, UIParent)
-        Button:SetFrameStrata("BACKGROUND")
-        Button:SetFrameLevel(4)
-        Button:CreateBackdrop("Transparent")
-        Button:RegisterForClicks("AnyUp")
+		Button:SetFrameStrata("BACKGROUND")
+		Button:SetFrameLevel(4)
+		Button:CreateBackdrop("Transparent")
+		Button:RegisterForClicks("AnyUp")
         Button:SetAlpha(0)
-
-        Button.ID = i
         
-        Button:SetScript("OnClick", OnClick)
-        Button:SetScript("OnEnter", OnEnter)
-        Button:SetScript("OnLeave", OnLeave)
+        Button.Num = i
+        Button.Bar = Bar
+
+		Button:SetScript("OnClick", OnClick)
+		Button:SetScript("OnEnter", OnEnter)
+		Button:SetScript("OnLeave", OnLeave)
 
         Button.Text = Button:CreateFontString(nil, "OVERLAY")
-        Button.Text:SetFont(Font, FontSize, FontStyle)
+        Button.Text:Point("CENTER", Button, "CENTER", 1, 1)
+		Button.Text:SetFont(Font, FontSize, FontStyle)
         
+        local Offset = 7
 
-        if (i == 1) then
-            Button.Bar = Panels.ActionBar5
+        if (i == 5) then
             Button.Anchor = Panels.ActionBar4
-            Button:Point("TOP", Button.Anchor, "BOTTOM", 0, -7)
-            Button:Size(Button.Anchor:GetWidth(), 16)
-            Button.Text:Point("CENTER", Button, "CENTER", 1, 1)
+
+            Button:Point("TOP", Button.Anchor, "BOTTOM", 0, -Offset)
+            Button:Size(Bar:GetWidth(), 16)
             Button.Text:SetText(">")
-        elseif (i == 2) then
-            Button.Bar = Panels.ActionBar6
+        elseif (i == 6) then
             Button.Anchor = Panels.ActionBar6
-            Button:Point("TOP", Button.Anchor, "BOTTOM", 0, -7)
-            Button:Size(Button.Anchor:GetWidth(), 16)
-            Button.Text:Point("CENTER", Button, "CENTER", 2, 1)
+
+            Button:Point("TOP", Bar, "BOTTOM", 0, -Offset)
+            Button:Size(Bar:GetWidth(), 16)
             Button.Text:SetText("<")
         end
 
         BarButtons[i] = Button
 
-		Panels["ActionBar" .. i .. "ToggleButton"] = Button
+        Panels["ActionBarToggleButton" .. i] = Button
     end
 end
--- hooksecurefunc(ActionBars, "CreateToggleButtons", CreateToggleButtons)
+hooksecurefunc(ActionBars, "CreateToggleButtons", CreateToggleButtons)
+
+-- check character saved-variables
+local function LoadVariables()
+    if (not LuaUIData[GetRealmName()][UnitName("player")]) then
+        LuaUI[GetRealmName()][UnitName("player")] = {}
+    end
+
+    local Data = LuaUIData[GetRealmName()][UnitName("player")]
+
+    -- hide actionbars
+    for i = 5, 6 do
+        local ToggleButton = BarButtons[i]
+        
+        if (Data["HideBar" .. i]) then
+            OnClick(ToggleButton)
+        end
+    end
+end
+hooksecurefunc(ActionBars, "LoadVariables", LoadVariables)

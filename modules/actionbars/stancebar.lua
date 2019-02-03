@@ -14,7 +14,7 @@ local function CreateStanceBar()
 	local Spacing = C.ActionBars.ButtonSpacing
 
 	StanceBar:ClearAllPoints()
-    StanceBar:Point("TOPLEFT", UIParent, "TOPLEFT", 7, -7)
+    StanceBar:Point("TOPLEFT", UIParent, "TOPLEFT", 1, -1)
     StanceBar:Width((PetSize * 10) + (Spacing * 11))
     StanceBar:Height((PetSize * 1) + (Spacing * 2))
     StanceBar.Backdrop:Kill()

@@ -1,39 +1,47 @@
 local T, C, L = Tukui:unpack()
 
 ----------------------------------------------------------------
--- Console Variables Setup
+-- Install
 ----------------------------------------------------------------
+-- configure default console variables.
 local function SetVariables()
     if (not C.Lua.Setup) then return end
 
     -- System
+        local uiScale = C.Lua.uiScale or 1
+
         -- Advanced
-        SetCVar("uiScale", C.Lua.UIScale or 1)
+        SetCVar("uiScale", uiScale)
+        
         -- Sound
-        SetCVar("Sound_EnableAllSound", C.Lua.Mute and 0 or 1)                     -- enables all sounds
-        SetCVar("Sound_MasterVolume", 0.25)                          -- set master volume (0.0 to 1.0)
+        SetCVar("Sound_EnableAllSound", C.Lua.Mute and 0 or 1)      -- enables all sounds
+        SetCVar("Sound_MasterVolume", 0.25)                         -- set master volume (0.0 to 1.0)
         SetCVar("Sound_EnableSFX", 1)                               -- enables sound effects
-        SetCVar("Sound_SFXVolume", 0.20)                             -- sound effects volume (default = 1.0)
+        SetCVar("Sound_SFXVolume", 0.20)                            -- sound effects volume (default = 1.0)
         SetCVar("Sound_EnableMusic", 1)                             -- enables music sounds
-        SetCVar("Sound_MusicVolume", 0.20)                           -- set music volume (default = 0.4)
+        SetCVar("Sound_MusicVolume", 0.20)                          -- set music volume (default = 0.4)
         SetCVar("Sound_EnableAmbience", 1)                          -- enables ambience sounds
-        SetCVar("Sound_AmbienceVolume", 0.35)                        -- ambience volume (default = 0.6)
+        SetCVar("Sound_AmbienceVolume", 0.35)                       -- ambience volume (default = 0.6)
         SetCVar("Sound_EnableDialog", 1)                            -- enables dialog volume
-        SetCVar("Sound_DialogVolume", 0.50)                          -- dialog volume (default 1.0)
+        SetCVar("Sound_DialogVolume", 0.50)                         -- dialog volume (default 1.0)
+        
         -- Chat
         SetCVar("ChatAmbienceVolume", 0.3)                          -- ambience volume (default = 0.3)
         SetCVar("ChatMusicVolume", 0.3)                             -- music volume (default = 0.3)
         SetCVar("ChatSoundVolume", 0.4)                             -- sound volume (default = 0.4)
+    
     -- General
-    SetCVar("deselectOnClick", 1)                                   -- clear the target when clicking on terrain (default = 0)
-    SetCVar("autoDismount", 1)                                      -- enables automatically dismount when needed (default = 1)
-	SetCVar("autoDismountFlying", 1)                                -- enables automatically dismount before casting while flying (default = 0)
+    SetCVar("deselectOnClick", 1)                                   -- clear the target when clicking on terrain
+    SetCVar("autoDismount", 1)                                      -- enables automatically dismount when needed
+	SetCVar("autoDismountFlying", 1)                                -- enables automatically dismount before casting while flying
 	SetCVar("showTutorials", 0)                                     -- enables tutorials.
-    SetCVar("autoLootDefault", 1)                                   -- automatically loot items when the loot window opens (default = 0)
+    SetCVar("autoLootDefault", 1)                                   -- automatically loot items when the loot window opens
+    
     -- Social
     SetCVar("chatBubbles", 1)                                       -- show in-game chat bubbles
-	SetCVar("chatBubblesParty", 0)                                  -- show in-game cha bubbles for party chat
-    SetCVar("guildMemberNotify", 0)                                 -- receive notification when guild members log on/off (default 1)
+	SetCVar("chatBubblesParty", 0)                                  -- show in-game party chat bubbles
+    SetCVar("guildMemberNotify", 0)                                 -- enables notification when guild members log on/off (default 1)
+    
     -- Names
 	SetCVar("UnitNameEnemyGuardianName", 1)                         -- default = 1
     SetCVar("UnitNameEnemyMinionName", 1)                           -- default = 1
@@ -55,6 +63,7 @@ local function SetVariables()
     SetCVar("UnitNameOwn", 0)                                       -- default = 0
     SetCVar("UnitNamePlayerGuild", 0)                               -- default = 1
     SetCVar("UnitNamePlayerPVPTitle", 0)                            -- default = 1
+    
     -- Nameplates
 	SetCVar("nameplateMotion", 0)
     SetCVar("nameplateShowAll", 1)
@@ -73,6 +82,7 @@ local function SetVariables()
     SetCVar("nameplateShowFriends", 0)
     SetCVar("nameplateShowOnlyNames", 0)
     SetCVar("nameplateShowSelf", 0)
+    
     -- Combat Text
     SetCVar("enableFloatingCombatText", 1)                          -- enables floating combat text.
     SetCVar("floatingCombatTextAllSpellMechanics", 0)
@@ -101,18 +111,62 @@ local function SetVariables()
     SetCVar("floatingCombatTextRepChanges", 0)
     SetCVar("floatingCombatTextSpellMechanics", 0)
     SetCVar("floatingCombatTextSpellMechanicsOther", 0)
+    
     -- Camera
     SetCVar("cameraView", 1)                                        -- stores the last saved camera position the camera was in. (default = 0)
     SetCVar("cameraSmoothStyle", 0)                                 -- sets the automatic camera adjustment/following style. (default = 4)
 	SetCVar("cameraSmoothTrackingStyle", 0)
     SetCVar("cameraDistanceMaxZoomFactor", 2.6)                     -- sets the factor by which maximum camera distance (equals to 15) is multiplied. (cannot exceed 39 yards, default = 1.9)
+
+    -- ActionBars
+    if (C.ActionBars.Enable) then
+        SetActionBarToggles(1, 1, 1, 1, 1)                          -- enable all extra action bars.
+    end
+
+    LuaUIData[GetRealmName()][UnitName("player")].InstallDone = true
 end
 
+-- initialize saved variables
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
--- f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:SetScript("OnEvent", function(self, event, addon)
     if (addon ~= "LuaUI") then return end
-    SetVariables()
+
+    local Name = UnitName("player")
+    local Realm = GetRealmName()
+
+    if (not LuaUIData) then
+        LuaUIData = {}
+    end
+
+    if (not LuaUIData[Realm]) then
+        LuaUIData[Realm] = {}
+    end
+
+    if (not LuaUIData[Realm][Name]) then
+        LuaUIData[Realm][Name] = {}
+    end
+
+    if (LuaUIDataPerChar) then
+        LuaUIData[Realm][Name] = LuaUIDataPerChar
+        LuaUIDataPerChar = nil
+    end
+
+    local IsInstalled = LuaUIData[Realm][Name].InstallDone
+
+    -- check if LuaUI was already installed
+    if (not IsInstalled) then
+        local Data = LuaUIData[Realm][Name]
+
+        -- define visible actionbars
+        Data["HideBar2"] = false
+        Data["HideBar3"] = false
+        Data["HideBar4"] = false
+        Data["HideBar5"] = true
+        Data["HideBar6"] = true
+
+        SetVariables()
+    end
+
     self:UnregisterEvent("ADDON_LOADED")
 end)

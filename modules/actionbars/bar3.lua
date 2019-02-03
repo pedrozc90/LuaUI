@@ -12,7 +12,7 @@ local function CreateBar3()
     local Size = C.ActionBars.NormalButtonSize
 	local Spacing = C.ActionBars.ButtonSpacing
     
-	MultiBarBottomRight:SetParent(Bar)
+    MultiBarBottomRight:SetParent(Bar)
     MultiBarBottomRight:SetScript("OnHide", function() Bar.Backdrop:Hide() end)
     MultiBarBottomRight:SetScript("OnShow", function() Bar.Backdrop:Show() end)
 

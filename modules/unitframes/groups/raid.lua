@@ -87,7 +87,7 @@ local function Raid(self)
 	Name:Point("CENTER", Health, "CENTER", 1, 7)
     Name:SetJustifyH("CENTER")
 
-    self:Tag(Name, "[Tukui:GetRaidNameColor][Tukui:NameShort]")
+    self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameShort]")
     
     -- ReadyCheck
 	ReadyCheck:ClearAllPoints()

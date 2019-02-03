@@ -12,9 +12,9 @@ local function CreateBar5()
     local Size = C.ActionBars.NormalButtonSize
 	local Spacing = C.ActionBars.ButtonSpacing
 
-	MultiBarLeft:SetParent(Bar)
+    MultiBarLeft:SetParent(Bar)
 	MultiBarLeft:SetScript("OnHide", function() Bar.Backdrop:Hide() end)
-	MultiBarLeft:SetScript("OnShow", function() Bar.Backdrop:Show() end)
+    MultiBarLeft:SetScript("OnShow", function() Bar.Backdrop:Show() end)
 
     Bar:ClearAllPoints()
     Bar:Point("RIGHT", Panels.ActionBar4, "LEFT", -7, 0)
