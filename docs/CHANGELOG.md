@@ -1,5 +1,15 @@
 # ChangeLog:
 
+## Changes in 1.4-Release
+
++ Added: miscellaneous Mirror Timers.
++ Added: miscellaneous Timer Tracker.
++ Added: miscellaneous Alternative Power Bar.
++ Added: miscellaneous Objective Tracker position.
++ Added: Tooltips anchor update if pet frame or right chat background are visible.
++ Added: spellID on tooltips.
++ Added: ChatFrame positioning.
+
 ## Changes in 1.3-Release:
 
 + Added: plugin Raid Cooldowns.

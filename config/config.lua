@@ -6,12 +6,12 @@ local class = RAID_CLASS_COLORS[select(2, UnitClass("player"))]
 ----------------------------------------------------------------
 C["Lua"] = {
     -- Setup
-    ["Enable"] = true,                              -- enable LuaUI edit
+    -- ["Enable"] = true,                              -- enable LuaUI edit
     ["UniColor"] = true,                            -- enable unicolor theme
     ["ColorPower"] = true,                          -- enable power bar color based on power type.
 
     -- System
-    ["uiScale"] = 0.71111,                          -- set ui scale (temporary fix for tukui auot-scale).
+    ["uiScale"] = "auto",                           -- set game uiScale ("auto" or a number, e.g: 0.71 fro 1920x1080).
     ["Setup"] = true,                               -- set console variables preferences.
     ["Mute"] = false,                               -- set system master sounds to 0.
 
@@ -35,19 +35,22 @@ C["Units"] = {
 }
 
 -- Auras
-C["Auras"].Spacing = 3
+C["Auras"].Spacing = 3                              -- set spacing between auras.
 
 -- Nameplate
-C["NamePlates"].PowerBar = false                    -- enables nameplates powerbar
+C["NamePlates"].PowerBar = false                    -- enables nameplates powerbar.
 C["NamePlates"].DebuffSize = 18                     -- set debuff icon size.
 C["NamePlates"].DebuffSpacing = 7                   -- set space between debuffs.
 
 -- Party
-C["Party"].ShowSolo = false
+C["Party"].ShowSolo = false                         -- display party frame when playing solo (only player unit).
 
 -- Raid
-C["Raid"].ShowSolo = false
+C["Raid"].ShowSolo = false                          -- display raid frame when playing solo (only player unit).
 C["Raid"].TestAuraWatch = false                     -- force to show aurawatch debuff.
+
+-- Tooltips
+C["Tooltips"].SpellID = true                        -- enables spells, items, quest ids on tooltips.
 
 ----------------------------------------------------------------
 -- Plugins Settings
@@ -73,7 +76,7 @@ C["ScreenShots"] = {
 
 C["SpellAnnounce"] = {
     ["Enable"] = true,                              -- enables spell announce plugin.
-    ["GroupChat"] = true,                          -- set announce chat channel to by group type and instance.
+    ["GroupChat"] = true,                           -- set announce chat channel to by group type and instance.
     ["SpellLink"] = true,                           -- enable spell link one messages.
 }
 
@@ -82,11 +85,11 @@ C["PvPAlert"] = {
 }
 
 C["RaidCD"] = {
-    ["Enable"] = true,
-    ["MaxBars"] = 10,
-    ["BarSize"] = { 230, 23 },
-    ["BarSpacing"] = 7,
-    ["StatusBarHeight"] = 3,
+    ["Enable"] = true,                              -- enables raid cooldowns plugin.
+    ["MaxBars"] = 10,                               -- max number of visible bars.
+    ["BarSize"] = { 230, 23 },                      -- set bar size
+    ["BarSpacing"] = 7,                             -- set spacing between bars
+    ["StatusBarHeight"] = 3,                        -- set status bar height
     ["Anchor"] = { "TOPLEFT", UIParent, "TOPLEFT", 7, -35 },
 }
 

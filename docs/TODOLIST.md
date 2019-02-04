@@ -4,16 +4,12 @@
 1. Add Plugins:
     + Filger
     + xCT
-    + Raid Cooldowns
-2. Quest Tracker:
-    + Move quest tracker anchor.
-    + Add a toggle button to hide quest tracker.
-3. ChatFrame:
-    + Anchor chat by code.
-    + Setup channel by code.
-4. Tooltip:
-    + Fix Anchor (above right chatframe or above pet unit).
-    + Add spellID
-5. Check target stealable/dispelable buffs border.
+2. ChatFrame:
+    + ~~Anchor chat by code.~~
+    + ~~Setup channel by code.~~
+    + Test QuickJoinToastButton and ChatMenu. (**LuaUI/modules/chatframes/core**)
+3. Check target stealable/dispelable buffs border.
+4. Tukui Install
+    + disable it and run install on first time.
 
 ## Bugs:

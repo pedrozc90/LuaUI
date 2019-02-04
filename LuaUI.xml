@@ -39,6 +39,11 @@
         <Script file="modules\misc\threat.lua"/>
         <Script file="modules\misc\experience.lua"/>
         <Script file="modules\misc\reputation.lua"/>
+        
+        <Script file="modules\misc\mirror_timers.lua"/>
+        <Script file="modules\misc\timer_tracker.lua"/>
+        <Script file="modules\misc\objective_tracker.lua"/>
+        <Script file="modules\misc\altpowerbar.lua"/>
 
         <!-- Auras -->
         <Script file="modules\auras\auras.lua"/>
@@ -86,6 +91,7 @@
     <Include file="modules\plugins\init.xml"/>
 
     <!-- Tooltip -->
-    <Script file="modules/tooltip/tooltip.lua"/>
+    <Script file="modules\tooltip\tooltips.lua"/>
+    <Script file="modules\tooltip\spellID.lua"/>
 
 </Ui>

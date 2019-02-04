@@ -161,7 +161,7 @@ hooksecurefunc(ActionBars, "CreateToggleButtons", CreateToggleButtons)
 -- check character saved-variables
 local function LoadVariables()
     if (not LuaUIData[GetRealmName()][UnitName("player")]) then
-        LuaUI[GetRealmName()][UnitName("player")] = {}
+        LuaUIData[GetRealmName()][UnitName("player")] = {}
     end
 
     local Data = LuaUIData[GetRealmName()][UnitName("player")]

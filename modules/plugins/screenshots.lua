@@ -169,7 +169,7 @@ function f:BOSS_KILL(...)
     
     if (bossName) then
         -- display bos
-        if (C.ScreenShot.Messages) then
+        if (C.ScreenShots.Messages) then
             T.Print("Boss Killed:", bossName)
         end
         -- delay 1 sec before take screenshot.
@@ -188,37 +188,23 @@ function f:ENCOUNTER_END(...)
     local ecounterID, encounterName, difficultyID, groupSize, sucess = ...
     local difficulty, groupType = GetDifficultyInfo(difficultyID)
 
+    -- calculate total time until encounter wipe/success
+    self.EncounterElapsedTimer = time() - self.EncounterStartTimer
+
     -- check if encounter was a wipe
-    if (sucess == 0) then return end
+    if (sucess == 0) then 
+        T.Print(encounterName, "Wipe.")
+        T.Print("Time:", GetEncounterTime(self.EncounterElapsedTimer))
+        return
+    end
 
     -- filter encounters difficulty which we want to take screenshots.
     if (EncounterDifficulty[difficultyID]) then
-
-        -- calculate total time until encounter wipe/success
-        self.EncounterElapsedTimer = time() - self.EncounterStartTimer
-
+        
         -- display encounter info
         T.Print("Defeted", encounterName, difficulty, "(" .. groupSize .. "-man)")
         T.Print("Date:", date("%m/%d/%y %H:%M:%S"))
         T.Print("Time:", GetEncounterTime(self.EncounterElapsedTimer))
-
-        -- print group members
-        if (C.ScreenShot.Messages) then
-            local inInstance, instanceType = IsInInstance()
-
-            if (instanceType == "raid") or (instanceType == "party") then
-
-                local groupMembers = {}
-                for index = 1, groupSize do
-                    local name, rank, subgroup, level, class, classFile, zone, online, isDead, role, isML = GetRaidRosterInfo(index)
-                    local specID = GetInspectSpecialization(instanceType .. index)
-                    local spec = select(2, GetSpecializationInfoByID(specID))
-                    -- Luaerror <Guild> - Priest Discipline
-                    local color = RAID_CLASS_COLORS[classFile]
-                    T.Print(format("%s%s - %s %s|r",T.RGBToHex(color.r, color.g, color.b), name, class, spec))
-                end
-            end
-        end
 
         -- take screenshot
         Wait(1, Screenshot)

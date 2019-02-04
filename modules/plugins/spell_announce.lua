@@ -20,26 +20,27 @@ local SpellList = {
         { spellID = 196718, type = "raid", announce = true, duration = 8 },  -- Darkness
     },
     ["DRUID"] = {
-        { spellID = 20484, type = "resurrect", announce = true },  -- Rebirth
-        { spellID = 29166, type = "external", announce = true },  -- Innervate
+        { spellID = 20484, type = "resurrect", announce = true },   -- Rebirth
+        { spellID = 29166, type = "external", announce = true },    -- Innervate
 
         -- Restoration
-        { spellID = 740   , type = "raid,channeled", announce = true },  -- Tranquility
-        { spellID = 102342, type = "external", announce = true },  -- Ironbark
+        { spellID = 740   , type = "raid,channeled", announce = true }, -- Tranquility
+        { spellID = 102342, type = "external", announce = true },       -- Ironbark
     },
     ["HUNTER"] = {
-        { spellID = 264667, type = "raid", announce = true },     -- Primal Rage
+        { spellID = 264667, type = "raid", announce = true },       -- Primal Rage
     },
     ["MAGE"] = {
-        { spellID = 80353 , type = "raid", announce = true },     -- Time Warp
+        { spellID = 45438 , type = "defensive", announce = true },  -- Ice Block
+        { spellID = 80353 , type = "raid", announce = true },       -- Time Warp
     },
     ["MONK"] = {
-        { spellID = 116841, type = "external", announce = false },	-- Tiger's Lust
+        { spellID = 116841, type = "external", announce = false },  -- Tiger's Lust
 
         -- Brewmaster
         { spellID = 115295, type = "defensive", announce = false },	-- Guard
         { spellID = 120954, type = "defensive", announce = true  },	-- Fortigying Brew
-        { spellID = 122278, type = "defensive", announce = false },	-- Dampen Harm
+        { spellID = 122278, type = "defensive", announce = true },	-- Dampen Harm
         { spellID = 215479, type = "defensive", announce = false },	-- Ironskin Brew
         { spellID = 115176, type = "raid,channeled", announce = true },   -- Zen Meditation
 
@@ -50,7 +51,7 @@ local SpellList = {
         { spellID = 191837, type = "raid,channeled", announce = false },  -- Essence Font
     },
     ["PALADIN"] = {
-        { spellID = 642   , type = "defensive", announce = true },   -- Divine Shield
+        { spellID = 642   , type = "defensive", announce = true },  -- Divine Shield
         { spellID = 1022  , type = "external", announce = true },   -- Blessing of Protection
         { spellID = 1044  , type = "external", announce = true },   -- Blessing of Freedom
         { spellID = 6940  , type = "external", announce = true },   -- Blessing of Sacrifice
@@ -59,7 +60,7 @@ local SpellList = {
         -- Holy
         { spellID = 498   , type = "defensive", announce = true },  -- Divine Protection
         { spellID = 31821 , type = "raid", announce = true },       -- Aura Mastery
-        { spellID = 114158, type = "raid,cast", announce = true, duration = 14 },    -- Light's Hammer (Holy)
+        { spellID = 114158, type = "raid,cast", announce = true, duration = 14 },   -- Light's Hammer (Holy)
 
         -- Protection
         { spellID = 31850 , type = "defensive", announce = true },  -- Ardent Defender
@@ -110,7 +111,7 @@ local SpellList = {
 
         -- Protection
         { spellID = 871   , type = "defensive", announce = true },  -- Shield Wall
-        { spellID = 132404, type = "defensive", announce = true },  -- Shield Block
+        { spellID = 132404, type = "defensive", announce = false },  -- Shield Block
     },
     ["ALL"] = {
         { spellID = 6907, type = "debuff", announce = true },  -- Deseased Slime

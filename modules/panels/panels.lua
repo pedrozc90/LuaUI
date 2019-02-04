@@ -17,7 +17,8 @@ local function Enable(self)
 	local TabsBGLeft = self.TabsBGLeft
     local TabsBGRight = self.TabsBGRight
 
-    local xOffset, yOffset = 7, 7
+    local xOffset, yOffset = 4, 4
+    local ChatWidth = 385 + xOffset + yOffset
     
     -- Kill Lines
     BottomLine:Kill()
@@ -25,12 +26,12 @@ local function Enable(self)
     RightVerticalLine:Kill()
 
     LeftChatBG:ClearAllPoints()
-    LeftChatBG:Point("BOTTOMLEFT", UIParent, "BOTTOMLEFT", xOffset, yOffset)
-    LeftChatBG:Size(379 + xOffset + yOffset, 177)
+    LeftChatBG:Point("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 7, 7)
+    LeftChatBG:Size(ChatWidth, 177)
 
     RightChatBG:ClearAllPoints()
-    RightChatBG:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -xOffset, yOffset)
-    RightChatBG:Size(379 + xOffset + yOffset, 177)
+    RightChatBG:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -7, 7)
+    RightChatBG:Size(ChatWidth, 177)
 
     TabsBGLeft:ClearAllPoints()
     TabsBGLeft:Point("TOPLEFT", LeftChatBG, "TOPLEFT", xOffset, -yOffset)

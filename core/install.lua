@@ -3,15 +3,30 @@ local T, C, L = Tukui:unpack()
 ----------------------------------------------------------------
 -- Install
 ----------------------------------------------------------------
+local function GetUIScale()
+    local uiScale = 1
+    -- calculates uiScale based on screen size
+    if (C.Lua.uiScale == "auto") then
+        uiScale = 768 / tonumber(string.match(T.Resolution, "%d+x(%d+)"))
+        uiScale = T.RoundValue(uiScale, 5)
+    
+    -- uiScale set manually
+    elseif (type(C.Lua.uiScale) == "number") then
+        uiScale = C.Lua.uiScale
+    end
+    return uiScale
+end
+
 -- configure default console variables.
 local function SetVariables()
     if (not C.Lua.Setup) then return end
 
     -- System
-        local uiScale = C.Lua.uiScale or 1
 
         -- Advanced
-        SetCVar("uiScale", uiScale)
+        if (C.Lua.uiScale) then
+            SetCVar("uiScale", GetUIScale())
+        end
         
         -- Sound
         SetCVar("Sound_EnableAllSound", C.Lua.Mute and 0 or 1)      -- enables all sounds
