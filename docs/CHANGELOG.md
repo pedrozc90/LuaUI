@@ -9,6 +9,9 @@
 + Added: Tooltips anchor update if pet frame or right chat background are visible.
 + Added: spellID on tooltips.
 + Added: ChatFrame positioning.
++ Added: Monk Stagger Bar.
++ Changed: ObjectiveTracker Progress Bar.
++ Fixed: Tooltip **TaskPOI_OnEnter**, WorldMapTooltip was retuning as nil.
 
 ## Changes in 1.3-Release:
 

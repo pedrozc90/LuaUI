@@ -11,6 +11,7 @@ function Tooltips:AddSpellID()
     UnitDebuff, UnitAura, UnitGUID, GetGlyphSocketInfo
     local hooksecurefunc, select, tonumber = hooksecurefunc, select, tonumber
     local find, match, gsub, gmatch = string.find, string.match, string.gsub, string.gmatch
+    local tconcat, tinsert = table.concat, table.insert
 
     local kinds = {
         spell = "SpellID",
@@ -56,7 +57,7 @@ function Tooltips:AddSpellID()
         local left, right
         if type(id) == "table" then
             left = NORMAL_FONT_COLOR_CODE .. kind .. "s:" .. FONT_COLOR_CODE_CLOSE
-            right = HIGHLIGHT_FONT_COLOR_CODE .. table.concat(id, ", ") .. FONT_COLOR_CODE_CLOSE
+            right = HIGHLIGHT_FONT_COLOR_CODE .. tconcat(id, ", ") .. FONT_COLOR_CODE_CLOSE
         else
             left = NORMAL_FONT_COLOR_CODE .. kind .. ":" .. FONT_COLOR_CODE_CLOSE
             right = HIGHLIGHT_FONT_COLOR_CODE .. id .. FONT_COLOR_CODE_CLOSE
@@ -190,7 +191,7 @@ function Tooltips:AddSpellID()
         local link = select(2, self:GetItem())
         if not link then return end
 
-        local itemString = match(link, "item:([%-?%d:]+)")
+        local itemString = link:match("item:([%-?%d:]+)")
         if not itemString then return end
 
         local enchantid = ""
@@ -297,9 +298,9 @@ function Tooltips:AddSpellID()
                 local itemIDs = {}
 
                 for i = 1, #sources do
-                if sources[i].visualID and not contains(visualIDs, sources[i].visualID) then table.insert(visualIDs, sources[i].visualID) end
-                if sources[i].sourceID and not contains(visualIDs, sources[i].sourceID) then table.insert(sourceIDs, sources[i].sourceID) end
-                if sources[i].itemID and not contains(visualIDs, sources[i].itemID) then table.insert(itemIDs, sources[i].itemID) end
+                if sources[i].visualID and not contains(visualIDs, sources[i].visualID) then tinsert(visualIDs, sources[i].visualID) end
+                if sources[i].sourceID and not contains(visualIDs, sources[i].sourceID) then tinsert(sourceIDs, sources[i].sourceID) end
+                if sources[i].itemID and not contains(visualIDs, sources[i].itemID) then tinsert(itemIDs, sources[i].itemID) end
                 end
 
                 if #visualIDs ~= 0 then addLine(GameTooltip, visualIDs, kinds.visual) end
@@ -333,7 +334,7 @@ function Tooltips:AddSpellID()
 
     -- Currencies
     hooksecurefunc(GameTooltip, "SetCurrencyToken", function(self, index)
-        local id = tonumber(string.match(GetCurrencyListLink(index),"currency:(%d+)"))
+        local id = tonumber(match(GetCurrencyListLink(index),"currency:(%d+)"))
         addLine(self, id, kinds.currency)
     end)
 
@@ -352,7 +353,8 @@ function Tooltips:AddSpellID()
     end)
 
     hooksecurefunc("TaskPOI_OnEnter", function(self)
-        if self and self.questID then addLine(WorldMapTooltip, self.questID, kinds.quest) end
+        -- WorldMapTooltip returns nil
+        if self and self.questID then addLine(GameTooltip, self.questID, kinds.quest) end
     end)
 end
 

@@ -17,3 +17,9 @@ Colors.assets = {
         ["notInterruptible"] = { .87, .37, .37, 0.75 }
     }
 }
+
+Colors.power["STAGGER"] = {
+    [1] = { .33, .69, .33 },    -- green
+    [2] = { .85, .77, .36 },    -- yellow
+    [3] = { .69, .31, .31 },    -- red
+}

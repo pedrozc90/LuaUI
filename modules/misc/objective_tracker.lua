@@ -33,3 +33,33 @@ local function SetDefaultPosition()
     Holder:Point("TOPRIGHT", UIParent, "TOPRIGHT", -228, -190)
 end
 hooksecurefunc(ObjectiveTracker, "SetDefaultPosition", SetDefaultPosition)
+
+local function UpdateProgressBar(self, _, line)
+    local Progress = line.ProgressBar
+    local Bar = Progress.Bar
+
+    if (Bar) then
+        local Label = Bar.Label
+        local Icon = Bar.Icon
+
+        local Font, FontSize, FontStyle = C["Medias"].Font, 12, nil
+
+        if (Bar.IsSkinned) then
+            Bar:Height(16)
+
+            if (Label) then
+                Label:ClearAllPoints()
+                Label:SetPoint("CENTER", Bar, "CENTER", 0, -1)
+                Label:SetFont(Font, FontSize, FontStyle)
+            end
+
+            if (Icon) then
+                Icon:ClearAllPoints()
+                Icon:Point("LEFT", Bar, "RIGHT", 7, 0)
+                Icon:Size(Bar:GetHeight())
+                Icon:SetTexCoord(unpack(T.IconCoord))
+            end
+        end
+    end
+end
+hooksecurefunc(ObjectiveTracker, "UpdateProgressBar", UpdateProgressBar)
