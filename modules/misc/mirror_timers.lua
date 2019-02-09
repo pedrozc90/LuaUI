@@ -27,7 +27,7 @@ local function Update()
 
         Text:ClearAllPoints()
         Text:Point("CENTER", Bar, "CENTER", 0, -1)
-        Text:SetFonf(Font, FontSize, FontStyle)
+        Text:SetFont(Font, FontSize, FontStyle)
     end
 end
 hooksecurefunc(MirrorTimers, "Update", Update)

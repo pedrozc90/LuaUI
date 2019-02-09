@@ -81,8 +81,8 @@ local function Player(self)
 
 	-- Stagger Bar
 	local Stagger = CreateFrame("StatusBar", self:GetName() .. "StaggerBar", self)
-	Stagger:Point("CENTER", UIParent, "BOTTOM", 0, 300)
-	Stagger:Width(230)
+	Stagger:Point("CENTER", UIParent, "BOTTOM", 0, 288)
+	Stagger:Width(225)
 	Stagger:Height(10)
 	Stagger:SetStatusBarTexture(PowerTexture)
 	Stagger:CreateBackdrop("Default")
