@@ -12,6 +12,8 @@
 + Added: Monk Stagger Bar.
 + Changed: ObjectiveTracker Progress Bar.
 + Fixed: Tooltip **TaskPOI_OnEnter**, WorldMapTooltip was retuning as nil.
++ Fixed: Player combo points positioning.
++ Added: Dispel Announce, Spell Announce and RaidCD spell list update.
 
 ## Changes in 1.3-Release:
 

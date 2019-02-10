@@ -237,8 +237,9 @@ local function Player(self)
         local Spacing = 7           -- spacing between combo-points
         local SizeMax5, DeltaMax5 = T.EqualSizes(FrameWidth, 5, Spacing)
         local SizeMax6, DeltaMax6 = T.EqualSizes(FrameWidth, 6, Spacing)
-
-		for i = 1, 6 do
+        
+        for i = 1, 6 do
+            ComboPoints[i]:ClearAllPoints()
             ComboPoints[i]:Height(ComboPoints:GetHeight())
             ComboPoints[i]:Width(SizeMax6)
             ComboPoints[i]:CreateBackdrop()
@@ -258,9 +259,9 @@ local function Player(self)
 			if (i == 1) then
                 ComboPoints[i]:Point("LEFT", ComboPoints, "LEFT", 0, 0)
 			else
-                ComboPoints[i]:Point("LEFT", ComboPoints[i - 1], "RIGHT", spacing, 0)
-			end
-		end
+                ComboPoints[i]:Point("LEFT", ComboPoints[i - 1], "RIGHT", Spacing, 0)
+            end
+        end
 
 		ComboPoints:SetScript("OnShow", function(self)
 			UnitFrames.UpdateShadow(self, 12)
@@ -270,7 +271,7 @@ local function Player(self)
 		ComboPoints:SetScript("OnHide", function(self)
 			UnitFrames.UpdateShadow(self, 4)
 			UnitFrames.UpdateBuffsHeaderPosition(self, 4)
-		end)
+        end)
     end
     
     -- TotemBar

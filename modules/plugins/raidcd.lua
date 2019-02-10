@@ -17,13 +17,18 @@ local RaidCooldowns = {
     },
     ["DRUID"] = {
         [20484] = true,                         -- Rebirth
+        
+        -- Balance
         [29166] = true,                         -- Innervate
+
+        -- Guardian
+        [61336] = true,                         -- Survival Instincts
 
         -- Restoration
         [740] = true,                           -- Tranquility
         [33891] = true,                         -- Incarnation: Tree of Life
         [102342] = true,                        -- Ironbark
-        [197721] = true,                        -- Flourish
+        [197721] = false,                       -- Flourish
     },
     ["HUNTER"] = {
         [264667] = true,                        -- Primal Rage
@@ -31,7 +36,16 @@ local RaidCooldowns = {
     ["MAGE"] = {
         [80353] = true,                         -- Time Warp
     },
-    ["MONK"] = {},
+    ["MONK"] = {
+        -- Brewmaster
+        [115176] = true,                        -- Zen Meditation
+        [120954] = true,                        -- Fortigying Brew
+        [122278] = true,                        -- Dampen Harm
+
+        -- Mistweaver
+        [115310] = true,                        -- Revival
+        [116849] = true,                        -- Life Cocoon
+    },
     ["PALADIN"] = {
         [642] = true,                           -- Divine Shield
         [633] = true,                           -- Lay of Hands
@@ -88,6 +102,7 @@ local RaidCooldowns = {
 
         -- Protection
         [871] = true,                           -- Shield Wall
+        [12975] = true,                         -- Last Stand
     },
 }
 
