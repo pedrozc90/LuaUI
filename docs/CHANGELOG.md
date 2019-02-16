@@ -5,15 +5,16 @@
 + Added: miscellaneous Mirror Timers.
 + Added: miscellaneous Timer Tracker.
 + Added: miscellaneous Alternative Power Bar.
-+ Added: miscellaneous Objective Tracker position.
++ Added: miscellaneous Objective Tracker.
 + Added: Tooltips anchor update if pet frame or right chat background are visible.
-+ Added: spellID on tooltips.
-+ Added: ChatFrame positioning.
++ Added: Tooltips now have spellID, itemID, NPCIDs, etc.
++ Added: ChatFrame positioning configured.
 + Added: Monk Stagger Bar.
-+ Changed: ObjectiveTracker Progress Bar.
 + Fixed: Tooltip **TaskPOI_OnEnter**, WorldMapTooltip was retuning as nil.
-+ Fixed: Player combo points positioning.
++ Fixed: Player combo points anchor.
 + Added: Dispel Announce, Spell Announce and RaidCD spell list update.
++ Changed: Removed floating combat text console variables.
++ Fixed: Totem Bar cooldown font set to pixel font.
 
 ## Changes in 1.3-Release:
 

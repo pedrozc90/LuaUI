@@ -289,7 +289,20 @@ local function Player(self)
 		for i = 1, MAX_TOTEMS do
 			Totems[i]:ClearAllPoints()
 			Totems[i]:Size(Totems:GetHeight())
-			Totems[i].Shadow:Kill()
+            Totems[i].Shadow:Kill()
+            
+            -- change cooldown font
+            local cooldown = Totems[i].Cooldown
+            local timer = cooldown:GetRegions()
+            timer:ClearAllPoints()
+            timer:SetPoint("CENTER", cooldown, "CENTER", 2, 1)
+            timer:SetFont(Font, 14, FontStyle)
+            timer:SetTextColor(0.84, 0.75, 0.65)
+
+            timer.ClearAllPoints = function() end
+            timer.SetPoint = function() end
+            timer.SetFontObject = function() end
+            timer.SetFont = function() end
 
 			if i == 1 then
 				Totems[i]:Point("BOTTOMLEFT", Totems, "BOTTOMLEFT", 0, 0)

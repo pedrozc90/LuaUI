@@ -173,13 +173,14 @@ end
 hooksecurefunc(Chat, "Install", Install)
 
 local function Setup(self)
-    local LeftChatBG = Panels.LeftChatBG
+	local LeftChatBG = Panels.LeftChatBG
+	local TabsBGLeft = Panels.TabsBGLeft
 
     -- QuickJoinToastButton
     QuickJoinToastButton.ClearAllPoints = BNToastFrame.ClearAllPoints
 	QuickJoinToastButton.SetPoint = BNToastFrame.SetPoint
 	QuickJoinToastButton:ClearAllPoints()
-	QuickJoinToastButton:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", -5, 4)
+	QuickJoinToastButton:SetPoint("TOPLEFT", TabsBGLeft, "BOTTOMLEFT", 0, -7)
 	QuickJoinToastButton:SetAlpha(0)
 
 	QuickJoinToastButton.ClearAllPoints = function() end

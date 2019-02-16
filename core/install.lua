@@ -97,36 +97,7 @@ local function SetVariables()
     SetCVar("nameplateShowFriends", 0)
     SetCVar("nameplateShowOnlyNames", 0)
     SetCVar("nameplateShowSelf", 0)
-    
-    -- Combat Text
-    SetCVar("enableFloatingCombatText", 1)                          -- enables floating combat text.
-    SetCVar("floatingCombatTextAllSpellMechanics", 0)
-    SetCVar("floatingCombatTextAuras", 0)                           -- display a message when you gain an aura.
-    SetCVar("floatingCombatTextCombatDamage", 1)                    -- display amount of damage dealt to hostile creatures.
-    SetCVar("floatingCombatTextCombatDamageAllAutos", 1)            -- display all auto-attack numbers, rather than hiding non-event numbers
-    SetCVar("floatingCombatTextCombatDamageDirectionalOffset", 1)   -- set amount to offset directional damage numbers when they start
-    SetCVar("floatingCombatTextCombatDamageDirectionalScale", 0)    -- set directional damage numbers movement scale (0 = no directional numbers)
-    SetCVar("floatingCombatTextCombatHealing", 1)                   -- display amount of healing you dealt to the target.
-    SetCVar("floatingCombatTextCombatHealingAbsorbSelf", 1)         -- displat a message when you gain a shield.
-    SetCVar("floatingCombatTextCombatHealingAbsorbTarget", 1)       -- display amount of shield added to the target.
-    SetCVar("floatingCombatTextCombatLogPeriodicSpells", 1)         -- display damage caused by periodic effects
-    SetCVar("floatingCombatTextCombatState", 0)                     -- display a message when you enter/leave combat.
-    SetCVar("floatingCombatTextComboPoints", 0)                     -- display amount of combo-points you have.
-    SetCVar("floatingCombatTextDamageReduction", 0)                 -- display amount of damage redection you gain.
-    SetCVar("floatingCombatTextDodgeParryMiss", 0)                  -- display a message when you dodge/parry/miss.
-    SetCVar("floatingCombatTextEnergyGains", 0)                     -- display amount of energy gain.
-    SetCVar("floatingCombatTextFloatMode", 1)                       -- set combat text float mode.
-    SetCVar("floatingCombatTextFriendlyHealers", 0)                 -- display amount of healing received from friends.
-    SetCVar("floatingCombatTextHonorGains", 0)                      -- display amount of honor gain.
-    SetCVar("floatingCombatTextLowManaHealth", 0)                   -- display a message when mana or health are low.
-    SetCVar("floatingCombatTextPeriodicEnergyGains", 0)             -- display amount of energy gain periodically.
-    SetCVar("floatingCombatTextPetMeleeDamage", 0)                  -- display pet melee damage dealt.
-    SetCVar("floatingCombatTextPetSpellDamage", 0)                  -- display pet spell damage dealt.
-    SetCVar("floatingCombatTextReactives", 0)
-    SetCVar("floatingCombatTextRepChanges", 0)
-    SetCVar("floatingCombatTextSpellMechanics", 0)
-    SetCVar("floatingCombatTextSpellMechanicsOther", 0)
-    
+
     -- Camera
     SetCVar("cameraView", 1)                                        -- stores the last saved camera position the camera was in. (default = 0)
     SetCVar("cameraSmoothStyle", 0)                                 -- sets the automatic camera adjustment/following style. (default = 4)
