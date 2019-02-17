@@ -158,8 +158,6 @@ function f:CHALLENGE_MODE_COMPLETED()
 end
 
 function f:PLAYER_LEVEL_UP()
-    -- take an instant screenshot.
-    Screenshot()
     -- delay enough for the golden glow ends.
     Wait(2.7, Screenshot)
 end

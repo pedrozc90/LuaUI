@@ -71,7 +71,7 @@ C["ScreenShots"] = {
     ["ChallendeMode"] = true,                       -- enables screenshots of successful challenge modes.
     ["Achievements"] = true,                        -- enables screenshots of earned achievements.
     ["LevelUp"] = true,                             -- enables screenshots when player level up.
-    ["Messages"] = true,                            -- enables print messages when screenshot is taken or failed.
+    ["Messages"] = false,                           -- enables print messages when screenshot is taken or failed.
 }
 
 C["SpellAnnounce"] = {
