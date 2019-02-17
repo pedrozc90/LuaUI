@@ -51,6 +51,7 @@ local function SetVariables()
 	SetCVar("autoDismountFlying", 1)                                -- enables automatically dismount before casting while flying
 	SetCVar("showTutorials", 0)                                     -- enables tutorials.
     SetCVar("autoLootDefault", 1)                                   -- automatically loot items when the loot window opens
+    SetCVar("doNotFlashLowHealthWarning", 1)                        -- do not flash your screen red when you are low on health.
     
     -- Social
     SetCVar("chatBubbles", 1)                                       -- show in-game chat bubbles

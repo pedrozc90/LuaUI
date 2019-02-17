@@ -176,8 +176,8 @@ local function Setup(self)
 	local LeftChatBG = Panels.LeftChatBG
 	local TabsBGLeft = Panels.TabsBGLeft
 
-    -- QuickJoinToastButton
-    QuickJoinToastButton.ClearAllPoints = BNToastFrame.ClearAllPoints
+	-- QuickJoinToastButton
+	QuickJoinToastButton.ClearAllPoints = BNToastFrame.ClearAllPoints
 	QuickJoinToastButton.SetPoint = BNToastFrame.SetPoint
 	QuickJoinToastButton:ClearAllPoints()
 	QuickJoinToastButton:SetPoint("TOPLEFT", TabsBGLeft, "BOTTOMLEFT", 0, -7)

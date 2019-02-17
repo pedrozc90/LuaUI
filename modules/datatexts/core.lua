@@ -129,13 +129,15 @@ end
 -- Set Default DataTexts
 ----------------------------------------------------------------
 hooksecurefunc(DataTexts, "AddDefaults", function()
-    TukuiData[GetRealmName()][UnitName("player")].Texts = {}
+	local Name = UnitName("player")
+	local Realm = GetRealmName()
 
-	TukuiData[GetRealmName()][UnitName("player")].Texts[L.DataText.HPS] = {true, 1}
-	TukuiData[GetRealmName()][UnitName("player")].Texts[L.DataText.DPS] = {true, 2}
-	TukuiData[GetRealmName()][UnitName("player")].Texts[L.DataText.Talents] = {true, 3}
-	TukuiData[GetRealmName()][UnitName("player")].Texts[L.DataText.FPSAndMS] = {true, 4}
-	TukuiData[GetRealmName()][UnitName("player")].Texts[L.DataText.Memory] = {true, 5}
-	TukuiData[GetRealmName()][UnitName("player")].Texts[L.DataText.LootSpec] = {true, 6}
-	TukuiData[GetRealmName()][UnitName("player")].Texts[L.DataText.Time] = {true, 7}
+    TukuiData[Realm][Name].Texts = {}
+	TukuiData[Realm][Name].Texts[L.DataText.Durability] = {true, 1}
+	TukuiData[Realm][Name].Texts[L.DataText.Gold] = {true, 2}
+	TukuiData[Realm][Name].Texts[L.DataText.Talents] = {true, 3}
+	TukuiData[Realm][Name].Texts[L.DataText.FPSAndMS] = {true, 4}
+	TukuiData[Realm][Name].Texts[L.DataText.Memory] = {true, 5}
+	TukuiData[Realm][Name].Texts[L.DataText.BagSlots] = {true, 6}
+	TukuiData[Realm][Name].Texts[L.DataText.Time] = {true, 7}
 end)

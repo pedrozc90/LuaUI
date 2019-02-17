@@ -3,11 +3,17 @@ local T, C, L = Tukui:unpack()
 ----------------------------------------------------------------
 -- CombatLog: prints combatlog events important to player
 ----------------------------------------------------------------
-local band = bit.band
-local bor = bit.bor
+-- player info
+local playerGUID = nil
+
+-- import
+local bor, band = bit.band, bit.bor
 local format = string.format
 
-local playerGUID = nil
+-- string format
+local STRING_HEX = "(0x%08x)"
+
+-- tables
 local CombatLogEnabled = false
 local FilterCombatEvents = {
     SPELL_DAMAGE = true,
@@ -18,9 +24,8 @@ local FilterCombatEvents = {
     SPELL_ABSORBED = true,
 }
 
-local function Debug(...)
-    print(format("|cff00FF96CombatLog:|r"), ...)
-end
+-- functions
+local function Debug(...) print(format("|cff00FF96CombatLog:|r"), ...) end
 
 local function Message(color, ...)
     local t = {}
@@ -74,9 +79,16 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
 
         local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
 
-        if (sourceGUID ~= playerGUID and destGUID ~= playerGUID) then return end
+        -- check if caster is player or belongs to player
+        local fromPlayer = CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MINE)
+        -- check if caster is player's pet/guardian
+        local fromPet = CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MY_PET)
+        -- check if target is the player
+        local toPlayer = CombatLog_Object_IsA(destFlags, COMBATLOG_FILTER_ME)
 
-        if (FilterCombatEvents[eventType]) then return end
+        if (not fromPlayer) and (not fromPet) then return end
+
+        -- if (FilterCombatEvents[eventType]) then return end
 
         color = { .93, .16, .08}
         if (sourceGUID == playerGUID) then
@@ -90,8 +102,8 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
 
         local color = { .87, .92, .08 }
 
-        Message(color, sourceName, format("(0x%08x)", sourceFlags), eventType,
-        destName, format("(0x%08x)", destFlags), select(12, CombatLogGetCurrentEventInfo()))
+        Message(color, sourceName, STRING_HEX:format(sourceFlags), eventType,
+        destName, STRING_HEX:format(destFlags), select(12, CombatLogGetCurrentEventInfo()))
     end
 end
 
