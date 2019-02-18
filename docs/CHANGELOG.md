@@ -1,5 +1,10 @@
 # ChangeLog:
 
+## Changes in 1.5-Release
+
++ Added: group role icons on raid frame.
++ Changed: Objective tracker default anchor.
+
 ## Changes in 1.4-Release
 
 + Added: miscellaneous Mirror Timers.

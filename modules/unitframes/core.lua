@@ -156,6 +156,22 @@ function UnitFrames:UpdateThreat(event, unit)
 end
 
 ----------------------------------------------------------------
+-- Group Role
+----------------------------------------------------------------
+function UnitFrames:UpdateGroupRole(role)
+    self:SetTexCoord(unpack(T.IconCoord))
+    if (role == "TANK") then
+        self:SetTexture(C.Medias.roleTANK)
+        self:Show()
+    elseif (role == "HEALER") then
+        self:SetTexture(C.Medias.roleHEALER)
+        self:Show()
+    else
+        self:Hide()
+    end
+end
+
+----------------------------------------------------------------
 -- Name
 ----------------------------------------------------------------
 function UnitFrames:UpdateNamePosition()

@@ -5,7 +5,9 @@
 
     <!-- Config -->
     <Script file="config\config.lua"/>
-    <Script file="config\medias.lua"/>
+
+    <!-- Medias -->
+    <Script file="medias\medias.lua"/>
 
     <!-- Core -->
     <Script file="core\api.lua"/>

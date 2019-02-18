@@ -161,7 +161,17 @@ local function Raid(self)
 
 	-- Highlight
 	Highlight:ClearAllPoints()
-	Highlight:SetAllPoints(Health)
+    Highlight:SetAllPoints(Health)
+    
+    -- Group Role
+    if (C.Raid.GroupRoles) then
+        local GroupRoleIndicator = self:CreateTexture(nil, "OVERLAY")
+        GroupRoleIndicator:SetSize(12, 12)
+        GroupRoleIndicator:SetPoint("CENTER", Health, "CENTER", 0, -7)
+        GroupRoleIndicator.PostUpdate = UnitFrames.UpdateGroupRole
+
+        self.GroupRoleIndicator = GroupRoleIndicator
+    end
 	
 	if (Class == "PRIEST") then
         local Atonement = CreateFrame("StatusBar", nil, Power)

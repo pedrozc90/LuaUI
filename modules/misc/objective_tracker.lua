@@ -27,10 +27,14 @@ function ObjectiveTracker:CreateToggleButtons()
 end
 
 local function SetDefaultPosition()
-    local Holder = TukuiObjectiveTracker
+    local ObjectiveFrameHolder = TukuiObjectiveTracker
+    local Data = TukuiData[T.MyRealm][T.MyName]
 
-    Holder:ClearAllPoints()
-    Holder:Point("TOPRIGHT", UIParent, "TOPRIGHT", -228, -190)
+    ObjectiveFrameHolder:ClearAllPoints()
+    ObjectiveFrameHolder:Point("TOPRIGHT", UIParent, "TOPRIGHT", -228, -190)
+
+    ObjectiveTrackerFrame:ClearAllPoints()
+    ObjectiveTrackerFrame:SetPoint("TOP", ObjectiveFrameHolder)
 end
 hooksecurefunc(ObjectiveTracker, "SetDefaultPosition", SetDefaultPosition)
 
