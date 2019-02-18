@@ -31,7 +31,7 @@ C["Units"] = {
     ["Arena"]           = { 205, 25 },              -- set arena unitframe size.
     ["Boss"]            = { 205, 25 },              -- set boss unitframe size.
     ["Party"]           = { 185, 25 },              -- set party unitframe size.
-    ["Raid"]            = {  73, 41 }               -- set raid unitframe size.
+    ["Raid"]            = {  72, 41 }               -- set raid unitframe size.
 }
 
 -- Auras

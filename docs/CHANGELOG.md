@@ -4,6 +4,8 @@
 
 + Added: group role icons on raid frame.
 + Changed: Objective tracker default anchor.
++ Changed: Bags, ChatFrames and Raid Frame aligments.
++ Added: SavedVariable to keep quest tracker hidden after /reload.
 
 ## Changes in 1.4-Release
 

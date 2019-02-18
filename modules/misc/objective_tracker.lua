@@ -4,6 +4,30 @@ local ObjectiveTracker = T.Miscellaneous.ObjectiveTracker
 ----------------------------------------------------------------
 -- Objective Tracker
 ----------------------------------------------------------------
+-- make sure objective track is hidden after reload
+function ObjectiveTracker:LoadVariables()
+    if (not LuaUIData[T.MyRealm][T.MyName]) then
+        LuaUIData[T.MyRealm][T.MyName] = {}
+    end
+
+    local Data = LuaUIData[T.MyRealm][T.MyName]
+
+    if (Data["HideObjectiveTracker"]) then
+        self:OnClick()
+    end
+end
+
+local function OnClick(self)
+    local Data = LuaUIData[T.MyRealm][T.MyName]
+    
+    if (ObjectiveTrackerFrame:IsVisible()) then
+        Data["HideObjectiveTracker"] = false
+    else
+        Data["HideObjectiveTracker"] = true
+    end
+end
+hooksecurefunc(ObjectiveTracker, "OnClick", OnClick)
+
 function ObjectiveTracker:CreateToggleButtons()
     local Font, FontSize, FontStyle = C["Medias"].PixelFont, 14, "MONOCHROMEOUTLINE"
 
@@ -23,7 +47,8 @@ function ObjectiveTracker:CreateToggleButtons()
     Button.Toggle:SetFont(Font, FontSize, FontStyle)
     Button.Toggle:SetText(">")
     
-    self.ToggleButon = Button
+    self.Button = Button
+    self.Toggle = Button.Toggle
 end
 
 local function SetDefaultPosition()
@@ -67,3 +92,8 @@ local function UpdateProgressBar(self, _, line)
     end
 end
 hooksecurefunc(ObjectiveTracker, "UpdateProgressBar", UpdateProgressBar)
+
+local function Enable(self)
+    self:LoadVariables()
+end
+hooksecurefunc(ObjectiveTracker, "Enable", Enable)

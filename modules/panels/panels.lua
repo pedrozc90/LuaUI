@@ -18,7 +18,7 @@ local function Enable(self)
     local TabsBGRight = self.TabsBGRight
 
     local xOffset, yOffset = 4, 4
-    local ChatWidth = 385 + xOffset + yOffset
+    local ChatWidth = 380 + xOffset + yOffset
     
     -- Kill Lines
     BottomLine:Kill()

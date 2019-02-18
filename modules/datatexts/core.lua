@@ -73,7 +73,7 @@ function DataTexts:CreateAnchors()
 		else
 			Frame:Width(Size)
 		end
-
+		
 		Frame.Tex = Frame:CreateTexture()
 		Frame.Tex:SetAllPoints()
 		Frame.Tex:SetColorTexture(0.2, 1, 0.2, 0)

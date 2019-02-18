@@ -37,7 +37,6 @@ local function Raid(self)
     Health.Background:SetColorTexture(.05, .05, .05)
 
     if (C.Raid.ShowHealthText) then
-        -- NOT EDITED
         Health.Value:ClearAllPoints()
         Health.Value:SetParent(Health)
         Health.Value:Point("CENTER", Health, "CENTER", 1, -7)
