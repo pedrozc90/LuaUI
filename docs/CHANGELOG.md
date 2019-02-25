@@ -3,9 +3,13 @@
 ## Changes in 1.5-Release
 
 + Added: group role icons on raid frame.
++ Added: SavedVariable to keep quest tracker hidden after /reload.
++ Added: modified Extra Action Button and Zone Ability.
++ Added: archeology progress bar skin.
++ Fixed: RaidCD source class error.
 + Changed: Objective tracker default anchor.
 + Changed: Bags, ChatFrames and Raid Frame aligments.
-+ Added: SavedVariable to keep quest tracker hidden after /reload.
++ Changed: Nameplates default saved variables.
 
 ## Changes in 1.4-Release
 
@@ -17,11 +21,11 @@
 + Added: Tooltips now have spellID, itemID, NPCIDs, etc.
 + Added: ChatFrame positioning configured.
 + Added: Monk Stagger Bar.
++ Added: Dispel Announce, Spell Announce and RaidCD spell list update.
 + Fixed: Tooltip **TaskPOI_OnEnter**, WorldMapTooltip was retuning as nil.
 + Fixed: Player combo points anchor.
-+ Added: Dispel Announce, Spell Announce and RaidCD spell list update.
-+ Changed: Removed floating combat text console variables.
 + Fixed: Totem Bar cooldown font set to pixel font.
++ Changed: Removed floating combat text console variables.
 
 ## Changes in 1.3-Release:
 
@@ -42,9 +46,9 @@
 ## Changes in 1.1-Release:
 
 + Added: plugin PvP Alert.
++ Added: plugin RaidCD.
 + Fixed: Spell Announce summoned units table was not updating.
 + Fixed: Interrupt Announce chatType selection
-+ Added: plugin RaidCD.
 + Fixed: PvP Alert intialize function was verifying instance corretly.
 
 ## Changes in 1.0-Release:

@@ -104,16 +104,11 @@ local RaidCooldowns = {
         [871] = true,                           -- Shield Wall
         [12975] = true,                         -- Last Stand
     },
-}
-
-local CombatEvents = {
-    SPELL_CAST_SUCCESS = true,
-    SPELL_AURA_APPLIED = true,
-    SPELL_RESSURECT = true,
+    ["ALL"] = {}
 }
 
 local ZoneTypes = {
-    ["none"] = false,                           -- when outside an instance
+    ["none"] = true,                           -- when outside an instance
     ["pvp"] = false,                            -- when in a battleground
     ["arena"] = true,                           -- when in an arena
     ["party"]= true,                            -- when in a 5-man instance
@@ -131,16 +126,12 @@ local MaxBars = C.RaidCD.MaxBars
 ----------------------------------------------------------------
 -- Functions
 ----------------------------------------------------------------
-local bor = bit.bor
-local band = bit.band
-local tinsert = table.insert
-local tremove = table.remove
-local tsort = table.sort
+local bor, band = bit.bor, bit.band
+local tinsert, tremove, tsort = table.insert, table.remove, table.sort
 local format = string.format
-local floor = math.floor
-local random = math.random
+local floor, random = math.floor, math.random
 
-local COMBATLOG_FILTER = bor(COMBATLOG_OBJECT_AFFILIATION_RAID,
+local COMBATLOG_FILTER_GROUP_MEMBER = bor(COMBATLOG_OBJECT_AFFILIATION_RAID,
 COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_AFFILIATION_MINE)
 
 -- update bars position
@@ -266,9 +257,8 @@ local function OnUpdate(self, elapsed)
 end
 
 -- start a new cooldown bar
-local function StartTimer(sourceGUID, spellID, cooldown)
+local function StartTimer(sourceName, class, spellID, cooldown)
     local spellName, spellRank, spellIcon = GetSpellInfo(spellID)
-    local _, sourceClass, sourceRace, _, _, sourceName, sourceRealm = GetPlayerInfoByGUID(sourceGUID)
 
     -- check if spell bar already exists
     for _, v in pairs(bars) do
@@ -277,7 +267,10 @@ local function StartTimer(sourceGUID, spellID, cooldown)
         end
     end
 
-    local color = RAID_CLASS_COLORS[sourceClass]
+    local color = RAID_CLASS_COLORS[class]
+    if (not color) then
+        color = { r = 0.30, g = 0.30, b = 0.30 }
+    end
 
     local bar = CreateBar()
     bar.caster = sourceName
@@ -336,8 +329,10 @@ function f:PLAYER_ENTERING_WORLD()
         else
             chatType = "SAY"
         end
+        T.Print("RaidCD Enabled.")
         self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     else
+        T.Print("RaidCD Disabled.")
         self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
         -- stop all cooldown bars
         for key, bar in pairs(bars) do
@@ -350,24 +345,29 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
     destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
 
-    -- filter combat events type
-    if (not CombatEvents[eventType]) then return end
-
-    -- check if caster is a player
-    if (band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) == 0) then return end
-
     -- check if caster is in party/raid member
-    if (band(sourceFlags, COMBATLOG_FILTER) == 0) then return end
+    if (band(sourceFlags, COMBATLOG_FILTER_GROUP_MEMBER) == 0) then return end
 
-    local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
-    local class = select(2, GetPlayerInfoByGUID(sourceGUID))
+    -- filter combat events type
+    if (eventType == "SPELL_CAST_SUCCESS") or (eventType == "SPELL_AURA_APPLIED") or (eventType == "SPELL_RESURRECT") then
 
-    -- check if spell is listed
-    if (RaidCooldowns[class][spellID]) then
-        local cooldown = GetSpellBaseCooldown(spellID) / 1000
+        -- spell standard
+        local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
 
-        if (cooldown and cooldown > 0) then
-            StartTimer(sourceGUID, spellID, cooldown)
+        local class = nil
+        if (sourceGUID and sourceGUID:find("Player")) then
+            class = select(2, GetPlayerInfoByGUID(sourceGUID))
+        else
+            class = "ALL"
+        end
+
+        -- check if spell is listed
+        if (class and RaidCooldowns[class][spellID]) then
+            local cooldown = GetSpellBaseCooldown(spellID) / 1000
+
+            if (cooldown and cooldown > 0) then
+                StartTimer(sourceName, class, spellID, cooldown)
+            end
         end
     end
 end
@@ -377,7 +377,7 @@ end
 ----------------------------------------------------------------
 SLASH_RAIDCD1 = "/raidcd"
 SlashCmdList["RAIDCD"] = function(cmd)
-    local guid = UnitGUID("player")
+    local name = UnitName("player")
     if (cmd == "test") then
         -- simutate raidcd
         for class, tbl in pairs(RaidCooldowns) do
@@ -385,7 +385,7 @@ SlashCmdList["RAIDCD"] = function(cmd)
                 if (check) then
                     local cooldown = GetSpellBaseCooldown(spellID) / 1000
                     if (cooldown and cooldown < 300) then
-                        StartTimer(guid, spellID, cooldown)
+                        StartTimer(name, class, spellID, cooldown)
                     end
                 end
             end

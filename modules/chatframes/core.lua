@@ -180,7 +180,7 @@ local function Setup(self)
 	QuickJoinToastButton.ClearAllPoints = BNToastFrame.ClearAllPoints
 	QuickJoinToastButton.SetPoint = BNToastFrame.SetPoint
 	QuickJoinToastButton:ClearAllPoints()
-	QuickJoinToastButton:SetPoint("TOPLEFT", TabsBGLeft, "BOTTOMLEFT", 0, -7)
+	QuickJoinToastButton:SetPoint("TOPLEFT", TabsBGLeft, "BOTTOMLEFT", 0, -66)
 	QuickJoinToastButton:SetAlpha(0)
 
 	QuickJoinToastButton.ClearAllPoints = function() end
