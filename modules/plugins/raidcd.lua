@@ -108,7 +108,7 @@ local RaidCooldowns = {
 }
 
 local ZoneTypes = {
-    ["none"] = true,                           -- when outside an instance
+    ["none"] = false,                           -- when outside an instance
     ["pvp"] = false,                            -- when in a battleground
     ["arena"] = true,                           -- when in an arena
     ["party"]= true,                            -- when in a 5-man instance
@@ -329,10 +329,8 @@ function f:PLAYER_ENTERING_WORLD()
         else
             chatType = "SAY"
         end
-        T.Print("RaidCD Enabled.")
         self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     else
-        T.Print("RaidCD Disabled.")
         self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
         -- stop all cooldown bars
         for key, bar in pairs(bars) do
