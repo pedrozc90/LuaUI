@@ -1,5 +1,12 @@
 # ChangeLog:
 
+## Changes in 1.6-Release
+
++ Fixed: RaidCD source class error.
++ Fixed: SpellAnnounce raid message spam.
++ Changed: Tooltip anchoring.
++ Changed: small changes to elements position.
+
 ## Changes in 1.5-Release
 
 + Added: group role icons on raid frame.

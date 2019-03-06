@@ -8,11 +8,14 @@ local Panels = T.Panels
 local function UpdatePosition(self)
     local DataTextRight = Panels.DataTextRight
     local RightChatBG = Panels.RightChatBG
+    local Focus = oUF_TukuiFocus
     local Pet = oUF_TukuiPet
 
     self:ClearAllPoints()
     if (Pet and Pet:IsVisible()) then
         self:Point("BOTTOMRIGHT", Pet, "TOPRIGHT", 0, 7)
+    elseif (Focus and Focus:IsVisible()) then
+        self:Point("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 39)
     elseif (RightChatBG and RightChatBG:IsShown()) then
         self:Point("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 7)
     else

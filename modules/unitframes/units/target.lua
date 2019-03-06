@@ -154,7 +154,7 @@ local function Target(self)
 
 		if (C.UnitFrames.UnlinkCastBar) then
 			CastBar:ClearAllPoints()
-            CastBar:Point("CENTER", UIParent, "CENTER", 0, 230)
+            CastBar:Point("CENTER", UIParent, "CENTER", 0, 300)
             CastBar:Width(Panels.ActionBar1:GetWidth())
             CastBar:Height(20)
             CastBar.Shadow:Kill()

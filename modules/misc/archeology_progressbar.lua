@@ -31,8 +31,7 @@ function f:ADDON_LOADED(addon)
     local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
 
     Bar:ClearAllPoints()
-    Bar:SetPoint("TOP", UIErrorsFrame, "BOTTOM", 100, 0)
-    -- Bar:SetSize(350, 23)
+    Bar:SetPoint("TOP", UIErrorsFrame, "BOTTOM", 0, 720)
     Bar:StripTextures()
     Bar.Shadow:Kill()
 

@@ -68,8 +68,6 @@ local RaidCooldowns = {
         [62618] = true,                         -- Power Word: Barrier
         [271466] = true,                        -- Luminous Barrier
 
-        [47540] = true,                         -- Penance
-
         -- Holy
         [47788] = true,                         -- Guardian Spirit
         [64843] = true,                         -- Divine Hymn
@@ -352,19 +350,15 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
         -- spell standard
         local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
 
-        local class = nil
-        if (sourceGUID and sourceGUID:find("Player")) then
-            class = select(2, GetPlayerInfoByGUID(sourceGUID))
-        else
-            class = "ALL"
-        end
+        for class, data in pairs(RaidCooldowns) do
+            for key, value in pairs(data) do
+                if (key == spellID) and (value == true) then
+                    local cooldown = GetSpellBaseCooldown(spellID) / 1000
 
-        -- check if spell is listed
-        if (class and RaidCooldowns[class][spellID]) then
-            local cooldown = GetSpellBaseCooldown(spellID) / 1000
-
-            if (cooldown and cooldown > 0) then
-                StartTimer(sourceName, class, spellID, cooldown)
+                    if (cooldown and cooldown > 0) then
+                        StartTimer(sourceName, class, spellID, cooldown)
+                    end
+                end
             end
         end
     end

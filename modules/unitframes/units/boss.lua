@@ -92,7 +92,7 @@ local function Boss(self)
 		Buffs:Point("TOPRIGHT", self, "TOPLEFT", -7, 0)
 		Buffs.size = FrameHeight
 		Buffs.num = 3
-		Buffs.spacing = 3
+		Buffs.spacing = 7
 		Buffs.initialAnchor = "RIGHT"
         Buffs["growth-x"] = "LEFT"
         Buffs:Width(Buffs.num * Buffs.size + (Buffs.num - 1) * Buffs.spacing)
@@ -102,7 +102,7 @@ local function Boss(self)
 		Debuffs:Point("TOPLEFT", self, "TOPRIGHT", 7, 0)
 		Debuffs.size = Buffs.size
 		Debuffs.num = 5
-		Debuffs.spacing = 3
+		Debuffs.spacing = 7
 		Debuffs.initialAnchor = "LEFT"
         Debuffs["growth-x"] = "RIGHT"
         Debuffs.onlyShowPlayer = true

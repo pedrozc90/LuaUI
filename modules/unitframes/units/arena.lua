@@ -92,7 +92,7 @@ local function Arena(self)
 		Debuffs:Point("TOPLEFT", self, "TOPRIGHT", 7, 0)
 		Debuffs.size = FrameHeight
 		Debuffs.num = 5
-		Debuffs.spacing = 3
+		Debuffs.spacing = 7
 		Debuffs.initialAnchor = "LEFT"
 		Debuffs["growth-x"] = "RIGHT"
         Debuffs:Width(Debuffs.num * Debuffs.size + (Debuffs.num - 1) * Debuffs.spacing)

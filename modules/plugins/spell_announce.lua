@@ -323,30 +323,17 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
                         end
                     end
                 elseif (eventType == "SPELL_AURA_APPLIED") and (not arg1) then
-                    -- announce spells that apply affects a large group of people
+                    -- announce spells that apply affects to a large group of people
                     local unit = GetUnit(destFlags)
                     local filter = (sourceGUID == playerGUID) and "HELPFUL|PLAYER" or "HELPFUL"
                     local duration = select(5, SearchUnitAura(spellID, unit, filter))
-                    if (sourceGUID == playerGUID) then
-                        if (destGUID == playerGUID) then
-                            SendChatMessage(format("%s (%ds) up!", spellText, duration), chatType)
-                        end
-                    else
-                        if (destGUID == playerGUID) then
-                            SendChatMessage(format("%s (%s) on me!", spellText, duration), chatType)
-                        end
+                    if (destGUID == playerGUID) then
+                        SendChatMessage(format("%s (%ds) up!", spellText, duration), chatType)
                     end
                 elseif (eventType == "SPELL_AURA_REMOVED") and (arg1 ~= "summon") then
-                    if (sourceGUID == playerGUID) then
-                        if (destGUID == playerGUID) then
-                            SendChatMessage(format("%s over!", spellText), chatType)
-                        else
-                            SendChatMessage(format("%s on %s is over!", spellText, destName), chatType)
-                        end
-                    else
-                        if (destGUID == playerGUID) then
-                            SendChatMessage(format("%s on me is over!", spellText), chatType)
-                        end
+                    -- announce only when the unit is the player
+                    if (destGUID == playerGUID) then
+                        SendChatMessage(format("%s over!", spellText), chatType)
                     end
                 elseif (eventType == "SPELL_SUMMON") then
                     if (sourceGUID == playerGUID) then
