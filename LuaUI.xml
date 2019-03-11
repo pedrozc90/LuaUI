@@ -63,6 +63,7 @@
         <!-- UnitFrames -->
         <Script file="modules\unitframes\core.lua"/>
         <Script file="modules\unitframes\tags.lua"/>
+        <Script file="modules\unitframes\layout.lua"/>
 
         <Script file="modules\unitframes\classes\deathknight.lua"/>
         <Script file="modules\unitframes\classes\demonhunter.lua"/>

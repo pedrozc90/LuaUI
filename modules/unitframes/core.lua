@@ -346,6 +346,12 @@ local function CreateUnits()
         Party:Point("LEFT", UIParent, "LEFT", 7, 150)
     end
 
+    -- frame for raid frame positioning
+    UnitFrames.GroupHolder = CreateFrame("Frame", "GroupHolder", UIParent)
+    UnitFrames.GroupHolder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 270)
+    UnitFrames.GroupHolder:SetSize(250, 20)
+    UnitFrames.GroupHolder:CreateBackdrop("Transparent")
+
     if (C.Raid.Enable) then
         Raid:ClearAllPoints()
         Raid:Point("BOTTOMLEFT", Panels.LeftChatBG, "TOPLEFT", 0, 7)

@@ -2,8 +2,10 @@
 
 ## Changes in 1.6-Release
 
++ Added: Healer raid frame layout.
 + Fixed: RaidCD source class error.
-+ Fixed: SpellAnnounce raid message spam.
++ Fixed: Spell Announce raid message spam.
++ Fixed: Spell Announce get caster class error.
 + Changed: Tooltip anchoring.
 + Changed: small changes to elements position.
 

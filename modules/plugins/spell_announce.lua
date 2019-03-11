@@ -285,12 +285,7 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
         if (sourceGUID ~= playerGUID) and (destGUID ~= playerGUID) then return end
 
         -- get caster class
-        local class = nil
-        if (CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MINE)) then
-            class = playerClass
-        elseif (band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0) then
-            class = select(2, GetPlayerInfoByGUID(sourceGUID))
-        end
+        local class = sourceGUID:find("Player") and select(2, GetPlayerInfoByGUID(sourceGUID)) or "ALL"
 
         -- get extra combatlog info
         local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
