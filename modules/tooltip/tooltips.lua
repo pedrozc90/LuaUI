@@ -1,6 +1,7 @@
 local T, C, L = Tukui:unpack()
 local Tooltips = T.Tooltips
 local Panels = T.Panels
+local Bags = T.Inventory.Bags
 
 ----------------------------------------------------------------
 -- Tooltips
@@ -10,9 +11,12 @@ local function UpdatePosition(self)
     local RightChatBG = Panels.RightChatBG
     local Focus = oUF_TukuiFocus
     local Pet = oUF_TukuiPet
+    local Bag = Bags["Bag"]
 
     self:ClearAllPoints()
-    if (Pet and Pet:IsVisible()) then
+    if (Bag and Bag:IsVisible()) then
+        self:Point("BOTTOMRIGHT", Bag.SortButton, "TOPRIGHT", -2, 5)
+    elseif (Pet and Pet:IsVisible()) then
         self:Point("BOTTOMRIGHT", Pet, "TOPRIGHT", 0, 7)
     elseif (Focus and Focus:IsVisible()) then
         self:Point("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 39)
@@ -32,7 +36,7 @@ hooksecurefunc(Tooltips, "CreateAnchor", CreateAnchor)
 
 --
 local function SetTooltipDefaultAnchor(self, parent)
-    local Anchor = Tooltips.Anchor
+    local Anchor = self.Anchor
     
     if (C.Tooltips.MouseOver) then
 		if (parent ~= UIParent) then
