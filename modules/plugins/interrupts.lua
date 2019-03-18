@@ -1,12 +1,23 @@
 local T, C, L = Tukui:unpack()
 
 ----------------------------------------------------------------
--- Interrupt Announce by Elv22
+-- Interrupt Announce
 ----------------------------------------------------------------
 if (not C.Interrupts.Enable) then return end
 
-local chatType = "SAY"
-local CHANNELS = {
+local COMBATLOG_FILTER_ME = COMBATLOG_FILTER_ME
+local COMBATLOG_FILTER_MINE = COMBATLOG_FILTER_MINE
+local COMBATLOG_FILTER_MY_PET = COMBATLOG_FILTER_MY_PET
+local STRING_INTERRUPT = "Interrupted %s %s!"
+
+-- variable to store selected chat channel
+local chatType
+
+-- variables used to prevent AoE spam interrupts
+local lastTimestamp, lastSpellID
+
+-- configure group messages
+local chatChannels = {
     ["SAY"] = true,
     ["PARTY"] = true,
     ["RAID"] = true,
@@ -14,53 +25,80 @@ local CHANNELS = {
     ["INSTANCE_CHAT"] = false
 }
 
-local f = CreateFrame("Frame")
-f:RegisterEvent("PLAYER_LOGIN")
-f:RegisterEvent("PLAYER_ENTERING_WORLD")
-f:SetScript("OnEvent", function(self, event, ...)
-    -- call one of the functions above
+-- create a possesion form by appending ('s) to the string, unless it ends
+-- with s, x or z, in which only (') is added.
+local function StringPossesion(s)
+    if (s:sub(-1):find("[sxzSXZ]")) then
+        return s .. "\'"
+    end
+    return s .. "\'s"
+end
+
+local Interrupt = CreateFrame("Frame")
+Interrupt:RegisterEvent("PLAYER_LOGIN")
+Interrupt:RegisterEvent("PLAYER_ENTERING_WORLD")
+Interrupt:SetScript("OnEvent", function(self, event, ...)
+    -- call one of the event handlers.
     self[event](self, ...)
 end)
 
-function f:PLAYER_LOGIN()
+function Interrupt:PLAYER_LOGIN()
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
-function f:PLAYER_ENTERING_WORLD()
-    inInstance, instanceType = IsInInstance()
-    if (inInstance and (instanceType == "raid" or instanceType == "party")) then
-        if (IsInGroup(LE_PARTY_CATEGORY_INSTANCE)) then
+function Interrupt:PLAYER_ENTERING_WORLD()
+    local _, instanceType = IsInInstance()
+    local inInstance, inGroup, inRaid = IsInGroup(LE_PARTY_CATEGORY_INSTANCE), IsInGroup(), IsInRaid()
+
+    -- check group status
+    if (instanceType == "raid") or (instanceType == "party") then
+        if (inInstance) then
             chatType = "INSTANCE_CHAT"
-        elseif (IsInRaid()) then
+        elseif (inRaid) then
             chatType = "RAID"
-        elseif (IsInGroup()) then
+        elseif (inGroup) then
             chatType = "PARTY"
+        else
+            chatType = "SAY"
         end
     else
         chatType = "SAY"
     end
 
     -- check if channel is enable for announcing
-    if (not CHANNELS[chatType]) then
+    if (not chatChannels[chatType]) then
         chatType = "SAY"
     end
 end
 
-function f:COMBAT_LOG_EVENT_UNFILTERED()
-    local timestamp, eventType, hideCaster, sourceGUID, sourceName,
-    sourceFlags, sourceRaidFlags, destGUID, destName, destFlags,
-    destRaidFlags = CombatLogGetCurrentEventInfo()
+function Interrupt:COMBAT_LOG_EVENT_UNFILTERED()
+    local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
+    destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
 
-    -- check if event is interrupt
-    if ((eventType == "SPELL_INTERRUPT") and (sourceGUID == UnitGUID("player"))) then
+    -- check if event type was a spell interrupt
+    if (eventType == "SPELL_INTERRUPT") then
+
+        -- spell standard
         local spellID, spellName, spellSchool, extraSpellID, extraSpellName,
         extraSchool = select(12, CombatLogGetCurrentEventInfo())
 
-        if (C.Interrupts.SpellLink) then
-            local extraSpellLink = GetSpellLink(extraSpellID)
-            SendChatMessage("Interrupted " .. destName .. " " .. extraSpellLink .. "!", chatType)
-        else
-            SendChatMessage("Interrupted " .. destName .. " " .. extraSpellName .. "!", chatType)
+        -- prevents spam announcements
+        if (spellID == lastSpellID) and (timestamp - lastTimestamp <= 1) then return end
+
+        -- update last timestamp e spellID
+        lastTimestamp, lastSpellID = timestamp, spellID
+
+        -- check if source is the player or belong to player
+        if (CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_ME) or
+            CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MINE) or
+            CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MY_PET)) then
+
+            if (C.Interrupts.SpellLink) then
+                local extraSpellLink = GetSpellLink(extraSpellID)
+                SendChatMessage(STRING_INTERRUPT:format(StringPossesion(destName or "?"), extraSpellLink or "Error"), chatType)
+            else
+                SendChatMessage(STRING_INTERRUPT:format(StringPossesion(destName or "?"), extraSpellName), chatType)
+            end
         end
     end
 end
