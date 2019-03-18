@@ -70,12 +70,12 @@ C["Interrupts"] = {
 }
 
 C["ScreenShots"] = {
-    ["Enable"] = true,                              -- enables achievement/encounter screenshot plugin.
-    ["BossKills"] = false,                          -- enables screenshots of successful raid encounters.
-    ["ChallendeMode"] = false,                      -- enables screenshots of successful challenge modes.
+    ["Enable"] = true,                              -- enables plugin.
     ["Achievements"] = true,                        -- enables screenshots of earned achievements.
+    ["BossKills"] = false,                          -- enables screenshots of successful boss encounters.
+    ["ChallendeMode"] = false,                      -- enables screenshots of successful challenge modes.
     ["LevelUp"] = false,                            -- enables screenshots when player level up.
-    ["Messages"] = false,                           -- enables print messages when screenshot is taken or failed.
+    ["Messages"] = false,                           -- enables debug messages.
 }
 
 C["SpellAnnounce"] = {

@@ -30,6 +30,7 @@ local ZoneTypes = {
     ["scenario"] = false,                       -- when in a scenario
 	-- nil when in an unknown kind of instance
 }
+
 ----------------------------------------------------------------
 -- Wait Function
     -- delay: amount of time to wait (in seconds) before the provided function is triggered.
@@ -84,7 +85,6 @@ end
 ----------------------------------------------------------------
 local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_LOGIN")
-f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:SetScript("OnEvent", function(self, event, ...)
     -- call one of the functions below
     self[event](self, ...)
@@ -92,11 +92,13 @@ end)
 
 -- register events defined at configuration file
 function f:PLAYER_LOGIN()
+    -- enable debug messages
     if (C.ScreenShots.Messages) then
         self:RegisterEvent("SCREENSHOT_FAILED")
         self:RegisterEvent("SCREENSHOT_SUCCEEDED")
     end
 
+    -- achiemente screenshots
     if (C.ScreenShots.Achievements) then
         self:RegisterEvent("ACHIEVEMENT_EARNED")
     end
@@ -105,25 +107,25 @@ function f:PLAYER_LOGIN()
         self:RegisterEvent("CHALLENGE_MODE_COMPLETED")
     end
 
-    -- if (C.ScreenShots.BossKills) then
-    --     self:RegisterEvent("BOSS_KILL")
-    --     self:RegisterEvent("ENCOUNTER_START")
-    --     self:RegisterEvent("ENCOUNTER_END")
-    -- end
-
     if (C.ScreenShots.LevelUp) then
         self:RegisterEvent("PLAYER_LEVEL_UP")
     end
 
-    self.EncounterStartTimer = 0
-    self.EncounterElapsedTimer = 0
+    -- self.EncounterStartTimer = 0
+    -- self.EncounterElapsedTimer = 0
+    if (C.ScreenShots.BossKills) then
+        self:RegisterEvent("PLAYER_ENTERING_WORLD")
+    end
 end
 
 function f:PLAYER_ENTERING_WORLD()
     local inInstance, instanceType = IsInInstance()
-    
+    local isRegistered = self:IsEventRegistered("BOSS_KILL")
+
     if (inInstance and ZoneTypes[instanceType]) then
-        self:UnregisterEvent("BOSS_KILL")
+        if (isRegistered) then
+            self:UnregisterEvent("BOSS_KILL")
+        end
         self:RegisterEvent("ENCOUNTER_START")
         self:RegisterEvent("ENCOUNTER_END")
     else
@@ -150,18 +152,6 @@ function f:ACHIEVEMENT_EARNED(...)
     Wait(1, Screenshot)
 end
 
-function f:CHALLENGE_MODE_COMPLETED()
-    -- take an instant screenshot.
-    Screenshot()
-    -- delay 1 sec to wait the right moment.
-    Wait(1, Screenshot)
-end
-
-function f:PLAYER_LEVEL_UP()
-    -- delay enough for the golden glow ends.
-    Wait(2.7, Screenshot)
-end
-
 function f:BOSS_KILL(...)
     local bossID, bossName = ...
     
@@ -173,6 +163,11 @@ function f:BOSS_KILL(...)
         -- delay 1 sec before take screenshot.
         Wait(1, Screenshot)
     end
+end
+
+function f:CHALLENGE_MODE_COMPLETED()
+    -- delay 1 sec to wait the right moment.
+    Wait(1, Screenshot)
 end
 
 function f:ENCOUNTER_START(...)
@@ -207,4 +202,9 @@ function f:ENCOUNTER_END(...)
         -- take screenshot
         Wait(1, Screenshot)
     end
+end
+
+function f:PLAYER_LEVEL_UP()
+    -- delay enough for the golden glow ends.
+    Wait(2.7, Screenshot)
 end
