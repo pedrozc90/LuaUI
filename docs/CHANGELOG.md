@@ -1,5 +1,11 @@
 # ChangeLog:
 
+## Changes in 1.7-Release
+
++ Changed: Interrupt Announce updated (spam filter added).
++ Changed: ScreenShots Boss Kill / Encounter reconfigured.
++ Fixed: tooltips overlaping inventory.
+
 ## Changes in 1.6-Release
 
 + Added: Healer raid frame layout.
