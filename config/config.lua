@@ -180,7 +180,7 @@ C["Misc"].ExperienceEnable = true
 C["Misc"].ReputationEnable = true
 C["Misc"].ErrorFilterEnable = true
 C["Misc"].AutoInviteEnable = false
-C["Misc"].TalkingHeadEnable = true
+C["Misc"].TalkingHeadEnable = false
 
 -- Nameplates
 C["NamePlates"].Enable = true
