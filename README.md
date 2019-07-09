@@ -8,7 +8,11 @@ LuaUI is an external edit for [**Tukui 18.21+**](https://www.tukui.org/), a mini
 Release Date: 01/20/2019
 ```
 
-<a href="https://i.imgur.com/52edNKs.jpg"><img src="https://i.imgur.com/52edNKs.jpg" alt="LuaUI-sample" width="640" height="360" border="1"/></a>
+<p align="center">
+    <a href="https://i.imgur.com/52edNKs.jpg">
+        <img src="https://i.imgur.com/52edNKs.jpg" alt="LuaUI-sample" style="width: 640px; height: 360px; border: 1px solid #000;"/>
+    </a>
+</p>
 
 ## Features:
 
