@@ -4,7 +4,14 @@ local UnitFrames = T.UnitFrames
 ----------------------------------------------------------------
 -- NamePlates
 ----------------------------------------------------------------
-local function Nameplates(self)
+local baseNameplates = UnitFrames.Nameplates
+
+function UnitFrames:Nameplates()
+
+    -- first, call the base function
+    baseNameplates(self)
+
+    -- second, we edit it
     local Health = self.Health
     local Power = self.Power
     local Name = self.Name
@@ -30,6 +37,8 @@ local function Nameplates(self)
     Health:Point("TOPRIGHT", self, "TOPRIGHT", 0, 0)
     Health:Height(FrameHeight)
     Health:CreateBackdrop()
+    Health.Backdrop:SetBorder()
+    Health.Backdrop:SetOutside(nil, 2, 2)
 
 	Health.Background:SetAllPoints()
 	Health.Background:SetColorTexture(.05, .05, .05)
@@ -82,40 +91,40 @@ local function Nameplates(self)
 	Debuffs["growth-y"] = "UP"
 	Debuffs["growth-x"] = "RIGHT"
     Debuffs:Height(Debuffs.size)
-	Debuffs:Width(Debuffs.num * Debuffs.size + (Debuffs.num - 1) * Debuffs.spacing)
+    Debuffs:Width(Debuffs.num * Debuffs.size + (Debuffs.num - 1) * Debuffs.spacing)
+    
+    Debuffs.PostCreateIcon = UnitFrames.PostCreateAura
+    Debuffs.PostUpdateIcon = UnitFrames.PostUpdateAura
 
     -- CastBar
-	CastBar:ClearAllPoints()
-    CastBar:Point("TOPRIGHT", self, "BOTTOMRIGHT", 0, -7)
-	CastBar:Width(self:GetWidth() - C.NamePlates.CastHeight - 7)
-    CastBar:Height(C.NamePlates.CastHeight)
-    CastBar:SetStatusBarTexture(CastTexture)
-	CastBar:CreateBackdrop()
+    if (C.NamePlates.NameplateCastBar) then
+        CastBar:ClearAllPoints()
+        CastBar:Point("TOPRIGHT", self, "BOTTOMRIGHT", 0, -7)
+        CastBar:Width(self:GetWidth() - C.NamePlates.CastHeight - 7)
+        CastBar:Height(C.NamePlates.CastHeight)
+        CastBar:SetStatusBarTexture(CastTexture)
+        CastBar:CreateBackdrop()
+        CastBar.Backdrop:SetBorder()
+        CastBar.Backdrop:SetOutside(nil, 2, 2)
 
-	CastBar.Background:SetAllPoints(CastBar)
-	CastBar.Background:SetVertexColor(0.05, 0.05, 0.05)
+        CastBar.Background:SetAllPoints(CastBar)
+        CastBar.Background:SetVertexColor(0.05, 0.05, 0.05)
 
-	CastBar.Button:ClearAllPoints()
-    CastBar.Button:Point("RIGHT", CastBar, "LEFT", -5, 0)
-    CastBar.Button:Size(CastBar:GetHeight() + 4)
-	CastBar.Button:SetTemplate()
-	CastBar.Button.Shadow:Kill()
+        CastBar.Button:ClearAllPoints()
+        CastBar.Button:Point("RIGHT", CastBar, "LEFT", -5, 0)
+        CastBar.Button:Size(CastBar:GetHeight() + 4)
+        CastBar.Button:SetTemplate()
+        CastBar.Button.Shadow:Kill()
 
-	CastBar.Text:ClearAllPoints()
-	CastBar.Text:Point("CENTER", CastBar, "CENTER", 0, 1)
-	CastBar.Text:Width(CastBar:GetWidth())
-    CastBar.Text:SetJustifyH("CENTER")
+        CastBar.Text:ClearAllPoints()
+        CastBar.Text:Point("CENTER", CastBar, "CENTER", 0, 1)
+        CastBar.Text:Width(CastBar:GetWidth())
+        CastBar.Text:SetJustifyH("CENTER")
+    end
 
     -- Raid Icon
     RaidIcon:ClearAllPoints()
     RaidIcon:Point("RIGHT", Name, "LEFT", -5, -1)
     RaidIcon:Size(18, 18)
-
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", UnitFrames.HighlightPlate)
-	self:RegisterEvent("NAME_PLATE_UNIT_ADDED", UnitFrames.HighlightPlate)
-	self:RegisterEvent("NAME_PLATE_UNIT_REMOVED", UnitFrames.HighlightPlate)
-
-	-- Check highlight when created.
-    UnitFrames.HighlightPlate(self)
+    
 end
-hooksecurefunc(UnitFrames, "Nameplates", Nameplates)

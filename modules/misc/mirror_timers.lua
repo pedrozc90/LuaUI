@@ -4,9 +4,16 @@ local MirrorTimers = T.Miscellaneous.MirrorTimers
 ----------------------------------------------------------------
 -- Mirror Timers (e.g: Breath Timer)
 ----------------------------------------------------------------
-local function Update()
-    local Texture = C["Medias"].Blank
-    local Font, FontSize, FontStyle = C["Medias"].Font, 12, nil
+local baseUpdate = MirrorTimers.Update
+
+function MirrorTimers:Update()
+
+    -- first, call the base function
+    baseUpdate(self)
+
+    -- second, we edit it
+    local Texture = C.Medias.Blank
+    local Font, FontSize, FontStyle = C.Medias.Font, 12, nil
 
     for i = 1, MIRRORTIMER_NUMTIMERS, 1 do
         local Bar = _G["MirrorTimer"..i]
@@ -18,7 +25,9 @@ local function Update()
         Bar:Width(210)
         Bar:Height(16)
         Bar:SetBackdrop(nil)
-        Bar:CreateBackdrop("Default")
+        Bar:CreateBackdrop()
+        Bar.Backdrop:SetBorder()
+        Bar.Backdrop:SetOutside(nil, 2, 2)
         Bar.Shadow:Kill()
 
         Status:ClearAllPoints()
@@ -30,4 +39,3 @@ local function Update()
         Text:SetFont(Font, FontSize, FontStyle)
     end
 end
-hooksecurefunc(MirrorTimers, "Update", Update)

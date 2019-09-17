@@ -19,7 +19,7 @@ local function SkinButton(self)
 	local Normal  = _G[Name.."NormalTexture"]
 	local BtnBG = _G[Name.."FloatingBG"]
 
-    Button:SetTemplate("Transparent")
+    Button:SetBorder()
 
     -- Count
     if (Count) then
@@ -55,7 +55,7 @@ local function SkinPetAndShiftButton(self, Normal, Button, Icon, Name, Pet)
     
     local PetSize = C.ActionBars.PetButtonSize
 
-    Button:SetTemplate("Transparent")
+    Button:SetBorder()
 
 	if (HotKey) then
 		HotKey:ClearAllPoints()

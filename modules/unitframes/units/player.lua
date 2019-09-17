@@ -6,7 +6,14 @@ local Class = select(2, UnitClass("player"))
 ----------------------------------------------------------------
 -- Player
 ----------------------------------------------------------------
-local function Player(self)
+local basePlayer = UnitFrames.Player
+
+function UnitFrames:Player()
+
+    -- first, call the base function
+    basePlayer(self)
+
+    -- second, we edit it
     local Health = self.Health
     local Power = self.Power
     local AdditionalPower = self.AdditionalPower
@@ -17,7 +24,7 @@ local function Player(self)
     local RaidIcon = self.RaidTargetIndicator
     local Threat = self.ThreatIndicator
 
-    local FrameWidth, FrameHeight = unpack(C["Units"].Player)
+    local FrameWidth, FrameHeight = unpack(C["Units"].Player or { 254, 31 })
     local HealthTexture = T.GetTexture(C["Textures"].UFHealthTexture)
 	local PowerTexture = T.GetTexture(C["Textures"].UFPowerTexture)
     local CastTexture = T.GetTexture(C["Textures"].UFCastTexture)
@@ -34,6 +41,8 @@ local function Player(self)
     Health:Height(FrameHeight - 6)
     Health:SetFrameLevel(3)
     Health:CreateBackdrop()
+    Health.Backdrop:SetBorder()
+    Health.Backdrop:SetOutside(nil, 2, 2)
 
     Health.Background:SetAllPoints()
     Health.Background:SetColorTexture(.05, .05, .05)
@@ -58,30 +67,6 @@ local function Player(self)
         Health.colorReaction = true
     end
 
-    -- Health Prediction
-	if (C.UnitFrames.HealBar) then
-        local FirstBar = self.HealthPrediction.myBar
-        local SecondBar = self.HealthPrediction.otherBar
-        local ThirdBar = self.HealthPrediction.absorbBar
-
-        local HealBarColor = { .31, .45, .63, .4 }
-        
-        FirstBar:Width(FrameWidth)
-        FirstBar:Height(Health:GetHeight())
-		FirstBar:SetStatusBarTexture(HealthTexture)
-        FirstBar:SetStatusBarColor(unpack(HealBarColor))
-		
-        SecondBar:Width(FrameWidth)
-        SecondBar:Height(Health:GetHeight())
-		SecondBar:SetStatusBarTexture(HealthTexture)
-		SecondBar:SetStatusBarColor(unpack(HealBarColor))
-		
-        ThirdBar:Width(FrameWidth)
-        ThirdBar:Height(Health:GetHeight())
-		ThirdBar:SetStatusBarTexture(HealthTexture)
-		ThirdBar:SetStatusBarColor(unpack(HealBarColor))
-    end
-
     -- Power
     Power:ClearAllPoints()
     Power:Point("TOPLEFT", Health, "BOTTOMLEFT", 0, -3)
@@ -89,6 +74,8 @@ local function Player(self)
     Power:Height(3)
     Power:SetFrameLevel(Health:GetFrameLevel())
     Power:CreateBackdrop()
+    Power.Backdrop:SetBorder()
+    Power.Backdrop:SetOutside(nil, 2, 2)
 
     Power.Background:SetAllPoints()
     Power.Background:SetColorTexture(.05, .05, .05)
@@ -113,24 +100,6 @@ local function Player(self)
 	Power.Prediction:SetStatusBarTexture(PowerTexture)
 	Power.Prediction:SetStatusBarColor(.0, .0, .0, .7)
 
-    -- Additional Power (e.g: Shadow Priest Mana)
-	AdditionalPower:ClearAllPoints()
-    AdditionalPower:Point("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-    AdditionalPower:Width(FrameWidth)
-    AdditionalPower:Height(3)
-	AdditionalPower:SetStatusBarTexture(PowerTexture)
-	AdditionalPower:SetStatusBarColor(unpack(T.Colors.power["MANA"]))
-	AdditionalPower:SetFrameLevel(Health:GetFrameLevel())
-    AdditionalPower:SetBackdrop(nil)
-    AdditionalPower:CreateBackdrop()
-
-    AdditionalPower.Background:SetAllPoints()
-    AdditionalPower.Background:SetColorTexture(0.05, 0.05, 0.05)
-
-	AdditionalPower.Prediction:Width(FrameWidth)
-	AdditionalPower.Prediction:SetStatusBarTexture(PowerTexture)
-    AdditionalPower.Prediction:SetStatusBarColor(.0, .0, .0, .7)
-
     -- Portrait
     if (C.UnitFrames.Portrait) then
         local Portrait = self.Portrait
@@ -139,6 +108,44 @@ local function Player(self)
         Portrait:SetInside(Health, 1, 1)
         Portrait:SetAlpha(.3)
     end
+
+    -- Auras
+    if (C.UnitFrames.PlayerAuras) then
+		local Buffs = self.Buffs
+		local Debuffs = self.Debuffs
+
+        local Offset = 0
+
+		Buffs:ClearAllPoints()
+        Buffs:Point("BOTTOMLEFT", self, "TOPLEFT", 0, 7 + Offset)
+        Buffs.initialAnchor = "TOPLEFT"
+        Buffs["growth-y"] = "UP"
+        Buffs["growth-x"] = "RIGHT"
+        Buffs.size = 22
+        Buffs.spacing = 7
+        Buffs.num = 9
+        Buffs.numRow = 9
+        Buffs:Width(Buffs.numRow * Buffs.size + (Buffs.numRow - 1) * Buffs.spacing)
+        Buffs:Height(Buffs.size)
+
+        Buffs.PostCreateIcon = UnitFrames.PostCreateAura
+		Buffs.PostUpdateIcon = UnitFrames.PostUpdateAura
+
+		Debuffs:ClearAllPoints()
+        Debuffs:Point("BOTTOMRIGHT", self, "TOPRIGHT", 0, Buffs.size + 2 * Buffs.spacing)
+        Debuffs.initialAnchor = "TOPRIGHT"
+        Debuffs["growth-y"] = "UP"
+        Debuffs["growth-x"] = "LEFT"
+        Debuffs.size = Buffs.size
+        Debuffs.spacing = Buffs.spacing
+        Debuffs.num = Buffs.num
+        Debuffs.numRow = Buffs.numRow
+        Debuffs:Width(Debuffs.numRow * Debuffs.size + (Debuffs.numRow - 1) * Debuffs.spacing)
+        Debuffs:Height(Debuffs.size)
+
+        Debuffs.PostCreateIcon = UnitFrames.PostCreateAura
+		Debuffs.PostUpdateIcon = UnitFrames.PostUpdateAura
+	end
     
     -- Combat Indocator
 	Combat:ClearAllPoints()
@@ -174,6 +181,8 @@ local function Player(self)
         CastBar:SetStatusBarTexture(CastTexture)
         CastBar:SetFrameLevel(Health:GetFrameLevel())
         CastBar:CreateBackdrop()
+        CastBar.Backdrop:SetBorder()
+        CastBar.Backdrop:SetOutside(nil, 2, 2)
 
 		CastBar.Background:SetAllPoints()
 		CastBar.Background:SetTexture(CastTexture)
@@ -197,7 +206,8 @@ local function Player(self)
             CastBar.Icon:SetTexCoord(unpack(T.IconCoord))
 
             CastBar.Button:ClearAllPoints()
-            CastBar.Button:SetOutside(CastBar.Icon)
+            CastBar.Button:SetBorder()
+            CastBar.Button:SetOutside(CastBar.Icon, 2, 2)
 		end
 
 		if (C.UnitFrames.UnlinkCastBar) then
@@ -243,6 +253,8 @@ local function Player(self)
             ComboPoints[i]:Height(ComboPoints:GetHeight())
             ComboPoints[i]:Width(SizeMax6)
             ComboPoints[i]:CreateBackdrop()
+            ComboPoints[i].Backdrop:SetBorder()
+            ComboPoints[i].Backdrop:SetOutside(nil, 2, 2)
 
             if ((DeltaMax5 > 0) and (i <= DeltaMax5)) then
                 ComboPoints[i].BarSizeForMaxComboIs5 = SizeMax5 + 1
@@ -273,43 +285,4 @@ local function Player(self)
 			UnitFrames.UpdateBuffsHeaderPosition(self, 4)
         end)
     end
-    
-    -- TotemBar
-    if (C.UnitFrames.TotemBar) and (Class == "SHAMAN" or Class == "MONK") then
-        local Totems = self.Totems
-
-        local Size = 27
-        local Spacing = 3
-
-		Totems:ClearAllPoints()
-        Totems:Point("BOTTOMLEFT", AdditionalPower or self, "TOPLEFT", -2, 5)
-        Totems:Width((Size * MAX_TOTEMS) + (Spacing * (MAX_TOTEMS - 1)))
-        Totems:Height(Size)
-
-		for i = 1, MAX_TOTEMS do
-			Totems[i]:ClearAllPoints()
-			Totems[i]:Size(Totems:GetHeight())
-            Totems[i].Shadow:Kill()
-            
-            -- change cooldown font
-            local cooldown = Totems[i].Cooldown
-            local timer = cooldown:GetRegions()
-            timer:ClearAllPoints()
-            timer:SetPoint("CENTER", cooldown, "CENTER", 2, 1)
-            timer:SetFont(Font, 14, FontStyle)
-            timer:SetTextColor(0.84, 0.75, 0.65)
-
-            timer.ClearAllPoints = function() end
-            timer.SetPoint = function() end
-            timer.SetFontObject = function() end
-            timer.SetFont = function() end
-
-			if i == 1 then
-				Totems[i]:Point("BOTTOMLEFT", Totems, "BOTTOMLEFT", 0, 0)
-			else
-				Totems[i]:Point("LEFT", Totems[i - 1], "RIGHT", Spacing, 0)
-			end
-		end
-	end
 end
-hooksecurefunc(UnitFrames, "Player", Player)

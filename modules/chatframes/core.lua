@@ -5,18 +5,32 @@ local Panels = T.Panels
 ----------------------------------------------------------------
 -- ChatFrames
 ----------------------------------------------------------------
-local function SetDefaultChatFramesPositions()
-    -- load saved variables
-    local Name = UnitName("player")
-    local Realm = GetRealmName()
+local baseSetDefaultChatFramesPositions = Chat.SetDefaultChatFramesPositions
+local baseSetChatFramePosition = Chat.SetChatFramePosition
+local baseInstall = Chat.Install
+local baseSetup = Chat.Setup
+
+function Chat:SetDefaultChatFramesPositions()
+
+	-- first, call the base function
+    baseSetDefaultChatFramesPositions(self)
+
+    -- second, we edit it
+	local Name = UnitName("player")
+	local Realm = GetRealmName()
+	
+	-- load saved variables
+	if (not TukuiData[Realm][Name].Chat) then
+		TukuiData[Realm][Name].Chat = {}
+	end
     
     local DataTextLeft = Panels.DataTextLeft
-    local Width = DataTextLeft:GetWidth() - 2
-    local Height = 118
+	local Width = C.Chat.LeftWidth - 14 -- DataTextLeft:GetWidth() - 2
+    local Height = C.Chat.LeftHeight - 30 -- 118
 
     for i = 1, NUM_CHAT_WINDOWS do
 		local Frame = _G["ChatFrame"..i]
-        local ID = Frame:GetID()
+		local ID = Frame:GetID()
         
         -- Set font size and chat frame size
 		Frame:Size(Width, Height)
@@ -26,9 +40,9 @@ local function SetDefaultChatFramesPositions()
 			Frame:ClearAllPoints()
 			Frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 13, 38)
 		elseif (ID == 5) then
-			if (not Frame.isDocked) then
+			if Frame:IsShown() and not Frame.isDocked then
 				Frame:ClearAllPoints()
-				Frame:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -11, 38)
+				Frame:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -13, 38)
 			end
         end
 
@@ -60,9 +74,49 @@ local function SetDefaultChatFramesPositions()
 		TukuiData[Realm][Name].Chat["Frame" .. i] = {Anchor1, Anchor2, X, Y, Width, Height}
     end
 end
-hooksecurefunc(Chat, "SetDefaultChatFramesPositions", SetDefaultChatFramesPositions)
 
-local function Install(self)
+function Chat:SetChatFramePosition()
+
+	-- first, call the base function
+	baseSetChatFramePosition(self)
+
+	-- second, we edit it
+	local Name = UnitName("player")
+	local Realm = GetRealmName()
+	
+	-- load saved variables
+	if (not TukuiData[Realm][Name].Chat) then return end
+
+	local Frame = self
+	local ID = Frame:GetID()
+	local Settings = TukuiData[Realm][Name].Chat["Frame" .. ID]
+
+	if (Settings) then
+		if C.General.Themes.Value == "Tukui 18" then
+			if (ID == 1) then
+				Frame:ClearAllPoints()
+				Frame:SetSize(C.Chat.LeftWidth, C.Chat.LeftHeight - 58)
+				Frame:SetPoint("BOTTOMLEFT", Panels.DataTextLeft, "TOPLEFT", 2, 3)
+				-- Frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 13, 38)
+			elseif (ID == 5) then
+				if Frame:IsShown() and not Frame.isDocked then
+					Frame:ClearAllPoints()
+					Frame:SetSize(C.Chat.RightWidth, C.Chat.RightHeight - 58)
+					Frame:SetPoint("BOTTOMLEFT", Panels.DataTextRight, "TOPLEFT", 2, 3)
+					-- Frame:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -8, 38)
+					-- Frame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+				end
+			end
+		end
+	end
+
+end
+
+function Chat:Install()
+	
+	-- first, call the base function
+    baseInstall(self)
+
 	-- Create our custom chatframes
 	FCF_ResetChatWindows()
     FCF_SetLocked(ChatFrame1, 1)
@@ -83,11 +137,6 @@ local function Install(self)
 
 	-- Set more chat groups
 	ChatFrame_RemoveAllMessageGroups(ChatFrame1)
-	ChatFrame_RemoveChannel(ChatFrame1, TRADE)
-	ChatFrame_RemoveChannel(ChatFrame1, GENERAL)
-	ChatFrame_RemoveChannel(ChatFrame1, L.ChatFrames.LocalDefense)
-	ChatFrame_RemoveChannel(ChatFrame1, L.ChatFrames.GuildRecruitment)
-	ChatFrame_RemoveChannel(ChatFrame1, L.ChatFrames.LookingForGroup)
 	ChatFrame_AddMessageGroup(ChatFrame1, "SAY")
 	ChatFrame_AddMessageGroup(ChatFrame1, "EMOTE")
 	ChatFrame_AddMessageGroup(ChatFrame1, "YELL")
@@ -119,11 +168,18 @@ local function Install(self)
 
 	-- Setup the Genera/Spam chat frame
 	ChatFrame_RemoveAllMessageGroups(ChatFrame3)
-    ChatFrame_AddChannel(ChatFrame3, TRADE)
-	ChatFrame_AddChannel(ChatFrame3, GENERAL)
-	ChatFrame_AddChannel(ChatFrame3, L.ChatFrames.LocalDefense)
-	ChatFrame_AddChannel(ChatFrame3, L.ChatFrames.GuildRecruitment)
-	ChatFrame_AddChannel(ChatFrame3, L.ChatFrames.LookingForGroup)
+
+	T.Delay(5, function()
+		ChatFrame_RemoveChannel(ChatFrame1, TRADE)
+		ChatFrame_RemoveChannel(ChatFrame1, GENERAL)
+		ChatFrame_RemoveChannel(ChatFrame1, "LocalDefense")
+		ChatFrame_RemoveChannel(ChatFrame1, "LookingForGroup")
+
+		ChatFrame_AddChannel(ChatFrame3, TRADE)
+		ChatFrame_AddChannel(ChatFrame3, GENERAL)
+		ChatFrame_AddChannel(ChatFrame3, "LocalDefense")
+		ChatFrame_AddChannel(ChatFrame3, "LookingForGroup")
+	end)
 
     -- Setup the Whisper chat frame
     ChatFrame_RemoveAllMessageGroups(ChatFrame4)
@@ -166,28 +222,38 @@ local function Install(self)
 	ToggleChatColorNamesByClassGroup(true, "INSTANCE_CHAT")
 	ToggleChatColorNamesByClassGroup(true, "INSTANCE_CHAT_LEADER")
 
+	-- Setup font size
+	FCF_SetChatWindowFontSize(nil, ChatFrame1, 12)
+	FCF_SetChatWindowFontSize(nil, ChatFrame2, 12)
+	FCF_SetChatWindowFontSize(nil, ChatFrame3, 12)
+	FCF_SetChatWindowFontSize(nil, ChatFrame4, 12)
+	FCF_SetChatWindowFontSize(nil, ChatFrame5, 12)
+
 	DEFAULT_CHAT_FRAME:SetUserPlaced(true)
 
 	self:SetDefaultChatFramesPositions()
 end
-hooksecurefunc(Chat, "Install", Install)
 
-local function Setup(self)
+function Chat:Setup()
+
+	-- first, call the base function
+    baseSetup(self)
+
+    -- second, we edit it
 	local LeftChatBG = Panels.LeftChatBG
 	local TabsBGLeft = Panels.TabsBGLeft
 
 	-- QuickJoinToastButton
-	QuickJoinToastButton.ClearAllPoints = BNToastFrame.ClearAllPoints
-	QuickJoinToastButton.SetPoint = BNToastFrame.SetPoint
-	QuickJoinToastButton:ClearAllPoints()
-	QuickJoinToastButton:SetPoint("TOPLEFT", TabsBGLeft, "BOTTOMLEFT", 0, -66)
-	QuickJoinToastButton:SetAlpha(0)
+	-- QuickJoinToastButton.ClearAllPoints = BNToastFrame.ClearAllPoints
+	-- QuickJoinToastButton.SetPoint = BNToastFrame.SetPoint
+	-- QuickJoinToastButton:ClearAllPoints()
+	-- QuickJoinToastButton:SetPoint("TOPLEFT", TabsBGLeft, "BOTTOMLEFT", 0, -66)
+	-- QuickJoinToastButton:SetAlpha(0)
 
-	QuickJoinToastButton.ClearAllPoints = function() end
-	QuickJoinToastButton.SetPoint = function() end
+	-- QuickJoinToastButton.ClearAllPoints = function() end
+	-- QuickJoinToastButton.SetPoint = function() end
 
     -- ChatMenu
     ChatMenu:ClearAllPoints()
 	ChatMenu:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", -2, 5)
 end
-hooksecurefunc(Chat, "Setup", Setup)

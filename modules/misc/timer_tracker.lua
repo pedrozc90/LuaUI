@@ -4,9 +4,16 @@ local TimerTracker = T.Miscellaneous.TimerTracker
 ----------------------------------------------------------------
 -- Timer Tracker (e.g: Battleground Timer)
 ----------------------------------------------------------------
-local function UpdateBar(self)
-    local Texture = C["Medias"].Blank
-    local Font, FontSize, FontStyle = C["Medias"].Font, 12, nil
+local baseUpdateBar = TimerTracker.UpdateBar
+
+function TimerTracker:UpdateBar()
+    
+    -- first, call the base function
+    baseUpdateBar(self)
+
+    -- second, we edit it
+    local Texture = C.Medias.Blank
+    local Font, FontSize, FontStyle = C.Medias.Font, 12, nil
 
     for i = 1, self:GetNumRegions() do
 		local Region = select(i, self:GetRegions())
@@ -24,8 +31,9 @@ local function UpdateBar(self)
     self:Width(210)
     self:Height(16)
     self:SetBackdrop(nil)
-    self:CreateBackdrop("Default")
+    self:CreateBackdrop()
+    self.Backdrop:SetBorder()
+    self.Backdrop:SetOutside(nil, 2, 2)
     self:SetStatusBarTexture(Texture)
     self.Shadow:Kill()
 end
-hooksecurefunc(TimerTracker, "UpdateBar", UpdateBar)

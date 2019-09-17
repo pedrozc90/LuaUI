@@ -3,11 +3,13 @@ local UnitFrames = T.UnitFrames
 local Panels = T.Panels
 local Class = select(2, UnitClass("player"))
 
+local LibClassicDurations = LibStub("LibClassicDurations")
+
 ----------------------------------------------------------------
 -- Health
 ----------------------------------------------------------------
 function UnitFrames:PreUpdateHealth(unit)
-    local UniColor = C.Lua.UniColor
+    local UniColor = C["Lua"].UniColor
 	local HostileColor = C["UnitFrames"].TargetEnemyHostileColor
 
 	if ((UniColor == true) or (HostileColor ~= true)) then
@@ -27,55 +29,68 @@ end
 local function PostCreateAura(self, button)
 	local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
 
-	-- Skin aura button
-	button:SetBackdrop(nil)
-	button.Shadow:Kill()
-	button:CreateBackdrop()
+    -- Skin aura button
+    button:NoTemplate()
+	-- button:SetBackdrop(nil)
+	-- button.Shadow:Kill()
+    button:CreateBackdrop()
+    button.Backdrop:SetBorder()
+    button.Backdrop:SetOutside(nil, 2, 2)
 	
 	-- remaining time to aura expire
 	button.Remaining:ClearAllPoints()
-	button.Remaining:SetPoint("CENTER", button, "CENTER", 2, 1)
+	button.Remaining:Point("CENTER", button, "CENTER", 2, 1)
 	button.Remaining:SetFont(Font, FontSize, FontStyle)
 
 	-- cooldown
 	button.cd:ClearAllPoints()
 	button.cd:SetInside(button, 0, 0)
 	
-	-- artwork
-	button.icon:SetInside(button, 0, 0)
+    -- artwork
+    button.icon:ClearAllPoints()
+	button.icon:SetInside(button, 0,0 )
 	
 	-- count
 	button.count:ClearAllPoints()
-	button.count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, 0)
+	button.count:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, 0)
 	button.count:SetFont(Font, FontSize, FontStyle)
 	button.count:SetJustifyH("RIGHT")
 end
 hooksecurefunc(UnitFrames, "PostCreateAura", PostCreateAura)
 
 function UnitFrames:PostUpdateAura(unit, button, index, offset, filter, isDebuff, duration, timeLeft)
-	local _, _, _, DType, Duration, ExpirationTime, UnitCaster, IsStealable = UnitAura(unit, index, button.filter)
+	local Name, _, _, DType, Duration, ExpirationTime, UnitCaster, IsStealable, _, SpellID = UnitAura(unit, index, button.filter)
+
+	if Duration == 0 and ExpirationTime == 0 then
+		Duration, ExpirationTime = LibClassicDurations:GetAuraDurationByUnit(unit, SpellID, UnitCaster, Name)
+		
+		button.IsLibClassicDuration = true
+	else
+		button.IsLibClassicDuration = false
+	end
 
 	if button then
 		if(button.filter == "HARMFUL") then
-			if(not UnitIsFriend("player", unit) and not button.isPlayer) then
-                button.icon:SetDesaturated(true)
-                if (button.Backdrop) then
+			if (not UnitIsFriend("player", unit) and not button.isPlayer) then
+				button.icon:SetDesaturated(true)
+				if (button.Backdrop) then
                     button.Backdrop:SetBackdropBorderColor(unpack(C["General"].BorderColor))
                 else
                     button:SetBackdropBorderColor(unpack(C["General"].BorderColor))
                 end
 			else
 				local color = DebuffTypeColor[DType] or DebuffTypeColor.none
-                button.icon:SetDesaturated(false)
-                if (button.Backdrop) then
+				button.icon:SetDesaturated(false)
+				if (button.Backdrop) then
                     button.Backdrop:SetBackdropBorderColor(color.r * 0.8, color.g * 0.8, color.b * 0.8)
                 else
                     button:SetBackdropBorderColor(color.r * 0.8, color.g * 0.8, color.b * 0.8)
                 end
 			end
 		else
-			if button.Animation then
-				if (IsStealable or DType == "Magic") and not UnitIsFriend("player", unit) and not button.Animation.Playing then
+			-- These classes can purge, show them
+			if (button.Animation) and (T.MyClass == "PRIEST") or (T.MyClass == "SHAMAN") then
+				if (DType == "Magic") and (not UnitIsFriend("player", unit)) and (not button.Animation.Playing) then
 					button.Animation:Play()
 					button.Animation.Playing = true
 				else
@@ -86,7 +101,7 @@ function UnitFrames:PostUpdateAura(unit, button, index, offset, filter, isDebuff
 		end
 
 		if button.Remaining then
-			if Duration and Duration > 0 then
+			if (Duration and Duration > 0) then
 				button.Remaining:Show()
 			else
 				button.Remaining:Hide()
@@ -95,9 +110,18 @@ function UnitFrames:PostUpdateAura(unit, button, index, offset, filter, isDebuff
 			button:SetScript("OnUpdate", UnitFrames.CreateAuraTimer)
 		end
 
+		if (button.cd) and (button.IsLibClassicDuration) then
+			if (Duration and Duration > 0) then
+				button.cd:SetCooldown(ExpirationTime - Duration, Duration)
+				button.cd:Show()
+			else
+				button.cd:Hide()
+			end
+		end
+
 		button.Duration = Duration
 		button.TimeLeft = ExpirationTime
-		button.First = true
+		button.Elapsed = GetTime()
 	end
 end
 
@@ -239,7 +263,7 @@ function UnitFrames:DisplayNameplatePowerAndCastBar(unit, cur, min, max)
 	if (not unit) then unit = self:GetParent().unit end
 	if (not unit) then return end
 
-	if not cur then
+	if (not cur) then
 		cur, max = UnitPower(unit), UnitPowerMax(unit)
 	end
 
@@ -249,10 +273,10 @@ function UnitFrames:DisplayNameplatePowerAndCastBar(unit, cur, min, max)
 	local PowerBar = Nameplate.Power
 	local CastBar = Nameplate.Castbar
 	local Health = Nameplate.Health
-	local IsPowerHidden = PowerBar.IsHidden
+    local IsPowerHidden = C.NamePlates.PowerBar and PowerBar.IsHidden or false
 
     -- check if unit has a power bar
-    if (not CastBar:IsShown()) and (CurrentPower and CurrentPower == 0) and (MaxPower and MaxPower == 0) then
+    if (CastBar and (not CastBar:IsShown())) and (CurrentPower and CurrentPower == 0) and (MaxPower and MaxPower == 0) then
 		if (not IsPowerHidden) then
 			Health:ClearAllPoints()
             Health:Point("TOPLEFT", Nameplate, "TOPLEFT", 0, 0)
@@ -309,37 +333,37 @@ local function CreateUnits()
     Pet:SetPoint("BOTTOMRIGHT", Panels.RightChatBG, "TOPRIGHT", 0, 7)
     Pet:Size(unpack(C.Units.Pet))
     
-    Focus:ClearAllPoints()
-    Focus:SetPoint("BOTTOMLEFT",  Panels.RightChatBG, "TOPLEFT", 0, 7)
-    Focus:Size(unpack(C.Units.Focus))
+    -- Focus:ClearAllPoints()
+    -- Focus:SetPoint("BOTTOMLEFT",  Panels.RightChatBG, "TOPLEFT", 0, 7)
+    -- Focus:Size(unpack(C.Units.Focus))
 
-    FocusTarget:ClearAllPoints()
-    FocusTarget:SetPoint("BOTTOM", Focus, "TOP", 0, 34)
-    FocusTarget:Size(unpack(C.Units.FocusTarget))
+    -- FocusTarget:ClearAllPoints()
+    -- FocusTarget:SetPoint("BOTTOM", Focus, "TOP", 0, 34)
+    -- FocusTarget:Size(unpack(C.Units.FocusTarget))
 
-    if (C.UnitFrames.Arena) then
-        for i = 1, 5 do
-            Arena[i]:ClearAllPoints()
-            Arena[i]:Size(unpack(C.Units.Arena))
-            if (i == 1) then
-                Arena[i]:SetPoint("TOPRIGHT", UIParent, "RIGHT", -225, 275)
-            else
-                Arena[i]:SetPoint("TOP", Arena[i - 1], "BOTTOM", 0, -34)
-            end
-        end
-    end
+    -- if (C.UnitFrames.Arena) then
+    --     for i = 1, 5 do
+    --         Arena[i]:ClearAllPoints()
+    --         Arena[i]:Size(unpack(C.Units.Arena))
+    --         if (i == 1) then
+    --             Arena[i]:SetPoint("TOPRIGHT", UIParent, "RIGHT", -225, 275)
+    --         else
+    --             Arena[i]:SetPoint("TOP", Arena[i - 1], "BOTTOM", 0, -34)
+    --         end
+    --     end
+    -- end
 
-    if (C.UnitFrames.Boss) then
-        for i = 1, 5 do
-            Boss[i]:ClearAllPoints()
-            Boss[i]:Size(unpack(C.Units.Boss))
-            if (i == 1) then
-                Boss[i]:SetPoint("TOPRIGHT", UIParent, "RIGHT", -225, 275)
-            else
-                Boss[i]:SetPoint("TOP", Boss[i - 1], "BOTTOM", 0, -46)
-            end
-        end
-    end
+    -- if (C.UnitFrames.Boss) then
+    --     for i = 1, 5 do
+    --         Boss[i]:ClearAllPoints()
+    --         Boss[i]:Size(unpack(C.Units.Boss))
+    --         if (i == 1) then
+    --             Boss[i]:SetPoint("TOPRIGHT", UIParent, "RIGHT", -225, 275)
+    --         else
+    --             Boss[i]:SetPoint("TOP", Boss[i - 1], "BOTTOM", 0, -46)
+    --         end
+    --     end
+    -- end
 
     if (C.Party.Enable) then
         Party:ClearAllPoints()
@@ -351,6 +375,7 @@ local function CreateUnits()
     UnitFrames.GroupHolder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 270)
     UnitFrames.GroupHolder:SetSize(250, 20)
     UnitFrames.GroupHolder:CreateBackdrop("Transparent")
+    UnitFrames.GroupHolder:SetAlpha(0)
 
     if (C.Raid.Enable) then
         Raid:ClearAllPoints()

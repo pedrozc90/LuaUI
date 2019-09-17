@@ -2,6 +2,7 @@ local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
 local Panels = T.Panels
 
+if (not C.Lua.Enable) then return end
 ----------------------------------------------------------------
 -- Layouts
 ----------------------------------------------------------------

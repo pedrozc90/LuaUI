@@ -1,26 +1,37 @@
 local T, C, L = Tukui:unpack()
 local Experience = T.Miscellaneous.Experience
 local Minimap = T.Maps.Minimap
+local Panels = T.Panels
 
 ----------------------------------------------------------------
 -- Experience / Honor Bar
 ----------------------------------------------------------------
-local function Enable(self)
-    -- resources
-    local Texture = T.GetTexture(C.Lua.Texture)
+local baseCreate = Experience.Create
 
-    -- elements
+function Experience:Create()
+
+    -- first, call the base function
+    baseCreate(self)
+
+    -- second, we edit it
     local ExpBar = self.XPBar1
     local HonorBar = self.XPBar2
     local ExpRestedBar = self.RestedBar1
     local HonorRestedBar = self.RestedBar2
 
+    -- resources
+    local Height = 3
+    local Texture = T.GetTexture(C.Lua.Texture or "Blank")
+
     -- Experience
     ExpBar:ClearAllPoints()
     ExpBar:SetStatusBarTexture(Texture)
-    ExpBar:Height(3)
     ExpBar:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -7)
     ExpBar:Point("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -7)
+    ExpBar:Height(Height)
+    -- ExpBar:SetBackdrop(nil)
+    ExpBar.Backdrop:SetBorder()
+    ExpBar.Backdrop:SetOutside(nil, 2, 2)
 
     ExpRestedBar:SetAllPoints(ExpBar)
     ExpRestedBar:SetStatusBarTexture(Texture)
@@ -28,7 +39,10 @@ local function Enable(self)
     -- Honor
     HonorBar:ClearAllPoints()
     HonorBar:SetStatusBarTexture(Texture)
-    HonorBar:Height(3)
+    HonorBar:Height(Height)
+    -- HonorBar:SetBackdrop(nil)
+    HonorBar.Backdrop:SetBorder()
+    HonorBar.Backdrop:SetOutside(nil, 2, 2)
     if (ExpBar:IsShown()) then
         HonorBar:Point("TOPLEFT", ExpBar, "BOTTOMLEFT", 0, -7)
         HonorBar:Point("TOPRIGHT", ExpBar, "BOTTOMRIGHT", 0, -7)
@@ -39,5 +53,5 @@ local function Enable(self)
 
     HonorRestedBar:SetAllPoints(HonorBar)
     HonorRestedBar:SetStatusBarTexture(Texture)
+
 end
-hooksecurefunc(Experience, "Enable", Enable)

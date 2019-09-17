@@ -6,72 +6,105 @@ local Bags = T.Inventory.Bags
 ----------------------------------------------------------------
 -- Tooltips
 ----------------------------------------------------------------
-local function UpdatePosition(self)
+local baseCreateAnchor = Tooltips.CreateAnchor
+local baseSetTooltipDefaultAnchor = Tooltips.SetTooltipDefaultAnchor
+local baseSkin = Tooltips.Skin
+local baseEnable = Tooltips.Enable
+
+function Tooltips:OnUpdate(elapsed)
+
     local DataTextRight = Panels.DataTextRight
     local RightChatBG = Panels.RightChatBG
-    local Focus = oUF_TukuiFocus
     local Pet = oUF_TukuiPet
     local Bag = Bags["Bag"]
 
-    self:ClearAllPoints()
+    local Anchor = self.Anchor
+    Anchor:ClearAllPoints()
     if (Bag and Bag:IsVisible()) then
-        self:Point("BOTTOMRIGHT", Bag.SortButton, "TOPRIGHT", -2, 5)
+        if (Bag.BagsContainer and Bag.BagsContainer:IsVisible()) then
+            Anchor:Point("BOTTOMRIGHT", Bag.BagsContainer, "TOPRIGHT", -2, 5)
+        else
+            Anchor:Point("BOTTOMRIGHT", Bag, "TOPRIGHT", -2, 5)
+        end
     elseif (Pet and Pet:IsVisible()) then
-        self:Point("BOTTOMRIGHT", Pet, "TOPRIGHT", 0, 7)
-    elseif (Focus and Focus:IsVisible()) then
-        self:Point("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 39)
+        Anchor:Point("BOTTOMRIGHT", Pet, "TOPRIGHT", 0, 7)
     elseif (RightChatBG and RightChatBG:IsShown()) then
-        self:Point("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 7)
+        Anchor:Point("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 7)
     else
-        self:Point("BOTTOMRIGHT", DataTextRight, "TOPRIGHT", -2, 5)
+        Anchor:Point("BOTTOMRIGHT", DataTextRight, "TOPRIGHT", 0, 7)
     end
 end
 
-local function CreateAnchor(self)
+function Tooltips:CreateAnchor()
+
+    -- first, call the base function
+    baseCreateAnchor(self)
+
+    local DataTextRight = Panels.DataTextRight
+    local RightChatBG = Panels.RightChatBG
+
+    -- second, we edit it
     local Anchor = self.Anchor
 
-    UpdatePosition(Anchor)
+    Anchor:ClearAllPoints()
+    Anchor:Point("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 7)
+
 end
-hooksecurefunc(Tooltips, "CreateAnchor", CreateAnchor)
 
---
-local function SetTooltipDefaultAnchor(self, parent)
-    local Anchor = self.Anchor
-    
+function Tooltips:SetTooltipDefaultAnchor(parent)
+
+    -- first, call the base function
+    baseSetTooltipDefaultAnchor(self)
+
+    -- second, we edit it
+    local Anchor = Tooltips.Anchor
+
+    -- self:ClearAllPoints()
     if (C.Tooltips.MouseOver) then
 		if (parent ~= UIParent) then
-			self:SetAnchorType("ANCHOR_TOPRIGHT", 2, -23)
+			self:ClearAllPoints()
+            self:SetPoint("BOTTOMRIGHT", Anchor, "TOPRIGHT", 0, 7)
 		else
-			self:SetOwner(parent, "ANCHOR_CURSOR")
+            self:SetOwner(parent, "ANCHOR_CURSOR")
 		end
 	else
-		self:SetAnchorType("ANCHOR_TOPRIGHT", 2, -23)
+		self:ClearAllPoints()
+        self:SetPoint("BOTTOMRIGHT", Anchor, "BOTTOMRIGHT", 0, 0)
 	end
+    
 end
-hooksecurefunc(Tooltips, "SetTooltipDefaultAnchor", SetTooltipDefaultAnchor)
 
-local function OnUpdate(self, elapsed)
-    local Owner = self:GetOwner()
+function Tooltips:Skin(unit)
 
-    -- update tukui tooltip anchor is pet or chatbackground are visible
-    if (Owner) and (Owner:GetName() == "TukuiTooltipAnchor") then
-        UpdatePosition(Owner)
-    end
+    -- first, call the base function
+    baseSkin(self)
+
+    -- second, we edit it
+    self.Backdrop:SetBorder("Transparent")
+    self.Backdrop:SetOutside(nil, 2, 2)
+
 end
-hooksecurefunc(Tooltips, "OnUpdate", OnUpdate)
 
-local function Enable(self)
+function Tooltips:Enable()
+
+    -- first, call the base function
+    baseEnable(self)
+
     -- tooltip health bar
     local HealthBar = GameTooltipStatusBar
 
 	HealthBar:ClearAllPoints()
-    HealthBar:Point("BOTTOMLEFT", HealthBar:GetParent(), "TOPLEFT", 2, 5)
-    HealthBar:Point("BOTTOMRIGHT", HealthBar:GetParent(), "TOPRIGHT", -2, 5)
+    HealthBar:Point("BOTTOMLEFT", HealthBar:GetParent(), "TOPLEFT", 0, 7)
+    HealthBar:Point("BOTTOMRIGHT", HealthBar:GetParent(), "TOPRIGHT", 0, 7)
     HealthBar:Height(9)
+    HealthBar.Backdrop:SetBorder()
+    HealthBar.Backdrop:SetOutside(nil, 2, 2)
 
-    if (C["Tooltips"].UnitHealthText) then
+    if (C.Tooltips.UnitHealthText) then
 		HealthBar.Text:ClearAllPoints()
 		HealthBar.Text:Point("CENTER", HealthBar, "CENTER", 0, 1)
     end
+    
+    -- update tooltip position to void overlay
+    self:SetScript("OnUpdate", self.OnUpdate)
 end
-hooksecurefunc(Tooltips, "Enable", Enable)

@@ -8,7 +8,14 @@ if (not C.ActionBars.ShapeShift) then return end
 ----------------------------------------------------------------
 -- StanceBar
 ----------------------------------------------------------------
-local function CreateStanceBar()
+local baseCreateStanceBar = ActionBars.CreateStanceBar
+
+function ActionBars:CreateStanceBar()
+
+    -- first, call the base function
+    baseCreateStanceBar(self)
+
+    -- second, we edit it
 	local StanceBar = Panels.StanceBar
 	local PetSize = C.ActionBars.PetButtonSize
 	local Spacing = C.ActionBars.ButtonSpacing
@@ -36,4 +43,3 @@ local function CreateStanceBar()
 
 	RegisterStateDriver(StanceBar, "visibility", "[vehicleui][petbattle][overridebar] hide; show")
 end
-hooksecurefunc(ActionBars, "CreateStanceBar", CreateStanceBar)

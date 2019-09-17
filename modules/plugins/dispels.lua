@@ -13,23 +13,7 @@ local chatType = nil
 local playerGUID = nil
 
 -- list of spell to announce when dispeled
-local DispellList = {
-    -- Mogu'shan Vaults: 
-    [117961] = true,        -- Impervious Shield
-    [117697] = true,        -- Shield of Darkness
-    [117837] = true,        -- Delirious
-    [117949] = true,        -- Closed Circuit
-    -- Heart of Fear: 
-    [122149] = true,        -- Quickening
-    [124862] = true,        -- Visions of Demise
-    -- Terrace of Endless Spring
-    [117398] = true,        -- Lightning Prison
-    [117235] = true,        -- Purified
-    [123011] = true,        -- Terrorize
-    -- Throne of Thunder
-    -- Siege od Orgrimmar
-    [143791] = true,        -- Corrosive Blood
-}
+local DispellList = {}
 
 local CombatEvents = {
     SPELL_DISPEL = true,

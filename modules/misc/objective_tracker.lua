@@ -1,6 +1,7 @@
 local T, C, L = Tukui:unpack()
 local ObjectiveTracker = T.Miscellaneous.ObjectiveTracker
 
+if (not C.Lua.Enable) then return end
 ----------------------------------------------------------------
 -- Objective Tracker
 ----------------------------------------------------------------

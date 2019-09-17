@@ -4,7 +4,14 @@ local UnitFrames = T.UnitFrames
 ----------------------------------------------------------------
 -- TargetOfTarget
 ----------------------------------------------------------------
-local function TargetOfTarget(self)
+local baseTargetOfTarget = UnitFrames.TargetOfTarget
+
+function UnitFrames:TargetOfTarget()
+
+    -- first, call the base function
+    baseTargetOfTarget(self)
+
+    -- second, we edit it
     local Health = self.Health
 	local Name =  self.Name
     local RaidIcon = self.RaidTargetIndicator
@@ -25,6 +32,8 @@ local function TargetOfTarget(self)
     Health:Height(FrameHeight - 6)
     Health:SetFrameLevel(3)
     Health:CreateBackdrop()
+    Health.Backdrop:SetBorder()
+    Health.Backdrop:SetOutside(nil, 2, 2)
 
     Health.Background:SetAllPoints()
     Health.Background:SetColorTexture(.05, .05, .05)
@@ -44,6 +53,7 @@ local function TargetOfTarget(self)
         Health.colorReaction = true
     end
 
+    -- Power
     local Power = CreateFrame("StatusBar", nil, self)
     Power:Point("TOPLEFT", Health, "BOTTOMLEFT", 0, -3)
     Power:Point("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -3)
@@ -51,6 +61,8 @@ local function TargetOfTarget(self)
     Power:SetFrameStrata(self:GetFrameStrata())
     Power:SetStatusBarTexture(PowerTexture)
     Power:CreateBackdrop()
+    Power.Backdrop:SetBorder()
+    Power.Backdrop:SetOutside(nil, 2, 2)
 
 	Power.Background = Power:CreateTexture(nil, "BORDER")
 	Power.Background:SetAllPoints()
@@ -83,4 +95,3 @@ local function TargetOfTarget(self)
 
     self.Power = Power
 end
-hooksecurefunc(UnitFrames, "TargetOfTarget", TargetOfTarget)

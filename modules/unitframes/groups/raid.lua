@@ -1,11 +1,19 @@
 local T, C, L = Tukui:unpack()
+local Toolkit = T00LKIT
 local UnitFrames = T.UnitFrames
 local Class = select(2, UnitClass("player"))
 
 ----------------------------------------------------------------
 -- Raid
 ----------------------------------------------------------------
-local function Raid(self)
+local baseRaid = UnitFrames.Raid
+
+function UnitFrames:Raid()
+
+    -- first, call the base function
+    baseRaid(self)
+
+    -- second, we edit it
     local Health = self.Health
 	local Power = self.Power
 	local Name = self.Name
@@ -31,17 +39,11 @@ local function Raid(self)
     Health:Height(FrameHeight - 6)
     Health:SetFrameLevel(3)
     Health:CreateBackdrop()
-    Health:SetOrientation("HORIZONTAL")
+    Health.Backdrop:SetBorder()
+    Health.Backdrop:SetOutside(nil, 2, 2)
 
     Health.Background:SetAllPoints()
     Health.Background:SetColorTexture(.05, .05, .05)
-
-    if (C.Raid.ShowHealthText) then
-        Health.Value:ClearAllPoints()
-        Health.Value:SetParent(Health)
-        Health.Value:Point("CENTER", Health, "CENTER", 1, -7)
-        Health.Value:SetJustifyH("CENTER")
-    end
     
     Health.frequentUpdate = true
     if (C.Lua.UniColor) then
@@ -65,6 +67,8 @@ local function Raid(self)
     Power:Height(3)
     Power:SetFrameLevel(Health:GetFrameLevel())
     Power:CreateBackdrop()
+    Power.Backdrop:SetBorder()
+    Power.Backdrop:SetOutside(nil, 2, 2)
 
     Power.Background:SetAllPoints()
     Power.Background:SetColorTexture(.05, .05, .05)
@@ -97,96 +101,50 @@ local function Raid(self)
 	RaidIcon:ClearAllPoints()
     RaidIcon:Point("CENTER", Health, "TOP", 0, 3)
     RaidIcon:Size(14, 14)
-
-	if C["Raid"].ShowRessurection then
-        local ResurrectIcon = self.ResurrectIndicator
+    
+    if (C.Raid.MyRaidBuffs) then
+        local Buffs = self.Buffs
         
-        ResurrectIcon:ClearAllPoints()
-        ResurrectIcon:Point("CENTER", Health, "CENTER", 0, 0)
-		ResurrectIcon:Size(16)
+        Buffs:ClearAllPoints()
+		Buffs:Point("TOPLEFT", Health, "TOPLEFT", 7, -7)
+		Buffs:SetHeight(16)
+		Buffs:SetWidth(FrameWidth)
+		Buffs.size = 16
+		Buffs.num = 5
+		Buffs.numRow = 1
+		Buffs.spacing = 0
+		Buffs.initialAnchor = "TOPLEFT"
+		Buffs.disableCooldown = true
+		Buffs.disableMouse = true
+		Buffs.onlyShowPlayer = true
+		Buffs.IsRaid = true
+		-- Buffs.PostCreateIcon = TukuiUnitFrames.PostCreateAura
 	end
-
-	-- Health Prediction
-	if (C.Raid.HealBar) then
-		local FirstBar = self.HealthPrediction.myBar
-        local SecondBar = self.HealthPrediction.otherBar
-        local ThirdBar = self.HealthPrediction.absorbBar
-
-        local HealBarColor = { .31, .45, .63, .4 }
-        
-        FirstBar:Width(FrameWidth)
-        FirstBar:Height(Health:GetHeight())
-		FirstBar:SetStatusBarTexture(HealthTexture)
-        FirstBar:SetStatusBarColor(unpack(HealBarColor))
-		
-        SecondBar:Width(FrameWidth)
-        SecondBar:Height(Health:GetHeight())
-		SecondBar:SetStatusBarTexture(HealthTexture)
-		SecondBar:SetStatusBarColor(unpack(HealBarColor))
-		
-        ThirdBar:Width(FrameWidth)
-        ThirdBar:Height(Health:GetHeight())
-		ThirdBar:SetStatusBarTexture(HealthTexture)
-		ThirdBar:SetStatusBarColor(unpack(HealBarColor))
-	end
-
-	-- AuraWatch (corner and center icon)
-    if (C.Raid.AuraWatch) then
+	
+	if C.Raid.DebuffWatch then
         local RaidDebuffs = self.RaidDebuffs
-
+        
         RaidDebuffs:ClearAllPoints()
-        RaidDebuffs:SetParent(Health)
         RaidDebuffs:Point("CENTER", Health, "CENTER", 0, 0)
-        RaidDebuffs:Size(18)
-		RaidDebuffs.Shadow:Kill()
-
-		RaidDebuffs.showDispellableDebuff = true
-		RaidDebuffs.onlyMatchSpellID = true
-		RaidDebuffs.FilterDispellableDebuff = true
-		RaidDebuffs.forceShow = C["Raid"].TestAuraWatch -- use for testing
-
-		RaidDebuffs.time:ClearAllPoints()
-        RaidDebuffs.time:Point("CENTER", RaidDebuffs, 0, 0)
+        RaidDebuffs:Size(20)
+		-- RaidDebuffs:SetTemplate()
+        RaidDebuffs.Shadow:Kill()
+        
+        RaidDebuffs.time:ClearAllPoints()
+        RaidDebuffs.time:Point("CENTER", RaidDebuffs, "CENTER", 0, 0)
         RaidDebuffs.time:SetFont(Font, FontSize, FontStyle)
 
 		RaidDebuffs.count:ClearAllPoints()
         RaidDebuffs.count:Point("BOTTOMRIGHT", RaidDebuffs, "BOTTOMRIGHT", 2, 0)
         RaidDebuffs.count:SetFont(Font, FontSize, FontStyle)		
 		RaidDebuffs.count:SetTextColor(1, .9, 0)
+        
+        RaidDebuffs.showDispellableDebuff = true
+		RaidDebuffs.onlyMatchSpellID = true
+		RaidDebuffs.FilterDispellableDebuff = true
+		RaidDebuffs.forceShow = C.Raid.TestAuraWatch
 	end
-    
-	-- Threat
-	Threat.Override = UnitFrames.UpdateThreat
-
-	-- Highlight
-	Highlight:ClearAllPoints()
-    Highlight:SetAllPoints(Health)
-    
-    -- Group Role
-    if (C.Raid.GroupRoles) then
-        local GroupRoleIndicator = self:CreateTexture(nil, "OVERLAY")
-        GroupRoleIndicator:SetSize(12, 12)
-        GroupRoleIndicator:SetPoint("CENTER", Health, "CENTER", 0, -7)
-        GroupRoleIndicator.PostUpdate = UnitFrames.UpdateGroupRole
-
-        self.GroupRoleIndicator = GroupRoleIndicator
-    end
-	
-	if (Class == "PRIEST") then
-        local Atonement = CreateFrame("StatusBar", nil, Power)
-		Atonement:SetAllPoints(Power)
-		Atonement:SetStatusBarTexture(PowerTexture)
-		Atonement:SetFrameStrata(Power:GetFrameStrata())
-		Atonement:SetFrameLevel(Power:GetFrameLevel() + 1)
-
-		self.Atonement = Atonement
-	end
-
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", UnitFrames.Highlight)
-	self:RegisterEvent("RAID_ROSTER_UPDATE", UnitFrames.Highlight)
-    self:RegisterEvent("PLAYER_FOCUS_CHANGED", UnitFrames.Highlight)
 end
-hooksecurefunc(UnitFrames, "Raid", Raid)
 
 ----------------------------------------------------------------
 -- Raid Attributes
@@ -203,20 +161,20 @@ function UnitFrames:GetRaidFramesAttributes()
 			self:SetWidth(header:GetAttribute("initial-width"))
 			self:SetHeight(header:GetAttribute("initial-height"))
 		]],
-		"initial-width", T.Scale(Width),
-		"initial-height", T.Scale(Height),
+		"initial-width", Toolkit.Functions.Scale(Width),
+		"initial-height", Toolkit.Functions.Scale(Height),
 		"showParty", true,
 		"showRaid", true,
 		"showPlayer", true,
 		"showSolo", C["Raid"].ShowSolo,
-		"xoffset", T.Scale(7),
-		"yOffset", T.Scale(-3),
+		"xoffset", Toolkit.Functions.Scale(7),
+		"yOffset", Toolkit.Functions.Scale(-3),
 		"point", "LEFT",
 		"groupFilter", "1,2,3,4,5,6,7,8",
 		"groupingOrder", "1,2,3,4,5,6,7,8",
 		"groupBy", C["Raid"].GroupBy.Value,
 		"maxColumns", math.ceil(40 / 5),
 		"unitsPerColumn", C["Raid"].MaxUnitPerColumn,
-		"columnSpacing", T.Scale(7),
+		"columnSpacing", Toolkit.Functions.Scale(7),
 		"columnAnchorPoint", "BOTTOM"
 end

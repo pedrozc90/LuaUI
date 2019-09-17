@@ -5,7 +5,14 @@ local Panels = T.Panels
 ----------------------------------------------------------------
 -- Target
 ----------------------------------------------------------------
-local function Target(self)
+local baseTarget = UnitFrames.Target
+
+function UnitFrames:Target()
+
+    -- first, call the base function
+    baseTarget(self)
+
+    -- second, we edit it
     local Health = self.Health
     local Power = self.Power
     local Name = self.Name
@@ -13,7 +20,7 @@ local function Target(self)
 	local RaidIcon = self.RaidTargetIndicator
     local Threat = self.ThreatIndicator
     
-    local FrameWidth, FrameHeight = unpack(C["Units"].Target)
+    local FrameWidth, FrameHeight = unpack(C["Units"].Target or { 254, 31 })
     local HealthTexture = T.GetTexture(C["Textures"].UFHealthTexture)
 	local PowerTexture = T.GetTexture(C["Textures"].UFPowerTexture)
     local CastTexture = T.GetTexture(C["Textures"].UFCastTexture)
@@ -30,6 +37,8 @@ local function Target(self)
     Health:Height(FrameHeight - 6)
     Health:SetFrameLevel(3)
     Health:CreateBackdrop()
+    Health.Backdrop:SetBorder()
+    Health.Backdrop:SetOutside(nil, 2, 2)
 
     Health.Background:SetAllPoints()
     Health.Background:SetColorTexture(.05, .05, .05)
@@ -64,14 +73,11 @@ local function Target(self)
     Power:Height(3)
     Power:SetFrameLevel(Health:GetFrameLevel())
     Power:CreateBackdrop()
+    Power.Backdrop:SetBorder()
+    Power.Backdrop:SetOutside(nil, 2, 2)
 
     Power.Background:SetAllPoints()
     Power.Background:SetColorTexture(.05, .05, .05)
-
-    Power.Value:ClearAllPoints()
-    Power.Value:SetParent(Health)
-    Power.Value:Point("LEFT", Health, "LEFT", 5, 1)
-    Power.Value:SetJustifyH("LEFT")
 
     Power.frequentUpdates = true
     Power.colorDisconnected = true
@@ -91,21 +97,6 @@ local function Target(self)
     Name:SetJustifyH("LEFT")
     
     self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameLong] [Tukui:Classification][Tukui:DiffColor][level]")
-
-    -- Alternative Power Bar
-    AltPowerBar:ClearAllPoints()
-    AltPowerBar:Point("BOTTOMLEFT", self, "TOPLEFT", 0, 7)
-	AltPowerBar:Point("BOTTOMRIGHT", self, "TOPRIGHT", 0, 7)
-	AltPowerBar:Height(5)
-    AltPowerBar:SetStatusBarColor(.0, .0, .0)
-    AltPowerBar:SetFrameLevel(Health:GetFrameLevel())
-	AltPowerBar:SetBackdrop(nil)
-	AltPowerBar:CreateBackdrop()
-
-	if (AltPowerBar.Value) then
-		AltPowerBar.Value:ClearAllPoints()
-		AltPowerBar.Value:Point("CENTER", AltPowerBar, "CENTER", 0, 1)
-    end
     
     -- Portrait
     if (C.UnitFrames.Portrait) then
@@ -116,6 +107,7 @@ local function Target(self)
         Portrait:SetAlpha(.3)
     end
 
+    -- CastBar
     if (C.UnitFrames.CastBar) then
         local CastBar = self.Castbar
         
@@ -126,6 +118,8 @@ local function Target(self)
         CastBar:SetStatusBarTexture(CastTexture)
         CastBar:SetFrameLevel(Health:GetFrameLevel())
         CastBar:CreateBackdrop()
+        CastBar.Backdrop:SetBorder()
+        CastBar.Backdrop:SetOutside(nil, 2, 2)
 
 		CastBar.Background:SetAllPoints()
 		CastBar.Background:SetTexture(CastTexture)
@@ -149,7 +143,8 @@ local function Target(self)
             CastBar.Icon:SetTexCoord(unpack(T.IconCoord))
 
             CastBar.Button:ClearAllPoints()
-            CastBar.Button:SetOutside(CastBar.Icon)
+            CastBar.Button:SetBorder()
+            CastBar.Button:SetOutside(CastBar.Icon, 2, 2)
 		end
 
 		if (C.UnitFrames.UnlinkCastBar) then
@@ -167,45 +162,12 @@ local function Target(self)
 		end
     end
 
-    -- CombatLog
-	if (C.UnitFrames.CombatLog) then
-        local CombatFeedbackText = self.CombatFeedbackText
-        
-		CombatFeedbackText:ClearAllPoints()
-        CombatFeedbackText:Point("CENTER", Health, "CENTER", 0, 1)
-        CombatFeedbackText:SetFont(Font, 13, FontStyle)
-    end
-
-    -- Health Prediction
-	if (C.UnitFrames.HealBar) then
-        local FirstBar = self.HealthPrediction.myBar
-        local SecondBar = self.HealthPrediction.otherBar
-        local ThirdBar = self.HealthPrediction.absorbBar
-
-        local HealBarColor = { .31, .45, .63, .4 }
-        
-        FirstBar:Width(FrameWidth)
-        FirstBar:Height(Health:GetHeight())
-		FirstBar:SetStatusBarTexture(HealthTexture)
-        FirstBar:SetStatusBarColor(unpack(HealBarColor))
-		
-        SecondBar:Width(FrameWidth)
-        SecondBar:Height(Health:GetHeight())
-		SecondBar:SetStatusBarTexture(HealthTexture)
-		SecondBar:SetStatusBarColor(unpack(HealBarColor))
-		
-        ThirdBar:Width(FrameWidth)
-        ThirdBar:Height(Health:GetHeight())
-		ThirdBar:SetStatusBarTexture(HealthTexture)
-		ThirdBar:SetStatusBarColor(unpack(HealBarColor))
-    end
-
+    -- Auras
     if (C.UnitFrames.TargetAuras) then
 		local Buffs = self.Buffs
         local Debuffs = self.Debuffs
         
         local yOffset = 0
-        if (self.AlternativePower.IsEnable) then yOffset = 10 end
 
 		Buffs:ClearAllPoints()
         Buffs:Point("BOTTOMLEFT", self, "TOPLEFT", 0, 7 + yOffset)
@@ -219,6 +181,8 @@ local function Target(self)
         Buffs:Width(Buffs.numRow * Buffs.size + (Buffs.numRow - 1) * Buffs.spacing)
         Buffs:Height(Buffs.size)
 
+        Buffs.PostCreateIcon = UnitFrames.PostCreateAura
+		Buffs.PostUpdateIcon = UnitFrames.PostUpdateAura
         Buffs.PostUpdate = UnitFrames.UpdateDebuffsHeaderPosition
 
         Debuffs:ClearAllPoints()
@@ -232,6 +196,18 @@ local function Target(self)
         Debuffs.numRow = Buffs.numRow
         Debuffs:Width(Debuffs.numRow * Debuffs.size + (Debuffs.numRow - 1) * Debuffs.spacing)
         Debuffs:Height(Debuffs.size)
+
+        Debuffs.PostCreateIcon = UnitFrames.PostCreateAura
+		Debuffs.PostUpdateIcon = UnitFrames.PostUpdateAura
+    end
+
+    -- CombatLog
+	if (C.UnitFrames.CombatLog) then
+        local CombatFeedbackText = self.CombatFeedbackText
+        
+		CombatFeedbackText:ClearAllPoints()
+        CombatFeedbackText:Point("CENTER", Health, "CENTER", 0, 1)
+        CombatFeedbackText:SetFont(Font, 13, FontStyle)
     end
 
     -- Raid Icon
@@ -239,4 +215,3 @@ local function Target(self)
     RaidIcon:Point("CENTER", self, "TOP", 0, 3)
     RaidIcon:Size(16, 16)
 end
-hooksecurefunc(UnitFrames, "Target", Target)

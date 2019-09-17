@@ -1,0 +1,68 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- Panels -->
+    <Script file="panels\panels.lua"/>
+
+    <!-- Inventory -->
+    <Script file="inventory\bags.lua"/>
+
+    <!-- Action Bars -->
+    <Script file="actionbars\core.lua"/>
+    <Script file="actionbars\bar1.lua"/>
+    <Script file="actionbars\bar2.lua"/>
+    <Script file="actionbars\bar3.lua"/>
+    <Script file="actionbars\bar4.lua"/>
+    <Script file="actionbars\bar5.lua"/>
+    <Script file="actionbars\petbar.lua"/>
+    <Script file="actionbars\stancebar.lua"/>
+    <Script file="actionbars\buttons.lua"/>
+
+    <!-- Misc. -->
+    <Script file="misc\experience.lua"/>
+    <Script file="misc\reputation.lua"/>
+    <Script file="misc\mirror_timers.lua"/>
+    <Script file="misc\objective_tracker.lua"/>
+
+    <!-- Auras -->
+    <Script file="auras\auras.lua"/>
+
+    <!-- Maps -->
+    <Script file="maps\maps.lua"/>
+
+    <!-- Data Text -->
+    <Script file="datatexts\core.lua"/>
+
+    <!-- ChatFrames -->
+    <Script file="chatframes\core.lua"/>
+
+    <!-- UnitFrames -->
+    <Script file="unitframes\core.lua"/>
+    <Script file="unitframes\tags.lua"/>
+    <Script file="unitframes\layout.lua"/>
+
+    <Script file="unitframes\classes\druid.lua"/>
+    <Script file="unitframes\classes\hunter.lua"/>
+    <Script file="unitframes\classes\mage.lua"/>
+    <Script file="unitframes\classes\paladin.lua"/>
+    <Script file="unitframes\classes\priest.lua"/>
+    <Script file="unitframes\classes\rogue.lua"/>
+    <Script file="unitframes\classes\shaman.lua"/>
+    <Script file="unitframes\classes\warlock.lua"/>
+    <Script file="unitframes\classes\warrior.lua"/>
+    
+    <Script file="unitframes\units\player.lua"/>
+    <Script file="unitframes\units\target.lua"/>
+    <Script file="unitframes\units\tot.lua"/>
+    <Script file="unitframes\units\pet.lua"/>
+    <Script file="unitframes\units\nameplates.lua"/>
+
+    <Script file="unitframes\groups\party.lua"/>
+    <Script file="unitframes\groups\raid.lua"/>
+    
+    <!-- Plugins -->
+    <Include file="plugins\init.xml"/>
+
+    <!-- Tooltip -->
+    <Script file="tooltip\tooltips.lua"/>
+
+</Ui>

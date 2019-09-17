@@ -31,9 +31,8 @@ local function CreateBar2()
     LeftBar:Point("BOTTOMRIGHT", Panels.ActionBar1, "BOTTOMLEFT", -7, 0)
     LeftBar:Width(Width)
     LeftBar:Height(Height)
-    LeftBar.Backdrop:StripTextures(true)
-    LeftBar.Backdrop = nil
-    LeftBar:CreateBackdrop("Transparent")
+    LeftBar.Backdrop:SetBorder("Transparent")
+	LeftBar.Backdrop:SetOutside(nil, 2, 2)
 
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
         local Button = _G["MultiBarBottomLeftButton"..i]
@@ -74,8 +73,7 @@ local function CreateBar3()
     Bar:Point("BOTTOMLEFT", Panels.ActionBar1, "BOTTOMRIGHT", 7, 0)
     Bar:Width(Width)
     Bar:Height(Height)
-    Bar.Backdrop:StripTextures(true)
-    Bar.Backdrop = nil
-    Bar:CreateBackdrop("Transparent")
+    Bar.Backdrop:SetBorder("Transparent")
+	Bar.Backdrop:SetOutside(nil, 2, 2)
 end
 hooksecurefunc(ActionBars, "CreateBar3", CreateBar3)

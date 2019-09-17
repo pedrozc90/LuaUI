@@ -4,9 +4,17 @@ local Minimap = T.Maps.Minimap
 local Panels = T.Panels
 
 ----------------------------------------------------------------
--- Auras Timer Ajustments
+-- Auras
 ----------------------------------------------------------------
-local function Skin(self)
+local baseSkin = Auras.Skin
+local baseCreateHeaders = Auras.CreateHeaders
+
+function Auras:Skin()
+
+    -- first, call the base function
+    baseSkin(self)
+
+    -- second, we edit it
     local Duration = self.Duration
 	local Bar = self.Bar
 	local Holder = self.Holder
@@ -19,7 +27,6 @@ local function Skin(self)
 	Holder:ClearAllPoints()
     Holder:SetPoint("TOP", self, "BOTTOM", 0, -3)
     Holder:Size(self:GetWidth(), 6)
-	Holder:SetTemplate("Transparent")
 	Holder.Shadow:Kill()
 
 	if (Bar) then
@@ -33,14 +40,17 @@ local function Skin(self)
         Duration:ClearAllPoints()
         Duration:SetPoint("BOTTOM", self, "BOTTOM", 2, -12)
     end
-end
-hooksecurefunc(Auras, "Skin", Skin)
 
-----------------------------------------------------------------
--- Anchoring Buffs/Debuffs next to the Minimap
-----------------------------------------------------------------
-local function CreateHeaders()
-	
+    self:SetBorder()
+
+end
+
+function Auras:CreateHeaders()
+    
+    -- first, call the base function
+    baseCreateHeaders(self)
+
+    -- second, we edit it
 	local Headers = Auras.Headers
     local Buffs = Headers[1]
     local Debuffs = Headers[2]
@@ -66,4 +76,3 @@ local function CreateHeaders()
         Debuffs:SetAttribute("xOffset", -AuraXOffset)
     end
 end
-hooksecurefunc(Auras, "CreateHeaders", CreateHeaders)

@@ -6,7 +6,14 @@ local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS
 ----------------------------------------------------------------
 -- PetActionBar
 ----------------------------------------------------------------
-local function CreatePetBar()
+local baseCreatePetBar = ActionBars.CreatePetBar
+
+function ActionBars:CreatePetBar()
+
+	-- first, call the base function
+    baseCreatePetBar(self)
+
+    -- second, we edit it
 	local Bar = Panels.PetActionBar
 	local PetSize = C.ActionBars.PetButtonSize
     local Spacing = C.ActionBars.ButtonSpacing
@@ -15,9 +22,11 @@ local function CreatePetBar()
     Bar:Point("RIGHT", Panels.ActionBar5, "LEFT", -7, 0)
     Bar:SetWidth((PetSize * 1) + (Spacing * 2) - 2)
 	Bar:SetHeight((PetSize * 10) + (Spacing * 11) - 2)
-    Bar.Backdrop:StripTextures(true)
-    Bar.Backdrop = nil
-	Bar:CreateBackdrop("Transparent")
+    -- Bar.Backdrop:StripTextures(true)
+    -- Bar.Backdrop = nil
+	-- Bar:CreateBackdrop("Transparent")
+	Bar.Backdrop:SetBorder("Transparent")
+	Bar.Backdrop:SetOutside(nil, 2, 2)
 
 	for i = 1, NUM_PET_ACTION_SLOTS do
         local Button = _G["PetActionButton"..i]
@@ -39,4 +48,3 @@ local function CreatePetBar()
 
 	RegisterStateDriver(Bar, "visibility", "[pet,nopetbattle,novehicleui,nooverridebar,nopossessbar,nobonusbar:5] show; hide")
 end
-hooksecurefunc(ActionBars, "CreatePetBar", CreatePetBar)

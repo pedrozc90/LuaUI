@@ -1,11 +1,19 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
+local Toolkit = T00LKIT
 local Class = select(2, UnitClass("player"))
 
 ----------------------------------------------------------------
 -- Party
 ----------------------------------------------------------------
-local function Party(self)
+local baseParty = UnitFrames.Party
+
+function UnitFrames:Party()
+
+    -- first, call the base function
+    baseParty(self)
+
+    -- second, we edit it
     local Health = self.Health
 	local Power = self.Power
 	local Name = self.Name
@@ -36,16 +44,11 @@ local function Party(self)
     Health:Height(FrameHeight - 6)
     Health:SetFrameLevel(3)
     Health:CreateBackdrop()
+    Health.Backdrop:SetBorder()
+    Health.Backdrop:SetOutside(nil, 2, 2)
 
     Health.Background:SetAllPoints()
     Health.Background:SetColorTexture(.05, .05, .05)
-
-    if (C.Party.ShowHealthText) then
-        Health.Value:ClearAllPoints()
-        Health.Value:SetParent(Health)
-        Health.Value:Point("CENTER", Health, "CENTER", 1, -7)
-        Health.Value:SetJustifyH("CENTER")
-    end
     
     Health.frequentUpdate = true
     if (C.Lua.UniColor) then
@@ -69,6 +72,8 @@ local function Party(self)
     Power:Height(3)
     Power:SetFrameLevel(Health:GetFrameLevel())
     Power:CreateBackdrop()
+    Power.Backdrop:SetBorder()
+    Power.Backdrop:SetOutside(nil, 2, 2)
 
     Power.Background:SetAllPoints()
     Power.Background:SetColorTexture(.05, .05, .05)
@@ -130,55 +135,8 @@ local function Party(self)
 	RaidIcon:ClearAllPoints()
     RaidIcon:SetPoint("CENTER", Health, "TOP", 0, 3)
     RaidIcon:Size(14, 14)
-
-    -- Phase Icon
-	PhaseIcon:ClearAllPoints()
-    PhaseIcon:SetPoint("TOPRIGHT", self, "TOPRIGHT", 7, 24)
-    PhaseIcon:Size(24, 24)
-
-    -- Health Prediction
-	if (C.Party.HealBar) then
-		local FirstBar = self.HealthPrediction.myBar
-        local SecondBar = self.HealthPrediction.otherBar
-        local ThirdBar = self.HealthPrediction.absorbBar
-
-        local HealBarColor = { .31, .45, .63, .4 }
-        
-        FirstBar:Width(FrameWidth)
-        FirstBar:Height(Health:GetHeight())
-		FirstBar:SetStatusBarTexture(HealthTexture)
-        FirstBar:SetStatusBarColor(unpack(HealBarColor))
-		
-        SecondBar:Width(FrameWidth)
-        SecondBar:Height(Health:GetHeight())
-		SecondBar:SetStatusBarTexture(HealthTexture)
-		SecondBar:SetStatusBarColor(unpack(HealBarColor))
-		
-        ThirdBar:Width(FrameWidth)
-        ThirdBar:Height(Health:GetHeight())
-		ThirdBar:SetStatusBarTexture(HealthTexture)
-		ThirdBar:SetStatusBarColor(unpack(HealBarColor))
-	end
-
-	-- Threat
-	Threat.Override = UnitFrames.UpdateThreat
-
-    -- Highlight
-	Highlight:ClearAllPoints()
-	Highlight:SetAllPoints(Health)
-
-    -- Atonement
-	if (Class == "PRIEST") then
-        local Atonement = self.Atonement
-        Atonement:SetAllPoints(Power)
-		Atonement:SetStatusBarTexture(PowerTexture)
-	end
-
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", UnitFrames.Highlight)
-	self:RegisterEvent("RAID_ROSTER_UPDATE", UnitFrames.Highlight)
-    self:RegisterEvent("PLAYER_FOCUS_CHANGED", UnitFrames.Highlight)
+    
 end
-hooksecurefunc(UnitFrames, "Party", Party)
 
 ----------------------------------------------------------------
 -- Party Attributes
@@ -194,8 +152,8 @@ function UnitFrames:GetPartyFramesAttributes()
 			self:SetWidth(header:GetAttribute("initial-width"))
 			self:SetHeight(header:GetAttribute("initial-height"))
 		]],
-		"initial-width", T.Scale(Width),
-		"initial-height", T.Scale(Height),
+		"initial-width", Toolkit.Scale(Width),
+		"initial-height", Toolkit.Scale(Height),
 		"showSolo", C["Party"].ShowSolo,
 		"showParty", true,
 		"showPlayer", C["Party"].ShowPlayer,
@@ -203,5 +161,5 @@ function UnitFrames:GetPartyFramesAttributes()
 		"groupFilter", "1,2,3,4,5,6,7,8",
 		"groupingOrder", "1,2,3,4,5,6,7,8",
 		"groupBy", "GROUP",
-		"yOffset", T.Scale(-39)
+		"yOffset", Toolkit.Scale(-39)
 end

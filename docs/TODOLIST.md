@@ -1,7 +1,15 @@
 # To-Do List:
 
-## Pendent:
+## Part 1:
 
-+ Disable Tukui Install (*because i don't like to install it every single time*).
++ [install.lua](../core/install.lua): review console variables.
++ [bar3.lua](../modules/actionsbars/bar3.lua): make bar invisible, mouse over to show it.
++ [objective tracker](../modules/misc/objective_tracker.lua): ???
++ [api](../core/api.lua):
+    + buttons: edit or override SkinButton
+    + template: edit / override SetTemplate
 
-## Bugs:
+## Part 2:
+
++ [weak souls](../modules/unitframes/class/priest.lua): add **oUF_weaksouls**
++ []

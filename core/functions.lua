@@ -10,11 +10,12 @@ local ceil = math.ceil
 -- Utilities
 ----------------------------------------------------------------
 
--- override Tukui print function
+-- override Tukui message function
 T.Print = function(...)
     print("|cff00FF96LuaUI|r: ", ...)
 end
 
+-- override Tukui debug message function
 T.Debug = function(...)
     print("|cffB04F4FLuaUI WARNING: |r", ...)
 end

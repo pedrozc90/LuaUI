@@ -1,13 +1,18 @@
-## Interface: 80100
+## Interface: 11302
 ## Author: Luaerror
-## Version: 1.7
-## Title: |cffb3ff19LuaUI|r
-## Notes: External Tukui Edit
-## Website: https://github.com/PedroZC90/LuaUI
+## Version: 1.0.0
+## Title: |cffb3ff19LuaUI Classic|r
+## Notes: Tukui Classic Edit version +1.19
+## Website: https://github.com/PedroZC90/LuaUI#classic
 ## RequiredDeps: Tukui
 ## SavedVariables: LuaUIData
 ## SavedVariablesPerCharacter: LuaUIDataPerChar
 ## X-Website: http://www.tukui.org
-## X-Maintainer: PedroZC90
+## X-Maintainer: PedroZC90 <pedrozc90@gmail.com>
 
-LuaUI.xml
+core\init.lua
+config\config.lua
+medias\medias.lua
+
+core\init.xml
+modules\init.xml

@@ -4,15 +4,24 @@ local Experience = T.Miscellaneous.Experience
 local Minimap = T.Maps.Minimap
 
 ----------------------------------------------------------------
--- Repustation Bar
+-- Reputation Bar
 ----------------------------------------------------------------
-local function Enable(self)
-    local Texture = T.GetTexture(C.Lua.Texture)
+local baseCreate = Reputation.Create
+
+function Reputation:Create()
+
+    -- first, call the base function
+    baseCreate(self)
+
+    -- second, we edit it
+    local ExpBar = Experience.XPBar1
+    local HonorBar = Experience.XPBar2
+    
+    -- texture
+    local Texture = T.GetTexture(C.Lua.Texture or "Blank")
 
     for i = 1, self.NumBars do
         local RepBar = self["RepBar" .. i]
-        local ExpBar = Experience.XPBar1
-        local HonorBar = Experience.XPBar2
         
         RepBar:ClearAllPoints()
         RepBar:SetStatusBarTexture(Texture)
@@ -20,9 +29,11 @@ local function Enable(self)
         RepBar:Width(i == 1 and ExpBar:GetWidth() or i == 2 and HonorBar:GetWidth())
         RepBar:SetAllPoints(i == 1 and ExpBar or i == 2 and HonorBar)
         RepBar:SetReverseFill(false)
+        -- RepBar:SetBackdrop(nil)
+        RepBar.Backdrop:SetBorder()
+        RepBar.Backdrop:SetOutside(nil, 2, 2)
     end
 
     -- I don't know why there is 2 reputation bars
     self.RepBar2:Kill()
 end
-hooksecurefunc(Reputation, "Enable", Enable)

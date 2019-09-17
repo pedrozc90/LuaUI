@@ -5,6 +5,9 @@ local Panels = T.Panels
 ----------------------------------------------------------------
 -- DataTexts
 ----------------------------------------------------------------
+local baseCreateAnchors = DataTexts.CreateAnchors
+local baseAddDefaults = DataTexts.AddDefaults
+
 local RemoveData = function(self)
 	if self.Data then
 		self.Data.Position = 0
@@ -28,7 +31,8 @@ local SetData = function(self, object)
 	self.Data.Text:Point("TOP", self, 0, 0)
 	self.Data.Text:Point("BOTTOM", self, 0, 2)
 	self.Data.Position = self.Num
-	self.Data:SetAllPoints(self.Data.Text)
+    self.Data:SetAllPoints(self.Data.Text)
+    self.Data.Text:SetFontObject(T.GetFont(C.DataTexts.Font))
 
 	if (Panels.DataTextLeft and self.Data.Position >= 1 and self.Data.Position <= 3) then
 		self.Data:SetParent(Panels.DataTextLeft)
@@ -40,6 +44,11 @@ local SetData = function(self, object)
 end
 
 function DataTexts:CreateAnchors()
+
+    -- first, call the base function
+    baseCreateAnchors(self)
+
+    -- second, we edit it
 	local DataTextLeft = Panels.DataTextLeft
 	local DataTextRight = Panels.DataTextRight
 	local MinimapDataText = Panels.MinimapDataText
@@ -99,19 +108,19 @@ local GetTooltipAnchor = function(self)
 	local From
 	local Anchor = "ANCHOR_TOP"
 	local X = 0
-	local Y = T.Scale(16)
+	local Y = 16
 
 	if ((Position >= 1) and (Position <= 3)) then
-		X = T.Scale(-1)
+		X = -1
 		Anchor = "ANCHOR_TOPLEFT"
 		From = Panels.LeftChatBG
 	elseif ((Position >= 4) and (Position <= 6)) then
-		X = T.Scale(1)
+		X = 1
 		Anchor = "ANCHOR_TOPRIGHT"
 		From = Panels.RightChatBG
 	elseif ((Position == 7) and Panels.MinimapDataText) then
 		Anchor = "ANCHOR_BOTTOMLEFT"
-		Y = T.Scale(-5)
+		Y = -5
 		From = Panels.MinimapDataText
 	end
 
@@ -128,16 +137,22 @@ end
 ----------------------------------------------------------------
 -- Set Default DataTexts
 ----------------------------------------------------------------
-hooksecurefunc(DataTexts, "AddDefaults", function()
-	local Name = UnitName("player")
-	local Realm = GetRealmName()
+function DataTexts:AddDefaults()
 
+    -- first, call the base function
+    baseAddDefaults(self)
+
+    -- second, we edit it
+	local Name = UnitName("player")
+    local Realm = GetRealmName()
+    
     TukuiData[Realm][Name].Texts = {}
-	TukuiData[Realm][Name].Texts[L.DataText.Durability] = {true, 1}
-	TukuiData[Realm][Name].Texts[L.DataText.Gold] = {true, 2}
-	TukuiData[Realm][Name].Texts[L.DataText.Talents] = {true, 3}
-	TukuiData[Realm][Name].Texts[L.DataText.FPSAndMS] = {true, 4}
-	TukuiData[Realm][Name].Texts[L.DataText.Memory] = {true, 5}
-	TukuiData[Realm][Name].Texts[L.DataText.BagSlots] = {true, 6}
-	TukuiData[Realm][Name].Texts[L.DataText.Time] = {true, 7}
-end)
+	TukuiData[Realm][Name].Texts["Regen"] = {true, 1}
+	TukuiData[Realm][Name].Texts["Zone"] = {true, 2}
+	TukuiData[Realm][Name].Texts["Durability"] = {true, 3}
+	TukuiData[Realm][Name].Texts["FPS & MS"] = {true, 4}
+	TukuiData[Realm][Name].Texts["Memory"] = {true, 5}
+	TukuiData[Realm][Name].Texts["Power"] = {true, 6}
+    TukuiData[Realm][Name].Texts["Time"] = {true, 7}
+    
+end
