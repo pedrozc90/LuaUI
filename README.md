@@ -2,36 +2,29 @@
 
 ## Description:
 
-LuaUI is an external edit for [**Tukui 18.21+**](https://www.tukui.org/), a minimalistic user interface for [**World of Warcraft - Battle for Azeroth (Patch 8.1)**](https://worldofwarcraft.com/en-us/)
-
-```
-Release Date: 01/20/2019
-```
+LuaUI Classic is an external edit for [**Tukui Class 1.20+**](https://www.tukui.org/), a minimalistic user interface for [**World of Warcraft Classic**](https://worldofwarcraft.com/en-us/wowclassic)
 
 <p align="center">
-    <a href="https://i.imgur.com/52edNKs.jpg">
-        <img src="https://i.imgur.com/52edNKs.jpg" alt="LuaUI-sample" style="width: 640px; height: 360px; border: 1px solid #000;"/>
+    <a href="https://i.imgur.com/zhHn2Vs.jpg">
+        <img src="https://i.imgur.com/zhHn2Vs.jpg" alt="LuaUI-sample" style="max-height: 360px; border: 1px solid #000;"/>
     </a>
 </p>
 
 ## Features:
 
-+ Supports **Tukui 18.21+**
++ Supports **Tukui 1.20+**
 + Embedded Plugins:
-    - **ScreenShot Taker**: *take screenshot of events such as Achievements Earned,Completed Raid Encounters and Level Up*
     - **Interrupt Announce**
     - **Dispel Announce**
     - **Spell Announce**
-    - **PvP Alert**
-    - **Raid Cooldowns**
 
 ## Install:
 
-1. Download the latest version of [**Tukui 18.21+**](https://www.tukui.org/)
-2. Download the latest version of [**LuaUI**](https://github.com/PedroZC90/LuaUI)
+1. Download the latest version of [**Tukui Classic 1.20+**](https://www.tukui.org/classic-addons.php?id=1)
+2. Download the latest version of [**LuaUI Classic**](https://github.com/PedroZC90/LuaUI/tree/classic)
 3. Backup your **Interface** and **WTF** folders.
 4. Delete **Cache** and **WTF** folders for a clean install.
-5. Copy/Paste **Tukui** and **LuaUI** into *../World of Warcraft/Interface/AddOns*
+5. Copy/Paste **Tukui** and **LuaUI** folders into WoW interface folder (*../World of Warcraft/_classic_/Interface/AddOns*)
 6. Now you are ready to start World of Warcraft.
 
 ## License:
