@@ -197,6 +197,7 @@ function Chat:Install()
 	ChatFrame_AddMessageGroup(ChatFrame5, "SYSTEM")
 	ChatFrame_AddMessageGroup(ChatFrame5, "ERRORS")
 	ChatFrame_AddMessageGroup(ChatFrame5, "IGNORED")
+	ChatFrame_AddMessageGroup(ChatFrame5, "SKILL")
 
 	-- Enable Classcolor
 	ToggleChatColorNamesByClassGroup(true, "SAY")
