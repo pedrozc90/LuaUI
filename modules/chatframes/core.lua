@@ -141,6 +141,7 @@ local function Install(self)
 	ChatFrame_AddMessageGroup(ChatFrame5, "SYSTEM")
 	ChatFrame_AddMessageGroup(ChatFrame5, "ERRORS")
 	ChatFrame_AddMessageGroup(ChatFrame5, "IGNORED")
+	ChatFrame_AddMessageGroup(ChatFrame5, "SKILL")
 
 	-- Enable Classcolor
 	ToggleChatColorNamesByClassGroup(true, "SAY")
@@ -165,6 +166,13 @@ local function Install(self)
 	ToggleChatColorNamesByClassGroup(true, "CHANNEL5")
 	ToggleChatColorNamesByClassGroup(true, "INSTANCE_CHAT")
 	ToggleChatColorNamesByClassGroup(true, "INSTANCE_CHAT_LEADER")
+
+	-- Setup font size
+	FCF_SetChatWindowFontSize(nil, ChatFrame1, 12)
+	FCF_SetChatWindowFontSize(nil, ChatFrame2, 12)
+	FCF_SetChatWindowFontSize(nil, ChatFrame3, 12)
+	FCF_SetChatWindowFontSize(nil, ChatFrame4, 12)
+	FCF_SetChatWindowFontSize(nil, ChatFrame5, 12)
 
 	DEFAULT_CHAT_FRAME:SetUserPlaced(true)
 

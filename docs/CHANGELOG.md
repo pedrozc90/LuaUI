@@ -1,5 +1,9 @@
 # ChangeLog:
 
+## Changes in 1.8-Release
+
++ Added: Skills up message on Loot chat.
+
 ## Changes in 1.7-Release
 
 + Changed: Interrupt Announce updated (spam filter added).
