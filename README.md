@@ -29,4 +29,4 @@ LuaUI Classic is an external edit for [**Tukui Class 1.20+**](https://www.tukui.
 
 ## License:
 
-Please see [LICENSE](https://github.com/PedroZC90/LuaUI/tree/master/LICENSE) file.
+Please see [LICENSE](https://github.com/PedroZC90/LuaUI/tree/classic/LICENSE) file.

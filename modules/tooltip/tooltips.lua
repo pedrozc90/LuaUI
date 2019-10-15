@@ -3,6 +3,7 @@ local Tooltips = T.Tooltips
 local Panels = T.Panels
 local Bags = T.Inventory.Bags
 
+if (not C.Lua.Enable) then return end
 ----------------------------------------------------------------
 -- Tooltips
 ----------------------------------------------------------------
@@ -106,5 +107,5 @@ function Tooltips:Enable()
     end
     
     -- update tooltip position to void overlay
-    self:SetScript("OnUpdate", self.OnUpdate)
+    -- self:SetScript("OnUpdate", self.OnUpdate)
 end
