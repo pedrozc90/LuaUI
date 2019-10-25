@@ -1,6 +1,6 @@
-## Interface: 80100
+## Interface: 80205
 ## Author: Luaerror
-## Version: 1.8
+## Version: 1.9
 ## Title: |cffb3ff19LuaUI|r
 ## Notes: External Tukui Edit
 ## Website: https://github.com/PedroZC90/LuaUI
