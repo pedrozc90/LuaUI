@@ -29,8 +29,8 @@ C["Units"] = {
     ["Target"]          = { 254, 31 },              -- set target unitframe size.
     ["TargetOfTarget"]  = { 181, 25 },              -- set targetoftarget unitframe size.
     ["Pet"]             = { 181, 25 },              -- set pet unitframe size.
-    ["Party"]           = { 185, 25 },              -- set party unitframe size.
-    ["Raid"]            = {  72, 41 }               -- set raid unitframe size.
+    -- ["Party"]           = { 185, 25 },              -- set party unitframe size.
+    -- ["Raid"]            = {  72, 41 }               -- set raid unitframe size.
 }
 
 -- Auras
@@ -126,11 +126,14 @@ C["Chat"].LeftHeight = 185
 C["Chat"].RightWidth = 380
 C["Chat"].RightHeight = 185
 C["Chat"].RightChatAlignRight = true
+C["Chat"].BackgroundAlpha = 80
 C["Chat"].WhisperSound = true
 C["Chat"].ShortChannelName = true
 C["Chat"].LinkColor = { 0.08, 1.00, 0.36 }
 C["Chat"].LinkBrackets = true
 C["Chat"].ScrollByX = 3
+C["Chat"].TextFading = false
+C["Chat"].TextFadingTimer = 60
 C["Chat"].TabFont = C["Lua"].Font
 C["Chat"].ChatFont = "Tukui"
 
@@ -147,33 +150,42 @@ C["DataTexts"].Font = C["Lua"].Font
 
 -- Loot
 C["Loot"].Enable = true
-C["Loot"].StandardLoot = false
 C["Loot"].Font = C["Lua"].Font
 
 -- Misc.
 C["Misc"].WorldMapEnable = true
 C["Misc"].ExperienceEnable = true
-C["Misc"].ReputationEnable = true
+-- C["Misc"].ReputationEnable = true
 C["Misc"].ErrorFilterEnable = true
 C["Misc"].AutoSellJunk = true
+C["Misc"].AutoRepair = true
 C["Misc"].AFKSaver = false
 C["Misc"].FadeWorldMapWhileMoving = false
 C["Misc"].ObjectiveTrackerFont = "Tukui Outline"
 
 -- NamePlates
 C["NamePlates"].Enable = true
-C["NamePlates"].Width = 153
+C["NamePlates"].Width = 129
 C["NamePlates"].Height = 12
 C["NamePlates"].NameplateCastBar = true
-C["NamePlates"].Font = C["Lua"].Font
+C["NamePlates"].Font = "Tukui Outline"
 C["NamePlates"].OnlySelfDebuffs = true
+C["NamePlates"].HighlightColor = { 1, 1, 0 }
+C["NamePlates"].HighlightSize = 10
 
 -- Party
 C["Party"].Enable = false
+C["Party"].ShowPets = false
 C["Party"].ShowPlayer = true
-C["Party"].RangeAlpha = 0.30
+C["Party"].ShowHealthText = true
+C["Party"].ShowManaText = false
+C["Party"].RangeAlpha = 0.3
 C["Party"].Font = C["Lua"].Font
 C["Party"].HealthFont = C["Lua"].Font
+C["Party"].WidthSize = 185
+C["Party"].HeightSize = 25
+C["Party"].HighlightColor = { 0.00, 1.00, 0.00 }
+C["Party"].HighlightSize = 10
 
 -- Raid
 C["Raid"].Enable = true
@@ -185,6 +197,10 @@ C["Raid"].MaxUnitPerColumn = 5
 C["Raid"].Font = C["Lua"].Font
 C["Raid"].HealthFont = C["Lua"].Font
 C["Raid"].MyRaidBuffs = false
+C["Raid"].WidthSize = 72
+C["Raid"].HeightSize = 41
+C["Raid"].HighlightColor = { 0.00, 1.00, 0.00 }
+C["Raid"].HighlightSize = 10
 C["Raid"].GroupBy.Value = "GROUP"
 
 -- Tooltips
@@ -211,10 +227,14 @@ C["Textures"].NPCastTexture = C["Lua"].Texture
 
 -- UnitFrames
 C["UnitFrames"].Enable = true
+C["UnitFrames"].TotemBar = true                                 -- NEW
+C["UnitFrames"].HealComm = true                                 -- NEW
+C["UnitFrames"].PlayerAuraBars = false                           -- NEW
 C["UnitFrames"].ScrollingCombatText = false
 C["UnitFrames"].ScrollingCombatTextFontSize = 32
 C["UnitFrames"].ScrollingCombatTextFont = "Tukui Damage"
-C["UnitFrames"].EnergyTick = true
+C["UnitFrames"].PowerTick = true                                -- NEW
+C["UnitFrames"].Portrait2D = true                               -- NEW
 C["UnitFrames"].OOCNameLevel = false
 C["UnitFrames"].OOCPetNameLevel = false
 C["UnitFrames"].Portrait = false
@@ -225,9 +245,13 @@ C["UnitFrames"].CastBarIcon = true
 C["UnitFrames"].CastBarLatency = true
 C["UnitFrames"].Smooth = true
 C["UnitFrames"].TargetEnemyHostileColor = true
+C["UnitFrames"].ShowTargetManaText = false                      -- NEW
 C["UnitFrames"].CombatLog = true
 C["UnitFrames"].PlayerAuras = true
 C["UnitFrames"].TargetAuras = true
+C["UnitFrames"].AurasBelow = false                              -- NEW
 C["UnitFrames"].OnlySelfDebuffs = false
 C["UnitFrames"].OnlySelfBuffs = false
 C["UnitFrames"].Font = C["Lua"].Font
+C["UnitFrames"].HealCommSelfColor = { 0.29, 1.00, 0.30 }
+C["UnitFrames"].HealCommOtherColor = { 1.00, 1.00, 0.36 }

@@ -22,6 +22,7 @@ function UnitFrames:Player()
     local Leader = self.LeaderIndicator
     local MasterLooter = self.MasterLooterIndicator
     local RaidIcon = self.RaidTargetIndicator
+    local RestingIndicator = self.RestingIndicator
     local Threat = self.ThreatIndicator
 
     local FrameWidth, FrameHeight = unpack(C["Units"].Player or { 254, 31 })
@@ -110,7 +111,25 @@ function UnitFrames:Player()
     end
 
     -- Auras
-    if (C.UnitFrames.PlayerAuras) then
+    if (C.UnitFrames.PlayerAuras and C.UnitFrames.PlayerAuraBars) then
+        local AuraBars = self.AuraBars
+
+        local Gap = (T.MyClass == "ROGUE" or T.MyClass == "DRUID") and 8 or 0
+        
+        AuraBars:ClearAllPoints()
+		AuraBars:SetHeight(10)
+		AuraBars:SetWidth(FrameWidth)
+		AuraBars:SetPoint("TOPLEFT", self, "TOPLEFT", -2, 12 + Gap)
+		AuraBars.auraBarTexture = HealthTexture
+		-- AuraBars.PostCreateBar = TukuiUnitFrames.PostCreateAuraBar
+		AuraBars.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
+		AuraBars.gap = 2
+		AuraBars.width = 231
+		AuraBars.height = 17
+		AuraBars.spellNameObject = Font
+		AuraBars.spellTimeObject = Font
+		
+	elseif (C.UnitFrames.PlayerAuras) then
 		local Buffs = self.Buffs
 		local Debuffs = self.Debuffs
 
@@ -144,7 +163,12 @@ function UnitFrames:Player()
         Debuffs:Height(Debuffs.size)
 
         Debuffs.PostCreateIcon = UnitFrames.PostCreateAura
-		Debuffs.PostUpdateIcon = UnitFrames.PostUpdateAura
+        Debuffs.PostUpdateIcon = UnitFrames.PostUpdateAura
+        
+        if (C.UnitFrames.AurasBelow) then
+            Buffs:Point("BOTTOMLEFT", self, "BOTTOMLEFT", 0, -7)
+			Debuffs["growth-y"] = "DOWN"
+		end
 	end
     
     -- Combat Indocator
@@ -169,6 +193,11 @@ function UnitFrames:Player()
     RaidIcon:ClearAllPoints()
     RaidIcon:Point("CENTER", self, "TOP", 0, 3)
     RaidIcon:Size(16, 16)
+    
+    -- Resting Indicator
+	RestingIndicator:ClearAllPoints()
+    RestingIndicator:SetPoint("CENTER", self, "CENTER", 0, 3)
+    RestingIndicator:SetSize(16, 16)
 
     -- Castbar
     if (C.UnitFrames.CastBar) then
@@ -285,4 +314,37 @@ function UnitFrames:Player()
 			UnitFrames.UpdateBuffsHeaderPosition(self, 4)
         end)
     end
+
+    -- Melee Ticks
+    if (C.UnitFrames.PowerTick) then
+        local EnergyManaRegen = self.EnergyManaRegen
+
+		EnergyManaRegen:ClearAllPoints()
+        EnergyManaRegen:SetAllPoints()
+        EnergyManaRegen:SetFrameLevel(Power:GetFrameLevel() + 3)
+		-- EnergyManaRegen.Spark = EnergyManaRegen:CreateTexture(nil, "OVERLAY")
+    end
+    
+    -- Heal Prediction
+    if (C.UnitFrames.HealComm) then
+        local HealthPrediction = self.HealthPrediction
+        local myBar = HealthPrediction.myBar
+		local otherBar = HealthPrediction.otherBar
+
+		-- myBar:SetFrameLevel(Health:GetFrameLevel())
+		-- myBar:SetStatusBarTexture(HealthTexture)
+		-- myBar:SetPoint("TOP")
+		-- myBar:SetPoint("BOTTOM")
+		-- myBar:SetPoint("LEFT", Health:GetStatusBarTexture(), "RIGHT")
+		-- myBar:SetWidth(250)
+		-- myBar:SetStatusBarColor(unpack(C.UnitFrames.HealCommSelfColor))
+
+		-- otherBar:SetFrameLevel(Health:GetFrameLevel())
+		-- otherBar:SetPoint("TOP")
+		-- otherBar:SetPoint("BOTTOM")
+		-- otherBar:SetPoint("LEFT", myBar:GetStatusBarTexture(), "RIGHT")
+		-- otherBar:SetWidth(250)
+		-- otherBar:SetStatusBarTexture(HealthTexture)
+		-- otherBar:SetStatusBarColor(C.UnitFrames.HealCommOtherColor)
+	end
 end

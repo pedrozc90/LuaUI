@@ -28,7 +28,6 @@ function UnitFrames:Party()
     local Range = self.Range
     local Highlight = self.Highlight
     
-    local FrameWidth, FrameHeight = unpack(C["Units"].Party)
     local HealthTexture = T.GetTexture(C["Textures"].UFPartyHealthTexture)
     local PowerTexture = T.GetTexture(C["Textures"].UFPartyPowerTexture)
     local Font, FontSize, FontStyle = C["Medias"].PixelFont, 12, "MONOCHROMEOUTLINE"
@@ -41,7 +40,7 @@ function UnitFrames:Party()
     Health:ClearAllPoints()
     Health:Point("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:Point("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:Height(FrameHeight - 6)
+    Health:Height(C.Party.HeightSize - 6)
     Health:SetFrameLevel(3)
     Health:CreateBackdrop()
     Health.Backdrop:SetBorder()
@@ -49,6 +48,12 @@ function UnitFrames:Party()
 
     Health.Background:SetAllPoints()
     Health.Background:SetColorTexture(.05, .05, .05)
+
+    if (C.Party.ShowHealthText) then
+		Health.Value.ClearAllPoints()
+		Health.Value:SetParent(Health)
+		Health.Value:SetPoint("TOPRIGHT", Health, "TOPRIGHT", -4, 6)
+	end
     
     Health.frequentUpdate = true
     if (C.Lua.UniColor) then
@@ -78,6 +83,13 @@ function UnitFrames:Party()
     Power.Background:SetAllPoints()
     Power.Background:SetColorTexture(.05, .05, .05)
 
+    if (C.Party.ShowManaText) then
+		Power.Value:ClearAllPoints()
+		Power.Value:SetParent(Health)
+		Power.Value:SetPoint("BOTTOMRIGHT", Health, "BOTTOMRIGHT", -4, 0)
+		Power.PostUpdate = TukuiUnitFrames.PostUpdatePower
+	end
+
     Power.frequentUpdates = true
     Power.colorDisconnected = true
     if (C.Lua.UniColor) then
@@ -99,7 +111,7 @@ function UnitFrames:Party()
     -- Auras
 	Buffs:ClearAllPoints()
     Buffs:Point("TOPLEFT", Power, "BOTTOMLEFT", 0, -7)
-    Buffs.size = FrameHeight
+    Buffs.size = C.Party.HeightSize
 	Buffs.num = 8
 	Buffs.numRow = 1
 	Buffs.spacing = 7
@@ -109,7 +121,7 @@ function UnitFrames:Party()
 
 	Debuffs:ClearAllPoints()
 	Debuffs:Point("TOPLEFT", self, "TOPRIGHT", 7, 0)
-	Debuffs.size = FrameHeight
+	Debuffs.size = C.Party.HeightSize
 	Debuffs.num = 3
 	Debuffs.spacing = 7
 	Debuffs.initialAnchor = "TOPLEFT"
@@ -135,6 +147,40 @@ function UnitFrames:Party()
 	RaidIcon:ClearAllPoints()
     RaidIcon:SetPoint("CENTER", Health, "TOP", 0, 3)
     RaidIcon:Size(14, 14)
+
+    if (C.UnitFrames.HealComm) then
+        local HealthPrediction = self.HealthPrediction
+		local myBar = HealthPrediction.myBar
+		local otherBar = HealthPrediction.otherBar
+
+		-- myBar:SetFrameLevel(Health:GetFrameLevel())
+		-- myBar:SetStatusBarTexture(HealthTexture)
+		-- myBar:SetPoint("TOP")
+		-- myBar:SetPoint("BOTTOM")
+		-- myBar:SetPoint("LEFT", Health:GetStatusBarTexture(), "RIGHT")
+		-- myBar:SetWidth(180)
+		-- myBar:SetStatusBarColor(unpack(C.UnitFrames.HealCommSelfColor))
+
+		-- otherBar:SetFrameLevel(Health:GetFrameLevel())
+		-- otherBar:SetPoint("TOP")
+		-- otherBar:SetPoint("BOTTOM")
+		-- otherBar:SetPoint("LEFT", myBar:GetStatusBarTexture(), "RIGHT")
+		-- otherBar:SetWidth(180)
+		-- otherBar:SetStatusBarTexture(HealthTexture)
+		-- otherBar:SetStatusBarColor(C.UnitFrames.HealCommOtherColor)
+
+		-- local HealthPrediction = {
+		-- 	myBar = myBar,
+		-- 	otherBar = otherBar,
+		-- 	maxOverflow = 1,
+		-- }
+	end
+
+	-- Highlight:SetBackdrop({edgeFile = C.Medias.Glow, edgeSize = C.Party.HighlightSize})
+	-- Highlight:SetOutside(self, C.Party.HighlightSize, C.Party.HighlightSize)
+	-- Highlight:SetBackdropBorderColor(unpack(C.Party.HighlightColor))
+	-- Highlight:SetFrameLevel(0)
+	-- Highlight:Hide()
     
 end
 
@@ -142,7 +188,7 @@ end
 -- Party Attributes
 ----------------------------------------------------------------
 function UnitFrames:GetPartyFramesAttributes()
-    local Width, Height = unpack(C.Units.Party)
+    -- local Width, Height = unpack(C.Units.Party)
 	return
 		"TukuiParty",
 		nil,
@@ -152,8 +198,8 @@ function UnitFrames:GetPartyFramesAttributes()
 			self:SetWidth(header:GetAttribute("initial-width"))
 			self:SetHeight(header:GetAttribute("initial-height"))
 		]],
-		"initial-width", Toolkit.Scale(Width),
-		"initial-height", Toolkit.Scale(Height),
+		"initial-width", C.Party.WidthSize,
+		"initial-height", C.Party.HeightSize,
 		"showSolo", C["Party"].ShowSolo,
 		"showParty", true,
 		"showPlayer", C["Party"].ShowPlayer,

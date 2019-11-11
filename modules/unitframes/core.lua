@@ -221,16 +221,16 @@ function UnitFrames:Highlight()
     local PowerBackdrop = self.Power.Backdrop
     local colors = T.Colors.assets["Highlight"]
 
-    if UnitIsUnit("focus", self.unit) then
-        HealthBackdrop:SetBackdropBorderColor(unpack(colors["focus"]))
-        PowerBackdrop:SetBackdropBorderColor(unpack(colors["focus"]))
-    elseif UnitIsUnit("target", self.unit) then
-        HealthBackdrop:SetBackdropBorderColor(unpack(colors["target"]))
-        PowerBackdrop:SetBackdropBorderColor(unpack(colors["target"]))
-	else
-        HealthBackdrop:SetBackdropBorderColor(unpack(colors["none"]))
-        PowerBackdrop:SetBackdropBorderColor(unpack(colors["none"]))
-	end
+    -- if UnitIsUnit("focus", self.unit) then
+    --     HealthBackdrop:SetBackdropBorderColor(unpack(colors["focus"]))
+    --     PowerBackdrop:SetBackdropBorderColor(unpack(colors["focus"]))
+    -- elseif UnitIsUnit("target", self.unit) then
+    --     HealthBackdrop:SetBackdropBorderColor(unpack(colors["target"]))
+    --     PowerBackdrop:SetBackdropBorderColor(unpack(colors["target"]))
+	-- else
+    --     HealthBackdrop:SetBackdropBorderColor(unpack(colors["none"]))
+    --     PowerBackdrop:SetBackdropBorderColor(unpack(colors["none"]))
+	-- end
 end
 
 -- change target nameplate border color.

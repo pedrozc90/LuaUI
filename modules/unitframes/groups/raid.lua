@@ -23,7 +23,6 @@ function UnitFrames:Raid()
 	local Threat = self.ThreatIndicator
     local Highlight = self.Highlight
     
-    local FrameWidth, FrameHeight = unpack(C["Units"].Raid)
     local HealthTexture = T.GetTexture(C["Textures"].UFRaidHealthTexture)
     local PowerTexture = T.GetTexture(C["Textures"].UFRaidPowerTexture)
     local Font, FontSize, FontStyle = C["Medias"].PixelFont, 12, "MONOCHROMEOUTLINE"
@@ -36,7 +35,7 @@ function UnitFrames:Raid()
     Health:ClearAllPoints()
     Health:Point("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:Point("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:Height(FrameHeight - 6)
+    Health:Height(C.Raid.HeightSize - 6)
     Health:SetFrameLevel(3)
     Health:CreateBackdrop()
     Health.Backdrop:SetBorder()
@@ -44,6 +43,10 @@ function UnitFrames:Raid()
 
     Health.Background:SetAllPoints()
     Health.Background:SetColorTexture(.05, .05, .05)
+
+    Health.Value:ClearAllPoints()
+	Health.Value:SetFontObject(HealthFont)
+	Health.Value:Point("CENTER", Health, "CENTER", 0, -5)
     
     Health.frequentUpdate = true
     if (C.Lua.UniColor) then
@@ -108,7 +111,7 @@ function UnitFrames:Raid()
         Buffs:ClearAllPoints()
 		Buffs:Point("TOPLEFT", Health, "TOPLEFT", 7, -7)
 		Buffs:SetHeight(16)
-		Buffs:SetWidth(FrameWidth)
+		Buffs:SetWidth(C.Raid.WidthSize)
 		Buffs.size = 16
 		Buffs.num = 5
 		Buffs.numRow = 1
@@ -121,7 +124,7 @@ function UnitFrames:Raid()
 		-- Buffs.PostCreateIcon = TukuiUnitFrames.PostCreateAura
 	end
 	
-	if C.Raid.DebuffWatch then
+	if (C.Raid.DebuffWatch) then
         local RaidDebuffs = self.RaidDebuffs
         
         RaidDebuffs:ClearAllPoints()
@@ -143,7 +146,49 @@ function UnitFrames:Raid()
 		RaidDebuffs.onlyMatchSpellID = true
 		RaidDebuffs.FilterDispellableDebuff = true
 		RaidDebuffs.forceShow = C.Raid.TestAuraWatch
+    end
+    
+    if (C.UnitFrames.HealComm) then
+        local HealthPrediction = self.HealthPrediction
+		local myBar = HealthPrediction.myBar
+		local otherBar = HealthPrediction.otherBar
+
+		-- myBar:SetFrameLevel(Health:GetFrameLevel())
+		-- myBar:SetStatusBarTexture(HealthTexture)
+		-- myBar:SetPoint("TOP")
+		-- myBar:SetPoint("BOTTOM")
+		-- myBar:SetPoint("LEFT", Health:GetStatusBarTexture(), "RIGHT")
+		-- myBar:SetWidth(C.Raid.WidthSize)
+		-- myBar:SetStatusBarColor(unpack(C.UnitFrames.HealCommSelfColor))
+
+		-- otherBar:SetFrameLevel(Health:GetFrameLevel())
+		-- otherBar:SetPoint("TOP")
+		-- otherBar:SetPoint("BOTTOM")
+		-- otherBar:SetPoint("LEFT", myBar:GetStatusBarTexture(), "RIGHT")
+		-- otherBar:SetWidth(C.Raid.WidthSize)
+		-- otherBar:SetStatusBarTexture(HealthTexture)
+		-- otherBar:SetStatusBarColor(C.UnitFrames.HealCommOtherColor)
+		
+		-- if (C.Raid.VerticalHealth) then
+		-- 	myBar:SetOrientation("VERTICAL")
+		-- 	otherBar:SetOrientation("VERTICAL")
+			
+		-- 	myBar:SetPoint("BOTTOM", Health:GetStatusBarTexture(), "TOP")
+		-- 	myBar:SetPoint("LEFT")
+		-- 	myBar:SetPoint("RIGHT")
+			
+		-- 	otherBar:SetPoint("BOTTOM", myBar:GetStatusBarTexture(), "TOP")
+		-- 	otherBar:SetPoint("LEFT")
+		-- 	otherBar:SetPoint("RIGHT")
+		-- end
 	end
+	
+	-- Highlight:SetBackdrop({edgeFile = C.Medias.Glow, edgeSize = C.Raid.HighlightSize})
+	-- Highlight:SetOutside(self, C.Raid.HighlightSize, C.Raid.HighlightSize)
+	-- Highlight:SetBackdropBorderColor(unpack(C.Raid.HighlightColor))
+	-- Highlight:SetFrameLevel(0)
+    -- Highlight:Hide()
+    
 end
 
 ----------------------------------------------------------------
@@ -151,7 +196,6 @@ end
 ----------------------------------------------------------------
 function UnitFrames:GetRaidFramesAttributes()
     local Properties = C.Party.Enable and "custom [@raid6,exists] show;hide" or "solo,party,raid"
-    local Width, Height = unpack(C.Units.Raid)
 	return
 		"TukuiRaid",
 		nil,
@@ -161,8 +205,8 @@ function UnitFrames:GetRaidFramesAttributes()
 			self:SetWidth(header:GetAttribute("initial-width"))
 			self:SetHeight(header:GetAttribute("initial-height"))
 		]],
-		"initial-width", Toolkit.Functions.Scale(Width),
-		"initial-height", Toolkit.Functions.Scale(Height),
+		"initial-width", C.Raid.WidthSize,
+		"initial-height", C.Raid.HeightSize,
 		"showParty", true,
 		"showRaid", true,
 		"showPlayer", true,
