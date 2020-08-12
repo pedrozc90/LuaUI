@@ -29,8 +29,7 @@ function Reputation:Create()
         RepBar:Width(i == 1 and ExpBar:GetWidth() or i == 2 and HonorBar:GetWidth())
         RepBar:SetAllPoints(i == 1 and ExpBar or i == 2 and HonorBar)
         RepBar:SetReverseFill(false)
-        -- RepBar:SetBackdrop(nil)
-        RepBar.Backdrop:SetBorder()
+        RepBar.Backdrop:SetTripleBorder()
         RepBar.Backdrop:SetOutside(nil, 2, 2)
     end
 

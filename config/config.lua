@@ -27,14 +27,11 @@ C["Lua"] = {
 C["Units"] = {
     ["Player"]          = { 254, 31 },              -- set player unitframe size.
     ["Target"]          = { 254, 31 },              -- set target unitframe size.
-    ["TargetOfTarget"]  = { 181, 25 },              -- set targetoftarget unitframe size.
+    ["TargetOfTarget"]  = { 193, 25 },              -- set targetoftarget unitframe size.
     ["Pet"]             = { 181, 25 },              -- set pet unitframe size.
     -- ["Party"]           = { 185, 25 },              -- set party unitframe size.
     -- ["Raid"]            = {  72, 41 }               -- set raid unitframe size.
 }
-
--- Auras
-C["Auras"].Spacing = 3                              -- set spacing between auras.
 
 -- Nameplate
 C["NamePlates"].PowerBar = false                    -- enables nameplates powerbar.
@@ -111,6 +108,7 @@ C["Auras"].HideBuffs = false
 C["Auras"].HideDebuffs = false
 C["Auras"].Animation = false
 C["Auras"].BuffsPerRow = 12
+C["Auras"].Spacing = 3                                          -- set spacing between auras.
 C["Auras"].Font = C["Lua"].Font
 
 -- Bags
@@ -145,6 +143,8 @@ C["DataTexts"].Battleground = true
 C["DataTexts"].HideFriendsNotPlaying = true
 C["DataTexts"].NameColor = { class.r, class.g, class.b }
 C["DataTexts"].ValueColor = { 1.00, 1.00, 1.00 }
+C["DataTexts"].ClassColor = false
+C["DataTexts"].HighlightColor = { 1.00, 1.00, 0.00 }
 C["DataTexts"].Hour24 = true
 C["DataTexts"].Font = C["Lua"].Font
 
@@ -153,9 +153,9 @@ C["Loot"].Enable = true
 C["Loot"].Font = C["Lua"].Font
 
 -- Misc.
+C["Misc"].ThreatBar = true
 C["Misc"].WorldMapEnable = true
 C["Misc"].ExperienceEnable = true
--- C["Misc"].ReputationEnable = true
 C["Misc"].ErrorFilterEnable = true
 C["Misc"].AutoSellJunk = true
 C["Misc"].AutoRepair = true
@@ -170,7 +170,7 @@ C["NamePlates"].Height = 12
 C["NamePlates"].NameplateCastBar = true
 C["NamePlates"].Font = "Tukui Outline"
 C["NamePlates"].OnlySelfDebuffs = true
-C["NamePlates"].HighlightColor = { 1, 1, 0 }
+C["NamePlates"].HighlightColor = { 1.00, 1.00, 0.00 }
 C["NamePlates"].HighlightSize = 10
 
 -- Party
@@ -179,7 +179,7 @@ C["Party"].ShowPets = false
 C["Party"].ShowPlayer = true
 C["Party"].ShowHealthText = true
 C["Party"].ShowManaText = false
-C["Party"].RangeAlpha = 0.3
+C["Party"].RangeAlpha = 0.30
 C["Party"].Font = C["Lua"].Font
 C["Party"].HealthFont = C["Lua"].Font
 C["Party"].WidthSize = 185
@@ -196,7 +196,9 @@ C["Raid"].VerticalHealth = false
 C["Raid"].MaxUnitPerColumn = 5
 C["Raid"].Font = C["Lua"].Font
 C["Raid"].HealthFont = C["Lua"].Font
-C["Raid"].MyRaidBuffs = false
+C["Raid"].DesaturateNonPlayerBuffs = true
+C["Raid"].RaidBuffs.Value = "Self"
+C["Raid"].ClassRaidBuffs = true
 C["Raid"].WidthSize = 72
 C["Raid"].HeightSize = 41
 C["Raid"].HighlightColor = { 0.00, 1.00, 0.00 }
@@ -227,14 +229,14 @@ C["Textures"].NPCastTexture = C["Lua"].Texture
 
 -- UnitFrames
 C["UnitFrames"].Enable = true
-C["UnitFrames"].TotemBar = true                                 -- NEW
-C["UnitFrames"].HealComm = true                                 -- NEW
-C["UnitFrames"].PlayerAuraBars = false                           -- NEW
+C["UnitFrames"].TotemBar = true
+C["UnitFrames"].HealComm = true
+C["UnitFrames"].PlayerAuraBars = false
 C["UnitFrames"].ScrollingCombatText = false
 C["UnitFrames"].ScrollingCombatTextFontSize = 32
 C["UnitFrames"].ScrollingCombatTextFont = "Tukui Damage"
-C["UnitFrames"].PowerTick = true                                -- NEW
-C["UnitFrames"].Portrait2D = true                               -- NEW
+C["UnitFrames"].PowerTick = true
+C["UnitFrames"].Portrait2D = true
 C["UnitFrames"].OOCNameLevel = false
 C["UnitFrames"].OOCPetNameLevel = false
 C["UnitFrames"].Portrait = false
@@ -245,13 +247,16 @@ C["UnitFrames"].CastBarIcon = true
 C["UnitFrames"].CastBarLatency = true
 C["UnitFrames"].Smooth = true
 C["UnitFrames"].TargetEnemyHostileColor = true
-C["UnitFrames"].ShowTargetManaText = false                      -- NEW
+C["UnitFrames"].ShowTargetManaText = false
 C["UnitFrames"].CombatLog = true
 C["UnitFrames"].PlayerAuras = true
 C["UnitFrames"].TargetAuras = true
-C["UnitFrames"].AurasBelow = false                              -- NEW
+C["UnitFrames"].TOTAuras = true
+C["UnitFrames"].PetAuras = true
+C["UnitFrames"].AurasBelow = false
 C["UnitFrames"].OnlySelfDebuffs = false
 C["UnitFrames"].OnlySelfBuffs = false
 C["UnitFrames"].Font = C["Lua"].Font
-C["UnitFrames"].HealCommSelfColor = { 0.29, 1.00, 0.30 }
+C["UnitFrames"].HealCommSelfColor = { class.r, class.g, class.b, 0.30 }--{ 0.29, 1.00, 0.30 }
 C["UnitFrames"].HealCommOtherColor = { 1.00, 1.00, 0.36 }
+C["UnitFrames"].RaidIconSize = 24

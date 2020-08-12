@@ -20,7 +20,7 @@ local function CreateBar3()
     Bar:Point("LEFT", UIParent, "LEFT", 7, 35)
     Bar:Width((Size * 1) + (Spacing * 2) - 2)
     Bar:Height((Size * 12) + (Spacing * 13) - 2)
-    Bar.Backdrop:SetBorder("Transparent")
+    Bar.Backdrop:SetTripleBorder("Transparent")
 	Bar.Backdrop:SetOutside(nil, 2, 2)
 
 	for i = 1, NUM_ACTIONBAR_BUTTONS do

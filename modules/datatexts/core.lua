@@ -43,6 +43,9 @@ local SetData = function(self, object)
 	end
 end
 
+----------------------------------------------------------------
+-- DataTexts Anchors
+----------------------------------------------------------------
 function DataTexts:CreateAnchors()
 
     -- first, call the base function
@@ -147,12 +150,15 @@ function DataTexts:AddDefaults()
     local Realm = GetRealmName()
     
     TukuiData[Realm][Name].Texts = {}
-	TukuiData[Realm][Name].Texts["Regen"] = {true, 1}
-	TukuiData[Realm][Name].Texts["Zone"] = {true, 2}
-	TukuiData[Realm][Name].Texts["Durability"] = {true, 3}
-	TukuiData[Realm][Name].Texts["FPS & MS"] = {true, 4}
-	TukuiData[Realm][Name].Texts["Memory"] = {true, 5}
-	TukuiData[Realm][Name].Texts["Power"] = {true, 6}
-    TukuiData[Realm][Name].Texts["Time"] = {true, 7}
+    -- left chat
+	TukuiData[Realm][Name].Texts["Voice Chat"] = { true, 1 }
+	TukuiData[Realm][Name].Texts["Zone"] = { true, 2 }
+    TukuiData[Realm][Name].Texts["Durability"] = { true, 3 }
+    -- right chat
+	TukuiData[Realm][Name].Texts["System"] = { true, 4 }
+	TukuiData[Realm][Name].Texts["Gold"] = { true, 5 }
+    TukuiData[Realm][Name].Texts["Power"] = { true, 6 }
+    -- minimap
+    TukuiData[Realm][Name].Texts["Time"] = { true, 7 }
     
 end

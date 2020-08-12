@@ -3,6 +3,8 @@ local UnitFrames = T.UnitFrames
 local Panels = T.Panels
 local Class = select(2, UnitClass("player"))
 
+local LastTickTime = GetTime()
+
 ----------------------------------------------------------------
 -- Player
 ----------------------------------------------------------------
@@ -42,7 +44,7 @@ function UnitFrames:Player()
     Health:Height(FrameHeight - 6)
     Health:SetFrameLevel(3)
     Health:CreateBackdrop()
-    Health.Backdrop:SetBorder()
+    Health.Backdrop:SetTripleBorder()
     Health.Backdrop:SetOutside(nil, 2, 2)
 
     Health.Background:SetAllPoints()
@@ -75,7 +77,7 @@ function UnitFrames:Player()
     Power:Height(3)
     Power:SetFrameLevel(Health:GetFrameLevel())
     Power:CreateBackdrop()
-    Power.Backdrop:SetBorder()
+    Power.Backdrop:SetTripleBorder()
     Power.Backdrop:SetOutside(nil, 2, 2)
 
     Power.Background:SetAllPoints()
@@ -210,7 +212,7 @@ function UnitFrames:Player()
         CastBar:SetStatusBarTexture(CastTexture)
         CastBar:SetFrameLevel(Health:GetFrameLevel())
         CastBar:CreateBackdrop()
-        CastBar.Backdrop:SetBorder()
+        CastBar.Backdrop:SetTripleBorder()
         CastBar.Backdrop:SetOutside(nil, 2, 2)
 
 		CastBar.Background:SetAllPoints()
@@ -235,7 +237,7 @@ function UnitFrames:Player()
             CastBar.Icon:SetTexCoord(unpack(T.IconCoord))
 
             CastBar.Button:ClearAllPoints()
-            CastBar.Button:SetBorder()
+            CastBar.Button:SetTripleBorder()
             CastBar.Button:SetOutside(CastBar.Icon, 2, 2)
 		end
 
@@ -282,7 +284,7 @@ function UnitFrames:Player()
             ComboPoints[i]:Height(ComboPoints:GetHeight())
             ComboPoints[i]:Width(SizeMax6)
             ComboPoints[i]:CreateBackdrop()
-            ComboPoints[i].Backdrop:SetBorder()
+            ComboPoints[i].Backdrop:SetTripleBorder()
             ComboPoints[i].Backdrop:SetOutside(nil, 2, 2)
 
             if ((DeltaMax5 > 0) and (i <= DeltaMax5)) then
@@ -315,6 +317,8 @@ function UnitFrames:Player()
         end)
     end
 
+    
+
     -- Melee Ticks
     if (C.UnitFrames.PowerTick) then
         local EnergyManaRegen = self.EnergyManaRegen
@@ -322,7 +326,60 @@ function UnitFrames:Player()
 		EnergyManaRegen:ClearAllPoints()
         EnergyManaRegen:SetAllPoints()
         EnergyManaRegen:SetFrameLevel(Power:GetFrameLevel() + 3)
-		-- EnergyManaRegen.Spark = EnergyManaRegen:CreateTexture(nil, "OVERLAY")
+
+        -- EnergyManaRegen.Spark = CreateFrame("StatusBar", nil, EnergyManaRegen)
+        -- EnergyManaRegen.Spark:SetStatusBarColor(1, 1, 0)
+
+        -- EnergyManaRegen.Override  = function(self, elapsed)
+        --     local element = self.EnergyManaRegen
+        
+        --     element.sinceLastUpdate = (element.sinceLastUpdate or 0) + (tonumber(elapsed) or 0)
+        
+        --     if element.sinceLastUpdate > 0.01 then
+        --         local powerType = UnitPowerType("player")
+        
+        --         if powerType ~= "Energy" and powerType ~= "Mana" then
+        --             element.Spark:Hide()
+        --             return
+        --         end
+        
+        --         CurrentValue = UnitPower('player', powerType)
+        
+        --         if powerType == "Mana" and (not CurrentValue or CurrentValue >= UnitPowerMax('player', "Mana")) then
+        --             element:SetValue(0)
+        --             element.Spark:Hide()
+        --             return
+        --         end
+        
+        --         local Now = GetTime() or 0
+        --         if not (Now == nil) then
+        --             local Timer = Now - LastTickTime
+        
+        --             if (CurrentValue > LastValue) or powerType == "Energy" and (Now >= LastTickTime + 2) then
+        --                 LastTickTime = Now
+        --             end
+        
+        --             if Timer > 0 then
+        --                 element.Spark:Show()
+        --                 element:SetMinMaxValues(0, 2)
+        --                 -- element.Spark:SetVertexColor(1, 1, 1, 1)
+        --                 element:SetValue(Timer)
+        --                 allowPowerEvent = true
+        
+        --                 LastValue = CurrentValue
+        --             elseif Timer < 0 then
+        --                 -- if negative, it's mp5delay
+        --                 element.Spark:Show()
+        --                 element:SetMinMaxValues(0, Mp5Delay)
+        --                 -- element.Spark:SetVertexColor(1, 1, 0, 1)
+        
+        --                 element:SetValue(math.abs(Timer))
+        --             end
+        
+        --             element.sinceLastUpdate = 0
+        --         end
+        --     end
+        -- end
     end
     
     -- Heal Prediction

@@ -26,7 +26,7 @@ function MirrorTimers:Update()
         Bar:Height(16)
         Bar:SetBackdrop(nil)
         Bar:CreateBackdrop()
-        Bar.Backdrop:SetBorder()
+        Bar.Backdrop:SetTripleBorder()
         Bar.Backdrop:SetOutside(nil, 2, 2)
         Bar.Shadow:Kill()
 

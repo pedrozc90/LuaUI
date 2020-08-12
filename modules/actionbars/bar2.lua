@@ -31,7 +31,7 @@ local function CreateBar2()
     LeftBar:Point("BOTTOMRIGHT", Panels.ActionBar1, "BOTTOMLEFT", -7, 0)
     LeftBar:Width(Width)
     LeftBar:Height(Height)
-    LeftBar.Backdrop:SetBorder("Transparent")
+    LeftBar.Backdrop:SetTripleBorder("Transparent")
 	LeftBar.Backdrop:SetOutside(nil, 2, 2)
 
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
@@ -73,7 +73,7 @@ local function CreateBar3()
     Bar:Point("BOTTOMLEFT", Panels.ActionBar1, "BOTTOMRIGHT", 7, 0)
     Bar:Width(Width)
     Bar:Height(Height)
-    Bar.Backdrop:SetBorder("Transparent")
+    Bar.Backdrop:SetTripleBorder("Transparent")
 	Bar.Backdrop:SetOutside(nil, 2, 2)
 end
 hooksecurefunc(ActionBars, "CreateBar3", CreateBar3)

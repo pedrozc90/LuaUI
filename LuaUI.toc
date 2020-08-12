@@ -1,8 +1,8 @@
-## Interface: 11302
+## Interface: 11305
 ## Author: Luaerror
 ## Version: 1.1.0
 ## Title: |cffb3ff19LuaUI Classic|r
-## Notes: Tukui Classic Edit version +1.19
+## Notes: My Personal Tukui Classic Edit
 ## Website: https://github.com/PedroZC90/LuaUI#classic
 ## RequiredDeps: Tukui
 ## SavedVariables: LuaUIData

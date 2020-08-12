@@ -16,7 +16,7 @@ local function CreateBar1()
     Bar:Point("BOTTOM", UIParent, "BOTTOM", 0, 7)
     Bar:Width((Size * 12) + (Spacing * 13) - 2)
     Bar:Height((Size * 1) + (Spacing * 2) - 2)
-	Bar.Backdrop:SetBorder("Transparent")
+	Bar.Backdrop:SetTripleBorder("Transparent")
 	Bar.Backdrop:SetOutside(nil, 2, 2)
 
 	Bar:SetScript("OnEvent", function(self, event, unit, ...)

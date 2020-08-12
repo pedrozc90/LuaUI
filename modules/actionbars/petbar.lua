@@ -22,10 +22,7 @@ function ActionBars:CreatePetBar()
     Bar:Point("RIGHT", Panels.ActionBar5, "LEFT", -7, 0)
     Bar:SetWidth((PetSize * 1) + (Spacing * 2) - 2)
 	Bar:SetHeight((PetSize * 10) + (Spacing * 11) - 2)
-    -- Bar.Backdrop:StripTextures(true)
-    -- Bar.Backdrop = nil
-	-- Bar:CreateBackdrop("Transparent")
-	Bar.Backdrop:SetBorder("Transparent")
+	Bar.Backdrop:SetTripleBorder("Transparent")
 	Bar.Backdrop:SetOutside(nil, 2, 2)
 
 	for i = 1, NUM_PET_ACTION_SLOTS do

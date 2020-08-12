@@ -19,4 +19,5 @@
 
 /run SetCVar("gxMaximize", 0) SetCVar("gxWindowedResolution", "3820x1800") RestartGx()
 
+/run print(768 / tonumber(string.match(GetCVar("gxWindowedResolution"), "%d+x(%d+)")))
 ```

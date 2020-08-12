@@ -81,7 +81,7 @@ function Tooltips:Skin(unit)
     baseSkin(self)
 
     -- second, we edit it
-    self.Backdrop:SetBorder("Transparent")
+    self.Backdrop:SetTripleBorder("Transparent")
     self.Backdrop:SetOutside(nil, 2, 2)
 
 end
@@ -98,7 +98,7 @@ function Tooltips:Enable()
     HealthBar:Point("BOTTOMLEFT", HealthBar:GetParent(), "TOPLEFT", 0, 7)
     HealthBar:Point("BOTTOMRIGHT", HealthBar:GetParent(), "TOPRIGHT", 0, 7)
     HealthBar:Height(9)
-    HealthBar.Backdrop:SetBorder()
+    HealthBar.Backdrop:SetTripleBorder()
     HealthBar.Backdrop:SetOutside(nil, 2, 2)
 
     if (C.Tooltips.UnitHealthText) then

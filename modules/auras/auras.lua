@@ -6,8 +6,40 @@ local Panels = T.Panels
 ----------------------------------------------------------------
 -- Auras
 ----------------------------------------------------------------
-local baseSkin = Auras.Skin
 local baseCreateHeaders = Auras.CreateHeaders
+local baseSkin = Auras.Skin
+
+function Auras:CreateHeaders()
+    
+    -- first, call the base function
+    baseCreateHeaders(self)
+
+    -- second, we edit it
+	local Headers = Auras.Headers
+    local Buffs = Headers[1]
+    local Debuffs = Headers[2]
+
+    local xOffset, yOffset = 5, 2
+    local AuraSpacing = C.Auras.Spacing or 5
+    local AuraXOffset = Buffs:GetHeight() + AuraSpacing
+    local AuraYOffset = (C.Auras.ClassicTimer) and 42 or 43
+
+    if (Buffs) then
+        Buffs:ClearAllPoints()
+        Buffs:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -xOffset, yOffset)
+        Buffs:SetAttribute("wrapAfter", C.Auras.BuffsPerRow)
+        Buffs:SetAttribute("wrapYOffset", -AuraYOffset)
+        Buffs:SetAttribute("xOffset", -AuraXOffset)
+    end
+
+    if (Debuffs) then
+        Debuffs:ClearAllPoints()
+        Debuffs:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -xOffset, -yOffset)
+        Debuffs:SetAttribute("wrapAfter", C.Auras.BuffsPerRow)
+        Debuffs:SetAttribute("wrapYOffset", -AuraYOffset)
+        Debuffs:SetAttribute("xOffset", -AuraXOffset)
+    end
+end
 
 function Auras:Skin()
 
@@ -41,38 +73,5 @@ function Auras:Skin()
         Duration:SetPoint("BOTTOM", self, "BOTTOM", 2, -12)
     end
 
-    self:SetBorder()
-
-end
-
-function Auras:CreateHeaders()
-    
-    -- first, call the base function
-    baseCreateHeaders(self)
-
-    -- second, we edit it
-	local Headers = Auras.Headers
-    local Buffs = Headers[1]
-    local Debuffs = Headers[2]
-
-    local xOffset, yOffset = 5, 2
-    local AuraSpacing = C.Auras.Spacing or 5
-    local AuraXOffset = Buffs:GetHeight() + AuraSpacing
-    local AuraYOffset = (C.Auras.ClassicTimer) and 42 or 43
-
-    if (Buffs) then
-        Buffs:ClearAllPoints()
-        Buffs:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -xOffset, yOffset)
-        Buffs:SetAttribute("wrapAfter", C.Auras.BuffsPerRow)
-        Buffs:SetAttribute("wrapYOffset", -AuraYOffset)
-        Buffs:SetAttribute("xOffset", -AuraXOffset)
-    end
-
-    if (Debuffs) then
-        Debuffs:ClearAllPoints()
-        Debuffs:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -xOffset, -yOffset)
-        Debuffs:SetAttribute("wrapAfter", C.Auras.BuffsPerRow)
-        Debuffs:SetAttribute("wrapYOffset", -AuraYOffset)
-        Debuffs:SetAttribute("xOffset", -AuraXOffset)
-    end
+    self:SetTripleBorder()
 end

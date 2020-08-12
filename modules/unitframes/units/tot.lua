@@ -32,7 +32,7 @@ function UnitFrames:TargetOfTarget()
     Health:Height(FrameHeight - 6)
     Health:SetFrameLevel(3)
     Health:CreateBackdrop()
-    Health.Backdrop:SetBorder()
+    Health.Backdrop:SetTripleBorder()
     Health.Backdrop:SetOutside(nil, 2, 2)
 
     Health.Background:SetAllPoints()
@@ -61,7 +61,7 @@ function UnitFrames:TargetOfTarget()
     Power:SetFrameStrata(self:GetFrameStrata())
     Power:SetStatusBarTexture(PowerTexture)
     Power:CreateBackdrop()
-    Power.Backdrop:SetBorder()
+    Power.Backdrop:SetTripleBorder()
     Power.Backdrop:SetOutside(nil, 2, 2)
 
 	Power.Background = Power:CreateTexture(nil, "BORDER")
@@ -92,6 +92,66 @@ function UnitFrames:TargetOfTarget()
     RaidIcon:ClearAllPoints()
     RaidIcon:Point("CENTER", self, "TOP", 0, 3)
     RaidIcon:Size(16, 16)
+
+    if (C.UnitFrames.TOTAuras) then
+        local Buffs = self.Buffs
+        local Debuffs = self.Debuffs
+        
+        local yOffset = 0
+
+		Buffs:ClearAllPoints()
+        Buffs:Point("BOTTOMLEFT", self, "TOPLEFT", 0, 7 + yOffset)
+        Buffs.initialAnchor = "TOPLEFT"
+        Buffs["growth-y"] = "UP"
+        Buffs["growth-x"] = "RIGHT"
+        Buffs.size = 18
+        Buffs.spacing = 7
+        Buffs.num = 8
+        Buffs.numRow = 8
+        Buffs:Width(Buffs.numRow * Buffs.size + (Buffs.numRow - 1) * Buffs.spacing)
+        Buffs:Height(Buffs.size)
+
+        Buffs.PostCreateIcon = UnitFrames.PostCreateAura
+		Buffs.PostUpdateIcon = UnitFrames.PostUpdateAura
+        Buffs.PostUpdate = UnitFrames.UpdateDebuffsHeaderPosition
+
+        Debuffs:ClearAllPoints()
+        Debuffs:Point("BOTTOMRIGHT", self, "TOPRIGHT", 0, Buffs.size + 2 * Buffs.spacing)
+        Debuffs.initialAnchor = "TOPRIGHT"
+        Debuffs["growth-y"] = "UP"
+        Debuffs["growth-x"] = "LEFT"
+        Debuffs.size = Buffs.size
+        Debuffs.spacing = Buffs.spacing
+        Debuffs.num = Buffs.num
+        Debuffs.numRow = Buffs.numRow
+        Debuffs:Width(Debuffs.numRow * Debuffs.size + (Debuffs.numRow - 1) * Debuffs.spacing)
+        Debuffs:Height(Debuffs.size)
+
+        Debuffs.PostCreateIcon = UnitFrames.PostCreateAura
+		Debuffs.PostUpdateIcon = UnitFrames.PostUpdateAura
+	end
+
+	if C.UnitFrames.HealComm then
+		local HealthPrediction = self.HealthPrediction
+        local myBar = HealthPrediction.myBar
+		local otherBar = HealthPrediction.otherBar
+
+		-- myBar:SetFrameLevel(Health:GetFrameLevel())
+		-- myBar:SetStatusBarTexture(HealthTexture)
+		-- myBar:SetPoint("TOP")
+		-- myBar:SetPoint("BOTTOM")
+		-- myBar:SetPoint("LEFT", Health:GetStatusBarTexture(), "RIGHT")
+		-- myBar:SetWidth(129)
+		-- myBar:SetStatusBarColor(unpack(C.UnitFrames.HealCommSelfColor))
+
+		-- otherBar:SetFrameLevel(Health:GetFrameLevel())
+		-- otherBar:SetPoint("TOP")
+		-- otherBar:SetPoint("BOTTOM")
+		-- otherBar:SetPoint("LEFT", myBar:GetStatusBarTexture(), "RIGHT")
+		-- otherBar:SetWidth(129)
+		-- otherBar:SetStatusBarTexture(HealthTexture)
+		-- otherBar:SetStatusBarColor(unpack(C.UnitFrames.HealCommOtherColor))
+	end
 
     self.Power = Power
 end

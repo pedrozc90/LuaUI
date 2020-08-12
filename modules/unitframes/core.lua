@@ -26,15 +26,18 @@ end
 ----------------------------------------------------------------
 -- Auras
 ----------------------------------------------------------------
-local function PostCreateAura(self, button)
+local basePostCreateAura = UnitFrames.PostCreateAura
+
+function UnitFrames:PostCreateAura(button)
+
+    basePostCreateAura(self, button)
+
 	local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
 
     -- Skin aura button
     button:NoTemplate()
-	-- button:SetBackdrop(nil)
-	-- button.Shadow:Kill()
     button:CreateBackdrop()
-    button.Backdrop:SetBorder()
+    button.Backdrop:SetTripleBorder()
     button.Backdrop:SetOutside(nil, 2, 2)
 	
 	-- remaining time to aura expire
@@ -48,7 +51,7 @@ local function PostCreateAura(self, button)
 	
     -- artwork
     button.icon:ClearAllPoints()
-	button.icon:SetInside(button, 0,0 )
+	button.icon:SetInside(button, 0, 0)
 	
 	-- count
 	button.count:ClearAllPoints()
@@ -56,7 +59,6 @@ local function PostCreateAura(self, button)
 	button.count:SetFont(Font, FontSize, FontStyle)
 	button.count:SetJustifyH("RIGHT")
 end
-hooksecurefunc(UnitFrames, "PostCreateAura", PostCreateAura)
 
 function UnitFrames:PostUpdateAura(unit, button, index, offset, filter, isDebuff, duration, timeLeft)
 	local Name, _, _, DType, Duration, ExpirationTime, UnitCaster, IsStealable, _, SpellID = UnitAura(unit, index, button.filter)
@@ -302,7 +304,14 @@ end
 ----------------------------------------------------------------
 -- UnitFrames Anchor
 ----------------------------------------------------------------
-local function CreateUnits()
+local baseCreateUnits = UnitFrames.CreateUnits
+
+function UnitFrames:CreateUnits()
+
+    -- first, call the base function
+    baseCreateUnits(self)
+
+    -- second, we edit it
     local Anchor = UnitFrames.Anchor
 
     local Player = UnitFrames.Units.Player
@@ -320,50 +329,22 @@ local function CreateUnits()
     Player:ClearAllPoints()
     Player:SetPoint("BOTTOMLEFT", Anchor, "TOPLEFT", 0, 34)
     Player:Size(unpack(C.Units.Player))
+    Player.Shadow:Kill()
     
     Target:ClearAllPoints()
     Target:SetPoint("BOTTOMRIGHT",  Anchor, "TOPRIGHT", 0, 34)
     Target:Size(unpack(C.Units.Target))
+    Target.Shadow:Kill()
     
     TargetOfTarget:ClearAllPoints()
     TargetOfTarget:SetPoint("BOTTOM",  Anchor, "TOP", 0, 37)
     TargetOfTarget:Size(unpack(C.Units.TargetOfTarget))
+    TargetOfTarget.Shadow:Kill()
     
     Pet:ClearAllPoints()
     Pet:SetPoint("BOTTOMRIGHT", Panels.RightChatBG, "TOPRIGHT", 0, 7)
     Pet:Size(unpack(C.Units.Pet))
-    
-    -- Focus:ClearAllPoints()
-    -- Focus:SetPoint("BOTTOMLEFT",  Panels.RightChatBG, "TOPLEFT", 0, 7)
-    -- Focus:Size(unpack(C.Units.Focus))
-
-    -- FocusTarget:ClearAllPoints()
-    -- FocusTarget:SetPoint("BOTTOM", Focus, "TOP", 0, 34)
-    -- FocusTarget:Size(unpack(C.Units.FocusTarget))
-
-    -- if (C.UnitFrames.Arena) then
-    --     for i = 1, 5 do
-    --         Arena[i]:ClearAllPoints()
-    --         Arena[i]:Size(unpack(C.Units.Arena))
-    --         if (i == 1) then
-    --             Arena[i]:SetPoint("TOPRIGHT", UIParent, "RIGHT", -225, 275)
-    --         else
-    --             Arena[i]:SetPoint("TOP", Arena[i - 1], "BOTTOM", 0, -34)
-    --         end
-    --     end
-    -- end
-
-    -- if (C.UnitFrames.Boss) then
-    --     for i = 1, 5 do
-    --         Boss[i]:ClearAllPoints()
-    --         Boss[i]:Size(unpack(C.Units.Boss))
-    --         if (i == 1) then
-    --             Boss[i]:SetPoint("TOPRIGHT", UIParent, "RIGHT", -225, 275)
-    --         else
-    --             Boss[i]:SetPoint("TOP", Boss[i - 1], "BOTTOM", 0, -46)
-    --         end
-    --     end
-    -- end
+    Pet.Shadow:Kill()
 
     if (C.Party.Enable) then
         Party:ClearAllPoints()
@@ -387,6 +368,3 @@ local function CreateUnits()
         end
     end
 end
-hooksecurefunc(UnitFrames, "CreateUnits", CreateUnits)
-
-T.UnitFrames = UnitFrames

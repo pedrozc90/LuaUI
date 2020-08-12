@@ -30,7 +30,7 @@ function Bags:CreateContainer(storagetype, ...)
 
     Container:SetWidth((ItemsPerRow * ButtonSize) + (ItemsPerRow - 1) * ButtonSpacing + 23)
     Container.Shadow:Kill()
-    Container:SetBorder("Transparent")
+    Container:SetTripleBorder("Transparent")
 
     if (storagetype == "Bag") then
         local BagsContainer = Container.BagsContainer
@@ -55,12 +55,12 @@ function Bags:CreateContainer(storagetype, ...)
         -- bags container
         BagsContainer:ClearAllPoints()
         BagsContainer:Point("BOTTOMRIGHT", Container, "TOPRIGHT", 0, 3)
-        BagsContainer:SetBorder("Transparent")
+        BagsContainer:SetTripleBorder("Transparent")
         
         for _, Button in pairs(BlizzardBags) do
 			local Count = _G[Button:GetName().."Count"]
 			local Icon = _G[Button:GetName().."IconTexture"]
-            Button:SetBorder()
+            Button:SetTripleBorder()
 		end
 
         -- toggle button
@@ -104,23 +104,23 @@ function Bags:CreateContainer(storagetype, ...)
         Purchase:ClearAllPoints()
         Purchase:SetPoint("BOTTOMLEFT", Container, "TOPLEFT", 2, 5)
         Purchase:SetPoint("BOTTOMRIGHT", Container, "TOPRIGHT", -2, 5)
-        Purchase.Backdrop:SetBorder("Transparent")
+        Purchase.Backdrop:SetTripleBorder("Transparent")
         Purchase.Backdrop:SetOutside(nil, 2, 2)
 
         -- NEED TO FIX BORDER COLOR ON MOUSEOVER (T00LKIT.SkinButton)
         -- PurchaseButton:NoTemplate()
         -- PurchaseButton:CreateBackdrop()
-        -- PurchaseButton.Backdrop:SetBorder()
+        -- PurchaseButton.Backdrop:SetTripleBorder()
         -- PurchaseButton.Backdrop:SetOutside(nil, 2, 2)
 
         -- bank bags container
         BankBagsContainer:ClearAllPoints()
         BankBagsContainer:Point("BOTTOMLEFT", Container, "TOPLEFT", 0, 9)
-        BankBagsContainer:SetBorder("Transparent")
+        BankBagsContainer:SetTripleBorder("Transparent")
 
         for i = 1, 6 do
 			local Bag = BankSlotsFrame["Bag"..i]
-            Bag:SetBorder()
+            Bag:SetTripleBorder()
 		end
     end
 end

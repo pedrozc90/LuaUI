@@ -32,7 +32,7 @@ local function Player(self)
 	-- Totems:SetFrameLevel(self.Health:GetFrameLevel() + 3)
 	Totems:SetSize(FrameWidth, 7)
     Totems:CreateBackdrop()
-    Totems.Backdrop:SetBorder()
+    Totems.Backdrop:SetTripleBorder()
     Totems.Backdrop:SetOutside(nil, 2, 2)
 	-- Totems.Destroy = {}
     
