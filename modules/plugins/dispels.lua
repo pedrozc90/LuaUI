@@ -13,7 +13,9 @@ local chatType = nil
 local playerGUID = nil
 
 -- list of spell to announce when dispeled
-local DispellList = {}
+local DispellList = {
+    [3427] = true
+}
 
 local CombatEvents = {
     SPELL_DISPEL = true,
@@ -29,7 +31,7 @@ f:SetScript("OnEvent", function(self, event, ...)
 end)
 
 -- scan dispel list for invalid spells
-local function CheckSpellList()
+function f:CheckSpellList()
     for spellID, value in pairs(DispellList) do
         local name = GetSpellInfo(spellID)
         if (not name) then
@@ -42,7 +44,7 @@ end
 function f:PLAYER_LOGIN()
     chatType = C.Dispels.Chat or "SAY"
     playerGUID = UnitGUID("player")
-    CheckSpellList()
+    self:CheckSpellList()
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 

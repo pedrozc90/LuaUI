@@ -57,6 +57,7 @@ C["Tooltips"].SpellID = true                        -- enables spells, items, qu
 C["Dispels"] = {
     ["Enable"] = true,                              -- enables dispel announce plugin.
     ["SpellLink"] = true,                           -- display spell link, else just the spell name.
+    ["Chat"] = "SAY"
 }
 
 -- Interrupts Announce
@@ -70,6 +71,11 @@ C["SpellAnnounce"] = {
     ["Enable"] = true,                              -- enables spell announce plugin.
     ["GroupChat"] = true,                           -- set announce chat channel to by group type and instance.
     ["SpellLink"] = true,                           -- enable spell link one messages.
+}
+
+-- Spell Announce
+C["LetMeCast"] = {
+    ["Enable"] = true,                              -- enables let me cast plugin.
 }
 
 ----------------------------------------------------------------

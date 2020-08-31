@@ -2,6 +2,7 @@
 
     <Script file="dispels.lua"/>
     <Script file="interrupts.lua"/>
+    <Script file="letmecast.lua"/>
     <Script file="spell_announce.lua"/>
-
+    
 </Ui>
