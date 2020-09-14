@@ -20,7 +20,10 @@ C["Lua"] = {
     ["Texture"] = "Blank",                          -- default texture type.
 
     -- Layout
-    ["HealerLayout"] = true,                        -- enables healing raid layout.
+    ["HealerLayout"] = {
+        ["Enable"] = "auto",                        -- enables healing raid layout.
+        ["OnlyInInstance"] = true                   -- enables healing raid layout.
+    }
 }
 
 -- UnitsFrames Size
@@ -29,8 +32,8 @@ C["Units"] = {
     ["Target"]          = { 254, 31 },              -- set target unitframe size.
     ["TargetOfTarget"]  = { 193, 25 },              -- set targetoftarget unitframe size.
     ["Pet"]             = { 181, 25 },              -- set pet unitframe size.
-    -- ["Party"]           = { 185, 25 },              -- set party unitframe size.
-    -- ["Raid"]            = {  72, 41 }               -- set raid unitframe size.
+    ["Party"]           = { 185, 25 },              -- set party unitframe size.
+    ["Raid"]            = {  72, 41 }               -- set raid unitframe size.
 }
 
 -- Nameplate

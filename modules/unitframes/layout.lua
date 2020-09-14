@@ -1,16 +1,15 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
 local Panels = T.Panels
+local Talents = T.Talents
 
-if (not C.Lua.Enable) then return end
+if (not C.Lua.HealerLayout.Enable) then return end
 ----------------------------------------------------------------
 -- Layouts
 ----------------------------------------------------------------
 function UnitFrames:UpdatePosition()
-    local spec = GetSpecialization()
-    local specRole = GetSpecializationRole(spec)
-
-    if (C.Lua.HealerLayout and (specRole == "HEALER")) then
+    local isHealer = (Talents.isHealer() == "HEALER")
+    if (isHealer) then
         self:SetHealerLayout()
     else
         self:SetDefaultLayout()
@@ -75,24 +74,33 @@ function UnitFrames:SetHealerLayout()
 end
 
 UnitFrames:RegisterEvent("PLAYER_LOGIN")
-UnitFrames:RegisterEvent("PLAYER_ENTERING_WORLD")
-UnitFrames:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
-UnitFrames:RegisterEvent("GROUP_ROSTER_UPDATE")
 UnitFrames:SetScript("OnEvent", function(self, event, ...)
     self[event](self, ...)
 end)
 
-function UnitFrames:PLAYER_LOGIN()
-    self.unit = "player"
-end
-
-function UnitFrames:PLAYER_ENTERING_WORLD()
+function UnitFrames:SPELLS_CHANGED(...)
     self:UpdatePosition()
 end
 
--- update raid frame position when spec changes
-function UnitFrames:PLAYER_SPECIALIZATION_CHANGED(unit)
-    if (self.unit ~= unit) then return end
+function UnitFrames:PLAYER_LOGIN()
+    self.unit = "player"
+    if (C.Lua.HealerLayout.Enable == "auto") then
+        self:RegisterEvent("PLAYER_ENTERING_WORLD")
+        self:RegisterEvent("GROUP_ROSTER_UPDATE")
+        self:RegisterEvent("SPELLS_CHANGED")
+    end
+end
+
+function UnitFrames:PLAYER_ENTERING_WORLD()
+    -- get instance/continent information
+    local inInstance = IsInInstance()
+    local instanceName, instanceType, difficultyID, difficultyName, maxPlayers,
+        dynamicDifficulty, isDynamic, instanceID, instanceGroupSize = GetInstanceInfo()
+    
+    if (C.Lua.HealerLayout.OnlyInInstance and not inInstance) then 
+        return
+    end
+    
     self:UpdatePosition()
 end
 

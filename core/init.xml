@@ -3,6 +3,7 @@
     <!-- Core -->
     <Script file="api.lua"/>
     <Script file="functions.lua"/>
+    <Script file="talents.lua"/>
     <Script file="colors.lua"/>
     <Script file="commands.lua"/>
     <Script file="development.lua"/>
