@@ -279,7 +279,7 @@ function UnitFrames:Player()
         local SizeMax5, DeltaMax5 = T.EqualSizes(FrameWidth, 5, Spacing)
         local SizeMax6, DeltaMax6 = T.EqualSizes(FrameWidth, 6, Spacing)
         
-        for i = 1, 6 do
+        for i = 1, 5 do
             ComboPoints[i]:ClearAllPoints()
             ComboPoints[i]:Height(ComboPoints:GetHeight())
             ComboPoints[i]:Width(SizeMax6)
