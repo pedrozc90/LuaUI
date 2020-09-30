@@ -31,6 +31,7 @@ function Reputation:Create()
         RepBar:SetReverseFill(false)
         RepBar.Backdrop:SetTripleBorder()
         RepBar.Backdrop:SetOutside(nil, 2, 2)
+        RepBar.Backdrop.Shadow:Kill()
     end
 
     -- I don't know why there is 2 reputation bars

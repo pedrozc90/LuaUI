@@ -117,7 +117,7 @@ function Minimap:StyleMinimap()
 
     if (MiniMapTrackingFrame) then
 		MiniMapTrackingFrame:ClearAllPoints()
-		MiniMapTrackingFrame:Point("TOPRIGHT", Minimap, "TOPRIGHT", -12, -1)
+		MiniMapTrackingFrame:Point("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 2, -4)
 
 		if (MiniMapTrackingIcon) then
 			MiniMapTrackingIcon:Size(16)
@@ -125,8 +125,11 @@ function Minimap:StyleMinimap()
 
 		-- MiniMapTrackingFrame:CreateBackdrop()
 		-- MiniMapTrackingFrame.Backdrop:SetFrameLevel(MiniMapTrackingFrame:GetFrameLevel())
-		-- MiniMapTrackingFrame.Backdrop:SetOutside(MiniMapTrackingIcon)
-		-- MiniMapTrackingFrame.Backdrop:SetTemplate()
+        -- MiniMapTrackingFrame.Backdrop:SetOutside(MiniMapTrackingIcon)
+        if (MiniMapTrackingFrame.Backdrop) then
+            MiniMapTrackingFrame.Backdrop:SetOutside(MiniMapTrackingIcon, 2, 2)
+            MiniMapTrackingFrame.Backdrop:SetTripleBorder()
+        end
 		-- MiniMapTrackingFrame.Backdrop:CreateShadow()
 	end
 

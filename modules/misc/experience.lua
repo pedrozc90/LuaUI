@@ -31,6 +31,7 @@ function Experience:Create()
     ExpBar:Height(Height)
     ExpBar.Backdrop:SetTripleBorder()
     ExpBar.Backdrop:SetOutside(nil, 2, 2)
+    ExpBar.Backdrop.Shadow:Kill()
 
     ExpRestedBar:SetAllPoints(ExpBar)
     ExpRestedBar:SetStatusBarTexture(Texture)

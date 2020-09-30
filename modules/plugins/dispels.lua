@@ -14,7 +14,7 @@ local playerGUID = nil
 
 -- list of spell to announce when dispeled
 local DispellList = {
-    [3427] = true
+    -- [spellID] = true
 }
 
 local CombatEvents = {
@@ -61,15 +61,15 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
     local spellID, spellName, spellSchool, extraSpellID, extraSpellName, extraSchool,
     auraType = select(12, CombatLogGetCurrentEventInfo())
 
-    if (DispellList[spellID]) then
+    if (DispellList[extraSpellID]) then
         local extraSpellLink = GetSpellLink(extraSpellID)
 
         if (eventType == "SPELL_DISPEL") then
-            SendChatMessage(format("%s %s dispeled!", destName, extraSpellLink), chatType)
+            SendChatMessage(format("%s %s dispeled!", destName, extraSpellLink or extraSpellName), chatType)
         elseif (eventType == "SPELL_STOLEN") then
-            SendChatMessage(format("%s's %s stolen!", destName, extraSpellLink), chatType)
+            SendChatMessage(format("%s's %s stolen!", destName, extraSpellLink or extraSpellName), chatType)
         elseif (eventType == "SPELL_DISPEL_FAILED") then
-            SendChatMessage(format("%s's %s dispel FAILED!", destName, extraSpellLink), chatType)
+            SendChatMessage(format("%s's %s dispel FAILED!", destName, extraSpellLink or extraSpellName), chatType)
         end
     end
 end 
