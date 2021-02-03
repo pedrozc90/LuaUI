@@ -2,6 +2,8 @@ local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
 local Class = select(2, UnitClass("player"))
 
+if (not C.Lua.Enable) then return end
+
 ----------------------------------------------------------------
 -- Party
 ----------------------------------------------------------------
@@ -19,7 +21,7 @@ local function Party(self)
     local Threat = self.ThreatIndicator
     local Range = self.Range
     local Highlight = self.Highlight
-    
+
     local FrameWidth, FrameHeight = unpack(C["Units"].Party)
     local HealthTexture = T.GetTexture(C["Textures"].UFPartyHealthTexture)
     local PowerTexture = T.GetTexture(C["Textures"].UFPartyPowerTexture)
@@ -31,9 +33,9 @@ local function Party(self)
 
     -- Health
     Health:ClearAllPoints()
-    Health:Point("TOPLEFT", self, "TOPLEFT", 0, 0)
-    Health:Point("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:Height(FrameHeight - 6)
+    Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
+    Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
+    Health:SetHeight(FrameHeight - 6)
     Health:SetFrameLevel(3)
     Health:CreateBackdrop()
 
@@ -43,10 +45,10 @@ local function Party(self)
     if (C.Party.ShowHealthText) then
         Health.Value:ClearAllPoints()
         Health.Value:SetParent(Health)
-        Health.Value:Point("CENTER", Health, "CENTER", 1, -7)
+        Health.Value:SetPoint("CENTER", Health, "CENTER", 1, -7)
         Health.Value:SetJustifyH("CENTER")
     end
-    
+
     Health.frequentUpdate = true
     if (C.Lua.UniColor) then
         Health.colorTapping = false
@@ -64,9 +66,9 @@ local function Party(self)
 
 	-- Power
     Power:ClearAllPoints()
-    Power:Point("TOPLEFT", Health, "BOTTOMLEFT", 0, -3)
-    Power:Point("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -3)
-    Power:Height(3)
+    Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -3)
+    Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -3)
+    Power:SetHeight(3)
     Power:SetFrameLevel(Health:GetFrameLevel())
     Power:CreateBackdrop()
 
@@ -88,53 +90,53 @@ local function Party(self)
     Name:ClearAllPoints()
 	Name:SetPoint("CENTER", Health, "CENTER", 0, 1)
     Name:SetJustifyH("CENTER")
-    
+
     self:Tag(Name, "[Tukui:NameShort] [Tukui:Role]")
 
     -- Auras
 	Buffs:ClearAllPoints()
-    Buffs:Point("TOPLEFT", Power, "BOTTOMLEFT", 0, -7)
+    Buffs:SetPoint("TOPLEFT", Power, "BOTTOMLEFT", 0, -7)
     Buffs.size = FrameHeight
 	Buffs.num = 8
 	Buffs.numRow = 1
 	Buffs.spacing = 7
 	Buffs.initialAnchor = "TOPLEFT"
-	Buffs:Height(Buffs.size)
-	Buffs:Width(Buffs.num * Buffs.size + (Buffs.num - 1) * Buffs.spacing)
+	Buffs:SetHeight(Buffs.size)
+	Buffs:SetWidth(Buffs.num * Buffs.size + (Buffs.num - 1) * Buffs.spacing)
 
 	Debuffs:ClearAllPoints()
-	Debuffs:Point("TOPLEFT", self, "TOPRIGHT", 7, 0)
+	Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 7, 0)
 	Debuffs.size = FrameHeight
 	Debuffs.num = 3
 	Debuffs.spacing = 7
 	Debuffs.initialAnchor = "TOPLEFT"
-	Debuffs:Height(Debuffs.size)
-	Debuffs:Width(Debuffs.num * Debuffs.size + (Debuffs.num - 1) * Debuffs.spacing)
+	Debuffs:SetHeight(Debuffs.size)
+	Debuffs:SetWidth(Debuffs.num * Debuffs.size + (Debuffs.num - 1) * Debuffs.spacing)
 
     -- Leader
 	Leader:ClearAllPoints()
-    Leader:Point("CENTER", Health, "TOPLEFT",  0, 3)
-    Leader:Size(14, 14)
+    Leader:SetPoint("CENTER", Health, "TOPLEFT",  0, 3)
+    Leader:SetSize(14, 14)
 
     -- Master Looter
 	MasterLooter:ClearAllPoints()
-    MasterLooter:Point("CENTER", Health, "TOPRIGHT", 0, 3)
-    MasterLooter:Size(14, 14)
+    MasterLooter:SetPoint("CENTER", Health, "TOPRIGHT", 0, 3)
+    MasterLooter:SetSize(14, 14)
 
     -- ReadyCheck
 	ReadyCheck:ClearAllPoints()
 	ReadyCheck:SetPoint("CENTER", Power, "CENTER", 0, 0)
-	ReadyCheck:Size(12, 12)
+	ReadyCheck:SetSize(12, 12)
 
     -- Raid Icon
 	RaidIcon:ClearAllPoints()
     RaidIcon:SetPoint("CENTER", Health, "TOP", 0, 3)
-    RaidIcon:Size(14, 14)
+    RaidIcon:SetSize(14, 14)
 
     -- Phase Icon
 	PhaseIcon:ClearAllPoints()
     PhaseIcon:SetPoint("TOPRIGHT", self, "TOPRIGHT", 7, 24)
-    PhaseIcon:Size(24, 24)
+    PhaseIcon:SetSize(24, 24)
 
     -- Health Prediction
 	if (C.Party.HealBar) then
@@ -143,19 +145,19 @@ local function Party(self)
         local ThirdBar = self.HealthPrediction.absorbBar
 
         local HealBarColor = { .31, .45, .63, .4 }
-        
-        FirstBar:Width(FrameWidth)
-        FirstBar:Height(Health:GetHeight())
+
+        FirstBar:SetWidth(FrameWidth)
+        FirstBar:SetHeight(Health:GetHeight())
 		FirstBar:SetStatusBarTexture(HealthTexture)
         FirstBar:SetStatusBarColor(unpack(HealBarColor))
-		
-        SecondBar:Width(FrameWidth)
-        SecondBar:Height(Health:GetHeight())
+
+        SecondBar:SetWidth(FrameWidth)
+        SecondBar:SetHeight(Health:GetHeight())
 		SecondBar:SetStatusBarTexture(HealthTexture)
 		SecondBar:SetStatusBarColor(unpack(HealBarColor))
-		
-        ThirdBar:Width(FrameWidth)
-        ThirdBar:Height(Health:GetHeight())
+
+        ThirdBar:SetWidth(FrameWidth)
+        ThirdBar:SetHeight(Health:GetHeight())
 		ThirdBar:SetStatusBarTexture(HealthTexture)
 		ThirdBar:SetStatusBarColor(unpack(HealBarColor))
 	end

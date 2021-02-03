@@ -1,6 +1,6 @@
-## Interface: 80300
+## Interface: 90002
 ## Author: Luaerror
-## Version: 1.9
+## Version: 2.0
 ## Title: |cffb3ff19LuaUI|r
 ## Notes: External Tukui Edit
 ## Website: https://github.com/PedroZC90/LuaUI
@@ -10,4 +10,9 @@
 ## X-Website: http://www.tukui.org
 ## X-Maintainer: PedroZC90
 
-LuaUI.xml
+core/init.lua
+config/config.lua
+medias/medias.lua
+
+core/init.xml
+modules/init.xml

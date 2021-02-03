@@ -1,81 +1,85 @@
 local T, C, L = Tukui:unpack()
 local ActionBars = T.ActionBars
-local Panels = T.Panels
+local Movers = T.Movers
 local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 
 ----------------------------------------------------------------
 -- ActionBar2
 ----------------------------------------------------------------
-local function CreateBar2()
-    local LeftBar = Panels.ActionBar2
-    local RightBar = Panels.ActionBar3
+local baseCreateBar2 = ActionBars.CreateBar2
+
+function ActionBars:CreateBar2()
+
+    -- first, we call the base function
+    baseCreateBar2(self)
+
+    -- second, we edit it
+    local ActionBar1 = ActionBars.Bars.Bar1
+    local ActionBar2 = ActionBars.Bars.Bar2
+    local ActionBar3 = ActionBars.Bars.Bar3
+
     local MultiBarBottomLeft = MultiBarBottomLeft
-    local Size = C.ActionBars.NormalButtonSize
-    local Spacing = C.ActionBars.ButtonSpacing
+	local Size = C.ActionBars.NormalButtonSize
+	local Spacing = C.ActionBars.ButtonSpacing
+	local ButtonsPerRow = 6 -- C.ActionBars.Bar2ButtonsPerRow
+    local NumButtons = 6 --C.ActionBars.Bar2NumButtons
 
-    local Width = (Size * 6) + (Spacing * 7) - 2
-    local Height = (Size * 1) + (Spacing * 2) - 2
+    local NumRow = ceil(NumButtons / ButtonsPerRow)
 
-	MultiBarBottomLeft:SetParent(LeftBar)
-    MultiBarBottomLeft:SetScript("OnHide", function()
-        LeftBar.Backdrop:Hide()
-        RightBar.Backdrop:Hide()
-    end)
+    local Offset = Spacing + 1
 
-    MultiBarBottomLeft:SetScript("OnShow", function()
-        LeftBar.Backdrop:Show()
-        RightBar.Backdrop:Show()
-    end)
+    local ActionBar2Left = CreateFrame("Frame", "TukuiActionBar2Left", T.PetHider, "SecureHandlerStateTemplate")
+	ActionBar2Left:SetPoint("BOTTOMRIGHT", ActionBar1, "BOTTOMLEFT", -1, 0)
+	ActionBar2Left:SetFrameStrata("LOW")
+	ActionBar2Left:SetFrameLevel(10)
+	ActionBar2Left:SetWidth((Size * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)) + 2)
+    ActionBar2Left:SetHeight((Size * NumRow) + (Spacing * (NumRow + 1)) + 2)
     
-    LeftBar:ClearAllPoints()
-    LeftBar:Point("BOTTOMRIGHT", Panels.ActionBar1, "BOTTOMLEFT", -7, 0)
-    LeftBar:Width(Width)
-    LeftBar:Height(Height)
-    LeftBar.Backdrop:StripTextures(true)
-    LeftBar.Backdrop = nil
-    LeftBar:CreateBackdrop("Transparent")
+    local ActionBar2Right = CreateFrame("Frame", "TukuiActionBar2Right", T.PetHider, "SecureHandlerStateTemplate")
+	ActionBar2Right:SetPoint("BOTTOMLEFT", ActionBar1, "BOTTOMRIGHT", 1, 0)
+	ActionBar2Right:SetFrameStrata("LOW")
+	ActionBar2Right:SetFrameLevel(10)
+	ActionBar2Right:SetWidth((Size * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)) + 2)
+    ActionBar2Right:SetHeight((Size * NumRow) + (Spacing * (NumRow + 1)) + 2)
+    
+    ActionBar2:Kill()
+
+    if (C.ActionBars.ShowBackdrop) then
+        ActionBar2Left:CreateBackdrop("Transparent")
+        ActionBar2Right:CreateBackdrop("Transparent")
+    end
+
+    MultiBarBottomLeft:SetShown(true)
+	MultiBarBottomLeft:SetParent(ActionBar2Left)
 
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
-        local Button = _G["MultiBarBottomLeftButton"..i]
-        Button:Show()
-        Button:ClearAllPoints()
-        Button:Size(Size)
-        -- Button:SetAttribute("showgrid", 1)
+        local Button = _G["MultiBarBottomLeftButton" .. i]
 
-        local Offset = Spacing - 1
-		if (i == 1) then
-			Button:SetPoint("BOTTOMRIGHT", LeftBar, "BOTTOMRIGHT", -Offset, Offset)
+        Button:SetSize(Size, Size)
+		Button:ClearAllPoints()
+		Button:SetAttribute("showgrid", 1)
+        Button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_EVENT)
+        
+        ActionBars:SkinButton(Button)
+
+        if (i == 1) then
+			Button:SetPoint("BOTTOMRIGHT", ActionBar2Left, "BOTTOMRIGHT", -Offset, Offset)
 		elseif (i == 7) then
-            Button:SetPoint("BOTTOMRIGHT", RightBar, "BOTTOMRIGHT", -Offset, Offset)
+            Button:SetPoint("BOTTOMRIGHT", ActionBar2Right, "BOTTOMRIGHT", -Offset, Offset)
         else
-            local PreviousButton = _G["MultiBarBottomLeftButton"..i-1]
+            local PreviousButton = _G["MultiBarBottomLeftButton" .. (i-1)]
 			Button:SetPoint("RIGHT", PreviousButton, "LEFT", -Spacing, 0)
 		end
 
-		LeftBar["Button"..i] = Button
+		ActionBar2["Button" .. i] = Button
 	end
 
-	RegisterStateDriver(LeftBar, "visibility", "[vehicleui][petbattle][overridebar] hide; show")
-end
-hooksecurefunc(ActionBars, "CreateBar2", CreateBar2)
+	RegisterStateDriver(ActionBar2, "visibility", "[vehicleui] hide; show")
 
-----------------------------------------------------------------
--- ActionBar3 Backdrop
-----------------------------------------------------------------
-local function CreateBar3()
-    local Bar = Panels.ActionBar3
-    local Size = C.ActionBars.NormalButtonSize
-    local Spacing = C.ActionBars.ButtonSpacing
-
-    local Width = (Size * 6) + (Spacing * 7) - 2
-    local Height = (Size * 1) + (Spacing * 2) - 2
+    Movers:RegisterFrame(ActionBar2Left, "Action Bar Left #2")
+    Movers:RegisterFrame(ActionBar2Right, "Action Bar Right #2")
+    Movers.Defaults["TukuiActionBar2"] = nil
     
-    Bar:ClearAllPoints()
-    Bar:Point("BOTTOMLEFT", Panels.ActionBar1, "BOTTOMRIGHT", 7, 0)
-    Bar:Width(Width)
-    Bar:Height(Height)
-    Bar.Backdrop:StripTextures(true)
-    Bar.Backdrop = nil
-    Bar:CreateBackdrop("Transparent")
+    self.Bars.Bar2Left = ActionBar2Left
+    self.Bars.Bar2Right = ActionBar2Right
 end
-hooksecurefunc(ActionBars, "CreateBar3", CreateBar3)

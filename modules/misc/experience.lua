@@ -5,11 +5,18 @@ local Minimap = T.Maps.Minimap
 ----------------------------------------------------------------
 -- Experience / Honor Bar
 ----------------------------------------------------------------
-local function Enable(self)
-    -- resources
-    local Texture = T.GetTexture(C.Lua.Texture)
+local baseCreate = Experience.Create
 
-    -- elements
+function Experience:Create()
+
+    -- first, we call the base function
+    baseCreate(self)
+
+    -- second, we edit it
+    local Texture = T.GetTexture(C.Lua.Texture)
+    local Height = 3
+    local Spacing = 3
+
     local ExpBar = self.XPBar1
     local HonorBar = self.XPBar2
     local ExpRestedBar = self.RestedBar1
@@ -17,27 +24,26 @@ local function Enable(self)
 
     -- Experience
     ExpBar:ClearAllPoints()
+    ExpBar:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -Spacing)
+    ExpBar:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -Spacing)
+    ExpBar:SetHeight(Height)
     ExpBar:SetStatusBarTexture(Texture)
-    ExpBar:Height(3)
-    ExpBar:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -7)
-    ExpBar:Point("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -7)
-
+    
     ExpRestedBar:SetAllPoints(ExpBar)
     ExpRestedBar:SetStatusBarTexture(Texture)
 
     -- Honor
     HonorBar:ClearAllPoints()
-    HonorBar:SetStatusBarTexture(Texture)
-    HonorBar:Height(3)
     if (ExpBar:IsShown()) then
-        HonorBar:Point("TOPLEFT", ExpBar, "BOTTOMLEFT", 0, -7)
-        HonorBar:Point("TOPRIGHT", ExpBar, "BOTTOMRIGHT", 0, -7)
+        HonorBar:SetPoint("TOPLEFT", ExpBar, "BOTTOMLEFT", 0, -Spacing)
+        HonorBar:SetPoint("TOPRIGHT", ExpBar, "BOTTOMRIGHT", 0, -Spacing)
     else
-        HonorBar:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -7)
-        HonorBar:Point("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -7)
+        HonorBar:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -Spacing)
+        HonorBar:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -Spacing)
     end
+    HonorBar:SetStatusBarTexture(Texture)
+    HonorBar:SetHeight(Height)
 
     HonorRestedBar:SetAllPoints(HonorBar)
     HonorRestedBar:SetStatusBarTexture(Texture)
 end
-hooksecurefunc(Experience, "Enable", Enable)

@@ -1,19 +1,1 @@
 # API:
-
-element:SetInside(frame, x, y)
-    Resize the element inside a frame with x (horizontal) and y (vertical) pixel spacing.
-    if frame, x and y is not specified, it will try to anchor to parent frame with default x, y values. (2)
-		
-element:SetOutside(frame, x, y)
-    Resize the element outside a frame with x (horizontal) and y (vertical) pixel spacing.
-    if frame, x and y is not specified, it will try to anchor to parent frame with default x, y values. (2)
-
-frame:SetTemplate("Template", texture)
-		Set a backdrop that cover the exact size of the frame according
-		to which template is choosen. If "texture" is set to true, it will
-		use media.normTex instead of the default blank texture. If "" is empty,
-		it will use "Default" template by default.
-
-    Templates:
-        - "Transparent" 
-            -- Same as "Default" but with Transparent background

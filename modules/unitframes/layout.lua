@@ -1,6 +1,8 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
-local Panels = T.Panels
+local Chat = T.Chat.Panels
+
+if (not C.Lua.Enable) then return end
 
 ----------------------------------------------------------------
 -- Layouts
@@ -22,7 +24,7 @@ function UnitFrames:SetDefaultLayout()
     local RaidPet = self.Headers.RaidPet
     local Holder = self.GroupHolder
 
-    local LeftChatBG = Panels.LeftChatBG
+    local LeftChatBG = Chat.LeftChat
 
     Holder:ClearAllPoints()
     Holder:SetPoint("TOPLEFT", LeftChatBG, "TOPLEFT", 0, 0)
@@ -31,11 +33,11 @@ function UnitFrames:SetDefaultLayout()
 
     if (C.Raid.Enable) then
         Raid:ClearAllPoints()
-        Raid:Point("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 0, 7)
+        Raid:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 0, 7)
 
         if (C.Raid.ShowPets) then
             RaidPet:ClearAllPoints()
-            RaidPet:Point("BOTTOMLEFT", Raid, "TOPLEFT", 0, 7)
+            RaidPet:SetPoint("BOTTOMLEFT", Raid, "TOPLEFT", 0, 7)
         end
     end
 end
@@ -69,7 +71,7 @@ function UnitFrames:SetHealerLayout()
 
     if (C.Raid.Enable) then
         Raid:ClearAllPoints()
-        Raid:Point("BOTTOMLEFT", Holder, "TOPLEFT", 0, 7)
+        Raid:SetPoint("BOTTOMLEFT", Holder, "TOPLEFT", 0, 7)
     end
 end
 

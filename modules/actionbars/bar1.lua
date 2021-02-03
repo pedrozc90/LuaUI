@@ -1,38 +1,63 @@
 local T, C, L = Tukui:unpack()
 local ActionBars = T.ActionBars
-local Panels = T.Panels
+local Movers = T.Movers
 local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 
 ----------------------------------------------------------------
 -- ActionBar1
 ----------------------------------------------------------------
-local function CreateBar1()
-	local Bar = Panels.ActionBar1
-	local Size = C.ActionBars.NormalButtonSize
-	local PetSize = C.ActionBars.PetButtonSize
-	local Spacing = C.ActionBars.ButtonSpacing
-	
-    Bar:ClearAllPoints()
-    Bar:Point("BOTTOM", UIParent, "BOTTOM", 0, 7)
-    Bar:Width((Size * 12) + (Spacing * 13) - 2)
-    Bar:Height((Size * 1) + (Spacing * 2) - 2)
-    Bar.Backdrop:StripTextures(true)
-    Bar.Backdrop = nil
-    Bar:CreateBackdrop("Transparent")
+local baseCreateBar1 = ActionBars.CreateBar1
 
-	Bar:SetScript("OnEvent", function(self, event, unit, ...)
+function ActionBars:CreateBar1()
+	
+	-- first, we call the base function
+    baseCreateBar1(self)
+
+    -- second, we edit it
+	local ActionBar1 = ActionBars.Bars.Bar1
+
+	local Size = C.ActionBars.NormalButtonSize
+	local Spacing = C.ActionBars.ButtonSpacing
+	local Druid, Rogue, Warrior, Priest = "", "", "", ""
+	local ButtonsPerRow = C.ActionBars.Bar1ButtonsPerRow
+	local NumRow = ceil(12 / ButtonsPerRow)
+	local Offset = Spacing + 1
+	
+    ActionBar1:ClearAllPoints()
+	ActionBar1:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 5)
+	ActionBar1:SetWidth((Size * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)) + 2)
+	ActionBar1:SetHeight((Size * NumRow) + (Spacing * (NumRow + 1)) + 2)
+	
+	if (C.ActionBars.ShowBackdrop) then
+		ActionBar1:SetBackdropTransparent()
+		ActionBar1.Shadow:Kill()
+	end
+	
+	ActionBar1:SetScript("OnEvent", function(self, event, unit, ...)
 		if (event == "PLAYER_ENTERING_WORLD") then
+			local NumPerRows = ButtonsPerRow
+			local NextRowButtonAnchor = _G["ActionButton1"]
+			
 			for i = 1, NUM_ACTIONBAR_BUTTONS do
 				local Button = _G["ActionButton"..i]
-				Button:Size(Size)
+				local PreviousButton = _G["ActionButton"..i-1]
+					
+				Button:SetSize(Size, Size)
 				Button:ClearAllPoints()
 				Button:SetParent(self)
-                
-                if (i == 1) then
-                    local Offset = Spacing - 1
-                    Button:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", Offset, Offset)
-                else
-					local PreviousButton = _G["ActionButton"..i-1]
+				Button:SetAttribute("showgrid", 1)
+				Button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_EVENT)
+					
+				ActionBars:SkinButton(Button)
+
+				if (i == 1) then
+					Button:SetPoint("TOPLEFT", ActionBar1, "TOPLEFT", Offset, -Offset)
+				elseif (i == NumPerRows + 1) then
+					Button:SetPoint("TOPLEFT", NextRowButtonAnchor, "BOTTOMLEFT", 0, -Spacing)
+						
+					NumPerRows = NumPerRows + ButtonsPerRow
+					NextRowButtonAnchor = _G["ActionButton"..i]
+				else
 					Button:SetPoint("LEFT", PreviousButton, "RIGHT", Spacing, 0)
 				end
 			end
@@ -57,10 +82,4 @@ local function CreateBar1()
 			end
 		end
 	end)
-
-	for i = 1, NUM_ACTIONBAR_BUTTONS do
-		local Button = _G["ActionButton"..i]
-		Bar["Button"..i] = Button
-	end
 end
-hooksecurefunc(ActionBars, "CreateBar1", CreateBar1)

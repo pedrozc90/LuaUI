@@ -1,48 +1,56 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
+local ceil = math.ceil
 
 ----------------------------------------------------------------
 -- Arena
 ----------------------------------------------------------------
-local function Arena(self)
+local baseArena = UnitFrames.Arena
+
+function UnitFrames:Arena()
+
+    -- first, we call the base function
+    baseArena(self)
+
+    -- second, we edit it
     local Health = self.Health
 	local Power = self.Power
 	local Name = self.Name
 	local SpecIcon = self.PVPSpecIcon
 	local Trinket = self.Trinket
     local RaidIcon = self.RaidTargetIndicator
-    
-    local FrameWidth, FrameHeight = unpack(C["Units"].Arena)
-    local HealthTexture = T.GetTexture(C["Textures"].UFHealthTexture)
-	local PowerTexture = T.GetTexture(C["Textures"].UFPowerTexture)
-	local CastTexture = T.GetTexture(C["Textures"].UFCastTexture)
 
-	self:SetBackdrop(nil)
-	self.Shadow:Kill()
-	
+    local FrameWidth, FrameHeight = unpack(C.Units.Arena)
+    local PowerHeight = 3
+    local Spacing = 1
+
+    local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)
+	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
+	local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
+
 	-- Health
     Health:ClearAllPoints()
-    Health:Point("TOPLEFT", self, "TOPLEFT", 0, 0)
-    Health:Point("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:Height(FrameHeight - 6)
-    Health:SetFrameLevel(3)
-    Health:CreateBackdrop()
+    Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
+    Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
+    Health:SetHeight(FrameHeight - (PowerHeight + 1))
+    Health:SetStatusBarTexture(HealthTexture)
 
-    Health.Background:SetAllPoints()
-    Health.Background:SetColorTexture(.05, .05, .05)
+    Health.Background:SetAllPoints(Health)
+    Health.Background:SetTexture(HealthTexture)
+    Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
-    Health.Value:ClearAllPoints()
-    Health.Value:SetParent(Health)
-    Health.Value:Point("RIGHT", Health, "RIGHT", -5, 1)
-    Health.Value:SetJustifyH("LEFT")
-    
+    -- Health.Value:ClearAllPoints()
+    -- Health.Value:SetParent(Health)
+    -- Health.Value:SetPoint("RIGHT", Health, "RIGHT", -5, 1)
+    -- Health.Value:SetJustifyH("LEFT")
+
     Health.frequentUpdate = true
     if (C.Lua.UniColor) then
         Health.colorDisconnected = false
         Health.colorClass = false
         Health.colorReaction = false
-        Health:SetStatusBarColor(unpack(C.General.BorderColor))
-        Health.Background:SetVertexColor(unpack(C.General.BackdropColor))
+        Health:SetStatusBarColor(unpack(C.General.BackdropColor))
+        Health.Background:SetVertexColor(unpack(C.General.BackgroundColor))
     else
         Health.colorDisconnected = true
         Health.colorClass = true
@@ -51,19 +59,18 @@ local function Arena(self)
 
 	-- Power
     Power:ClearAllPoints()
-    Power:Point("TOPLEFT", Health, "BOTTOMLEFT", 0, -3)
-    Power:Point("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -3)
-    Power:Height(3)
-    Power:SetFrameLevel(Health:GetFrameLevel())
-    Power:CreateBackdrop()
+    Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
+    Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
+    Power:SetHeight(PowerHeight)
 
-    Power.Background:SetAllPoints()
-    Power.Background:SetColorTexture(.05, .05, .05)
+    Power.Background:SetAllPoints(Power)
+    Power.Background:SetTexture(PowerTexture)
+    Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
-    Power.Value:ClearAllPoints()
-    Power.Value:SetParent(Health)
-    Power.Value:Point("LEFT", Health, "LEFT", 5, 1)
-    Power.Value:SetJustifyH("LEFT")
+    -- Power.Value:ClearAllPoints()
+    -- Power.Value:SetParent(Health)
+    -- Power.Value:SetPoint("LEFT", Health, "LEFT", 5, 1)
+    -- Power.Value:SetJustifyH("LEFT")
 
     Power.frequentUpdates = true
     Power.colorDisconnected = true
@@ -79,71 +86,87 @@ local function Arena(self)
     -- Name
 	Name:ClearAllPoints()
     Name:SetParent(Health)
-	Name:Point("CENTER", Health, "CENTER", 0, 1)
+	Name:SetPoint("CENTER", Health, "CENTER", 0, 0)
     Name:SetJustifyH("CENTER")
-    
-    self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameLong]")
+
+    -- self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameLong]")
+
+    -- Raid Icon
+    RaidIcon:ClearAllPoints()
+    RaidIcon:SetPoint("CENTER", self, "TOP", 0, 3)
+    RaidIcon:SetSize(16, 16)
+
+    -- -- Spec Icon
+	-- SpecIcon:ClearAllPoints()
+    -- SpecIcon:SetPoint("TOPRIGHT", self, "TOPLEFT", -7, 0)
+    -- SpecIcon:SetSize(FrameHeight)
+    -- SpecIcon.Backdrop.Shadow:Kill()
+
+    -- -- Trinket Icon
+	-- Trinket:ClearAllPoints()
+    -- Trinket:SetPoint("TOPRIGHT", SpecIcon, "TOPLEFT", -7, 0)
+    -- Trinket:SetSize(FrameHeight)
+	-- Trinket.Backdrop.Shadow:Kill()
 
     -- Auras
 	if (C.UnitFrames.ArenaAuras) then
+        local Buffs = self.Buffs
         local Debuffs = self.Debuffs
-        
+
+        local AuraSize = FrameHeight
+        local AuraSpacing = 1
+        local AuraPerRow = 3
+        local AuraWidth = (AuraSize * AuraPerRow) + (AuraSpacing * (AuraPerRow + 1))
+
+		Buffs:ClearAllPoints()
+        Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -3, 0)
+        Buffs:SetWidth(AuraWidth)
+        Buffs:SetHeight(AuraSize)
+
+		Buffs.size = AuraSize
+        Buffs.spacing = AuraSpacing
+        Buffs.num = 3
+        Buffs.numRow = ceil(Buffs.num / AuraPerRow)
+		Buffs.initialAnchor = "RIGHT"
+        Buffs["growth-x"] = "LEFT"
+        Buffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
+
 		Debuffs:ClearAllPoints()
-		Debuffs:Point("TOPLEFT", self, "TOPRIGHT", 7, 0)
-		Debuffs.size = FrameHeight
-		Debuffs.num = 5
-		Debuffs.spacing = 7
+        Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 3, 0)
+        Debuffs:SetWidth(AuraWidth)
+        Debuffs:SetHeight(AuraSize)
+
+		Debuffs.size = AuraSize
+        Debuffs.spacing = AuraSpacing
+        Debuffs.num = 4
+		Debuffs.numRow = ceil(Debuffs.num / AuraPerRow)
 		Debuffs.initialAnchor = "LEFT"
-		Debuffs["growth-x"] = "RIGHT"
-        Debuffs:Width(Debuffs.num * Debuffs.size + (Debuffs.num - 1) * Debuffs.spacing)
-        Debuffs:Height(Debuffs.size)
-		
+        Debuffs["growth-x"] = "RIGHT"
+        Debuffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
 	end
-
-    -- Spec Icon
-	SpecIcon:ClearAllPoints()
-    SpecIcon:SetPoint("TOPRIGHT", self, "TOPLEFT", -7, 0)
-    SpecIcon:Size(FrameHeight)
-    SpecIcon.Backdrop.Shadow:Kill()
-
-    -- Trinket Icon
-	Trinket:ClearAllPoints()
-    Trinket:SetPoint("TOPRIGHT", SpecIcon, "TOPLEFT", -7, 0)
-    Trinket:Size(FrameHeight)
-	Trinket.Backdrop.Shadow:Kill()
 
     -- CastBar
 	if (C.UnitFrames.CastBar) then
 		local CastBar = self.Castbar
 
-        CastBar:ClearAllPoints()
-		CastBar:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -7)
-        CastBar:Width(FrameWidth)
-        CastBar:Height(20)
-		CastBar:SetBackdrop(nil)
-        CastBar.Shadow:Kill()
-        CastBar:CreateBackdrop()
+        if (C.UnitFrames.UnlinkArenaCastBar) then
+            CastBar:ClearAllPoints()
+            CastBar:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -7)
+            CastBar:SetWidth(FrameWidth)
+            CastBar:SetHeight(20)
 
-		CastBar.Time:ClearAllPoints()
-		CastBar.Time:Point("RIGHT", CastBar, "RIGHT", -5, 1)
-		CastBar.Time:SetJustifyH("RIGHT")
+            CastBar.Time:ClearAllPoints()
+            CastBar.Time:SetPoint("RIGHT", CastBar, "RIGHT", -5, 1)
+            CastBar.Time:SetJustifyH("RIGHT")
 
-		CastBar.Text:ClearAllPoints()
-		CastBar.Text:Point("LEFT", CastBar, "LEFT", 5, 1)
-        CastBar.Text:SetJustifyH("LEFT")
-        CastBar.Text:Width(CastBar:GetWidth())
+            CastBar.Text:ClearAllPoints()
+            CastBar.Text:SetPoint("LEFT", CastBar, "LEFT", 5, 1)
+            CastBar.Text:SetJustifyH("LEFT")
+            CastBar.Text:SetWidth(CastBar:GetWidth())
 
-		CastBar.Button:ClearAllPoints()
-		CastBar.Button:Size(CastBar:GetHeight())
-		CastBar.Button:SetPoint("TOPLEFT", CastBar, "TOPRIGHT", 7, 0)
-		CastBar.Button:SetBackdrop(nil)
-        CastBar.Button.Shadow:Kill()
-        CastBar.Button:CreateBackdrop()
+            CastBar.Button:ClearAllPoints()
+            CastBar.Button:SetSize(CastBar:GetHeight())
+            CastBar.Button:SetPoint("TOPLEFT", CastBar, "TOPRIGHT", 7, 0)
+        end
 	end
-
-	-- Raid Icon
-    RaidIcon:ClearAllPoints()
-    RaidIcon:SetPoint("CENTER", self, "TOP", 0, 3)
-    RaidIcon:Size(16, 16)
 end
-hooksecurefunc(UnitFrames, "Arena", Arena)

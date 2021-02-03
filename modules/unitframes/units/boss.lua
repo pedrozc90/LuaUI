@@ -1,47 +1,54 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
+local ceil = math.ceil
 
 ----------------------------------------------------------------
 -- Boss
 ----------------------------------------------------------------
-local function Boss(self)
+local baseBoss = UnitFrames.Boss
+
+function UnitFrames:Boss()
+
+    -- first, we call the base function
+    baseBoss(self)
+
+    -- second, we edit it
     local Health = self.Health
 	local Power = self.Power
 	local Name = self.Name
 	local AltPowerBar = self.AlternativePower
     local RaidIcon = self.RaidTargetIndicator
-    
-    local FrameWidth, FrameHeight = unpack(C["Units"].Boss)
-    local HealthTexture = T.GetTexture(C["Textures"].UFHealthTexture)
-	local PowerTexture = T.GetTexture(C["Textures"].UFPowerTexture)
-	local CastTexture = T.GetTexture(C["Textures"].UFCastTexture)
 
-	self:SetBackdrop(nil)
-	self.Shadow:Kill()
-	
+    local FrameWidth, FrameHeight = unpack(C.Units.Boss)
+    local PowerHeight = 3
+
+    local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)
+	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
+	local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
+
 	-- Health
     Health:ClearAllPoints()
-    Health:Point("TOPLEFT", self, "TOPLEFT", 0, 0)
-    Health:Point("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:Height(FrameHeight - 6)
-    Health:SetFrameLevel(3)
-    Health:CreateBackdrop()
+    Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
+    Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
+    Health:SetHeight(FrameHeight - (PowerHeight + 1))
+    Health:SetStatusBarTexture(HealthTexture)
 
-    Health.Background:SetAllPoints()
-    Health.Background:SetColorTexture(.05, .05, .05)
+    Health.Background:SetAllPoints(Health)
+    Health.Background:SetTexture(HealthTexture)
+    Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
     Health.Value:ClearAllPoints()
     Health.Value:SetParent(Health)
-    Health.Value:Point("RIGHT", Health, "RIGHT", -5, 1)
+    Health.Value:SetPoint("RIGHT", Health, "RIGHT", -5, 0)
     Health.Value:SetJustifyH("LEFT")
-    
+
     Health.frequentUpdate = true
     if (C.Lua.UniColor) then
         Health.colorDisconnected = false
         Health.colorClass = false
         Health.colorReaction = false
-        Health:SetStatusBarColor(unpack(C.General.BorderColor))
-        Health.Background:SetVertexColor(unpack(C.General.BackdropColor))
+        Health:SetStatusBarColor(unpack(C.General.BackdropColor))
+        Health.Background:SetVertexColor(unpack(C.General.BorderColor))
     else
         Health.colorDisconnected = true
         Health.colorClass = true
@@ -50,19 +57,19 @@ local function Boss(self)
 
 	-- Power
     Power:ClearAllPoints()
-    Power:Point("TOPLEFT", Health, "BOTTOMLEFT", 0, -3)
-    Power:Point("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -3)
-    Power:Height(3)
-    Power:SetFrameLevel(Health:GetFrameLevel())
-    Power:CreateBackdrop()
+    Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
+    Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
+    Power:SetHeight(PowerHeight)
+    Power:SetStatusBarTexture(PowerTexture)
 
-    Power.Background:SetAllPoints()
-    Power.Background:SetColorTexture(.05, .05, .05)
+    Power.Background:SetAllPoints(Power)
+    Power.Background:SetTexture(PowerTexture)
+    Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
-    Power.Value:ClearAllPoints()
-    Power.Value:SetParent(Health)
-    Power.Value:Point("LEFT", Health, "LEFT", 5, 1)
-    Power.Value:SetJustifyH("LEFT")
+    -- Power.Value:ClearAllPoints()
+    -- Power.Value:SetParent(Health)
+    -- Power.Value:SetPoint("LEFT", Health, "LEFT", 5, 1)
+    -- Power.Value:SetJustifyH("LEFT")
 
     Power.frequentUpdates = true
     Power.colorDisconnected = true
@@ -78,88 +85,95 @@ local function Boss(self)
     -- Name
 	Name:ClearAllPoints()
     Name:SetParent(Health)
-	Name:Point("CENTER", Health, "CENTER", 0, 1)
+	Name:SetPoint("CENTER", Health, "CENTER", 0, 1)
     Name:SetJustifyH("CENTER")
 
-    self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameLong]")
+    self:Tag(Name, "[Tukui:Classification][Tukui:DiffColor][level] [Tukui:GetNameColor][Tukui:NameMedium]")
+
+    -- Raid Icon
+    RaidIcon:ClearAllPoints()
+    RaidIcon:SetPoint("CENTER", self, "TOP", 0, 3)
+    RaidIcon:SetSize(16, 16)
 
     -- Auras
 	if (C.UnitFrames.BossAuras) then
         local Buffs = self.Buffs
         local Debuffs = self.Debuffs
-        
+
+        local AuraSize = FrameHeight
+        local AuraSpacing = 1
+        local AuraPerRow = 3
+        local AuraWidth = (AuraSize * AuraPerRow) + (AuraSpacing * (AuraPerRow + 1))
+
 		Buffs:ClearAllPoints()
-		Buffs:Point("TOPRIGHT", self, "TOPLEFT", -7, 0)
-		Buffs.size = FrameHeight
-		Buffs.num = 3
-		Buffs.spacing = 7
+        Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -3, 0)
+        Buffs:SetWidth(AuraWidth)
+        Buffs:SetHeight(AuraSize)
+
+		Buffs.size = AuraSize
+        Buffs.spacing = AuraSpacing
+        Buffs.num = 3
+        Buffs.numRow = ceil(Buffs.num / AuraPerRow)
 		Buffs.initialAnchor = "RIGHT"
         Buffs["growth-x"] = "LEFT"
-        Buffs:Width(Buffs.num * Buffs.size + (Buffs.num - 1) * Buffs.spacing)
-        Buffs:Height(Buffs.size)
+        Buffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
 
 		Debuffs:ClearAllPoints()
-		Debuffs:Point("TOPLEFT", self, "TOPRIGHT", 7, 0)
-		Debuffs.size = Buffs.size
-		Debuffs.num = 5
-		Debuffs.spacing = 7
+        Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 3, 0)
+        Debuffs:SetWidth(AuraWidth)
+        Debuffs:SetHeight(AuraSize)
+
+		Debuffs.size = AuraSize
+        Debuffs.spacing = AuraSpacing
+        Debuffs.num = 5
+		Debuffs.numRow = ceil(Debuffs.num / AuraPerRow)
 		Debuffs.initialAnchor = "LEFT"
         Debuffs["growth-x"] = "RIGHT"
-        Debuffs.onlyShowPlayer = true
-        Debuffs:Width(Debuffs.num * Debuffs.size + (Debuffs.num - 1) * Debuffs.spacing)
-        Debuffs:Height(Debuffs.size)
+        Debuffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
 	end
 
     -- CastBar
 	if (C.UnitFrames.CastBar) then
 		local CastBar = self.Castbar
 
-        CastBar:ClearAllPoints()
-		CastBar:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -7)
-        CastBar:Width(FrameWidth)
-        CastBar:Height(20)
-		CastBar:SetBackdrop(nil)
-        CastBar.Shadow:Kill()
-        CastBar:CreateBackdrop()
+        if (C.UnitFrames.UnlinkBossCastBar) then
+            CastBar:ClearAllPoints()
+            CastBar:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -7)
+            CastBar:SetWidth(FrameWidth)
+            CastBar:SetHeight(20)
+            CastBar:CreateBackdrop()
 
-		CastBar.Time:ClearAllPoints()
-		CastBar.Time:Point("RIGHT", CastBar, "RIGHT", -5, 1)
-		CastBar.Time:SetJustifyH("RIGHT")
+            -- CastBar.Time:ClearAllPoints()
+            -- CastBar.Time:SetPoint("RIGHT", CastBar, "RIGHT", -5, 1)
+            -- CastBar.Time:SetJustifyH("RIGHT")
 
-		CastBar.Text:ClearAllPoints()
-		CastBar.Text:Point("LEFT", CastBar, "LEFT", 5, 1)
-        CastBar.Text:SetJustifyH("LEFT")
-        CastBar.Text:Width(CastBar:GetWidth())
+            CastBar.Text:ClearAllPoints()
+            CastBar.Text:SetPoint("LEFT", CastBar, "LEFT", 5, 1)
+            CastBar.Text:SetJustifyH("LEFT")
+            CastBar.Text:SetWidth(CastBar:GetWidth())
 
-		CastBar.Button:ClearAllPoints()
-		CastBar.Button:Size(CastBar:GetHeight())
-		CastBar.Button:SetPoint("TOPLEFT", CastBar, "TOPRIGHT", 7, 0)
-		CastBar.Button:SetBackdrop(nil)
-        CastBar.Button.Shadow:Kill()
-        CastBar.Button:CreateBackdrop()
-	end
+            CastBar.Button:ClearAllPoints()
+            CastBar.Button:SetSize(CastBar:GetHeight(), CastBar:GetHeight())
+            CastBar.Button:SetPoint("TOPLEFT", CastBar, "TOPRIGHT", 7, 0)
+        end
+    end
 
-    -- Alternative Power Bar
-	AltPowerBar:ClearAllPoints()
-    AltPowerBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 7)
-    AltPowerBar:Width(FrameWidth)
-    AltPowerBar:Height(5)
-	
-	AltPowerBar:SetBackdrop(nil)
-	AltPowerBar:SetBackdropColor(.0, .0, .0, .0)
-	AltPowerBar:SetBackdropBorderColor(.0, .0, .0, .0)
-    AltPowerBar.Shadow:Kill()
-    AltPowerBar:CreateBackdrop()
+    -- Health Prediction
+	if (C.UnitFrames.HealBar) then
+        local myBar = self.HealthPrediction.myBar
+        local otherBar = self.HealthPrediction.otherBar
+        local absorbBar = self.HealthPrediction.absorbBar
 
-	if C.UnitFrames.AltPowerText then
-		AltPowerBar.Value:ClearAllPoints()
-        AltPowerBar.Value:Point("CENTER", AltPowerBar, "CENTER", 0, 1)
-        AltPowerBar.Value:SetJustifyH("CENTER")
-	end
+        myBar:SetWidth(FrameWidth)
+        myBar:SetHeight(Health:GetHeight())
+		myBar:SetStatusBarTexture(HealthTexture)
 
-	-- Raid Icon
-    RaidIcon:ClearAllPoints()
-    RaidIcon:SetPoint("CENTER", self, "TOP", 0, 3)
-    RaidIcon:Size(16, 16)
+        otherBar:SetWidth(FrameWidth)
+        otherBar:SetHeight(Health:GetHeight())
+		otherBar:SetStatusBarTexture(HealthTexture)
+
+        absorbBar:SetWidth(FrameWidth)
+        absorbBar:SetHeight(Health:GetHeight())
+		absorbBar:SetStatusBarTexture(HealthTexture)
+    end
 end
-hooksecurefunc(UnitFrames, "Boss", Boss)

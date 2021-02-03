@@ -2,6 +2,8 @@ local T, C, L = Tukui:unpack()
 local ActionBars = T.ActionBars
 local Panels = T.Panels
 
+if (not C.Lua.Enable) then return end
+
 ----------------------------------------------------------------
 -- ActionBars Buttons
 ----------------------------------------------------------------
@@ -44,8 +46,8 @@ local OnClick = function(self, button)
 
                 -- Move the button
                 self:ClearAllPoints()
-                self:Point("RIGHT", Anchor, "RIGHT", 0, 0)
-                self:Size(16, Anchor:GetHeight() / 3)
+                self:SetPoint("RIGHT", Anchor, "RIGHT", 0, 0)
+                self:SetSize(16, Anchor:GetHeight() / 3)
                 Text:SetText("<<")
 
                 -- Set value
@@ -55,17 +57,17 @@ local OnClick = function(self, button)
             -- Visibility
 			UnregisterStateDriver(Bar, "visibility")
             Bar:Hide()
-            
+
             -- Move the button
             self:ClearAllPoints()
-            
+
             if (Num == 5) then
-                self:Point("TOP", Anchor, "BOTTOM", 0, -Offset)
-                self:Size(Anchor:GetWidth(), 16)
+                self:SetPoint("TOP", Anchor, "BOTTOM", 0, -Offset)
+                self:SetSize(Anchor:GetWidth(), 16)
                 Text:SetText("<")
             elseif (Num == 6) then
-                self:Point("LEFT", Anchor, "LEFT", 0, 0)
-                self:Size(16, Anchor:GetHeight() / 3)
+                self:SetPoint("LEFT", Anchor, "LEFT", 0, 0)
+                self:SetSize(16, Anchor:GetHeight() / 3)
                 Text:SetText(">")
             end
 
@@ -82,17 +84,17 @@ local OnClick = function(self, button)
             RegisterStateDriver(Anchor, "visibility", "[vehicleui][petbattle][overridebar] hide; show")
             Anchor:Show()
         end
-        
+
         -- Move the button
         self:ClearAllPoints()
-        
+
         if (Num == 5) then
-            self:Point("TOP", Anchor, "BOTTOM", 0, -Offset)
-            self:Size(Anchor:GetWidth(), 16)
+            self:SetPoint("TOP", Anchor, "BOTTOM", 0, -Offset)
+            self:SetSize(Anchor:GetWidth(), 16)
             Text:SetText(">")
         elseif (Num == 6) then
-            self:Point("TOP", Anchor, "BOTTOM", 0, -Offset)
-            self:Size(Anchor:GetWidth(), 16)
+            self:SetPoint("TOP", Anchor, "BOTTOM", 0, -Offset)
+            self:SetSize(Anchor:GetWidth(), 16)
             Text:SetText("<")
         end
 
@@ -123,7 +125,7 @@ local function CreateToggleButtons()
 		Button:CreateBackdrop("Transparent")
 		Button:RegisterForClicks("AnyUp")
         Button:SetAlpha(0)
-        
+
         Button.Num = i
         Button.Bar = Bar
 
@@ -132,22 +134,22 @@ local function CreateToggleButtons()
 		Button:SetScript("OnLeave", OnLeave)
 
         Button.Text = Button:CreateFontString(nil, "OVERLAY")
-        Button.Text:Point("CENTER", Button, "CENTER", 1, 1)
+        Button.Text:SetPoint("CENTER", Button, "CENTER", 1, 1)
 		Button.Text:SetFont(Font, FontSize, FontStyle)
-        
+
         local Offset = 7
 
         if (i == 5) then
             Button.Anchor = Panels.ActionBar4
 
-            Button:Point("TOP", Button.Anchor, "BOTTOM", 0, -Offset)
-            Button:Size(Bar:GetWidth(), 16)
+            Button:SetPoint("TOP", Button.Anchor, "BOTTOM", 0, -Offset)
+            Button:SetSize(Bar:GetWidth(), 16)
             Button.Text:SetText(">")
         elseif (i == 6) then
             Button.Anchor = Panels.ActionBar6
 
-            Button:Point("TOP", Bar, "BOTTOM", 0, -Offset)
-            Button:Size(Bar:GetWidth(), 16)
+            Button:SetPoint("TOP", Bar, "BOTTOM", 0, -Offset)
+            Button:SetSize(Bar:GetWidth(), 16)
             Button.Text:SetText("<")
         end
 
@@ -156,7 +158,7 @@ local function CreateToggleButtons()
         Panels["ActionBarToggleButton" .. i] = Button
     end
 end
-hooksecurefunc(ActionBars, "CreateToggleButtons", CreateToggleButtons)
+-- hooksecurefunc(ActionBars, "CreateToggleButtons", CreateToggleButtons)
 
 -- check character saved-variables
 local function LoadVariables()
@@ -169,7 +171,7 @@ local function LoadVariables()
     -- hide actionbars
     for i = 5, 6 do
         local ToggleButton = BarButtons[i]
-        
+
         if (Data["HideBar" .. i]) then
             OnClick(ToggleButton)
         end

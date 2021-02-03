@@ -1,47 +1,54 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
+local ceil = math.ceil
 
 ----------------------------------------------------------------
 -- FocusTarget
 ----------------------------------------------------------------
-local function FocusTarget(self)
+local baseFocusTarget = UnitFrames.FocusTarget
+
+function UnitFrames:FocusTarget()
+
+    -- first, we call the base function
+    baseFocusTarget(self)
+
+    -- second, we edit it
     local Health = self.Health
     local Power = self.Power
     local Name = self.Name
     local RaidIcon = self.RaidTargetIndicator
-    
-    local FrameWidth, FrameHeight = unpack(C.Units.FocusTarget)
-    local HealthTexture = T.GetTexture(C["Textures"].UFHealthTexture)
-	local PowerTexture = T.GetTexture(C["Textures"].UFPowerTexture)
-    local CastTexture = T.GetTexture(C["Textures"].UFCastTexture)
 
-    self:SetBackdrop(nil)
-    self.Shadow:Kill()
+    local FrameWidth, FrameHeight = unpack(C.Units.FocusTarget)
+    local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)
+	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
+    local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
+
+    self.Backdrop:Kill()
 
     -- Health
     Health:ClearAllPoints()
-    Health:Point("TOPLEFT", self, "TOPLEFT", 0, 0)
-    Health:Point("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:Height(FrameHeight - 6)
-    Health:SetFrameLevel(3)
+    Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
+    Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
+    Health:SetHeight(FrameHeight - 6)
     Health:CreateBackdrop()
+    Health.Backdrop:SetOutside()
 
     Health.Background:SetAllPoints()
-    Health.Background:SetColorTexture(.05, .05, .05)
+    Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
     Health.Value:ClearAllPoints()
     Health.Value:SetParent(Health)
-    Health.Value:Point("RIGHT", Health, "RIGHT", -5, 1)
+    Health.Value:SetPoint("RIGHT", Health, "RIGHT", -5, 0)
     Health.Value:SetJustifyH("LEFT")
-    
+
     Health.frequentUpdate = true
     if (C.Lua.UniColor) then
         Health.colorTapping = false
         Health.colorDisconnected = false
         Health.colorClass = false
         Health.colorReaction = false
-        Health:SetStatusBarColor(unpack(C.General.BorderColor))
-        Health.Background:SetVertexColor(unpack(C.General.BackdropColor))
+        Health:SetStatusBarColor(unpack(C.General.BackdropColor))
+        Health.Background:SetVertexColor(unpack(C.General.BackgroundColor))
     else
         Health.colorTapping = true
         Health.colorDisconnected = true
@@ -51,19 +58,19 @@ local function FocusTarget(self)
 
     -- Power
     Power:ClearAllPoints()
-    Power:Point("TOPLEFT", Health, "BOTTOMLEFT", 0, -3)
-    Power:Point("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -3)
-    Power:Height(3)
-    Power:SetFrameLevel(Health:GetFrameLevel())
+    Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
+    Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
+    Power:SetHeight(3)
     Power:CreateBackdrop()
+    Power.Backdrop:SetOutside()
 
     Power.Background:SetAllPoints()
-    Power.Background:SetColorTexture(.05, .05, .05)
+    Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
-    Power.Value:ClearAllPoints()
-    Power.Value:SetParent(Health)
-    Power.Value:Point("LEFT", Health, "LEFT", 5, 1)
-    Power.Value:SetJustifyH("LEFT")
+    -- Power.Value:ClearAllPoints()
+    -- Power.Value:SetParent(Health)
+    -- Power.Value:SetPoint("LEFT", Health, "LEFT", 5, 1)
+    -- Power.Value:SetJustifyH("LEFT")
 
     Power.frequentUpdates = true
     Power.colorDisconnected = true
@@ -79,68 +86,97 @@ local function FocusTarget(self)
     -- Name
     Name:ClearAllPoints()
     Name:SetParent(Health)
-	Name:Point("CENTER", Health, "CENTER", 0, 1)
-    Name:SetJustifyH("CENTER")
-    
-    self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameLong] [Tukui:Classification][Tukui:DiffColor][level]")
+	Name:SetPoint("LEFT", Health, "LEFT", 5, 1)
+    Name:SetJustifyH("LEFT")
+
+    -- self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameLong] [Tukui:Classification][Tukui:DiffColor][level]")
+
+    -- Raid Icon
+    RaidIcon:ClearAllPoints()
+    RaidIcon:SetPoint("CENTER", self, "TOP", 0, 3)
+    RaidIcon:SetSize(16, 16)
 
     if (C.UnitFrames.FocusAuras) then
         local Buffs = self.Buffs
         local Debuffs = self.Debuffs
-        
+
 		Buffs:ClearAllPoints()
-		Buffs:Point("TOPRIGHT", self, "TOPLEFT", -7, 0)
+		Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -7, 0)
 		Buffs.size = FrameHeight
 		Buffs.num = 3
 		Buffs.spacing = 7
 		Buffs.initialAnchor = "RIGHT"
         Buffs["growth-x"] = "LEFT"
-        
-        Buffs:Width(Buffs.num * Buffs.size + (Buffs.num - 1) * Buffs.spacing)
-        Buffs:Height(Buffs.size)
+
+        Buffs:SetWidth(Buffs.num * Buffs.size + (Buffs.num - 1) * Buffs.spacing)
+        Buffs:SetHeight(Buffs.size)
 
 		Debuffs:ClearAllPoints()
-		Debuffs:Point("TOPLEFT", self, "TOPRIGHT", 7, 0)
+		Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 7, 0)
 		Debuffs.size = Buffs.size
 		Debuffs.num = 5
 		Debuffs.spacing = Buffs.spacing
 		Debuffs.initialAnchor = "LEFT"
 		Debuffs["growth-x"] = "RIGHT"
-        Debuffs:Width(Debuffs.num * Debuffs.size + (Debuffs.num - 1) * Debuffs.spacing)
-        Debuffs:Height(Debuffs.size)
+        Debuffs:SetWidth(Debuffs.num * Debuffs.size + (Debuffs.num - 1) * Debuffs.spacing)
+        Debuffs:SetHeight(Debuffs.size)
 	end
 
-	if (C.UnitFrames.CastBar) then
-		local CastBar = self.Castbar
+	if (C.UnitFrames.FocusAuras) then
+		local Buffs = self.Buffs
+        local Debuffs = self.Debuffs
+        
+        local AuraSize = FrameHeight
+        local AuraSpacing = 1
+        local AuraPerRow = 3
+        local AuraWidth = (AuraSize * AuraPerRow) + (AuraSpacing * (AuraPerRow + 1))
 
-        CastBar:ClearAllPoints()
-		CastBar:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -7)
-        CastBar:Width(FrameWidth)
-        CastBar:Height(20)
-		CastBar:SetBackdrop(nil)
-        CastBar.Shadow:Kill()
-        CastBar:CreateBackdrop()
+		Buffs:ClearAllPoints()
+		Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -2, 1)
+		Buffs:SetHeight(AuraSize)
+        Buffs:SetWidth(AuraWidth)
+        
+		Buffs.size = AuraSize
+        Buffs.spacing = AuraSpacing
+        Buffs.num = 3
+        Buffs.numRow = ceil(Buffs.num / AuraPerRow)
+		Buffs.initialAnchor = "TOPRIGHT"
+		Buffs["growth-x"] = "LEFT"
+        Buffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
+        -- Buffs.PostCreateIcon = UnitFrames.PostCreateAura
+		-- Buffs.PostUpdateIcon = UnitFrames.PostUpdateAura
 
-		CastBar.Time:ClearAllPoints()
-		CastBar.Time:Point("RIGHT", CastBar, "RIGHT", -5, 1)
-		CastBar.Time:SetJustifyH("RIGHT")
-
-		CastBar.Text:ClearAllPoints()
-		CastBar.Text:Point("LEFT", CastBar, "LEFT", 5, 1)
-        CastBar.Text:SetJustifyH("LEFT")
-        CastBar.Text:Width(CastBar:GetWidth())
-
-		CastBar.Button:ClearAllPoints()
-		CastBar.Button:Size(CastBar:GetHeight())
-		CastBar.Button:SetPoint("TOPLEFT", CastBar, "TOPRIGHT", 7, 0)
-		CastBar.Button:SetBackdrop(nil)
-        CastBar.Button.Shadow:Kill()
-        CastBar.Button:CreateBackdrop()
+		Debuffs:ClearAllPoints()
+        Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 2, 1)
+        Debuffs:SetHeight(AuraSize)
+		Debuffs:SetWidth(AuraWidth)
+        
+		Debuffs.size = AuraSize
+        Debuffs.spacing = AuraSpacing
+        Debuffs.num = 4
+        Debuffs.numRow = ceil(Debuffs.num / AuraPerRow)
+		Debuffs.initialAnchor = "TOPLEFT"
+		Debuffs["growth-x"] = "RIGHT"
+        Debuffs.onlyShowPlayer = C.UnitFrames.OnlySelfDebuffs
+        -- Debuffs.PostCreateIcon = UnitFrames.PostCreateAura
+        -- Debuffs.PostUpdateIcon = UnitFrames.PostUpdateAura
 	end
 
-    -- Raid Icon
-    RaidIcon:ClearAllPoints()
-    RaidIcon:SetPoint("CENTER", self, "TOP", 0, 3)
-    RaidIcon:Size(16, 16)
+	if (C.UnitFrames.HealComm) then
+		local myBar = self.HealthPrediction.myBar
+		local otherBar = self.HealthPrediction.otherBar
+        local absorbBar = self.HealthPrediction.absorbBar
+
+		myBar:SetWidth(FrameWidth)
+        myBar:SetHeight(Health:GetHeight())
+		myBar:SetStatusBarTexture(HealthTexture)
+
+        otherBar:SetWidth(FrameWidth)
+        otherBar:SetHeight(Health:GetHeight())
+		otherBar:SetStatusBarTexture(HealthTexture)
+
+        absorbBar:SetWidth(FrameWidth)
+        absorbBar:SetHeight(Health:GetHeight())
+		absorbBar:SetStatusBarTexture(HealthTexture)
+	end
 end
-hooksecurefunc(UnitFrames, "FocusTarget", FocusTarget)

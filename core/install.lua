@@ -1,50 +1,40 @@
 local T, C, L = Tukui:unpack()
+local Install = T.Install
 
 ----------------------------------------------------------------
 -- Install
 ----------------------------------------------------------------
-local function GetUIScale()
-    local uiScale = 1
-    -- calculates uiScale based on screen size
-    if (C.Lua.uiScale == "auto") then
-        uiScale = 768 / tonumber(string.match(T.Resolution, "%d+x(%d+)"))
-        uiScale = T.RoundValue(uiScale, 5)
-    
-    -- uiScale set manually
-    elseif (type(C.Lua.uiScale) == "number") then
-        uiScale = C.Lua.uiScale
-    end
-    return uiScale
-end
 
--- configure default console variables.
-local function SetVariables()
-    if (not C.Lua.Setup) then return end
+local baseSetDefaultsCVars = Install.SetDefaultsCVars
+
+function Install:SetDefaultsCVars()
+    -- first, we call the base function
+    baseSetDefaultsCVars(self)
+
+    -- second, we edit it
 
     -- System
 
-        -- Advanced
-        if (C.Lua.uiScale) then
-            SetCVar("uiScale", GetUIScale())
-        end
-        
-        -- Sound
-        SetCVar("Sound_EnableAllSound", C.Lua.Mute and 0 or 1)      -- enables all sounds
-        SetCVar("Sound_MasterVolume", 0.25)                         -- set master volume (0.0 to 1.0)
-        SetCVar("Sound_EnableSFX", 1)                               -- enables sound effects
-        SetCVar("Sound_SFXVolume", 0.20)                            -- sound effects volume (default = 1.0)
-        SetCVar("Sound_EnableMusic", 1)                             -- enables music sounds
-        SetCVar("Sound_MusicVolume", 0.20)                          -- set music volume (default = 0.4)
-        SetCVar("Sound_EnableAmbience", 1)                          -- enables ambience sounds
-        SetCVar("Sound_AmbienceVolume", 0.35)                       -- ambience volume (default = 0.6)
-        SetCVar("Sound_EnableDialog", 1)                            -- enables dialog volume
-        SetCVar("Sound_DialogVolume", 0.50)                         -- dialog volume (default 1.0)
-        
-        -- Chat
-        SetCVar("ChatAmbienceVolume", 0.3)                          -- ambience volume (default = 0.3)
-        SetCVar("ChatMusicVolume", 0.3)                             -- music volume (default = 0.3)
-        SetCVar("ChatSoundVolume", 0.4)                             -- sound volume (default = 0.4)
-    
+    -- Advanced
+    -- SetCVar("uiScale", 0.64)
+
+    -- Sound
+    SetCVar("Sound_EnableAllSound", C.Lua.Mute and 0 or 1)      -- enables all sounds
+    SetCVar("Sound_MasterVolume", 0.25)                         -- set master volume (0.0 to 1.0)
+    SetCVar("Sound_EnableSFX", 1)                               -- enables sound effects
+    SetCVar("Sound_SFXVolume", 0.20)                            -- sound effects volume (default = 1.0)
+    SetCVar("Sound_EnableMusic", 1)                             -- enables music sounds
+    SetCVar("Sound_MusicVolume", 0.20)                          -- set music volume (default = 0.4)
+    SetCVar("Sound_EnableAmbience", 1)                          -- enables ambience sounds
+    SetCVar("Sound_AmbienceVolume", 0.35)                       -- ambience volume (default = 0.6)
+    SetCVar("Sound_EnableDialog", 1)                            -- enables dialog volume
+    SetCVar("Sound_DialogVolume", 0.50)                         -- dialog volume (default 1.0)
+
+    -- Chat
+    SetCVar("ChatAmbienceVolume", 0.3)                          -- ambience volume (default = 0.3)
+    SetCVar("ChatMusicVolume", 0.3)                             -- music volume (default = 0.3)
+    SetCVar("ChatSoundVolume", 0.4)                             -- sound volume (default = 0.4)
+
     -- General
     SetCVar("deselectOnClick", 1)                                   -- clear the target when clicking on terrain
     SetCVar("autoDismount", 1)                                      -- enables automatically dismount when needed
@@ -52,12 +42,12 @@ local function SetVariables()
 	SetCVar("showTutorials", 0)                                     -- enables tutorials.
     SetCVar("autoLootDefault", 1)                                   -- automatically loot items when the loot window opens
     SetCVar("doNotFlashLowHealthWarning", 1)                        -- do not flash your screen red when you are low on health.
-    
+
     -- Social
     SetCVar("chatBubbles", 1)                                       -- show in-game chat bubbles
 	SetCVar("chatBubblesParty", 0)                                  -- show in-game party chat bubbles
     SetCVar("guildMemberNotify", 0)                                 -- enables notification when guild members log on/off (default 1)
-    
+
     -- Names
 	SetCVar("UnitNameEnemyGuardianName", 1)                         -- default = 1
     SetCVar("UnitNameEnemyMinionName", 1)                           -- default = 1
@@ -79,7 +69,7 @@ local function SetVariables()
     SetCVar("UnitNameOwn", 0)                                       -- default = 0
     SetCVar("UnitNamePlayerGuild", 0)                               -- default = 1
     SetCVar("UnitNamePlayerPVPTitle", 0)                            -- default = 1
-    
+
     -- Nameplates
 	SetCVar("nameplateMotion", 0)
     SetCVar("nameplateShowAll", 1)
@@ -93,7 +83,7 @@ local function SetVariables()
     SetCVar("nameplateShowFriendlyGuardians", 0)
     SetCVar("nameplateShowFriendlyMinions", 0)
     SetCVar("nameplateShowFriendlyNPCs", 0)
-    SetCVar("nameplateShowFriendlyPets", 0)
+    SetCVar("nameplateShowFriendlyPets", 1)
     SetCVar("nameplateShowFriendlyTotems", 0)
     SetCVar("nameplateShowFriends", 0)
     SetCVar("nameplateShowOnlyNames", 0)
@@ -110,50 +100,50 @@ local function SetVariables()
         SetActionBarToggles(1, 1, 1, 1, 1)                          -- enable all extra action bars.
     end
 
-    LuaUIData[GetRealmName()][UnitName("player")].InstallDone = true
+    -- LuaUIData[GetRealmName()][UnitName("player")].InstallDone = true
 end
 
 -- initialize saved variables
-local f = CreateFrame("Frame")
-f:RegisterEvent("ADDON_LOADED")
-f:SetScript("OnEvent", function(self, event, addon)
-    if (addon ~= "LuaUI") then return end
+-- local f = CreateFrame("Frame")
+-- f:RegisterEvent("ADDON_LOADED")
+-- f:SetScript("OnEvent", function(self, event, addon)
+--     if (addon ~= "LuaUI") then return end
 
-    local Name = UnitName("player")
-    local Realm = GetRealmName()
+--     local Name = UnitName("player")
+--     local Realm = GetRealmName()
 
-    if (not LuaUIData) then
-        LuaUIData = {}
-    end
+--     if (not LuaUIData) then
+--         LuaUIData = {}
+--     end
 
-    if (not LuaUIData[Realm]) then
-        LuaUIData[Realm] = {}
-    end
+--     if (not LuaUIData[Realm]) then
+--         LuaUIData[Realm] = {}
+--     end
 
-    if (not LuaUIData[Realm][Name]) then
-        LuaUIData[Realm][Name] = {}
-    end
+--     if (not LuaUIData[Realm][Name]) then
+--         LuaUIData[Realm][Name] = {}
+--     end
 
-    if (LuaUIDataPerChar) then
-        LuaUIData[Realm][Name] = LuaUIDataPerChar
-        LuaUIDataPerChar = nil
-    end
+--     if (LuaUIDataPerChar) then
+--         LuaUIData[Realm][Name] = LuaUIDataPerChar
+--         LuaUIDataPerChar = nil
+--     end
 
-    local IsInstalled = LuaUIData[Realm][Name].InstallDone
+--     local IsInstalled = LuaUIData[Realm][Name].InstallDone
 
-    -- check if LuaUI was already installed
-    if (not IsInstalled) then
-        local Data = LuaUIData[Realm][Name]
+--     -- check if LuaUI was already installed
+--     if (not IsInstalled) then
+--         local Data = LuaUIData[Realm][Name]
 
-        -- define visible actionbars
-        Data["HideBar2"] = false
-        Data["HideBar3"] = false
-        Data["HideBar4"] = false
-        Data["HideBar5"] = true
-        Data["HideBar6"] = true
+--         -- define visible actionbars
+--         Data["HideBar2"] = false
+--         Data["HideBar3"] = false
+--         Data["HideBar4"] = false
+--         Data["HideBar5"] = true
+--         Data["HideBar6"] = true
 
-        SetVariables()
-    end
+--         SetVariables()
+--     end
 
-    self:UnregisterEvent("ADDON_LOADED")
-end)
+--     self:UnregisterEvent("ADDON_LOADED")
+-- end)

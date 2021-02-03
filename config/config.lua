@@ -6,17 +6,16 @@ local class = RAID_CLASS_COLORS[select(2, UnitClass("player"))]
 ----------------------------------------------------------------
 C["Lua"] = {
     -- Setup
-    -- ["Enable"] = true,                              -- enable LuaUI edit
+    ["Enable"] = false,                             -- enable LuaUI edit
     ["UniColor"] = true,                            -- enable unicolor theme
     ["ColorPower"] = true,                          -- enable power bar color based on power type.
 
     -- System
-    ["uiScale"] = "auto",                           -- set game uiScale ("auto" or a number, e.g: 0.71 fro 1920x1080).
     ["Setup"] = true,                               -- set console variables preferences.
     ["Mute"] = false,                               -- set system master sounds to 0.
 
     -- Media
-    ["Font"] = "Pixel",                             -- default font type.
+    ["Font"] = "Tukui",                             -- default font type.
     ["Texture"] = "Blank",                          -- default texture type.
 
     -- Layout
@@ -25,9 +24,9 @@ C["Lua"] = {
 
 -- UnitsFrames Size
 C["Units"] = {
-    ["Player"]          = { 254, 31 },              -- set player unitframe size.
-    ["Target"]          = { 254, 31 },              -- set target unitframe size.
-    ["TargetOfTarget"]  = { 181, 25 },              -- set targetoftarget unitframe size.
+    ["Player"]          = { 258, 25 },              -- set player unitframe size.
+    ["Target"]          = { 258, 25 },              -- set target unitframe size.
+    ["TargetOfTarget"]  = { 177, 25 },              -- set targetoftarget unitframe size.
     ["Pet"]             = { 181, 25 },              -- set pet unitframe size.
     ["Focus"]           = { 205, 25 },              -- set focus unitframe size.
     ["FocusTarget"]     = { 205, 25 },              -- set focustarget unitframe size.
@@ -56,21 +55,25 @@ C["Raid"].GroupRoles = true                         -- enables group role icon o
 -- Tooltips
 C["Tooltips"].SpellID = true                        -- enables spells, items, quest ids on tooltips.
 
+C["UnitFrames"].UnlinkPetCastBar = false            -- enable
+C["UnitFrames"].UnlinkBossCastBar = false           -- enable
+C["UnitFrames"].UnlinkArenaCastBar = false          -- enable
+
 ----------------------------------------------------------------
 -- Plugins Settings
 ----------------------------------------------------------------
 C["Dispels"] = {
-    ["Enable"] = true,                              -- enables dispel announce plugin.
+    ["Enable"] = false,                             -- enables dispel announce plugin.
     ["SpellLink"] = true,                           -- display spell link, else just the spell name.
 }
 
 C["Interrupts"] = {
-    ["Enable"] = true,                              -- enables interrupt annouce plugin.
+    ["Enable"] = false,                             -- enables interrupt annouce plugin.
     ["SpellLink"] = true,                           -- display spell link, else just the spell name.
 }
 
 C["ScreenShots"] = {
-    ["Enable"] = true,                              -- enables plugin.
+    ["Enable"] = false,                             -- enables plugin.
     ["Achievements"] = true,                        -- enables screenshots of earned achievements.
     ["BossKills"] = false,                          -- enables screenshots of successful boss encounters.
     ["ChallendeMode"] = false,                      -- enables screenshots of successful challenge modes.
@@ -79,17 +82,17 @@ C["ScreenShots"] = {
 }
 
 C["SpellAnnounce"] = {
-    ["Enable"] = true,                              -- enables spell announce plugin.
+    ["Enable"] = false,                             -- enables spell announce plugin.
     ["GroupChat"] = true,                           -- set announce chat channel to by group type and instance.
     ["SpellLink"] = true,                           -- enable spell link one messages.
 }
 
 C["PvPAlert"] = {
-    ["Enable"] = true,                              -- enables pvp alert plugin.
+    ["Enable"] = false,                             -- enables pvp alert plugin.
 }
 
 C["RaidCD"] = {
-    ["Enable"] = true,                              -- enables raid cooldowns plugin.
+    ["Enable"] = false,                             -- enables raid cooldowns plugin.
     ["MaxBars"] = 10,                               -- max number of visible bars.
     ["BarSize"] = { 230, 23 },                      -- set bar size
     ["BarSpacing"] = 7,                             -- set spacing between bars
@@ -102,26 +105,45 @@ C["RaidCD"] = {
 ----------------------------------------------------------------
 
 -- General
-C["General"].BackdropColor = { .05, .05, .05 }
-C["General"].BorderColor = { .125, .125, .125 }
+C["General"].BackgroundColor = { 0.05, 0.05, 0.05 }
+C["General"].BackdropColor = { 0.09, 0.09, 0.09 }
+C["General"].BorderColor = { 0, 0, 0 }
+C["General"].ClassColorBorder = false
+C["General"].UseGlobal = false
 C["General"].HideShadows = true
-C["General"].AFKSaver = false
-C["General"].Scaling.Value = "Pixel Perfection"
+C["General"].UIScale = 0.50     -- T.PerfectScale
+C["General"].MinimapScale = 100
+C["General"].WorldMapScale = 50
 C["General"].Themes.Value = "Tukui"
 
 -- Action Bars
 C["ActionBars"].Enable = true
-C["ActionBars"].AddNewSpells = true
+C["ActionBars"].BottomLeftBar = true
+C["ActionBars"].BottomRightBar = true
+C["ActionBars"].RightBar = false
+C["ActionBars"].LeftBar = false
 C["ActionBars"].HotKey = true
 C["ActionBars"].EquipBorder = true
 C["ActionBars"].Macro = true
 C["ActionBars"].ShapeShift = true
 C["ActionBars"].Pet = true
 C["ActionBars"].SwitchBarOnStance = true
-C["ActionBars"].NormalButtonSize = 27
-C["ActionBars"].PetButtonSize = 25
-C["ActionBars"].ButtonSpacing = 3
-C["ActionBars"].HideBackdrop = false
+C["ActionBars"].Bar1ButtonsPerRow = 12
+C["ActionBars"].Bar2ButtonsPerRow = 6
+C["ActionBars"].Bar3ButtonsPerRow = 12
+C["ActionBars"].Bar4ButtonsPerRow = 1
+C["ActionBars"].Bar5ButtonsPerRow = 1
+C["ActionBars"].Bar2NumButtons = 12
+C["ActionBars"].Bar3NumButtons = 12
+C["ActionBars"].Bar4NumButtons = 12
+C["ActionBars"].Bar5NumButtons = 12
+C["ActionBars"].BarPetButtonsPerRow = 10
+C["ActionBars"].NormalButtonSize = 30       -- 27
+C["ActionBars"].PetButtonSize = 32          -- 25
+C["ActionBars"].ButtonSpacing = 3           -- 3
+C["ActionBars"].ShowBackdrop = true
+C["ActionBars"].AutoAddNewSpell = true
+C["ActionBars"].ProcAnim = true
 C["ActionBars"].Font = C["Lua"].Font
 
 -- Auras
@@ -136,90 +158,128 @@ C["Auras"].Font = C["Lua"].Font
 
 -- Bags
 C["Bags"].Enable = true
-C["Bags"].ButtonSize = 27
-C["Bags"].Spacing = 3
+C["Bags"].IdentifyQuestItems = true
+C["Bags"].FlashNewItems = false
+C["Bags"].ItemLevel = true
+C["Bags"].ButtonSize = 32           -- 27
+C["Bags"].Spacing = 3               -- 3
 C["Bags"].ItemsPerRow = 12
-C["Bags"].PulseNewItem = true
-C["Bags"].Font = C["Lua"].Font
 
 -- Chat
 C["Chat"].Enable = true
+C["Chat"].Bubbles.Value = "Exclude Party"   -- All | Exclude Party | None
+C["Chat"].BubblesTextSize = 9
+C["Chat"].SkinBubbles = true
+C["Chat"].LeftWidth = 450
+C["Chat"].LeftHeight = 200
+C["Chat"].RightWidth = 450
+C["Chat"].RightHeight = 200
+C["Chat"].RightChatAlignRight = true
+C["Chat"].BackgroundAlpha = 70
 C["Chat"].WhisperSound = true
 C["Chat"].ShortChannelName = true
-C["Chat"].LinkColor = { .08, 1., .36 }
+C["Chat"].LinkColor = { 0.08, 1.00, 0.36 }
 C["Chat"].LinkBrackets = true
 C["Chat"].ScrollByX = 3
+C["Chat"].TextFading = true
+C["Chat"].TextFadingTimer = 60
 C["Chat"].TabFont = C["Lua"].Font
 C["Chat"].ChatFont = "Tukui"
+C["Chat"].BubblesNames = true
 
 -- Cooldowns
 C["Cooldowns"].Font = C["Lua"].Font
 
 -- DataTexts
+-- C["DataTexts"].LocalTime = true
+-- C["DataTexts"].Time24HrFormat = true
 C["DataTexts"].Battleground = true
-C["DataTexts"].LocalTime = true
-C["DataTexts"].Time24HrFormat = true
+C["DataTexts"].HideFriendsNotPlaying = true
 C["DataTexts"].NameColor = { class.r, class.g, class.b }
 C["DataTexts"].ValueColor = { 1, 1, 1 }
+C["DataTexts"].ClassColor = false
+C["DataTexts"].HighlightColor = { 1, 1, 0 }
 C["DataTexts"].Font = C["Lua"].Font
 
 -- Loot
 C["Loot"].Enable = true
-C["Loot"].StandardLoot = false
 C["Loot"].Font = C["Lua"].Font
 
--- Merchant
-C["Merchant"].AutoSellGrays = true
-C["Merchant"].AutoRepair = true
-C["Merchant"].UseGuildRepair = false
-
 -- Misc.
-C["Misc"].ThreatBarEnable = true
-C["Misc"].AltPowerBarEnable = true
+C["Misc"].MicroMenu = true
+C["Misc"].ItemLevel = true
+C["Misc"].ThreatBar = true
+C["Misc"].WorldMapEnable = true
+C["Misc"].FadeWorldMapAlpha = 100
 C["Misc"].ExperienceEnable = true
-C["Misc"].ReputationEnable = true
-C["Misc"].ErrorFilterEnable = true
-C["Misc"].AutoInviteEnable = false
-C["Misc"].TalkingHeadEnable = false
+C["Misc"].AutoSellJunk = true
+C["Misc"].AutoRepair = true
+C["Misc"].AFKSaver = false
+C["Misc"].TalkingHeadEnable = true
+C["Misc"].UIErrorSize = 16
+C["Misc"].UIErrorFont = "Tukui Outline"
+C["Misc"].MicroToggle.Value = "ALT-M"       -- None | M | SHIFT-M | CTRL-M | ALT-M
 
 -- Nameplates
 C["NamePlates"].Enable = true
-C["NamePlates"].Width = 153
-C["NamePlates"].Height = 12
-C["NamePlates"].CastHeight = 12
+C["NamePlates"].Width = 129                     -- 153
+C["NamePlates"].Height = 14                     -- 12
+C["NamePlates"].NameplateCastBar = true
 C["NamePlates"].Font = C["Lua"].Font
 C["NamePlates"].OnlySelfDebuffs = true
+C["NamePlates"].QuestIcon = true
+C["NamePlates"].ClassIcon = false
+C["NamePlates"].HighlightColor = {1, 1, 0}
+C["NamePlates"].HighlightSize = 10
+C["NamePlates"].ColorThreat = false
+C["NamePlates"].HealthTag.Value = "|cff549654[Tukui:CurrentHP] - [perhp]%|r"
 
 -- Party
 C["Party"].Enable = false
-C["Party"].HealBar = true
+C["Party"].ShowPets = false
 C["Party"].ShowPlayer = true
 C["Party"].ShowHealthText = true
+C["Party"].ShowManaText = false
 C["Party"].RangeAlpha = 0.3
 C["Party"].Font = C["Lua"].Font
 C["Party"].HealthFont = C["Lua"].Font
+C["Party"].HighlightColor = { 0, 1, 0 }
+C["Party"].HighlightSize = 10
+C["Party"].HealthTag.Value = "|cffFF0000[missinghp]|r"
 
 -- Raid
 C["Raid"].Enable = true
-C["Raid"].HealBar = true
-C["Raid"].AuraWatch = true
-C["Raid"].AuraWatchTimers = true
 C["Raid"].DebuffWatch = true
+C["Raid"].ShowPets = true
 C["Raid"].RangeAlpha = 0.3
-C["Raid"].ShowRessurection = true
-C["Raid"].ShowHealthText = true
-C["Raid"].ShowPets = false
 C["Raid"].VerticalHealth = false
 C["Raid"].MaxUnitPerColumn = 5
+C["Raid"].Raid40MaxUnitPerColumn = 10
 C["Raid"].Font = C["Lua"].Font
 C["Raid"].HealthFont = C["Lua"].Font
+C["Raid"].DesaturateNonPlayerBuffs = false
+C["Raid"].RaidBuffs.Value = "Self"
+C["Raid"].ClassRaidBuffs = true
+C["Raid"].WidthSize = 99
+C["Raid"].HeightSize = 69
+C["Raid"].Raid40WidthSize = 79
+C["Raid"].Raid40HeightSize = 55
+C["Raid"].Padding = 10
+C["Raid"].Padding40 = 10
+C["Raid"].HighlightColor = {0, 1, 0}
+C["Raid"].HighlightSize = 10
+C["Raid"].AuraTrack = true
+C["Raid"].AuraTrackIcons = true
+C["Raid"].AuraTrackSpellTextures = true
+C["Raid"].AuraTrackThickness = 5
 C["Raid"].GroupBy.Value = "GROUP"
+C["Raid"].HealthTag.Value = "|cffFF0000[missinghp]|r"
 
 -- Tooltips
 C["Tooltips"].Enable = true
-C["Tooltips"].HideOnUnitFrames = false
+C["Tooltips"].HideInCombat = false
+C["Tooltips"].AlwaysCompareItems = false
 C["Tooltips"].UnitHealthText = true
-C["Tooltips"].ShowSpec = true
 C["Tooltips"].MouseOver = false
 C["Tooltips"].HealthFont = C["Lua"].Font
 
@@ -239,6 +299,22 @@ C["Textures"].NPCastTexture = C["Lua"].Texture
 
 -- UnitFrames
 C["UnitFrames"].Enable = true
+C["UnitFrames"].TotemBar = T.MyClass == "SHAMAN" and true or false
+C["UnitFrames"].ClassBar = true
+C["UnitFrames"].HealComm = true
+C["UnitFrames"].PlayerAuraBars = false
+C["UnitFrames"].TargetAuraBars = false
+C["UnitFrames"].ScrollingCombatText = true
+C["UnitFrames"].ScrollingCombatTextIcon = true
+C["UnitFrames"].ScrollingCombatTextFontSize = 22
+C["UnitFrames"].ScrollingCombatTextRadius = 120
+C["UnitFrames"].ScrollingCombatTextDisplayTime = 1.5
+C["UnitFrames"].ScrollingCombatTextFont = C["Lua"].Font
+C["UnitFrames"].ScrollingCombatTextAnim.Value = "vertical"
+C["UnitFrames"].StatusBarBackgroundMultiplier = 25
+C["UnitFrames"].Portrait2D = false
+C["UnitFrames"].OOCNameLevel = true
+C["UnitFrames"].OOCPetNameLevel = false
 C["UnitFrames"].Portrait = false
 C["UnitFrames"].CastBar = true
 C["UnitFrames"].ComboBar = true
@@ -247,18 +323,38 @@ C["UnitFrames"].CastBarIcon = true
 C["UnitFrames"].CastBarLatency = true
 C["UnitFrames"].Smooth = true
 C["UnitFrames"].TargetEnemyHostileColor = true
-C["UnitFrames"].CombatLog = false
-C["UnitFrames"].HealBar = true
-C["UnitFrames"].TotemBar = true
-C["UnitFrames"].TargetAuras = true
+C["UnitFrames"].CombatLog = true
+C["UnitFrames"].PlayerBuffs = true
+C["UnitFrames"].PlayerDebuffs = true
+C["UnitFrames"].TargetBuffs = true
+C["UnitFrames"].TargetDebuffs = true
 C["UnitFrames"].FocusAuras = true
-C["UnitFrames"].FocusTargetAuras = true
-C["UnitFrames"].ArenaAuras = true
 C["UnitFrames"].BossAuras = true
+C["UnitFrames"].ArenaAuras = true
+C["UnitFrames"].TOTAuras = true
+C["UnitFrames"].PetAuras = true
+C["UnitFrames"].AurasBelow = false
 C["UnitFrames"].OnlySelfDebuffs = false
 C["UnitFrames"].OnlySelfBuffs = false
-C["UnitFrames"].Threat = false
-C["UnitFrames"].AltPowerText = true
-C["UnitFrames"].Arena = true
-C["UnitFrames"].Boss = true
 C["UnitFrames"].Font = C["Lua"].Font
+C["UnitFrames"].CastingColor = { 0.29, 0.77, 0.30 }
+C["UnitFrames"].ChannelingColor = { 0.29, 0.77, 0.30 }
+C["UnitFrames"].NotInterruptibleColor = { 0.85, 0.09, 0.09 }
+C["UnitFrames"].HealCommSelfColor = { 0.31, 0.45, 0.63, 0.40 }      -- { 0.29, 1.00, 0.30 }
+C["UnitFrames"].HealCommOtherColor = { 0.31, 0.45, 0.63, 0.40 }     -- { 1, 0.72, 0.30 }
+C["UnitFrames"].HealCommAbsorbColor = { 0.31, 0.45, 0.63, 0.40 }    -- { 207/255, 181/255, 59/255 }
+C["UnitFrames"].RaidIconSize = 24
+C["UnitFrames"].Boss = true
+C["UnitFrames"].Arena = true
+C["UnitFrames"].HighlightSize = 10
+C["UnitFrames"].HighlightColor = {0, 1, 0}
+C["UnitFrames"].RangeAlpha = 0.3
+C["UnitFrames"].Smoothing = true
+C["UnitFrames"].PlayerHealthTag.Value = "|cff549654[Tukui:CurrentHP]|r"
+C["UnitFrames"].TargetHealthTag.Value = "|cff549654[Tukui:CurrentHP]|r"
+C["UnitFrames"].FocusHealthTag.Value = "|cff549654[perhp]%|r"
+C["UnitFrames"].FocusTargetHealthTag.Value = "|cff549654[perhp]%|r"
+C["UnitFrames"].BossHealthTag.Value = "|cff549654[perhp]%|r"
+
+C["UnitFrames"].TargetBuffs = (not C["UnitFrames"].TargetAuraBars) -- or C["UnitFrames"].TargetBuffs
+C["UnitFrames"].TargetDebuffs = (not C["UnitFrames"].TargetAuraBars) -- or C["UnitFrames"].TargetDebuffs

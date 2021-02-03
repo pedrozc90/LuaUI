@@ -1,42 +1,65 @@
 local T, C, L = Tukui:unpack()
 local ActionBars = T.ActionBars
-local Panels = T.Panels
+local Movers = T.Movers
 local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS
 
 ----------------------------------------------------------------
 -- PetActionBar
 ----------------------------------------------------------------
-local function CreatePetBar()
-	local Bar = Panels.PetActionBar
+local baseCreatePetBar = ActionBars.CreatePetBar
+
+function ActionBars:CreatePetBar()
+
+	-- first, we call the base function
+    baseCreatePetBar(self)
+
+    -- second, we edit it
+	if (not C.ActionBars.Pet) then return end
+	
+	local PetBar = ActionBars.Bars.Pet
+	if (not PetBar) then return end
+
+	local ActionBar4 = ActionBars.Bars.Bar4
+	local ActionBar5 = ActionBars.Bars.Bar5
+
 	local PetSize = C.ActionBars.PetButtonSize
-    local Spacing = C.ActionBars.ButtonSpacing
-    
-	Bar:ClearAllPoints()
-    Bar:Point("RIGHT", Panels.ActionBar5, "LEFT", -7, 0)
-    Bar:SetWidth((PetSize * 1) + (Spacing * 2) - 2)
-	Bar:SetHeight((PetSize * 10) + (Spacing * 11) - 2)
-    Bar.Backdrop:StripTextures(true)
-    Bar.Backdrop = nil
-	Bar:CreateBackdrop("Transparent")
+	local ButtonSize = C.ActionBars.NormalButtonSize
+	local Spacing = C.ActionBars.ButtonSpacing
+	local PetActionBarFrame = PetActionBarFrame
+	-- local PetActionBar_UpdateCooldowns = PetActionBar_UpdateCooldowns
+	local ButtonsPerRow = C.ActionBars.BarPetButtonsPerRow
+	local NumRow = ceil(NUM_PET_ACTION_SLOTS / ButtonsPerRow)
+	
+	local Padding = (ButtonSize * 2) + (Spacing * 3) + 7
 
-	for i = 1, NUM_PET_ACTION_SLOTS do
-        local Button = _G["PetActionButton"..i]
-        
-		Button:ClearAllPoints()
-		Button:Size(PetSize)
-		Button:Show()
+	PetBar:ClearAllPoints()
+    PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -Padding, 7)
+    PetBar:SetWidth((PetSize * NumRow) + (Spacing * (NumRow + 1)))
+	PetBar:SetHeight((PetSize * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)))
 
-        if (i == 1) then
-            local Offset = Spacing - 1
-			Button:SetPoint("TOPLEFT", Bar, "TOPLEFT", Offset, -Offset)
-        else
-            local PreviousButton = _G["PetActionButton"..(i - 1)]
-			Button:SetPoint("TOP", PreviousButton, "BOTTOM", 0, -Spacing)
-		end
-
-		Bar["Button"..i] = Button
+	if (C.ActionBars.ShowBackdrop) then
+		PetBar:SetBackdropTransparent()
+		PetBar.Shadow:Kill()
 	end
 
-	RegisterStateDriver(Bar, "visibility", "[pet,nopetbattle,novehicleui,nooverridebar,nopossessbar,nobonusbar:5] show; hide")
+	local j = 1
+	for i = 1, NUM_PET_ACTION_SLOTS do
+		local Button = _G["PetActionButton" .. i]
+		local PreviousButton = _G["PetActionButton" .. (i-1)]
+		
+		-- Button:SetParent(Bar)
+		-- Button:ClearAllPoints()
+		-- Button:SetSize(PetSize, PetSize)
+		-- Button:SetNormalTexture("")
+		-- Button:Show()
+
+		if (i == 1) then
+			Button:SetPoint("TOPLEFT", PetBar, "TOPLEFT", Spacing, -Spacing)
+		elseif  ((i % ButtonsPerRow) == 1) then
+			Button:SetPoint("TOPLEFT", _G["PetActionButton" .. j], "TOPRIGHT", Spacing, 0)
+			j = j + ButtonsPerRow
+		else
+			Button:SetPoint("TOPLEFT", PreviousButton, "BOTTOMLEFT", 0, -Spacing)
+		end
+	end
 end
-hooksecurefunc(ActionBars, "CreatePetBar", CreatePetBar)

@@ -1,12 +1,20 @@
 local T, C, L = Tukui:unpack()
 local Auras = T.Auras
 local Minimap = T.Maps.Minimap
-local Panels = T.Panels
+
+-- if (not C.Lua.Enable) then return end
+local baseSkin = Auras.Skin
+local baseCreateHeaders = Auras.CreateHeaders
 
 ----------------------------------------------------------------
 -- Auras Timer Ajustments
 ----------------------------------------------------------------
-local function Skin(self)
+function Auras:Skin()
+
+    -- first, we call the base function
+    baseSkin(self)
+
+    -- second, we edit it
     local Duration = self.Duration
 	local Bar = self.Bar
 	local Holder = self.Holder
@@ -18,7 +26,7 @@ local function Skin(self)
 
 	Holder:ClearAllPoints()
     Holder:SetPoint("TOP", self, "BOTTOM", 0, -3)
-    Holder:Size(self:GetWidth(), 6)
+    Holder:SetSize(self:GetWidth(), 6)
 	Holder:SetTemplate("Transparent")
 	Holder.Shadow:Kill()
 
@@ -31,24 +39,27 @@ local function Skin(self)
 
     if (Duration) then
         Duration:ClearAllPoints()
-        Duration:SetPoint("BOTTOM", self, "BOTTOM", 2, -12)
+        Duration:SetPoint("BOTTOM", self, "BOTTOM", 2, -15)
     end
 end
-hooksecurefunc(Auras, "Skin", Skin)
 
 ----------------------------------------------------------------
 -- Anchoring Buffs/Debuffs next to the Minimap
 ----------------------------------------------------------------
-local function CreateHeaders()
-	
+function Auras:CreateHeaders()
+    
+    -- first, we call the base function
+    baseCreateHeaders(self)
+
+    -- second, we edit it
 	local Headers = Auras.Headers
     local Buffs = Headers[1]
     local Debuffs = Headers[2]
 
-    local xOffset, yOffset = 5, 2
+    local xOffset, yOffset = 3, 0
     local AuraSpacing = C.Auras.Spacing or 5
     local AuraXOffset = Buffs:GetHeight() + AuraSpacing
-    local AuraYOffset = (C.Auras.ClassicTimer) and 42 or 43
+    local AuraYOffset = (C.Auras.ClassicTimer) and 51 or 40
 
     if (Buffs) then
         Buffs:ClearAllPoints()
@@ -66,4 +77,3 @@ local function CreateHeaders()
         Debuffs:SetAttribute("xOffset", -AuraXOffset)
     end
 end
-hooksecurefunc(Auras, "CreateHeaders", CreateHeaders)

@@ -7,24 +7,22 @@ local Class = select(2, UnitClass("player"))
 ----------------------------------------------------------------
 if (Class ~= "PRIEST") then return end
 
-local function Player(self)
-	local Atonement = self.Atonement
-	local Shadow = self.Shadow
+local basePlayer = UnitFrames.Player
 
-	local PowerTexture = T.GetTexture(C["Textures"].UFPowerTexture)
-	
+function UnitFrames:Player()
+
+	-- first, we call the base function
+    basePlayer(self)
+
+    -- second, we edit it
+	local Atonement = self.Atonement
+
+	local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)
+
 	-- Atonement Bar
 	Atonement:ClearAllPoints()
-	Atonement:Point("BOTTOMLEFT", self, "TOPLEFT", 0, 7)
-	Atonement:Point("BOTTOMRIGHT", self, "TOPRIGHT", 0, 7)
-	Atonement:Height(3)
-	Atonement:SetStatusBarTexture(PowerTexture)
-	
-	-- create a border around atonemente bar
-	Atonement.Backdrop = nil
-	Atonement:CreateBackdrop("Transparent")
-
-	-- Remove Shadows
-	Shadow:Kill()
+	Atonement:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 3)
+	Atonement:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", 0, 3)
+	Atonement:SetHeight(3)
+	Atonement:SetStatusBarTexture(HealthTexture)
 end
-hooksecurefunc(UnitFrames, "Player", Player)

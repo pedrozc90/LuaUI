@@ -1,69 +1,45 @@
 local T, C, L = Tukui:unpack()
 local ObjectiveTracker = T.Miscellaneous.ObjectiveTracker
+local Movers = T.Movers
 
 ----------------------------------------------------------------
 -- Objective Tracker
 ----------------------------------------------------------------
--- make sure objective track is hidden after reload
-function ObjectiveTracker:LoadVariables()
-    if (not LuaUIData[T.MyRealm][T.MyName]) then
-        LuaUIData[T.MyRealm][T.MyName] = {}
-    end
+local baseSetDefaultPosition = ObjectiveTracker.SetDefaultPosition
+local baseUpdateProgressBar = ObjectiveTracker.UpdateProgressBar
 
-    local Data = LuaUIData[T.MyRealm][T.MyName]
+function ObjectiveTracker:SetDefaultPosition()
 
-    if (Data["HideObjectiveTracker"]) then
-        self:OnClick()
-    end
+    -- first, we call the base function
+    baseSetDefaultPosition(self)
+
+    -- second, we edit it
+    local Anchor1, Parent, Anchor2, X, Y = "TOPRIGHT", UIParent, "TOPRIGHT", -268, -240
+	local Data = TukuiData[T.MyRealm][T.MyName]
+
+	local ObjectiveFrameHolder = _G["TukuiObjectiveTracker"]
+	ObjectiveFrameHolder:SetSize(130, 22)
+	ObjectiveFrameHolder:SetPoint(Anchor1, Parent, Anchor2, X, Y)
+
+	ObjectiveTrackerFrame:ClearAllPoints()
+	ObjectiveTrackerFrame:SetPoint("TOP", ObjectiveFrameHolder, "TOP", 0, 0)
+    ObjectiveTrackerFrame:SetHeight(T.ScreenHeight - 520)
+	ObjectiveTrackerFrame.IsUserPlaced = function() return true end
+
+	Movers:RegisterFrame(ObjectiveFrameHolder, "Objectives Tracker")
+
+	if Data and Data.Move and Data.Move.TukuiObjectiveTracker then
+		ObjectiveFrameHolder:ClearAllPoints()
+		ObjectiveFrameHolder:SetPoint(unpack(Data.Move.TukuiObjectiveTracker))
+	end
 end
 
-local function OnClick(self)
-    local Data = LuaUIData[T.MyRealm][T.MyName]
+function ObjectiveTracker:UpdateProgressBar(_, line)
     
-    if (ObjectiveTrackerFrame:IsVisible()) then
-        Data["HideObjectiveTracker"] = false
-    else
-        Data["HideObjectiveTracker"] = true
-    end
-end
-hooksecurefunc(ObjectiveTracker, "OnClick", OnClick)
+    -- first, we call the base function
+    baseUpdateProgressBar(self)
 
-function ObjectiveTracker:CreateToggleButtons()
-    local Font, FontSize, FontStyle = C["Medias"].PixelFont, 14, "MONOCHROMEOUTLINE"
-
-    local Button = CreateFrame("Button", nil, self)
-    Button:SetPoint("TOPRIGHT", ObjectiveTrackerFrame,"TOPRIGHT", 29, -2)
-    Button:Size(18)
-    Button:SetAlpha(0)
-    Button:CreateBackdrop("Transparent")
-	Button:RegisterForClicks("AnyUp")
-	Button:SetScript("OnClick", self.OnClick)
-	Button:SetScript("OnEnter", self.OnEnter)
-	Button:SetScript("OnLeave", self.OnLeave)
-
-	Button.Toggle = Button:CreateFontString(nil, "OVERLAY")
-    Button.Toggle:SetPoint("CENTER", Button, "CENTER", 2, 2)
-    Button.Toggle:Size(Button:GetSize())
-    Button.Toggle:SetFont(Font, FontSize, FontStyle)
-    Button.Toggle:SetText(">")
-    
-    self.Button = Button
-    self.Toggle = Button.Toggle
-end
-
-local function SetDefaultPosition()
-    local ObjectiveFrameHolder = TukuiObjectiveTracker
-    local Data = TukuiData[T.MyRealm][T.MyName]
-
-    ObjectiveFrameHolder:ClearAllPoints()
-    ObjectiveFrameHolder:Point("TOPRIGHT", UIParent, "TOPRIGHT", -228, -190)
-
-    ObjectiveTrackerFrame:ClearAllPoints()
-    ObjectiveTrackerFrame:SetPoint("TOP", ObjectiveFrameHolder)
-end
-hooksecurefunc(ObjectiveTracker, "SetDefaultPosition", SetDefaultPosition)
-
-local function UpdateProgressBar(self, _, line)
+    -- second, we edit it
     local Progress = line.ProgressBar
     local Bar = Progress.Bar
 
@@ -71,29 +47,22 @@ local function UpdateProgressBar(self, _, line)
         local Label = Bar.Label
         local Icon = Bar.Icon
 
-        local Font, FontSize, FontStyle = C["Medias"].Font, 12, nil
-
         if (Bar.IsSkinned) then
-            Bar:Height(16)
+            Bar:SetHeight(16)
 
             if (Label) then
                 Label:ClearAllPoints()
                 Label:SetPoint("CENTER", Bar, "CENTER", 0, -1)
-                Label:SetFont(Font, FontSize, FontStyle)
+                Label:SetFont(C.Medias.Font, 12)
             end
 
             if (Icon) then
                 Icon:ClearAllPoints()
-                Icon:Point("LEFT", Bar, "RIGHT", 7, 0)
-                Icon:Size(Bar:GetHeight())
+                Icon:SetPoint("LEFT", Bar, "RIGHT", 7, 0)
+                Icon:SetSize(Bar:GetHeight())
+                Icon:SetTexCoord(.08, .92, .08, .92)
                 Icon:SetTexCoord(unpack(T.IconCoord))
             end
         end
     end
 end
-hooksecurefunc(ObjectiveTracker, "UpdateProgressBar", UpdateProgressBar)
-
-local function Enable(self)
-    self:LoadVariables()
-end
-hooksecurefunc(ObjectiveTracker, "Enable", Enable)

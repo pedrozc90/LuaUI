@@ -1,143 +1,95 @@
 local T, C, L = Tukui:unpack()
 local ActionBars = T.ActionBars
-local Panels = T.Panels
+local DataTexts = T.DataTexts.Panels
 local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS
 
 ----------------------------------------------------------------
 -- Skin ActionBar Buttons
 ----------------------------------------------------------------
-local function SkinButton(self)
-    local Button = self
-    local Name = self:GetName()
+local baseSkinButton = ActionBars.SkinButton
+local baseSkinPetAndShiftButton = ActionBars.SkinPetAndShiftButton
+local baseMovePetBar = ActionBars.MovePetBar
+
+function ActionBars:SkinButton(Button)
+    
+    -- first, we call the base function
+    baseSkinButton(self, Button)
+
+    -- second, we edit it
+    local Name = Button:GetName()
+	local Action = Button.action
+	local KeybindTex = Button.QuickKeybindHighlightTexture
 	local Icon = _G[Name.."Icon"]
 	local Count = _G[Name.."Count"]
 	local Flash	 = _G[Name.."Flash"]
 	local HotKey = _G[Name.."HotKey"]
-	local Border  = _G[Name.."Border"]
+	local Border = _G[Name.."Border"]
 	local Btname = _G[Name.."Name"]
-	local Normal  = _G[Name.."NormalTexture"]
+	local Normal = _G[Name.."NormalTexture"]
 	local BtnBG = _G[Name.."FloatingBG"]
+	local Font = T.GetFont(C["ActionBars"].Font)
 
-    Button:SetTemplate("Transparent")
+    -- Button:SetTemplate("Transparent")
 
     -- Count
     if (Count) then
         Count:ClearAllPoints()
-        Count:Point("BOTTOMRIGHT", self, "BOTTOMRIGHT", 2, 2)
+        Count:SetPoint("BOTTOMRIGHT", Button, "BOTTOMRIGHT", 1, 1)
     end
 
     -- HotKey
     if (HotKey) then
-        HotKey.ClearAllPoints = ClearAllPoints
-        HotKey.SetPoint = SetPoint
-        
         HotKey:ClearAllPoints()
-        HotKey:Point("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-
-        HotKey.ClearAllPoints = function() end
-        HotKey.SetPoint = function() end
+        HotKey:SetPoint("TOPRIGHT", Button, "TOPRIGHT", -2, -2)
     end
 
-    if (Btname) then
+    if (Btname and C.ActionBars.Macro) then
         Btname:ClearAllPoints()
-        Btname:Point("BOTTOM", self, "BOTTOM", 2, 2)
+        Btname:SetPoint("BOTTOM", Button, "BOTTOM", 1, 1)
     end
 end
-hooksecurefunc(ActionBars, "SkinButton", SkinButton)
 
-----------------------------------------------------------------
--- Skinning Pet and Shift Buttons
-----------------------------------------------------------------
-local function SkinPetAndShiftButton(self, Normal, Button, Icon, Name, Pet)
-	local HotKey = _G[Button:GetName().."HotKey"]
-	local Flash = _G[Name.."Flash"]
+function ActionBars:SkinPetAndShiftButton(Normal, Button, Icon, Name, Pet)
     
+    -- first, we call the base function
+    baseSkinPetAndShiftButton(self, Normal, Button, Icon, Name, Pet)
+
+    -- second, we edit it
     local PetSize = C.ActionBars.PetButtonSize
+	local HotKey = _G[Button:GetName().."HotKey"]
+	local Cooldown = _G[Button:GetName().."Cooldown"]
+	local Flash = _G[Name.."Flash"]
+	local Font = T.GetFont(C["ActionBars"].Font)
 
-    Button:SetTemplate("Transparent")
-
-	if (HotKey) then
+    if (C.ActionBars.HotKey) then
 		HotKey:ClearAllPoints()
-		HotKey:Point("TOPRIGHT", Button, "TOPRIGHT", 0, 0)
+		HotKey:SetPoint("TOPRIGHT", Button, "TOPRIGHT", 0, 0)
 	end
 end
-hooksecurefunc(ActionBars, "SkinPetAndShiftButton", SkinPetAndShiftButton)
 
-----------------------------------------------------------------
--- PetActionBars Position
-----------------------------------------------------------------
 function ActionBars:MovePetBar()
-	local PetBar = Panels.PetActionBar
-    local ActionBar4 = Panels.ActionBar4
-    local ActionBar5 = Panels.ActionBar5
+    
+    -- first, we call the base function
+    baseMovePetBar(self)
 
+    -- second, we edit it
+    local PetBar = TukuiPetActionBar
+	local ActionBar5 = TukuiActionBar5
+	local ActionBar4 = TukuiActionBar4
+	local Data1 = TukuiData[T.MyRealm][T.MyName].Move.TukuiActionBar5
+    local Data2 = TukuiData[T.MyRealm][T.MyName].Move.TukuiPetActionBar
+    
     local Spacing = C.ActionBars.ButtonSpacing
 
-	if (ActionBar5:IsVisible()) then
-        PetBar:SetPoint("RIGHT", ActionBar5, "LEFT", -7, 0)
-    elseif (ActionBar4:IsVisible()) then
-        PetBar:SetPoint("RIGHT", ActionBar4, "LEFT", -7, 0)
+	-- Don't run if player moved bar 5 or pet bar
+	if Data1 or Data2 then return end
+
+	if ActionBar5:IsShown() then
+		PetBar:SetPoint("RIGHT", ActionBar5, "LEFT", -Spacing, 0)
+    elseif ActionBar4:IsShown() then
+		PetBar:SetPoint("RIGHT", ActionBar4, "LEFT", -Spacing, 0)
 	else
-		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -7, 35)
+		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -83, 7)
 	end
 end
-
-----------------------------------------------------------------
--- Editing ActionBars Panels Layout and Anchor
-----------------------------------------------------------------
-local function AddPanels()
-    local Bar1 = Panels.ActionBar1
-	local Bar2 = Panels.ActionBar2
-	local Bar3 = Panels.ActionBar3
-	local Bar4 = Panels.ActionBar4
-    local Bar5 = Panels.ActionBar5
-	local PetBar = Panels.PetActionBar
-    local StanceBar = Panels.StanceBar
-    
-    local Size = C.ActionBars.NormalButtonSize
-	local PetSize = C.ActionBars.PetButtonSize
-    local Spacing = C.ActionBars.ButtonSpacing
-
-    -- Bar #6
-	local Bar6 = CreateFrame("Frame", "TukuiActionBar6", UIParent, "SecureHandlerStateTemplate")
-	Bar6:SetPoint("LEFT", UIParent, "LEFT", 28, 8)
-	Bar6:SetFrameStrata("LOW")
-	Bar6:SetFrameLevel(10)
-	Bar6.Backdrop = CreateFrame("Frame", nil, Bar6)
-	Bar6.Backdrop:SetAllPoints()
-    Bar6.Backdrop:Hide()
-    
-    T.Panels.ActionBar6 = Bar6
-end
-hooksecurefunc(ActionBars, "AddPanels", AddPanels)
-
-----------------------------------------------------------------
--- Editing ActionBars Panels Layout and Anchor
-----------------------------------------------------------------
-local function EnableBlizzardActionBars()
-    for _, v in pairs({ "BottomLeft", "BottomRight", "Right", "RightTwo"}) do
-        _G["InterfaceOptionsActionBarsPanel" .. v]:Enable()
-    end
-end
-
-local function Enable(self)
-    local Bar1 = Panels.ActionBar1
-	local Bar2 = Panels.ActionBar2
-	local Bar3 = Panels.ActionBar3
-	local Bar4 = Panels.ActionBar4
-    local Bar5 = Panels.ActionBar5
-	local PetBar = Panels.PetActionBar
-    local StanceBar = Panels.StanceBar
-    
-    local Size = C.ActionBars.NormalButtonSize
-	local PetSize = C.ActionBars.PetButtonSize
-    local Spacing = C.ActionBars.ButtonSpacing
-
-    -- Move Pet Bar if Bar 5 hidden
-	PetBar:SetScript("OnShow", self.MovePetBar)
-    PetBar:SetScript("OnHide", self.MovePetBar)
-
-    EnableBlizzardActionBars()
-end
-hooksecurefunc(ActionBars, "Enable", Enable)

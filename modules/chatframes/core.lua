@@ -1,6 +1,54 @@
 local T, C, L = Tukui:unpack()
 local Chat = T.Chat
-local Panels = T.Panels
+local DataTexts = T.DataTexts
+
+-- local baseAddPanels = Chat.AddPanels
+
+-- local function AddPanels(self)
+
+-- 	-- local BottomLine = self.BottomLine
+-- 	-- local LeftVerticalLine = self.LeftVerticalLine
+-- 	-- local RightVerticalLine = self.RightVerticalLine
+-- 	local DataTextLeft = DataTexts.Panels.Left
+-- 	local DataTextRight = DataTexts.Panels.Right
+	
+-- 	local LeftChatBG = self.Panels.LeftChat
+-- 	local RightChatBG = self.Panels.RightChat
+-- 	local TabsBGLeft = self.Panels.LeftChatTabs
+--     local TabsBGRight = self.Panels.RightChatTabs
+
+-- 	local Padding = 5
+--     local xOffset, yOffset = 5, 5
+-- 	-- local ChatWidth = 380 + xOffset + yOffset
+-- 	local ChatWidth = T.DataTexts.Panels.Left:GetWidth() + (2 * Padding)
+-- 	local ChatHeight = (C.General.Themes.Value == "Tukui") and C.Chat.LeftHeight or 177
+
+--     -- Kill Lines
+--     -- BottomLine:Kill()
+--     -- LeftVerticalLine:Kill()
+--     -- RightVerticalLine:Kill()
+
+--     LeftChatBG:ClearAllPoints()
+--     LeftChatBG:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", xOffset, yOffset)
+--     LeftChatBG:SetSize(ChatWidth, ChatHeight)
+
+--     RightChatBG:ClearAllPoints()
+--     RightChatBG:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -xOffset, xOffset)
+--     RightChatBG:SetSize(ChatWidth, ChatHeight)
+
+--     TabsBGLeft:ClearAllPoints()
+--     TabsBGLeft:SetPoint("TOPLEFT", LeftChatBG, "TOPLEFT", Padding, -Padding)
+--     TabsBGLeft:SetPoint("TOPRIGHT", LeftChatBG, "TOPRIGHT", -Padding, -Padding)
+--     TabsBGLeft:SetHeight(23)
+
+--     TabsBGRight:ClearAllPoints()
+--     TabsBGRight:SetPoint("TOPLEFT", RightChatBG, "TOPLEFT", Padding, -Padding)
+--     TabsBGRight:SetPoint("TOPRIGHT", RightChatBG, "TOPRIGHT", -Padding, -Padding)
+--     TabsBGRight:SetHeight(23)
+-- end
+-- hooksecurefunc(Chat, "AddPanels", AddPanels)
+
+if (not C.Lua.Enable) then return end
 
 ----------------------------------------------------------------
 -- ChatFrames
@@ -9,7 +57,7 @@ local function SetDefaultChatFramesPositions()
     -- load saved variables
     local Name = UnitName("player")
     local Realm = GetRealmName()
-    
+
     local DataTextLeft = Panels.DataTextLeft
     local Width = DataTextLeft:GetWidth() - 2
     local Height = 118
@@ -17,9 +65,9 @@ local function SetDefaultChatFramesPositions()
     for i = 1, NUM_CHAT_WINDOWS do
 		local Frame = _G["ChatFrame"..i]
         local ID = Frame:GetID()
-        
+
         -- Set font size and chat frame size
-		Frame:Size(Width, Height)
+		Frame:SetSize(Width, Height)
 
 		-- Set default chat frame position
 		if (ID == 1) then
@@ -39,11 +87,11 @@ local function SetDefaultChatFramesPositions()
 		if (ID == 2) then
 			FCF_SetWindowName(Frame, "Log")
         end
-        
+
         if (ID == 3) then
 			FCF_SetWindowName(Frame, "Spam")
         end
-        
+
         if (ID == 4) then
 			FCF_SetWindowName(Frame, "Whispers")
 		end
@@ -55,21 +103,21 @@ local function SetDefaultChatFramesPositions()
 		if (not Frame.isLocked) then
 			FCF_SetLocked(Frame, 1)
 		end
-        
+
         local Anchor1, Parent, Anchor2, X, Y = Frame:GetPoint()
 		TukuiData[Realm][Name].Chat["Frame" .. i] = {Anchor1, Anchor2, X, Y, Width, Height}
     end
 end
-hooksecurefunc(Chat, "SetDefaultChatFramesPositions", SetDefaultChatFramesPositions)
+-- hooksecurefunc(Chat, "SetDefaultChatFramesPositions", SetDefaultChatFramesPositions)
 
 local function Install(self)
 	-- Create our custom chatframes
 	FCF_ResetChatWindows()
     FCF_SetLocked(ChatFrame1, 1)
-    
+
 	FCF_DockFrame(ChatFrame2)
     FCF_SetLocked(ChatFrame2, 1)
-    
+
 	FCF_OpenNewWindow(SPAM)
 	FCF_SetLocked(ChatFrame3, 1)
     FCF_DockFrame(ChatFrame3)
@@ -77,7 +125,7 @@ local function Install(self)
     FCF_OpenNewWindow(WHISPERS)
 	FCF_SetLocked(ChatFrame4, 1)
     FCF_DockFrame(ChatFrame4)
-    
+
 	FCF_OpenNewWindow(LOOT)
 	FCF_UnDockFrame(ChatFrame5)
 

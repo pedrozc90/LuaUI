@@ -1,29 +1,32 @@
 local T, C, L = Tukui:unpack()
 local Tooltips = T.Tooltips
-local Panels = T.Panels
+local DataTexts = T.DataTexts.Panels
+local Chat = T.Chat.Panels
 local Bags = T.Inventory.Bags
+
+if (not C.Lua.Enable) then return end
 
 ----------------------------------------------------------------
 -- Tooltips
 ----------------------------------------------------------------
 local function UpdatePosition(self)
-    local DataTextRight = Panels.DataTextRight
-    local RightChatBG = Panels.RightChatBG
+    local DataTextRight = DataTexts.Right
+    local RightChatBG = Chat.RightChat
     local Focus = oUF_TukuiFocus
     local Pet = oUF_TukuiPet
     local Bag = Bags["Bag"]
 
     self:ClearAllPoints()
     if (Bag and Bag:IsVisible()) then
-        self:Point("BOTTOMRIGHT", Bag.SortButton, "TOPRIGHT", -2, 5)
+        self:SetPoint("BOTTOMRIGHT", Bag.SortButton, "TOPRIGHT", -2, 5)
     elseif (Pet and Pet:IsVisible()) then
-        self:Point("BOTTOMRIGHT", Pet, "TOPRIGHT", 0, 7)
+        self:SetPoint("BOTTOMRIGHT", Pet, "TOPRIGHT", 0, 7)
     elseif (Focus and Focus:IsVisible()) then
-        self:Point("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 39)
+        self:SetPoint("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 39)
     elseif (RightChatBG and RightChatBG:IsShown()) then
-        self:Point("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 7)
+        self:SetPoint("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 7)
     else
-        self:Point("BOTTOMRIGHT", DataTextRight, "TOPRIGHT", -2, 5)
+        self:SetPoint("BOTTOMRIGHT", DataTextRight, "TOPRIGHT", -2, 5)
     end
 end
 
@@ -37,7 +40,7 @@ hooksecurefunc(Tooltips, "CreateAnchor", CreateAnchor)
 --
 local function SetTooltipDefaultAnchor(self, parent)
     local Anchor = self.Anchor
-    
+
     if (C.Tooltips.MouseOver) then
 		if (parent ~= UIParent) then
 			self:SetAnchorType("ANCHOR_TOPRIGHT", 2, -23)
@@ -65,13 +68,13 @@ local function Enable(self)
     local HealthBar = GameTooltipStatusBar
 
 	HealthBar:ClearAllPoints()
-    HealthBar:Point("BOTTOMLEFT", HealthBar:GetParent(), "TOPLEFT", 2, 5)
-    HealthBar:Point("BOTTOMRIGHT", HealthBar:GetParent(), "TOPRIGHT", -2, 5)
-    HealthBar:Height(9)
+    HealthBar:SetPoint("BOTTOMLEFT", HealthBar:GetParent(), "TOPLEFT", 2, 5)
+    HealthBar:SetPoint("BOTTOMRIGHT", HealthBar:GetParent(), "TOPRIGHT", -2, 5)
+    HealthBar:SetHeight(9)
 
-    if (C["Tooltips"].UnitHealthText) then
+    if (C.Tooltips.UnitHealthText) then
 		HealthBar.Text:ClearAllPoints()
-		HealthBar.Text:Point("CENTER", HealthBar, "CENTER", 0, 1)
+		HealthBar.Text:SetPoint("CENTER", HealthBar, "CENTER", 0, 1)
     end
 end
 hooksecurefunc(Tooltips, "Enable", Enable)

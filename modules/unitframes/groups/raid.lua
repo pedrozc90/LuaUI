@@ -2,6 +2,8 @@ local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
 local Class = select(2, UnitClass("player"))
 
+if (not C.Lua.Enable) then return end
+
 ----------------------------------------------------------------
 -- Raid
 ----------------------------------------------------------------
@@ -14,7 +16,7 @@ local function Raid(self)
 	local RaidIcon = self.RaidTargetIndicator
 	local Threat = self.ThreatIndicator
     local Highlight = self.Highlight
-    
+
     local FrameWidth, FrameHeight = unpack(C["Units"].Raid)
     local HealthTexture = T.GetTexture(C["Textures"].UFRaidHealthTexture)
     local PowerTexture = T.GetTexture(C["Textures"].UFRaidPowerTexture)
@@ -26,9 +28,9 @@ local function Raid(self)
 
     -- Health
     Health:ClearAllPoints()
-    Health:Point("TOPLEFT", self, "TOPLEFT", 0, 0)
-    Health:Point("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:Height(FrameHeight - 6)
+    Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
+    Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
+    Health:SetHeight(FrameHeight - 6)
     Health:SetFrameLevel(3)
     Health:CreateBackdrop()
     Health:SetOrientation("HORIZONTAL")
@@ -39,10 +41,10 @@ local function Raid(self)
     if (C.Raid.ShowHealthText) then
         Health.Value:ClearAllPoints()
         Health.Value:SetParent(Health)
-        Health.Value:Point("CENTER", Health, "CENTER", 1, -7)
+        Health.Value:SetPoint("CENTER", Health, "CENTER", 1, -7)
         Health.Value:SetJustifyH("CENTER")
     end
-    
+
     Health.frequentUpdate = true
     if (C.Lua.UniColor) then
         Health.colorTapping = false
@@ -60,9 +62,9 @@ local function Raid(self)
 
 	-- Power
     Power:ClearAllPoints()
-    Power:Point("TOPLEFT", Health, "BOTTOMLEFT", 0, -3)
-    Power:Point("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -3)
-    Power:Height(3)
+    Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -3)
+    Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -3)
+    Power:SetHeight(3)
     Power:SetFrameLevel(Health:GetFrameLevel())
     Power:CreateBackdrop()
 
@@ -83,27 +85,27 @@ local function Raid(self)
     -- Name
     Name:ClearAllPoints()
     Name:SetParent(Health)
-	Name:Point("CENTER", Health, "CENTER", 1, 7)
+	Name:SetPoint("CENTER", Health, "CENTER", 1, 7)
     Name:SetJustifyH("CENTER")
 
     self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameShort]")
-    
+
     -- ReadyCheck
 	ReadyCheck:ClearAllPoints()
-	ReadyCheck:Point("CENTER", Power, "CENTER", 0, 0)
-	ReadyCheck:Size(12, 12)
+	ReadyCheck:SetPoint("CENTER", Power, "CENTER", 0, 0)
+	ReadyCheck:SetSize(12, 12)
 
 	-- Raid Icon
 	RaidIcon:ClearAllPoints()
-    RaidIcon:Point("CENTER", Health, "TOP", 0, 3)
-    RaidIcon:Size(14, 14)
+    RaidIcon:SetPoint("CENTER", Health, "TOP", 0, 3)
+    RaidIcon:SetSize(14, 14)
 
 	if C["Raid"].ShowRessurection then
         local ResurrectIcon = self.ResurrectIndicator
-        
+
         ResurrectIcon:ClearAllPoints()
-        ResurrectIcon:Point("CENTER", Health, "CENTER", 0, 0)
-		ResurrectIcon:Size(16)
+        ResurrectIcon:SetPoint("CENTER", Health, "CENTER", 0, 0)
+		ResurrectIcon:SetSize(16)
 	end
 
 	-- Health Prediction
@@ -113,19 +115,19 @@ local function Raid(self)
         local ThirdBar = self.HealthPrediction.absorbBar
 
         local HealBarColor = { .31, .45, .63, .4 }
-        
-        FirstBar:Width(FrameWidth)
-        FirstBar:Height(Health:GetHeight())
+
+        FirstBar:SetWidth(FrameWidth)
+        FirstBar:SetHeight(Health:GetHeight())
 		FirstBar:SetStatusBarTexture(HealthTexture)
         FirstBar:SetStatusBarColor(unpack(HealBarColor))
-		
-        SecondBar:Width(FrameWidth)
-        SecondBar:Height(Health:GetHeight())
+
+        SecondBar:SetWidth(FrameWidth)
+        SecondBar:SetHeight(Health:GetHeight())
 		SecondBar:SetStatusBarTexture(HealthTexture)
 		SecondBar:SetStatusBarColor(unpack(HealBarColor))
-		
-        ThirdBar:Width(FrameWidth)
-        ThirdBar:Height(Health:GetHeight())
+
+        ThirdBar:SetWidth(FrameWidth)
+        ThirdBar:SetHeight(Health:GetHeight())
 		ThirdBar:SetStatusBarTexture(HealthTexture)
 		ThirdBar:SetStatusBarColor(unpack(HealBarColor))
 	end
@@ -136,8 +138,8 @@ local function Raid(self)
 
         RaidDebuffs:ClearAllPoints()
         RaidDebuffs:SetParent(Health)
-        RaidDebuffs:Point("CENTER", Health, "CENTER", 0, 0)
-        RaidDebuffs:Size(18)
+        RaidDebuffs:SetPoint("CENTER", Health, "CENTER", 0, 0)
+        RaidDebuffs:SetSize(18)
 		RaidDebuffs.Shadow:Kill()
 
 		RaidDebuffs.showDispellableDebuff = true
@@ -146,22 +148,22 @@ local function Raid(self)
 		RaidDebuffs.forceShow = C["Raid"].TestAuraWatch -- use for testing
 
 		RaidDebuffs.time:ClearAllPoints()
-        RaidDebuffs.time:Point("CENTER", RaidDebuffs, 0, 0)
+        RaidDebuffs.time:SetPoint("CENTER", RaidDebuffs, 0, 0)
         RaidDebuffs.time:SetFont(Font, FontSize, FontStyle)
 
 		RaidDebuffs.count:ClearAllPoints()
-        RaidDebuffs.count:Point("BOTTOMRIGHT", RaidDebuffs, "BOTTOMRIGHT", 2, 0)
-        RaidDebuffs.count:SetFont(Font, FontSize, FontStyle)		
+        RaidDebuffs.count:SetPoint("BOTTOMRIGHT", RaidDebuffs, "BOTTOMRIGHT", 2, 0)
+        RaidDebuffs.count:SetFont(Font, FontSize, FontStyle)
 		RaidDebuffs.count:SetTextColor(1, .9, 0)
 	end
-    
+
 	-- Threat
 	Threat.Override = UnitFrames.UpdateThreat
 
 	-- Highlight
 	Highlight:ClearAllPoints()
     Highlight:SetAllPoints(Health)
-    
+
     -- Group Role
     if (C.Raid.GroupRoles) then
         local GroupRoleIndicator = self:CreateTexture(nil, "OVERLAY")
@@ -171,7 +173,7 @@ local function Raid(self)
 
         self.GroupRoleIndicator = GroupRoleIndicator
     end
-	
+
 	if (Class == "PRIEST") then
         local Atonement = CreateFrame("StatusBar", nil, Power)
 		Atonement:SetAllPoints(Power)

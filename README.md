@@ -2,9 +2,7 @@
 
 ## Description:
 
-LuaUI is an external edit for [**Tukui 18.21+**](https://www.tukui.org/), a minimalistic user interface for [**World of Warcraft - Battle for Azeroth (Patch 8.1)**](https://worldofwarcraft.com/en-us/)
-
-*Release Date: 01/20/2019*
+LuaUI is an external edit for [**Tukui**](https://www.tukui.org/), a minimalistic user interface for [**World of Warcraft - Shadowlands (Patch 9.0.2)**](https://worldofwarcraft.com/en-us/)
 
 <p align="center">
     <a href="https://i.imgur.com/52edNKs.jpg">
@@ -14,15 +12,15 @@ LuaUI is an external edit for [**Tukui 18.21+**](https://www.tukui.org/), a mini
 
 ## Classic
 
-Interface for [**World of Warcraft Classic**](https://worldofwarcraft.com/en-us/wowclassic), can be found at branch [classic](https://github.com/PedroZC90/LuaUI/tree/classic)
+Interface for [**World of Warcraft Classic**](https://worldofwarcraft.com/en-us/wowclassic) can be found at branch [classic](https://github.com/PedroZC90/LuaUI/tree/classic)
 
-**obs.:** Requires [**Tukui Class 1.20+**](https://www.tukui.org/)
+**obs.:** Requires [**Tukui Classic**](https://www.tukui.org/classic-addons.php?id=1) or on [GitLab](https://git.tukui.org/Tukz/Tukui/-/tree/Classic)
 
 ## Features:
 
-+ Supports **Tukui 18.21+**
++ Supports **Tukui 20.16+**
 + Embedded Plugins:
-    - **ScreenShot Taker**: *take screenshot of events such as Achievements Earned,Completed Raid Encounters and Level Up*
+    - **ScreenShot Taker**: *takes screenshots of events such as Achievements Earned, Completed Raid, Encounters and Level Up*
     - **Interrupt Announce**
     - **Dispel Announce**
     - **Spell Announce**
@@ -31,7 +29,7 @@ Interface for [**World of Warcraft Classic**](https://worldofwarcraft.com/en-us/
 
 ## Install:
 
-1. Download the latest version of [**Tukui 18.21+**](https://www.tukui.org/)
+1. Download the latest version of [**Tukui**](https://www.tukui.org/)
 2. Download the latest version of [**LuaUI**](https://github.com/PedroZC90/LuaUI)
 3. Backup your **Interface** and **WTF** folders.
 4. Delete **Cache** and **WTF** folders for a clean install.

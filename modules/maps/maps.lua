@@ -1,17 +1,23 @@
 local T, C, L = Tukui:unpack()
 local Minimap = T.Maps.Minimap
-local Panels = T.Panels
+local DataTexts = T.DataTexts
 local Experience = T.Miscellaneous.Experience
 local Reputation = T.Miscellaneous.Reputation
 
 ----------------------------------------------------------------
 -- Minimap
 ----------------------------------------------------------------
-local function Enable(self)
-    local Ticket = self.Ticket
-    local MinimapZone = self.MinimapZone
-	local MinimapCoords = self.MinimapCoords
-    local MinimapDataText = Panels.MinimapDataText
+local baseStyleMinimap = Minimap.StyleMinimap
+local basePositionMinimap = Minimap.PositionMinimap
+local baseAddZoneAndCoords = Minimap.AddZoneAndCoords
+local baseAddMinimapDataTexts = Minimap.AddMinimapDataTexts
+local baseAddTaxiEarlyExit = Minimap.AddTaxiEarlyExit
+
+function Minimap:StyleMinimap()
+    -- first, we call the base function
+    baseStyleMinimap(self)
+
+    -- second, we edit it
     local Mail = MiniMapMailFrame
 	local MailBorder = MiniMapMailBorder
 	local MailIcon = MiniMapMailIcon
@@ -20,80 +26,118 @@ local function Enable(self)
 	local MiniMapInstanceDifficulty = MiniMapInstanceDifficulty
 	local GuildInstanceDifficulty = GuildInstanceDifficulty
 	local HelpOpenTicketButton = HelpOpenTicketButton
+	local Tracking = MiniMapTrackingButton
+
+    -- Ticket
+    local Ticket = self.Ticket
+    local TicketAnchor = Minimap
+
+    -- if (Experience.XPBar2:IsShown()) then
+    --     TicketAnchor = Experience.XPBar2
+    -- elseif (Experience.XPBar1:IsShown()) then
+    --     TicketAnchor = Experience.XPBar1
+    -- elseif (Reputation.XPBar2:IsShown()) then
+    --     TicketAnchor = Reputation.RepBar2
+    -- elseif (Experience.XPBar1:IsShown()) then
+    --     TicketAnchor = Reputation.RepBar1
+    -- end
+
+    Ticket:ClearAllPoints()
+    Ticket:SetPoint("TOPLEFT", TicketAnchor, "BOTTOMLEFT", 0, -7)
+    Ticket:SetPoint("TOPRIGHT", TicketAnchor, "BOTTOMRIGHT", 0, -7)
+    Ticket:SetHeight(23)
     
-    -- Minimap
+	Ticket.Text:ClearAllPoints()
+	Ticket.Text:SetFontTemplate(C.Medias.Font, 12)
+	Ticket.Text:SetPoint("CENTER", Ticket, "CENTER", 0, 1)
+    
+    -- QueueStatusMinimapButton
+	QueueStatusMinimapButton:ClearAllPoints()
+    QueueStatusMinimapButton:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 3, -3)
+
+    -- Mail
+	Mail:ClearAllPoints()
+	Mail:SetPoint("TOPRIGHT", self, "TOPRIGHT", 4, 4)
+	
+	-- MiniMapInstanceDifficulty
+    MiniMapInstanceDifficulty:ClearAllPoints()
+	MiniMapInstanceDifficulty:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+
+	-- GuildInstanceDifficulty
+	GuildInstanceDifficulty:ClearAllPoints()
+	GuildInstanceDifficulty:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+end
+
+function Minimap:PositionMinimap()
+    -- first, we call the base function
+    basePositionMinimap(self)
+
+    -- second, we edit it
     self:ClearAllPoints()
-    self:Point("TOPRIGHT", UIParent, "TOPRIGHT", -7, -7)
-    self:Size(152)
-    self.Backdrop:SetOutside()
+	self:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -5, -5)
+end
 
-    if (C.Auras.ClassicTimer) then
-        self:Size(155)
-    end
+function Minimap:AddMinimapDataTexts()
+    -- first, we call the base function
+    baseAddMinimapDataTexts(self)
 
+    -- second, we edit it
+    local MinimapDataText = DataTexts.Panels.Minimap
+
+    MinimapDataText:ClearAllPoints()
+    MinimapDataText:SetPoint("BOTTOM", self, "BOTTOM", 0, 2)
+    MinimapDataText:SetSize(self:GetWidth(), 19)
+    MinimapDataText:StripTextures()
+end
+
+function Minimap:AddZoneAndCoords()
+    -- first, we call the base function
+    baseAddZoneAndCoords(self)
+
+    -- second, we edit it
+    local MinimapZone = self.MinimapZone
+    local MinimapCoords = self.MinimapCoords
+    
     -- MinimapZone
     MinimapZone:ClearAllPoints()
-    MinimapZone:Point("TOPLEFT", self, "TOPLEFT", 2, -2)
-    MinimapZone:Point("TOPRIGHT", self, "TOPRIGHT", -2, -2)
-    MinimapZone:Height(20)
+    MinimapZone:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+    MinimapZone:SetPoint("TOPRIGHT", self, "TOPRIGHT", -2, -2)
+    MinimapZone:SetHeight(23)
     MinimapZone:SetTemplate("Transparent")
 
     MinimapZone.Text:ClearAllPoints()
-    MinimapZone.Text:Point("CENTER", MinimapZone, "CENTER", 0, 0)
+    MinimapZone.Text:SetPoint("CENTER", MinimapZone, "CENTER", 0, 0)
+    MinimapZone.Text:SetFont(C.Medias.Font, 12)
     MinimapZone.Text:SetJustifyH("CENTER")
 
     -- MinimapCoords
     MinimapCoords:ClearAllPoints()
-    MinimapCoords:Point("BOTTOMLEFT", self, "BOTTOMLEFT", 2, 2)
-    MinimapCoords:Size(40, 20)
+    MinimapCoords:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 2, 2)
+    MinimapCoords:SetSize(40, 20)
     MinimapCoords:SetTemplate("Transparent")
 
     MinimapCoords.Text:ClearAllPoints()
-    MinimapCoords.Text:Point("CENTER", MinimapCoords, "CENTER", 0, 0)
+    MinimapCoords.Text:SetPoint("CENTER", MinimapCoords, "CENTER", 0, 0)
+    MinimapCoords.Text:SetFont(C.Medias.Font, 10)
     MinimapCoords.Text:SetJustifyH("CENTER")
-
-    -- Minimap DataText
-    MinimapDataText:ClearAllPoints()
-    MinimapDataText:Point("BOTTOM", self, "BOTTOM", 0, 2)
-    MinimapDataText:Size(55, 19)
-    MinimapDataText:StripTextures()
-
-    -- Ticket
-    local TicketAnchor = Minimap
-    
-    if (Experience.XPBar2:IsShown()) then
-        TicketAnchor = Experience.XPBar2
-    elseif (Experience.XPBar1:IsShown()) then
-        TicketAnchor = Experience.XPBar1
-    elseif (Reputation.XPBar2:IsShown()) then
-        TicketAnchor = Reputation.RepBar2
-    elseif (Experience.XPBar1:IsShown()) then
-        TicketAnchor = Reputation.RepBar1
-    end
-
-    Ticket:ClearAllPoints()
-    Ticket:Point("TOPLEFT", TicketAnchor, "BOTTOMLEFT", 0, -7)
-    Ticket:Point("TOPRIGHT", TicketAnchor, "BOTTOMRIGHT", 0, -7)
-    Ticket:Height(23)
-    Ticket:CreateBackdrop()
-
-    Ticket.Text:ClearAllPoints()
-    Ticket.Text:Point("CENTER", Ticket, "CENTER", 0, 1)
-
-    -- Mail
-    Mail:ClearAllPoints()
-    Mail:Point("TOPRIGHT", self, "TOPRIGHT", 5, 5)
-
-    -- QueueStatusMinimapButton
-	QueueStatusMinimapButton:ClearAllPoints()
-	QueueStatusMinimapButton:Point("BOTTOMRIGHT", self, "BOTTOMRIGHT", 3, -3)
-
-    -- MiniMapInstanceDifficulty
-    MiniMapInstanceDifficulty:ClearAllPoints()
-	MiniMapInstanceDifficulty:Point("TOPLEFT", self, "TOPLEFT", 2, -2)
-
-    -- GuildInstanceDifficulty
-	GuildInstanceDifficulty:ClearAllPoints()
-	GuildInstanceDifficulty:Point("TOPLEFT", self, "TOPLEFT", 2, -2)
 end
-hooksecurefunc(Minimap, "Enable", Enable)
+
+function Minimap:AddTaxiEarlyExit()
+    -- first, we call the base function
+    baseAddTaxiEarlyExit(self)
+
+    -- second, we edit it
+    local EarlyExitButton = self.EarlyExitButton
+
+    local EarlyExitButtonAnchor = self
+
+	EarlyExitButton:ClearAllPoints()
+	EarlyExitButton:SetWidth(DataTexts.Panels.Minimap:GetWidth())
+    EarlyExitButton:SetHeight(DataTexts.Panels.Minimap:GetHeight())
+    EarlyExitButton:SetPoint("TOPLEFT", EarlyExitButtonAnchor, "BOTTOMLEFT", -2, -4)
+    EarlyExitButton:SetPoint("TOPRIGHT", EarlyExitButtonAnchor, "BOTTOMRIGHT", 2, -4)
+
+    EarlyExitButton.Text:ClearAllPoints()
+    EarlyExitButton.Text:SetPoint("CENTER", EarlyExitButton, "CENTER", 0, 0)
+	EarlyExitButton.Text:SetFont(C.Medias.Font, 12)
+end
