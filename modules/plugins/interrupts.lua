@@ -14,7 +14,7 @@ local STRING_INTERRUPT = "Interrupted %s %s!"
 local chatType
 
 -- variables used to prevent AoE spam interrupts
-local lastTimestamp, lastSpellID
+local lastTimestamp, lastSpellID = 0, nil
 
 -- configure group messages
 local chatChannels = {

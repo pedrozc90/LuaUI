@@ -37,7 +37,7 @@ end
 function ObjectiveTracker:UpdateProgressBar(_, line)
     
     -- first, we call the base function
-    baseUpdateProgressBar(self)
+    baseUpdateProgressBar(self, _, line)
 
     -- second, we edit it
     local Progress = line.ProgressBar
@@ -59,7 +59,7 @@ function ObjectiveTracker:UpdateProgressBar(_, line)
             if (Icon) then
                 Icon:ClearAllPoints()
                 Icon:SetPoint("LEFT", Bar, "RIGHT", 7, 0)
-                Icon:SetSize(Bar:GetHeight())
+                Icon:SetSize(Bar:GetHeight(), Bar:GetHeight())
                 Icon:SetTexCoord(.08, .92, .08, .92)
                 Icon:SetTexCoord(unpack(T.IconCoord))
             end
