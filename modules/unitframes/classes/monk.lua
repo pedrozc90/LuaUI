@@ -2,7 +2,12 @@ local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
 local Class = select(2, UnitClass("player"))
 
-if (not C.Lua.Enable) then return end
+local STAGGER_RED_TRANSITION = STAGGER_RED_TRANSITION
+local STAGGER_RED_INDEX = STAGGER_RED_INDEX or 3
+local STAGGER_YELLOW_TRANSITION = STAGGER_YELLOW_TRANSITION
+local STAGGER_YELLOW_INDEX = STAGGER_YELLOW_INDEX or 2
+local STAGGER_GREEN_TRANSITION = STAGGER_GREEN_TRANSITION
+local STAGGER_GREEN_INDEX = STAGGER_GREEN_INDEX or 1
 
 ----------------------------------------------------------------
 -- Monk Class Resources
@@ -33,23 +38,28 @@ local PostUpdateStagger = function(self, cur, max)
 	end
 end
 
-local function Player(self)
-	local Harmony = self.HarmonyBar
-	local Shadow = self.Shadow
+local basePlayer = UnitFrames.Player
 
-	local PlayerWidth, PlayerHeight = unpack(C.Units.Player)
-	local PowerTexture = T.GetTexture(C["Textures"].UFPowerTexture)
-	local Font, FontSize, FontStyle = C["Medias"].PixelFont, 12, "MONOCHROMEOUTLINE"
+function UnitFrames:Player()
+
+	-- first, we call the base function
+    basePlayer(self)
+
+    -- second, we edit it
+	local Harmony = self.HarmonyBar
+
+	local PlayerWidth, _ = unpack(C.Units.Player)
+
+	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
+	local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
 
 	-- Harmony Bar
 	Harmony:ClearAllPoints()
-	Harmony:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 7)
+	Harmony:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 	Harmony:SetWidth(PlayerWidth)
-	Harmony:SetHeight(3)
-	Harmony:SetBackdrop(nil)
-	-- Harmony:CreateBackdrop()
+	Harmony:SetHeight(5)
 
-	local Spacing = 7
+	local Spacing = 1
 	local SizeAscension, DeltaAscension = T.EqualSizes(Harmony:GetWidth(), 6, Spacing)
 	local SizeNoTalent, DeltaNoTalent = T.EqualSizes(Harmony:GetWidth(), 5, Spacing)
 
@@ -71,31 +81,29 @@ local function Player(self)
 			Harmony[i].Ascension = SizeAscension
 		end
 
-		if i == 1 then
+		if (i == 1) then
 			Harmony[i]:SetPoint("TOPLEFT", Harmony, "TOPLEFT", 0, 0)
 		else
 			Harmony[i]:SetPoint("LEFT", Harmony[i-1], "RIGHT", Spacing, 0)
 		end
 	end
 
-	-- Remove Shadows
-	Shadow:Kill()
-
 	-- Stagger Bar
 	local Stagger = CreateFrame("StatusBar", self:GetName() .. "StaggerBar", self)
 	Stagger:SetPoint("CENTER", UIParent, "BOTTOM", 0, 288)
 	Stagger:SetWidth(225)
-	Stagger:SetHeight(10)
+	Stagger:SetHeight(14)
 	Stagger:SetStatusBarTexture(PowerTexture)
-	Stagger:CreateBackdrop("Default")
+	Stagger:CreateBackdrop()
+	Stagger.Backdrop:SetOutside()
 
 	Stagger.Background = Stagger:CreateTexture(nil, "BORDER")
 	Stagger.Background:SetAllPoints()
-	Stagger.Background:SetColorTexture(.05, .05, .05)
+	Stagger.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
 	Stagger.Value = Stagger:CreateFontString(nil, "OVERLAY")
-	Stagger.Value:SetPoint("CENTER", Stagger, "CENTER", 0, 2)
-	Stagger.Value:SetFont(Font, FontSize, FontStyle)
+	Stagger.Value:SetPoint("CENTER", Stagger, "CENTER", 0, 0)
+	Stagger.Value:SetFont(C.Medias.Font, 12)
 	Stagger.Value:SetJustifyH("CENTER")
 	Stagger.Value:SetTextColor(.84,.75,.65)
 
@@ -103,6 +111,4 @@ local function Player(self)
 
 	-- Register with oUF
 	self.Stagger = Stagger
-	self.Stagger.bg = Stagger.Background
 end
-hooksecurefunc(UnitFrames, "Player", Player)
