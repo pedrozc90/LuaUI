@@ -22,24 +22,27 @@ function UnitFrames:Target()
     local Threat = self.ThreatIndicator
 
     local FrameWidth, FrameHeight = unpack(C.Units.Target)
+    local PowerHeight = 5
+
     local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)
 	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
     local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
     local Font, FontSize, FontStyle = C.Medias.Font, 12, nil
 
-    self.Shadow:Kill()
-    self.Backdrop:Kill()
     self.Panel:Kill()
+    self.Shadow:Kill()
+    -- self.Backdrop:Kill()
 
      -- Health
     Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:SetHeight(FrameHeight)
-    Health:CreateBackdrop()
-    Health.Backdrop:SetOutside()
+    Health:SetHeight(FrameHeight - PowerHeight - 1)
+    -- Health:CreateBackdrop()
+    -- Health.Backdrop:SetOutside()
 
     Health.Background:SetAllPoints(Health)
+    Health.Background:SetTexture(HealthTexture)
     Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
     Health.Value:ClearAllPoints()
@@ -89,8 +92,8 @@ function UnitFrames:Target()
     Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
     Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
     Power:SetHeight(5)
-    Power:CreateBackdrop()
-    Power.Backdrop:SetOutside()
+    -- Power:CreateBackdrop()
+    -- Power.Backdrop:SetOutside()
 
     Power.Background:SetAllPoints()
     Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))
@@ -128,8 +131,8 @@ function UnitFrames:Target()
 	AltPowerBar:SetHeight(5)
     AltPowerBar:SetStatusBarColor(.0, .0, .0)
     AltPowerBar:SetFrameLevel(Health:GetFrameLevel())
-    AltPowerBar:CreateBackdrop()
-    AltPowerBar.Backdrop:SetOutside()
+    -- AltPowerBar:CreateBackdrop()
+    -- AltPowerBar.Backdrop:SetOutside()
 
 	if (AltPowerBar.Value) then
 		AltPowerBar.Value:ClearAllPoints()

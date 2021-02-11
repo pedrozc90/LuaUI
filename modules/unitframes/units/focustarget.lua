@@ -19,19 +19,21 @@ function UnitFrames:FocusTarget()
     local RaidIcon = self.RaidTargetIndicator
 
     local FrameWidth, FrameHeight = unpack(C.Units.FocusTarget)
+    local PowerHeight = 3
+
     local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)
 	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
     local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
 
-    self.Backdrop:Kill()
+    -- self.Backdrop:Kill()
 
     -- Health
     Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:SetHeight(FrameHeight - 6)
-    Health:CreateBackdrop()
-    Health.Backdrop:SetOutside()
+    Health:SetHeight(FrameHeight - PowerHeight - 1)
+    -- Health:CreateBackdrop()
+    -- Health.Backdrop:SetOutside()
 
     Health.Background:SetAllPoints()
     Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
@@ -60,9 +62,9 @@ function UnitFrames:FocusTarget()
     Power:ClearAllPoints()
     Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
     Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
-    Power:SetHeight(3)
-    Power:CreateBackdrop()
-    Power.Backdrop:SetOutside()
+    Power:SetHeight(PowerHeight)
+    -- Power:CreateBackdrop()
+    -- Power.Backdrop:SetOutside()
 
     Power.Background:SetAllPoints()
     Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))

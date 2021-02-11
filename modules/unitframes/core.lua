@@ -337,25 +337,26 @@ function UnitFrames:CreateUnits()
     local FocusTarget = self.Units.FocusTarget
     local Arena = self.Units.Arena
     local Boss = self.Units.Boss
-    local Party = self.Headers.Party
-    local Raid = self.Headers.Raid
-    local RaidPet = self.Headers.RaidPet
+    -- local Party = self.Headers.Party
+    -- local Raid = self.Headers.Raid
+    -- local RaidPet = self.Headers.RaidPet
 
     local ActionBar1 = ActionBars.Bars.Bar1
     local ActionBar2Left = ActionBars.Bars.Bar2Left
     local ActionBar2Right = ActionBars.Bars.Bar2Right
     local RightChatBG = Chat.Panels.RightChat
+    local LeftChatBG = Chat.Panels.LeftChat
 
     Player:ClearAllPoints()
-    Player:SetPoint("BOTTOMLEFT", ActionBar2Left, "TOPLEFT", 1, 31)
+    Player:SetPoint("BOTTOMLEFT", ActionBar2Left, "TOPLEFT", 1, 25)
     Player:SetSize(unpack(C.Units.Player))
 
     Target:ClearAllPoints()
-    Target:SetPoint("BOTTOMRIGHT",  ActionBar2Right, "TOPRIGHT", -1, 31)
+    Target:SetPoint("BOTTOMRIGHT",  ActionBar2Right, "TOPRIGHT", -1, 25)
     Target:SetSize(unpack(C.Units.Target))
 
     TargetOfTarget:ClearAllPoints()
-    TargetOfTarget:SetPoint("BOTTOM",  ActionBar1, "TOP", 0, 31)
+    TargetOfTarget:SetPoint("BOTTOM",  ActionBar1, "TOP", 0, 25)
     TargetOfTarget:SetSize(unpack(C.Units.TargetOfTarget))
 
     Pet:ClearAllPoints()
@@ -394,11 +395,6 @@ function UnitFrames:CreateUnits()
         end
     end
 
-    -- if (C.Party.Enable) then
-    --     Party:ClearAllPoints()
-    --     Party:SetPoint("LEFT", UIParent, "LEFT", 7, 150)
-    -- end
-
     -- -- frame for raid frame positioning
     -- UnitFrames.GroupHolder = CreateFrame("Frame", "GroupHolder", UIParent)
     -- UnitFrames.GroupHolder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 270)
@@ -414,6 +410,49 @@ function UnitFrames:CreateUnits()
     --         RaidPet:SetPoint("BOTTOMLEFT", Raid, "TOPLEFT", 0, 7)
     --     end
     -- end
+
+    if (C.Party.Enable) then
+        local Party = self.Headers.Party
+    
+        Party:ClearAllPoints()
+        Party:SetParent(T.PetHider)
+        Party:SetPoint("LEFT", T.PetHider, "LEFT", 7, 150)
+
+        if (C.Party.ShowPets) then
+            local Pet = self.Headers.RaidPet
+
+            Pet:ClearAllPoints()
+            Pet:SetParent(T.PetHider)
+            Pet:SetPoint("TOPLEFT", T.PetHider, "TOPLEFT", 7, -28)
+        end
+    end
+
+    if (C.Raid.Enable) then
+        local Raid = self.Headers.Raid
+        local Raid40 = self.Headers.Raid40
+
+        Raid:ClearAllPoints()
+        Raid:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 0, 3)
+
+        if (C.Raid.ShowPets) then
+            local RaidPet = self.Headers.RaidPet
+
+            RaidPet:ClearAllPoints()
+            RaidPet:SetParent(T.PetHider)
+            RaidPet:SetPoint("TOPLEFT", Raid, "TOPRIGHT", C.Raid.Padding, 0)
+        end
+        
+        Raid40:ClearAllPoints()
+        Raid40:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 0, 3)
+
+        if (C.Raid.ShowPets) then
+            local Raid40Pet = self.Headers.Raid40Pet
+
+            Raid40Pet:ClearAllPoints()
+            Raid40Pet:SetParent(T.PetHider)
+            Raid40Pet:SetPoint("TOPLEFT", Raid40, "TOPRIGHT", C.Raid.Padding40, 0)
+        end
+    end
 end
 
 -- T.UnitFrames = UnitFrames

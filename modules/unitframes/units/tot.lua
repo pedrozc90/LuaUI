@@ -18,22 +18,24 @@ function UnitFrames:TargetOfTarget()
     local RaidIcon = self.RaidTargetIndicator
 
     local FrameWidth, FrameHeight = unpack(C.Units.TargetOfTarget)
+    local PowerHeight = 5
+
     local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)
     local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
     local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
 
 	self.Shadow:Kill()
     self.Panel:Kill()
-    self.Backdrop:Kill()
+    -- self.Backdrop:Kill()
 
 	-- Health
     Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:SetHeight(FrameHeight)
-    Health:SetFrameLevel(3)
-    Health:CreateBackdrop()
-    Health.Backdrop:SetOutside()
+    Health:SetHeight(FrameHeight - PowerHeight - 1)
+    -- Health:SetFrameLevel(3)
+    -- Health:CreateBackdrop()
+    -- Health.Backdrop:SetOutside()
 
     Health.Background:SetAllPoints()
     Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
@@ -56,11 +58,11 @@ function UnitFrames:TargetOfTarget()
     local Power = CreateFrame("StatusBar", nil, self)
     Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
     Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
-    Power:SetHeight(5)
+    Power:SetHeight(PowerHeight)
     Power:SetFrameStrata(self:GetFrameStrata())
     Power:SetStatusBarTexture(PowerTexture)
-    Power:CreateBackdrop()
-    Power.Backdrop:SetOutside()
+    -- Power:CreateBackdrop()
+    -- Power.Backdrop:SetOutside()
 
 	Power.Background = Power:CreateTexture(nil, "BORDER")
 	Power.Background:SetAllPoints()
@@ -105,7 +107,7 @@ function UnitFrames:TargetOfTarget()
 
         -- Buffs
 		Buffs:ClearAllPoints()
-		Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, 2)
+		Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
 		Buffs:SetHeight(AuraSize)
         Buffs:SetWidth(AuraWidth)
         
@@ -120,7 +122,7 @@ function UnitFrames:TargetOfTarget()
 
         -- Debuffs
 		Debuffs:ClearAllPoints()
-        Debuffs:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 1, 2)
+        Debuffs:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 2)
         Debuffs:SetHeight(AuraSize)
         Debuffs:SetWidth(AuraWidth)
         
@@ -136,10 +138,10 @@ function UnitFrames:TargetOfTarget()
 
 		if (C.UnitFrames.AurasBelow) then
 			Buffs:ClearAllPoints()
-			Buffs:SetPoint("TOPLEFT", Power, "BOTTOMLEFT", -1, -2)
+			Buffs:SetPoint("TOPLEFT", Power, "BOTTOMLEFT", 0, -2)
 			
 			Debuffs:ClearAllPoints()
-			Debuffs:SetPoint("TOPRIGHT", Power, "BOTTOMRIGHT", 1, -2)
+			Debuffs:SetPoint("TOPRIGHT", Power, "BOTTOMRIGHT", 0, -2)
 		end
 	end
 

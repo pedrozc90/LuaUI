@@ -2,12 +2,18 @@ local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
 local Class = select(2, UnitClass("player"))
 
-if (not C.Lua.Enable) then return end
-
+local ceil = math.ceil
 ----------------------------------------------------------------
 -- Party
 ----------------------------------------------------------------
-local function Party(self)
+local baseParty = UnitFrames.Party
+
+function UnitFrames:Party()
+
+    -- first, we call the base function
+    baseParty(self)
+
+    -- second, we edit it
     local Health = self.Health
 	local Power = self.Power
 	local Name = self.Name
@@ -22,31 +28,35 @@ local function Party(self)
     local Range = self.Range
     local Highlight = self.Highlight
 
-    local FrameWidth, FrameHeight = unpack(C["Units"].Party)
-    local HealthTexture = T.GetTexture(C["Textures"].UFPartyHealthTexture)
-    local PowerTexture = T.GetTexture(C["Textures"].UFPartyPowerTexture)
-    local Font, FontSize, FontStyle = C["Medias"].PixelFont, 12, "MONOCHROMEOUTLINE"
+    local FrameWidth = C.Party.WidthSize
+    local FrameHeight = C.Party.HeightSize
+    local PowerHeight = 3
 
-	-- self:SetBackdrop(self)
-	self:SetBackdropColor(.0, .0, .0, .0)
+    local HealthTexture = T.GetTexture(C.Textures.UFPartyHealthTexture)
+    local PowerTexture = T.GetTexture(C.Textures.UFPartyPowerTexture)
+
+    local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
+
 	self.Shadow:Kill()
 
     -- Health
     Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:SetHeight(FrameHeight - 6)
+    Health:SetHeight(FrameHeight - PowerHeight - 1)
     Health:SetFrameLevel(3)
-    Health:CreateBackdrop()
 
     Health.Background:SetAllPoints()
-    Health.Background:SetColorTexture(.05, .05, .05)
+    Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
     if (C.Party.ShowHealthText) then
         Health.Value:ClearAllPoints()
         Health.Value:SetParent(Health)
-        Health.Value:SetPoint("CENTER", Health, "CENTER", 1, -7)
+        -- Health.Value:SetPoint("CENTER", Health, "CENTER", 1, -7)
+        Health.Value:SetPoint("TOPRIGHT", Health, "TOPRIGHT", -4, 6)
         Health.Value:SetJustifyH("CENTER")
+
+        -- self:Tag(Health.Value, C.Party.HealthTag.Value)
     end
 
     Health.frequentUpdate = true
@@ -55,8 +65,8 @@ local function Party(self)
         Health.colorDisconnected = false
         Health.colorClass = false
         Health.colorReaction = false
-        Health:SetStatusBarColor(unpack(C.General.BorderColor))
-        Health.Background:SetVertexColor(unpack(C.General.BackdropColor))
+        Health:SetStatusBarColor(unpack(C.General.BackdropColor))
+        Health.Background:SetVertexColor(unpack(C.General.BackgroundColor))
     else
         Health.colorTapping = true
         Health.colorDisconnected = true
@@ -66,14 +76,19 @@ local function Party(self)
 
 	-- Power
     Power:ClearAllPoints()
-    Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -3)
-    Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -3)
-    Power:SetHeight(3)
+    Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
+    Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
+    Power:SetHeight(PowerHeight)
     Power:SetFrameLevel(Health:GetFrameLevel())
-    Power:CreateBackdrop()
 
     Power.Background:SetAllPoints()
-    Power.Background:SetColorTexture(.05, .05, .05)
+    Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))
+
+    if (C.Party.ShowManaText) then
+		Power.Value:ClearAllPoints()
+		Power.Value:SetPoint("BOTTOMRIGHT", Health, "BOTTOMRIGHT", -4, 0)
+		-- Power.PostUpdate = UnitFrames.PostUpdatePower
+	end
 
     Power.frequentUpdates = true
     Power.colorDisconnected = true
@@ -88,30 +103,35 @@ local function Party(self)
 
     -- Name
     Name:ClearAllPoints()
-	Name:SetPoint("CENTER", Health, "CENTER", 0, 1)
+	Name:SetPoint("CENTER", Health, "CENTER", 0, 0)
     Name:SetJustifyH("CENTER")
 
-    self:Tag(Name, "[Tukui:NameShort] [Tukui:Role]")
+    -- self:Tag(Name, "[Tukui:NameShort] [Tukui:Role]")
 
     -- Auras
-	Buffs:ClearAllPoints()
-    Buffs:SetPoint("TOPLEFT", Power, "BOTTOMLEFT", 0, -7)
-    Buffs.size = FrameHeight
-	Buffs.num = 8
-	Buffs.numRow = 1
-	Buffs.spacing = 7
-	Buffs.initialAnchor = "TOPLEFT"
-	Buffs:SetHeight(Buffs.size)
-	Buffs:SetWidth(Buffs.num * Buffs.size + (Buffs.num - 1) * Buffs.spacing)
+    local AuraSize = FrameHeight + 2
+    local AuraSpacing = 1
+    local AuraPerRow = 7
+    local AuraWidth = (AuraPerRow * AuraSize) + ((AuraPerRow - 1) * AuraSpacing)
 
+    Buffs:ClearAllPoints()
+    Buffs:SetPoint("TOPLEFT", Power, "BOTTOMLEFT", -1, -3)
+    Buffs:SetHeight(AuraSize)
+    Buffs:SetWidth(AuraWidth)
+    Buffs.size = AuraSize
+    Buffs.spacing = AuraSpacing
+    Buffs.num = 6
+	Buffs.numRow = ceil(Buffs.num / AuraPerRow)
+	Buffs.initialAnchor = "TOPLEFT"
+	
 	Debuffs:ClearAllPoints()
-	Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 7, 0)
-	Debuffs.size = FrameHeight
-	Debuffs.num = 3
-	Debuffs.spacing = 7
+	Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 3, 1)
+    Debuffs:SetHeight(AuraSize)
+	Debuffs:SetWidth(AuraWidth)
+    Debuffs.size = AuraSize
+    Debuffs.spacing = AuraSpacing
+    Debuffs.num = 6
 	Debuffs.initialAnchor = "TOPLEFT"
-	Debuffs:SetHeight(Debuffs.size)
-	Debuffs:SetWidth(Debuffs.num * Debuffs.size + (Debuffs.num - 1) * Debuffs.spacing)
 
     -- Leader
 	Leader:ClearAllPoints()
@@ -134,59 +154,52 @@ local function Party(self)
     RaidIcon:SetSize(14, 14)
 
     -- Phase Icon
-	PhaseIcon:ClearAllPoints()
-    PhaseIcon:SetPoint("TOPRIGHT", self, "TOPRIGHT", 7, 24)
-    PhaseIcon:SetSize(24, 24)
-
+	-- PhaseIcon:ClearAllPoints()
+    -- PhaseIcon:SetPoint("TOPRIGHT", self, "TOPRIGHT", 7, 24)
+    -- PhaseIcon:SetSize(24, 24)
+    
     -- Health Prediction
-	if (C.Party.HealBar) then
-		local FirstBar = self.HealthPrediction.myBar
-        local SecondBar = self.HealthPrediction.otherBar
-        local ThirdBar = self.HealthPrediction.absorbBar
+	if (C.UnitFrames.HealComm) then
+        local myBar = self.HealthPrediction.myBar
+        local otherBar = self.HealthPrediction.otherBar
+        local absorbBar = self.HealthPrediction.absorbBar
 
-        local HealBarColor = { .31, .45, .63, .4 }
+        myBar:SetWidth(FrameWidth)
+        myBar:SetHeight(Health:GetHeight())
+		myBar:SetStatusBarTexture(HealthTexture)
 
-        FirstBar:SetWidth(FrameWidth)
-        FirstBar:SetHeight(Health:GetHeight())
-		FirstBar:SetStatusBarTexture(HealthTexture)
-        FirstBar:SetStatusBarColor(unpack(HealBarColor))
+        otherBar:SetWidth(FrameWidth)
+        otherBar:SetHeight(Health:GetHeight())
+		otherBar:SetStatusBarTexture(HealthTexture)
 
-        SecondBar:SetWidth(FrameWidth)
-        SecondBar:SetHeight(Health:GetHeight())
-		SecondBar:SetStatusBarTexture(HealthTexture)
-		SecondBar:SetStatusBarColor(unpack(HealBarColor))
-
-        ThirdBar:SetWidth(FrameWidth)
-        ThirdBar:SetHeight(Health:GetHeight())
-		ThirdBar:SetStatusBarTexture(HealthTexture)
-		ThirdBar:SetStatusBarColor(unpack(HealBarColor))
-	end
+        absorbBar:SetWidth(FrameWidth)
+        absorbBar:SetHeight(Health:GetHeight())
+		absorbBar:SetStatusBarTexture(HealthTexture)
+    end
 
 	-- Threat
-	Threat.Override = UnitFrames.UpdateThreat
+	-- Threat.Override = UnitFrames.UpdateThreat
 
     -- Highlight
-	Highlight:ClearAllPoints()
-	Highlight:SetAllPoints(Health)
+	-- Highlight:ClearAllPoints()
+	-- Highlight:SetAllPoints(Health)
 
     -- Atonement
-	if (Class == "PRIEST") then
-        local Atonement = self.Atonement
-        Atonement:SetAllPoints(Power)
-		Atonement:SetStatusBarTexture(PowerTexture)
-	end
+	-- if (Class == "PRIEST") then
+    --     local Atonement = self.Atonement
+    --     Atonement:SetAllPoints(Power)
+	-- 	Atonement:SetStatusBarTexture(PowerTexture)
+	-- end
 
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", UnitFrames.Highlight)
-	self:RegisterEvent("RAID_ROSTER_UPDATE", UnitFrames.Highlight)
-    self:RegisterEvent("PLAYER_FOCUS_CHANGED", UnitFrames.Highlight)
+	-- self:RegisterEvent("PLAYER_TARGET_CHANGED", UnitFrames.Highlight)
+	-- self:RegisterEvent("RAID_ROSTER_UPDATE", UnitFrames.Highlight)
+    -- self:RegisterEvent("PLAYER_FOCUS_CHANGED", UnitFrames.Highlight)
 end
-hooksecurefunc(UnitFrames, "Party", Party)
 
 ----------------------------------------------------------------
 -- Party Attributes
 ----------------------------------------------------------------
 function UnitFrames:GetPartyFramesAttributes()
-    local Width, Height = unpack(C.Units.Party)
 	return
 		"TukuiParty",
 		nil,
@@ -196,14 +209,36 @@ function UnitFrames:GetPartyFramesAttributes()
 			self:SetWidth(header:GetAttribute("initial-width"))
 			self:SetHeight(header:GetAttribute("initial-height"))
 		]],
-		"initial-width", T.Scale(Width),
-		"initial-height", T.Scale(Height),
-		"showSolo", C["Party"].ShowSolo,
+		"initial-width", C.Party.WidthSize,
+		"initial-height", C.Party.HeightSize,
+		"showSolo", C.Party.ShowSolo,
 		"showParty", true,
-		"showPlayer", C["Party"].ShowPlayer,
+		"showPlayer", C.Party.ShowPlayer,
 		"showRaid", true,
 		"groupFilter", "1,2,3,4,5,6,7,8",
 		"groupingOrder", "1,2,3,4,5,6,7,8",
 		"groupBy", "GROUP",
-		"yOffset", T.Scale(-39)
+		"yOffset", -C.Party.Padding  -- -39
+end
+
+function UnitFrames:GetPetPartyFramesAttributes()
+	return
+		"TukuiPartyPet",
+		"SecureGroupPetHeaderTemplate",
+		"custom [@raid6,exists] hide; [@raid1,exists] show; [@party1,exists] show; hide",
+		"oUF-initialConfigFunction", [[
+			local header = self:GetParent()
+			self:SetWidth(header:GetAttribute("initial-width"))
+			self:SetHeight(header:GetAttribute("initial-height"))
+		]],
+		"initial-width", C.Party.WidthSize,
+		"initial-height", C.Party.HeightSize,
+		"showSolo", C.Party.ShowSolo,
+		"showParty", true,
+		"showPlayer", C.Party.ShowPlayer,
+		"showRaid", true,
+		"groupFilter", "1,2,3,4,5,6,7,8",
+		"groupingOrder", "1,2,3,4,5,6,7,8",
+		"groupBy", "GROUP",
+		"yOffset", -C.Party.Padding
 end

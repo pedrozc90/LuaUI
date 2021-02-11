@@ -1,13 +1,19 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
 local Class = select(2, UnitClass("player"))
-
-if (not C.Lua.Enable) then return end
+local ceil = math.ceil
 
 ----------------------------------------------------------------
 -- Raid
 ----------------------------------------------------------------
-local function Raid(self)
+local baseRaid = UnitFrames.Raid
+
+function UnitFrames:Raid()
+
+    -- first, we call the base function
+    baseRaid(self)
+
+    -- second, we edit it
     local Health = self.Health
 	local Power = self.Power
 	local Name = self.Name
@@ -17,42 +23,47 @@ local function Raid(self)
 	local Threat = self.ThreatIndicator
     local Highlight = self.Highlight
 
-    local FrameWidth, FrameHeight = unpack(C["Units"].Raid)
-    local HealthTexture = T.GetTexture(C["Textures"].UFRaidHealthTexture)
-    local PowerTexture = T.GetTexture(C["Textures"].UFRaidPowerTexture)
-    local Font, FontSize, FontStyle = C["Medias"].PixelFont, 12, "MONOCHROMEOUTLINE"
+    -- local FrameWidth, FrameHeight = unpack(C["Units"].Raid)
+    local PowerHeight = 3
 
-	self:SetBackdrop(nil)
-    self.Shadow:Kill()
-    self.Panel:Kill()
+    local HealthTexture = T.GetTexture(C.Textures.UFPartyHealthTexture)
+    local PowerTexture = T.GetTexture(C.Textures.UFPartyPowerTexture)
+
+    local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
+
+	self.Shadow:Kill()
+	self.Panel:Kill()
 
     -- Health
     Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:SetHeight(FrameHeight - 6)
+    Health:SetHeight(self:GetHeight() - PowerHeight - 1)
     Health:SetFrameLevel(3)
     Health:CreateBackdrop()
-    Health:SetOrientation("HORIZONTAL")
-
-    Health.Background:SetAllPoints()
-    Health.Background:SetColorTexture(.05, .05, .05)
-
-    if (C.Raid.ShowHealthText) then
-        Health.Value:ClearAllPoints()
-        Health.Value:SetParent(Health)
-        Health.Value:SetPoint("CENTER", Health, "CENTER", 1, -7)
-        Health.Value:SetJustifyH("CENTER")
+    if (C.Raid.VerticalHealth) then
+		Health:SetOrientation("VERTICAL")
+	else
+        Health:SetOrientation("HORIZONTAL")
     end
 
+    Health.Background:SetAllPoints()
+    Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
+
+    Health.Value:ClearAllPoints()
+    Health.Value:SetParent(Health)
+    Health.Value:SetPoint("CENTER", Health, "CENTER", 0, -7)
+    Health.Value:SetJustifyH("CENTER")
+
     Health.frequentUpdate = true
+    Health.isRaid = true
     if (C.Lua.UniColor) then
         Health.colorTapping = false
         Health.colorDisconnected = false
         Health.colorClass = false
         Health.colorReaction = false
-        Health:SetStatusBarColor(unpack(C.General.BorderColor))
-        Health.Background:SetVertexColor(unpack(C.General.BackdropColor))
+        Health:SetStatusBarColor(unpack(C.General.BackdropColor))
+        Health.Background:SetVertexColor(unpack(C.General.BackgroundColor))
     else
         Health.colorTapping = true
         Health.colorDisconnected = true
@@ -62,17 +73,17 @@ local function Raid(self)
 
 	-- Power
     Power:ClearAllPoints()
-    Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -3)
-    Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -3)
-    Power:SetHeight(3)
+    Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
+    Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
+    Power:SetHeight(PowerHeight)
     Power:SetFrameLevel(Health:GetFrameLevel())
-    Power:CreateBackdrop()
 
     Power.Background:SetAllPoints()
-    Power.Background:SetColorTexture(.05, .05, .05)
+    Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
     Power.frequentUpdates = true
     Power.colorDisconnected = true
+    Power.isRaid = true
     if (C.Lua.UniColor) then
         Power.colorClass = true
         Power.colorPower = false
@@ -85,10 +96,10 @@ local function Raid(self)
     -- Name
     Name:ClearAllPoints()
     Name:SetParent(Health)
-	Name:SetPoint("CENTER", Health, "CENTER", 1, 7)
+	Name:SetPoint("CENTER", Health, "CENTER", 0, 7)
     Name:SetJustifyH("CENTER")
 
-    self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameShort]")
+    -- self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameShort]")
 
     -- ReadyCheck
 	ReadyCheck:ClearAllPoints()
@@ -109,93 +120,129 @@ local function Raid(self)
 	end
 
 	-- Health Prediction
-	if (C.Raid.HealBar) then
-		local FirstBar = self.HealthPrediction.myBar
-        local SecondBar = self.HealthPrediction.otherBar
-        local ThirdBar = self.HealthPrediction.absorbBar
+	if (C.UnitFrames.HealComm) then
+        local myBar = self.HealthPrediction.myBar
+        local otherBar = self.HealthPrediction.otherBar
+        local absorbBar = self.HealthPrediction.absorbBar
 
-        local HealBarColor = { .31, .45, .63, .4 }
+        myBar:SetWidth(self:GetWidth())
+        myBar:SetHeight(Health:GetHeight())
+		myBar:SetStatusBarTexture(HealthTexture)
 
-        FirstBar:SetWidth(FrameWidth)
-        FirstBar:SetHeight(Health:GetHeight())
-		FirstBar:SetStatusBarTexture(HealthTexture)
-        FirstBar:SetStatusBarColor(unpack(HealBarColor))
+        otherBar:SetWidth(self:GetWidth())
+        otherBar:SetHeight(Health:GetHeight())
+		otherBar:SetStatusBarTexture(HealthTexture)
 
-        SecondBar:SetWidth(FrameWidth)
-        SecondBar:SetHeight(Health:GetHeight())
-		SecondBar:SetStatusBarTexture(HealthTexture)
-		SecondBar:SetStatusBarColor(unpack(HealBarColor))
+        absorbBar:SetWidth(self:GetWidth())
+        absorbBar:SetHeight(Health:GetHeight())
+		absorbBar:SetStatusBarTexture(HealthTexture)
+    end
 
-        ThirdBar:SetWidth(FrameWidth)
-        ThirdBar:SetHeight(Health:GetHeight())
-		ThirdBar:SetStatusBarTexture(HealthTexture)
-		ThirdBar:SetStatusBarColor(unpack(HealBarColor))
+    if (C.Raid.AuraTrack) then
+        local AuraTrack = self.AuraTrack
+		
+		-- AuraTrack:ClearAllPoints()
+		-- AuraTrack:SetPoint("TOPLEFT", Health, "TOPLEFT", 1, -1)
+		-- AuraTrack:SetWidth(self:GetWidth() - 2)
+		-- AuraTrack:SetHeight(self:GetHeight() - 2)
+		AuraTrack:SetAllPoints(Health)
+		-- AuraTrack.Texture = C.Medias.Normal
+		-- AuraTrack.Icons = C.Raid.AuraTrackIcons
+		-- AuraTrack.SpellTextures = C.Raid.AuraTrackSpellTextures
+		-- AuraTrack.Thickness = C.Raid.AuraTrackThickness
+	elseif (C.Raid.RaidBuffs.Value ~= "Hide") then
+        local Buffs = self.Buffs
+
+		local onlyShowPlayer = C.Raid.RaidBuffs.Value == "Self"
+		local filter = C.Raid.RaidBuffs.Value == "All" and "HELPFUL" or "HELPFUL|RAID"
+
+        local AuraSize = 16
+        local AuraSpacing = 1
+        local AuraPerRow = 6
+        local AuraWidth = (AuraPerRow * AuraSize) + ((AuraPerRow - 1) * AuraSpacing)
+
+        Buffs:ClearAllPoints()
+		Buffs:SetPoint("TOPLEFT", Health, "TOPLEFT", 1, -1)
+		Buffs:SetHeight(AuraSize)
+		Buffs:SetWidth(AuraWidth)
+		Buffs.size = AuraSize
+        Buffs.spacing = AuraSpacing
+        Buffs.num = 5
+		Buffs.numRow = ceil(Buffs.num / AuraPerRow)
+		Buffs.initialAnchor = "TOPLEFT"
+		Buffs.disableCooldown = true
+		Buffs.disableMouse = true
+		Buffs.onlyShowPlayer = onlyShowPlayer
+		Buffs.desaturateNonPlayerBuffs = C.Raid.DesaturateNonPlayerBuffs
+		Buffs.filter = filter
+        Buffs.IsRaid = true
+        
+		-- Buffs.PostCreateIcon = UnitFrames.PostCreateAura
 	end
 
 	-- AuraWatch (corner and center icon)
-    if (C.Raid.AuraWatch) then
+    if (C.Raid.DebuffWatch) then
         local RaidDebuffs = self.RaidDebuffs
 
         RaidDebuffs:ClearAllPoints()
-        RaidDebuffs:SetParent(Health)
         RaidDebuffs:SetPoint("CENTER", Health, "CENTER", 0, 0)
-        RaidDebuffs:SetSize(18)
-		RaidDebuffs.Shadow:Kill()
+        RaidDebuffs:SetHeight(Health:GetHeight() - 16)
+		RaidDebuffs:SetWidth(Health:GetHeight() - 16)
+        
+        RaidDebuffs.Shadow:Kill()
 
-		RaidDebuffs.showDispellableDebuff = true
+        RaidDebuffs.forceShow = C.Raid.TestAuraWatch
 		RaidDebuffs.onlyMatchSpellID = true
-		RaidDebuffs.FilterDispellableDebuff = true
-		RaidDebuffs.forceShow = C["Raid"].TestAuraWatch -- use for testing
-
+        RaidDebuffs.showDispellableDebuff = false
+        
 		RaidDebuffs.time:ClearAllPoints()
-        RaidDebuffs.time:SetPoint("CENTER", RaidDebuffs, 0, 0)
-        RaidDebuffs.time:SetFont(Font, FontSize, FontStyle)
-
+        RaidDebuffs.time:SetPoint("CENTER", RaidDebuffs, "CENTER", 1, 0)
+        RaidDebuffs.time:SetFont(C.Medias.Font, 12, "OUTLINE")
+        
 		RaidDebuffs.count:ClearAllPoints()
         RaidDebuffs.count:SetPoint("BOTTOMRIGHT", RaidDebuffs, "BOTTOMRIGHT", 2, 0)
-        RaidDebuffs.count:SetFont(Font, FontSize, FontStyle)
+        RaidDebuffs.count:SetFont(C.Medias.Font, 12, "OUTLINE")
 		RaidDebuffs.count:SetTextColor(1, .9, 0)
 	end
 
 	-- Threat
-	Threat.Override = UnitFrames.UpdateThreat
+	-- Threat.Override = UnitFrames.UpdateThreat
 
 	-- Highlight
-	Highlight:ClearAllPoints()
-    Highlight:SetAllPoints(Health)
+	-- Highlight:ClearAllPoints()
+    -- Highlight:SetAllPoints(Health)
 
-    -- Group Role
-    if (C.Raid.GroupRoles) then
-        local GroupRoleIndicator = self:CreateTexture(nil, "OVERLAY")
-        GroupRoleIndicator:SetSize(12, 12)
-        GroupRoleIndicator:SetPoint("CENTER", Health, "CENTER", 0, -7)
-        GroupRoleIndicator.PostUpdate = UnitFrames.UpdateGroupRole
+    -- -- Group Role
+    -- if (C.Raid.GroupRoles) then
+    --     local GroupRoleIndicator = self:CreateTexture(nil, "OVERLAY")
+    --     GroupRoleIndicator:SetSize(12, 12)
+    --     GroupRoleIndicator:SetPoint("CENTER", Health, "CENTER", 0, -7)
+    --     GroupRoleIndicator.PostUpdate = UnitFrames.UpdateGroupRole
 
-        self.GroupRoleIndicator = GroupRoleIndicator
-    end
+    --     self.GroupRoleIndicator = GroupRoleIndicator
+    -- end
 
-	if (Class == "PRIEST") then
-        local Atonement = CreateFrame("StatusBar", nil, Power)
-		Atonement:SetAllPoints(Power)
-		Atonement:SetStatusBarTexture(PowerTexture)
-		Atonement:SetFrameStrata(Power:GetFrameStrata())
-		Atonement:SetFrameLevel(Power:GetFrameLevel() + 1)
+	-- if (Class == "PRIEST") then
+    --     local Atonement = CreateFrame("StatusBar", nil, Power)
+	-- 	Atonement:SetAllPoints(Power)
+	-- 	Atonement:SetStatusBarTexture(PowerTexture)
+	-- 	Atonement:SetFrameStrata(Power:GetFrameStrata())
+	-- 	Atonement:SetFrameLevel(Power:GetFrameLevel() + 1)
 
-		self.Atonement = Atonement
-	end
+	-- 	self.Atonement = Atonement
+	-- end
 
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", UnitFrames.Highlight)
-	self:RegisterEvent("RAID_ROSTER_UPDATE", UnitFrames.Highlight)
-    self:RegisterEvent("PLAYER_FOCUS_CHANGED", UnitFrames.Highlight)
+	-- self:RegisterEvent("PLAYER_TARGET_CHANGED", UnitFrames.Highlight)
+	-- self:RegisterEvent("RAID_ROSTER_UPDATE", UnitFrames.Highlight)
+    -- self:RegisterEvent("PLAYER_FOCUS_CHANGED", UnitFrames.Highlight)
 end
-hooksecurefunc(UnitFrames, "Raid", Raid)
 
 ----------------------------------------------------------------
 -- Raid Attributes
 ----------------------------------------------------------------
 function UnitFrames:GetRaidFramesAttributes()
     local Properties = C.Party.Enable and "custom [@raid6,exists] show;hide" or "solo,party,raid"
-    local Width, Height = unpack(C.Units.Raid)
+    
 	return
 		"TukuiRaid",
 		nil,
@@ -205,20 +252,104 @@ function UnitFrames:GetRaidFramesAttributes()
 			self:SetWidth(header:GetAttribute("initial-width"))
 			self:SetHeight(header:GetAttribute("initial-height"))
 		]],
-		"initial-width", T.Scale(Width),
-		"initial-height", T.Scale(Height),
+		"initial-width", C.Raid.WidthSize,
+		"initial-height", C.Raid.HeightSize,
 		"showParty", true,
 		"showRaid", true,
 		"showPlayer", true,
-		"showSolo", C["Raid"].ShowSolo,
-		"xoffset", T.Scale(7),
-		"yOffset", T.Scale(-3),
+		"showSolo", C.Raid.ShowSolo,
+		"xoffset", C.Raid.Padding,
+		"yOffset", -C.Raid.Padding,
 		"point", "LEFT",
 		"groupFilter", "1,2,3,4,5,6,7,8",
 		"groupingOrder", "1,2,3,4,5,6,7,8",
-		"groupBy", C["Raid"].GroupBy.Value,
-		"maxColumns", math.ceil(40 / 5),
-		"unitsPerColumn", C["Raid"].MaxUnitPerColumn,
-		"columnSpacing", T.Scale(7),
+		"groupBy", C.Raid.GroupBy.Value,
+		"maxColumns", ceil(40 / 5),
+		"unitsPerColumn", C.Raid.MaxUnitPerColumn,
+		"columnSpacing", C.Raid.Padding,
 		"columnAnchorPoint", "BOTTOM"
+end
+
+function UnitFrames:GetBigRaidFramesAttributes()
+	local Properties = "custom [@raid21,exists] show; hide"
+
+	return
+		"TukuiRaid40",
+		nil,
+		Properties,
+		"oUF-initialConfigFunction", [[
+			local header = self:GetParent()
+			self:SetWidth(header:GetAttribute("initial-width"))
+			self:SetHeight(header:GetAttribute("initial-height"))
+		]],
+		"initial-width", C.Raid.Raid40WidthSize,
+		"initial-height", C.Raid.Raid40HeightSize,
+		"showParty", true,
+		"showRaid", true,
+		"showPlayer", true,
+		"showSolo", C.Raid.ShowSolo,
+		"xoffset", C.Raid.Padding40,
+		"yOffset", -C.Raid.Padding40,
+		"point", "TOP",
+		"groupFilter", "1,2,3,4,5,6,7,8",
+		"groupingOrder", "1,2,3,4,5,6,7,8",
+		"groupBy", C.Raid.GroupBy.Value,
+		"maxColumns", ceil(40 / 5),
+		"unitsPerColumn", C.Raid.Raid40MaxUnitPerColumn,
+		"columnSpacing", C.Raid.Padding40,
+		"columnAnchorPoint", "LEFT"
+end
+
+function UnitFrames:GetPetRaidFramesAttributes()
+	local Properties = C.Party.Enable and "custom [@raid21,exists] hide; [@raid6,exists] show; hide" or "custom [@raid21,exists] hide; [@raid6,exists] show; [@party1,exists] show; hide"
+
+	return
+		"TukuiRaidPet",
+		"SecureGroupPetHeaderTemplate",
+		Properties,
+		"showParty", C.Raid.ShowPets,
+		"showRaid", C.Raid.ShowPets,
+		"showPlayer", true,
+		"showSolo", C.Raid.ShowSolo,
+		"maxColumns", ceil(40 / 5),
+		"point", "TOP",
+		"unitsPerColumn", C.Raid.MaxUnitPerColumn,
+		"columnSpacing", C.Raid.Padding,
+		"columnAnchorPoint", "LEFT",
+		"yOffset", -C.Raid.Padding,
+		"xOffset", C.Raid.Padding,
+		"initial-width", C.Raid.WidthSize,
+		"initial-height", C.Raid.HeightSize,
+		"oUF-initialConfigFunction", [[
+			local header = self:GetParent()
+			self:SetWidth(header:GetAttribute("initial-width"))
+			self:SetHeight(header:GetAttribute("initial-height"))
+		]]
+end
+
+function UnitFrames:GetBigPetRaidFramesAttributes()
+	local Properties = "custom [@raid21,exists] show; hide"
+
+	return
+		"TukuiRaid40Pet",
+		"SecureGroupPetHeaderTemplate",
+		Properties,
+		"showParty", C.Raid.ShowPets,
+		"showRaid", C.Raid.ShowPets,
+		"showPlayer", true,
+		"showSolo", C.Raid.ShowSolo,
+		"maxColumns", ceil(40 / 5),
+		"point", "TOP",
+		"unitsPerColumn", C.Raid.Raid40MaxUnitPerColumn,
+		"columnSpacing", C.Raid.Padding40,
+		"columnAnchorPoint", "LEFT",
+		"yOffset", -C.Raid.Padding40,
+		"xOffset", C.Raid.Padding40,
+		"initial-width", C.Raid.Raid40WidthSize,
+		"initial-height", C.Raid.Raid40HeightSize,
+		"oUF-initialConfigFunction", [[
+			local header = self:GetParent()
+			self:SetWidth(header:GetAttribute("initial-width"))
+			self:SetHeight(header:GetAttribute("initial-height"))
+		]]
 end

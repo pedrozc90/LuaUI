@@ -30,6 +30,8 @@ function UnitFrames:Player()
     local Threat = self.ThreatIndicator
 
     local FrameWidth, FrameHeight = unpack(C.Units.Player)
+    local PowerHeight, AdditionalPowerHeight = 5, 2
+
     local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)
 	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
     local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
@@ -37,17 +39,22 @@ function UnitFrames:Player()
 
     self.Panel:Kill()
     self.Shadow:Kill()
-    self.Backdrop:Kill()
+    -- self.Backdrop:Kill()
+    -- self.Backdrop = nil
+    -- self:CreateBackdrop()
+    -- self.Backdrop:SetOutside()
 
     -- Health
     Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
 	Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:SetHeight(FrameHeight - 2)
-    Health:CreateBackdrop()
-    Health.Backdrop:SetOutside()
+    Health:SetHeight(FrameHeight)
+    -- Health:CreateBackdrop()
+    -- Health.Backdrop:SetOutside()
 
+    -- Health.Background:Kill()
     Health.Background:SetAllPoints(Health)
+    Health.Background:SetTexture(HealthTexture)
     Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
     Health.Value:ClearAllPoints()
@@ -91,13 +98,14 @@ function UnitFrames:Player()
 
     -- Power
     Power:ClearAllPoints()
-    Power:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -1)
-    Power:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -1)
-    Power:SetHeight(5)
-    Power:CreateBackdrop()
-    Power.Backdrop:SetOutside()
+    Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
+	Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
+    Power:SetHeight(PowerHeight)
+    -- Power:CreateBackdrop()
+    -- Power.Backdrop:SetOutside()
 
-    Power.Background:SetAllPoints()
+    Power.Background:SetAllPoints(Power)
+    Power.Background:SetTexture(PowerTexture)
     Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
     Power.Value:ClearAllPoints()
@@ -122,21 +130,29 @@ function UnitFrames:Player()
 
     -- Additional Power (e.g: Shadow Priest Mana)    
 	AdditionalPower:ClearAllPoints()
-    AdditionalPower:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, 0)
-    AdditionalPower:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, 0)
-    AdditionalPower:SetHeight(2)
+    AdditionalPower:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
+    AdditionalPower:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
+    AdditionalPower:SetHeight(AdditionalPowerHeight)
 	AdditionalPower:SetStatusBarTexture(PowerTexture)
 	AdditionalPower:SetStatusBarColor(unpack(T.Colors.power["MANA"]))
     AdditionalPower:SetFrameLevel(Health:GetFrameLevel())
     AdditionalPower.Backdrop:Kill()
 
-    AdditionalPower:SetScript("OnShow", function (self)
-        Health:SetHeight(FrameHeight - 2)
-    end)
+    AdditionalPower.PostVisibility = function (self, visibility)
+        if (visibility) then
+            Health:SetHeight(FrameHeight - PowerHeight - AdditionalPowerHeight - 2)
 
-    AdditionalPower:SetScript("OnHide", function (self)
-        Health:SetHeight(FrameHeight)
-    end)
+            Power:ClearAllPoints()
+            Power:SetPoint("TOPLEFT", AdditionalPower, "BOTTOMLEFT", 0, -1)
+            Power:SetPoint("TOPRIGHT", AdditionalPower, "BOTTOMRIGHT", 0, -1)
+        else
+            Health:SetHeight(FrameHeight - PowerHeight - 1)
+
+            Power:ClearAllPoints()
+            Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
+            Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
+        end
+    end
 
     AdditionalPower.Background:SetAllPoints()
     AdditionalPower.Background:SetColorTexture(unpack(C.General.BackgroundColor))
