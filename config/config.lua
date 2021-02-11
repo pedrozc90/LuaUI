@@ -24,16 +24,16 @@ C["Lua"] = {
 
 -- UnitsFrames Size
 C["Units"] = {
-    ["Player"]          = { 258, 25 },              -- set player unitframe size.
-    ["Target"]          = { 258, 25 },              -- set target unitframe size.
-    ["TargetOfTarget"]  = { 177, 25 },              -- set targetoftarget unitframe size.
+    ["Player"]          = { 258, 30 },              -- set player unitframe size.
+    ["Target"]          = { 258, 30 },              -- set target unitframe size.
+    ["TargetOfTarget"]  = { 177, 30 },              -- set targetoftarget unitframe size.
     ["Pet"]             = { 181, 25 },              -- set pet unitframe size.
     ["Focus"]           = { 205, 25 },              -- set focus unitframe size.
     ["FocusTarget"]     = { 205, 25 },              -- set focustarget unitframe size.
     ["Arena"]           = { 205, 25 },              -- set arena unitframe size.
     ["Boss"]            = { 205, 25 },              -- set boss unitframe size.
-    ["Party"]           = { 185, 25 },              -- set party unitframe size.
-    ["Raid"]            = {  72, 41 }               -- set raid unitframe size.
+    -- ["Party"]           = { 185, 25 },              -- set party unitframe size.
+    -- ["Raid"]            = {  72, 41 }               -- set raid unitframe size.
 }
 
 -- Auras
@@ -46,10 +46,12 @@ C["NamePlates"].DebuffSpacing = 7                   -- set space between debuffs
 
 -- Party
 C["Party"].ShowSolo = false                         -- display party frame when playing solo (only player unit).
+C["Party"].WidthSize = 193                          -- 
+C["Party"].HeightSize = 25                          -- 
 
 -- Raid
 C["Raid"].ShowSolo = false                          -- display raid frame when playing solo (only player unit).
-C["Raid"].TestAuraWatch = false                     -- force to show aurawatch debuff.
+C["Raid"].TestAuraWatch = false                     -- force to show aurawatch debuff. (use for testing)
 C["Raid"].GroupRoles = true                         -- enables group role icon on raid frame.
 
 -- Tooltips
@@ -63,17 +65,17 @@ C["UnitFrames"].UnlinkArenaCastBar = false          -- enable
 -- Plugins Settings
 ----------------------------------------------------------------
 C["Dispels"] = {
-    ["Enable"] = false,                             -- enables dispel announce plugin.
+    ["Enable"] = true,                              -- enables dispel announce plugin.
     ["SpellLink"] = true,                           -- display spell link, else just the spell name.
 }
 
 C["Interrupts"] = {
-    ["Enable"] = false,                             -- enables interrupt annouce plugin.
-    ["SpellLink"] = true,                           -- display spell link, else just the spell name.
+    ["Enable"] = true,                              -- enables interrupt annouce plugin.
+    ["SpellLink"] = false,                          -- display spell link, else just the spell name.
 }
 
 C["ScreenShots"] = {
-    ["Enable"] = false,                             -- enables plugin.
+    ["Enable"] = true,                              -- enables plugin.
     ["Achievements"] = true,                        -- enables screenshots of earned achievements.
     ["BossKills"] = false,                          -- enables screenshots of successful boss encounters.
     ["ChallendeMode"] = false,                      -- enables screenshots of successful challenge modes.
@@ -105,9 +107,9 @@ C["RaidCD"] = {
 ----------------------------------------------------------------
 
 -- General
-C["General"].BackgroundColor = { 0.05, 0.05, 0.05 }
+C["General"].BackgroundColor = { 0.01, 0.01, 0.01 }
 C["General"].BackdropColor = { 0.09, 0.09, 0.09 }
-C["General"].BorderColor = { 0, 0, 0 }
+C["General"].BorderColor = { 0.01, 0.01, 0.01 }
 C["General"].ClassColorBorder = false
 C["General"].UseGlobal = false
 C["General"].HideShadows = true
@@ -120,8 +122,8 @@ C["General"].Themes.Value = "Tukui"
 C["ActionBars"].Enable = true
 C["ActionBars"].BottomLeftBar = true
 C["ActionBars"].BottomRightBar = true
-C["ActionBars"].RightBar = false
-C["ActionBars"].LeftBar = false
+C["ActionBars"].RightBar = true
+C["ActionBars"].LeftBar = true
 C["ActionBars"].HotKey = true
 C["ActionBars"].EquipBorder = true
 C["ActionBars"].Macro = true
@@ -146,6 +148,8 @@ C["ActionBars"].AutoAddNewSpell = true
 C["ActionBars"].ProcAnim = true
 C["ActionBars"].Font = C["Lua"].Font
 
+C["ActionBars"].VerticalRightBars = true
+
 -- Auras
 C["Auras"].Enable = true
 C["Auras"].Flash = true
@@ -167,7 +171,7 @@ C["Bags"].ItemsPerRow = 12
 
 -- Chat
 C["Chat"].Enable = true
-C["Chat"].Bubbles.Value = "Exclude Party"   -- All | Exclude Party | None
+C["Chat"].Bubbles.Value = "All"   -- All | Exclude Party | None
 C["Chat"].BubblesTextSize = 9
 C["Chat"].SkinBubbles = true
 C["Chat"].LeftWidth = 450
@@ -235,7 +239,7 @@ C["NamePlates"].ColorThreat = false
 C["NamePlates"].HealthTag.Value = "|cff549654[Tukui:CurrentHP] - [perhp]%|r"
 
 -- Party
-C["Party"].Enable = false
+C["Party"].Enable = true
 C["Party"].ShowPets = false
 C["Party"].ShowPlayer = true
 C["Party"].ShowHealthText = true
@@ -247,10 +251,12 @@ C["Party"].HighlightColor = { 0, 1, 0 }
 C["Party"].HighlightSize = 10
 C["Party"].HealthTag.Value = "|cffFF0000[missinghp]|r"
 
+C["Party"].Padding = 36 -- 39
+
 -- Raid
 C["Raid"].Enable = true
 C["Raid"].DebuffWatch = true
-C["Raid"].ShowPets = true
+C["Raid"].ShowPets = false
 C["Raid"].RangeAlpha = 0.3
 C["Raid"].VerticalHealth = false
 C["Raid"].MaxUnitPerColumn = 5
@@ -260,12 +266,12 @@ C["Raid"].HealthFont = C["Lua"].Font
 C["Raid"].DesaturateNonPlayerBuffs = false
 C["Raid"].RaidBuffs.Value = "Self"
 C["Raid"].ClassRaidBuffs = true
-C["Raid"].WidthSize = 99
-C["Raid"].HeightSize = 69
+C["Raid"].WidthSize = 90        -- 99
+C["Raid"].HeightSize = 55           -- 69
 C["Raid"].Raid40WidthSize = 79
 C["Raid"].Raid40HeightSize = 55
-C["Raid"].Padding = 10
-C["Raid"].Padding40 = 10
+C["Raid"].Padding = 5
+C["Raid"].Padding40 = 5
 C["Raid"].HighlightColor = {0, 1, 0}
 C["Raid"].HighlightSize = 10
 C["Raid"].AuraTrack = true
@@ -277,6 +283,7 @@ C["Raid"].HealthTag.Value = "|cffFF0000[missinghp]|r"
 
 -- Tooltips
 C["Tooltips"].Enable = true
+C["Tooltips"].DisplayTitle = false
 C["Tooltips"].HideInCombat = false
 C["Tooltips"].AlwaysCompareItems = false
 C["Tooltips"].UnitHealthText = true
