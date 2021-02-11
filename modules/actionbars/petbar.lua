@@ -3,6 +3,8 @@ local ActionBars = T.ActionBars
 local Movers = T.Movers
 local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS
 
+local ceil = math.ceil
+
 ----------------------------------------------------------------
 -- PetActionBar
 ----------------------------------------------------------------
@@ -17,7 +19,6 @@ function ActionBars:CreatePetBar()
 	if (not C.ActionBars.Pet) then return end
 	
 	local PetBar = ActionBars.Bars.Pet
-	if (not PetBar) then return end
 
 	local ActionBar4 = ActionBars.Bars.Bar4
 	local ActionBar5 = ActionBars.Bars.Bar5
@@ -30,12 +31,23 @@ function ActionBars:CreatePetBar()
 	local ButtonsPerRow = C.ActionBars.BarPetButtonsPerRow
 	local NumRow = ceil(NUM_PET_ACTION_SLOTS / ButtonsPerRow)
 	
-	local Padding = (ButtonSize * 2) + (Spacing * 3) + 7
+	local xOffset = 7
+	local Width = (PetSize * NumRow) + (Spacing * (NumRow + 1)) + 2
+	local Height = (PetSize * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)) + 2
 
 	PetBar:ClearAllPoints()
-    PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -Padding, 7)
-    PetBar:SetWidth((PetSize * NumRow) + (Spacing * (NumRow + 1)))
-	PetBar:SetHeight((PetSize * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)))
+    PetBar:SetWidth(Width)
+	PetBar:SetHeight(Height)
+	if (C.ActionBars.VerticalRightBars) then
+		local Padding = ButtonSize + (Spacing * 3) + xOffset
+		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -Padding, 7)
+	elseif (C.ActionBars.LeftBar) then
+		PetBar:SetPoint("RIGHT", ActionBar5, "LEFT", -Spacing, 0)
+	elseif (C.ActionBars.RightBar) then
+		PetBar:SetPoint("RIGHT", ActionBar4, "LEFT", -Spacing, 0)
+	else
+		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -xOffset, 7)
+	end
 
 	if (C.ActionBars.ShowBackdrop) then
 		PetBar:SetBackdropTransparent()
@@ -54,7 +66,7 @@ function ActionBars:CreatePetBar()
 		-- Button:Show()
 
 		if (i == 1) then
-			Button:SetPoint("TOPLEFT", PetBar, "TOPLEFT", Spacing, -Spacing)
+			Button:SetPoint("TOPLEFT", PetBar, "TOPLEFT", Spacing + 1, -Spacing - 1)
 		elseif  ((i % ButtonsPerRow) == 1) then
 			Button:SetPoint("TOPLEFT", _G["PetActionButton" .. j], "TOPRIGHT", Spacing, 0)
 			j = j + ButtonsPerRow

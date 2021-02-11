@@ -3,6 +3,8 @@ local ActionBars = T.ActionBars
 local Movers = T.Movers
 local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 
+local ceil = math.ceil
+
 ----------------------------------------------------------------
 -- ActionBar5
 ----------------------------------------------------------------
@@ -12,58 +14,72 @@ function ActionBars:CreateBar5()
     -- first, we call the base function
     baseCreateBar5(self)
 
-    -- second, we edit it
+	-- second, we edit it
+	if (not C.ActionBars.LeftBar) then return end
+
     local ActionBar5 = ActionBars.Bars.Bar5
-    if (not ActionBar5) then return end
+    local ActionBar4 = ActionBars.Bars.Bar4
     
     local MultiBarLeft = MultiBarLeft
 	local Size = C.ActionBars.NormalButtonSize
 	local Spacing = C.ActionBars.ButtonSpacing
 	local ButtonsPerRow = C.ActionBars.Bar5ButtonsPerRow
-	local NumButtons = C.ActionBars.Bar5NumButtons
+    local NumButtons = C.ActionBars.Bar5NumButtons
+    
+    if (NumButtons <= ButtonsPerRow) then
+		ButtonsPerRow = NumButtons
+	end
+	
+	local NumRow = ceil(NumButtons / ButtonsPerRow)
 
-    local Padding = Size + Spacing + 7
+    local Width = (Size * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)) + 2
+    local Height = (Size * NumRow) + (Spacing * (NumRow + 1)) + 2
 
     ActionBar5:ClearAllPoints()
-    ActionBar5:SetPoint("RIGHT", UIParent, "RIGHT", -Padding, 7)
+    ActionBar5:SetWidth(Width)
+	ActionBar5:SetHeight(Height)
+    if (C.ActionBars.RightBar) then
+        if (C.ActionBars.VerticalRightBars) then
+            ActionBar5:SetPoint("BOTTOMRIGHT", ActionBar4, "TOPRIGHT", 0, Spacing - 2)
+        else
+            ActionBar5:SetPoint("RIGHT", ActionBar4, "LEFT", -Spacing, 0)
+        end
+    else
+        ActionBar5:SetPoint("RIGHT", UIParent, "RIGHT", -7, 7)
+    end
 
     if (C.ActionBars.ShowBackdrop) then
         ActionBar5:SetBackdropTransparent()
         ActionBar5.Shadow:Kill()
     end
 
-    -- local Bar = T.Panels.ActionBar5
-    -- local MultiBarLeft = MultiBarLeft
-    -- local Size = C.ActionBars.NormalButtonSize
-	-- local Spacing = C.ActionBars.ButtonSpacing
+    local NumPerRows = ButtonsPerRow
+	local NextRowButtonAnchor = _G["MultiBarLeftButton1"]
 
-    -- MultiBarLeft:SetParent(Bar)
-	-- MultiBarLeft:SetScript("OnHide", function() Bar.Backdrop:Hide() end)
-    -- MultiBarLeft:SetScript("OnShow", function() Bar.Backdrop:Show() end)
+	for i = 1, NUM_ACTIONBAR_BUTTONS do
+		local Button = _G["MultiBarLeftButton"..i]
+		local PreviousButton = _G["MultiBarLeftButton"..i-1]
+		
+		Button:SetSize(Size, Size)
+		Button:ClearAllPoints()
+		Button:SetAttribute("showgrid", 1)
+		Button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_EVENT)
 
-    -- Bar:ClearAllPoints()
-    -- Bar:SetPoint("RIGHT", Panels.ActionBar4, "LEFT", -7, 0)
-    -- Bar:SetWidth((Size * 1) + (Spacing * 2) - 2)
-    -- Bar:SetHeight((Size * 12) + (Spacing * 13) - 2)
-    -- Bar.Backdrop:StripTextures(true)
-    -- Bar.Backdrop = nil
-    -- Bar:CreateBackdrop("Transparent")
+		ActionBars:SkinButton(Button)
+		
+		if i <= NumButtons then
+			if (i == 1) then
+				Button:SetPoint("TOPLEFT", ActionBar5, "TOPLEFT", (Spacing + 1), -(Spacing + 1))
+			elseif (i == NumPerRows + 1) then
+				Button:SetPoint("TOPLEFT", NextRowButtonAnchor, "BOTTOMLEFT", 0, -Spacing)
 
-	-- for i = 1, NUM_ACTIONBAR_BUTTONS do
-	-- 	local Button = _G["MultiBarLeftButton"..i]
-	-- 	Button:ClearAllPoints()
-	-- 	Button:SetSize(Size)
-
-    --     if (i == 1) then
-    --         local Offset = Spacing - 1
-	-- 		Button:SetPoint("TOPLEFT", Bar, "TOPLEFT", Offset, -Offset)
-    --     else
-    --         local PreviousButton = _G["MultiBarLeftButton"..i-1]
-	-- 		Button:SetPoint("TOP", PreviousButton, "BOTTOM", 0, -Spacing)
-	-- 	end
-
-	-- 	Bar["Button"..i] = Button
-	-- end
-
-	-- RegisterStateDriver(Bar, "visibility", "[vehicleui][petbattle][overridebar] hide; show")
+				NumPerRows = NumPerRows + ButtonsPerRow
+				NextRowButtonAnchor = _G["MultiBarLeftButton"..i]
+			else
+				Button:SetPoint("LEFT", PreviousButton, "RIGHT", Spacing, 0)
+			end
+		else
+			Button:SetPoint("TOP", UIParent, "TOP", 0, 200)
+		end
+	end
 end

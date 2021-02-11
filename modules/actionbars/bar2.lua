@@ -3,6 +3,8 @@ local ActionBars = T.ActionBars
 local Movers = T.Movers
 local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 
+local ceil = math.ceil
+
 ----------------------------------------------------------------
 -- ActionBar2
 ----------------------------------------------------------------

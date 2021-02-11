@@ -80,16 +80,21 @@ function ActionBars:MovePetBar()
 	local Data1 = TukuiData[T.MyRealm][T.MyName].Move.TukuiActionBar5
     local Data2 = TukuiData[T.MyRealm][T.MyName].Move.TukuiPetActionBar
     
+    local ButtonSize = C.ActionBars.NormalButtonSize
     local Spacing = C.ActionBars.ButtonSpacing
+    local xOffset = 7
 
 	-- Don't run if player moved bar 5 or pet bar
-	if Data1 or Data2 then return end
-
-	if ActionBar5:IsShown() then
+    -- if (Data1 or Data2) then return end
+    
+    if (C.ActionBars.VerticalRightBars) then
+		local Padding = ButtonSize + (Spacing * 3) + xOffset
+		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -Padding, 7)
+	elseif (C.ActionBars.LeftBar) then
 		PetBar:SetPoint("RIGHT", ActionBar5, "LEFT", -Spacing, 0)
-    elseif ActionBar4:IsShown() then
+	elseif (C.ActionBars.RightBar) then
 		PetBar:SetPoint("RIGHT", ActionBar4, "LEFT", -Spacing, 0)
 	else
-		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -83, 7)
+		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -xOffset, 7)
 	end
 end
