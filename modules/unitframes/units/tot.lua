@@ -26,16 +26,14 @@ function UnitFrames:TargetOfTarget()
 
 	self.Shadow:Kill()
     self.Panel:Kill()
-    -- self.Backdrop:Kill()
+    self.Backdrop = nil
+    self:CreateBackdrop()
 
 	-- Health
     Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
     Health:SetHeight(FrameHeight - PowerHeight - 1)
-    -- Health:SetFrameLevel(3)
-    -- Health:CreateBackdrop()
-    -- Health.Backdrop:SetOutside()
 
     Health.Background:SetAllPoints()
     Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
@@ -61,8 +59,6 @@ function UnitFrames:TargetOfTarget()
     Power:SetHeight(PowerHeight)
     Power:SetFrameStrata(self:GetFrameStrata())
     Power:SetStatusBarTexture(PowerTexture)
-    -- Power:CreateBackdrop()
-    -- Power.Backdrop:SetOutside()
 
 	Power.Background = Power:CreateTexture(nil, "BORDER")
 	Power.Background:SetAllPoints()

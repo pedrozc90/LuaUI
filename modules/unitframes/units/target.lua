@@ -31,15 +31,14 @@ function UnitFrames:Target()
 
     self.Panel:Kill()
     self.Shadow:Kill()
-    -- self.Backdrop:Kill()
+    self.Backdrop = nil
+    self:CreateBackdrop()
 
-     -- Health
+    -- Health
     Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
     Health:SetHeight(FrameHeight - PowerHeight - 1)
-    -- Health:CreateBackdrop()
-    -- Health.Backdrop:SetOutside()
 
     Health.Background:SetAllPoints(Health)
     Health.Background:SetTexture(HealthTexture)
@@ -91,9 +90,7 @@ function UnitFrames:Target()
     Power:ClearAllPoints()
     Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
     Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
-    Power:SetHeight(5)
-    -- Power:CreateBackdrop()
-    -- Power.Backdrop:SetOutside()
+    Power:SetHeight(PowerHeight)
 
     Power.Background:SetAllPoints()
     Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))

@@ -26,18 +26,18 @@ function UnitFrames:Pet()
     local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
     local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
 
-	self.Backdrop:SetBackdropColor(unpack(C.General.BackdropColor))
+	-- self.Backdrop:SetBackdropColor(unpack(C.General.BackdropColor))
 	-- self.Backdrop:Kill()
 	self.Shadow:Kill()
 	self.Panel:Kill()
+    self.Backdrop = nil
+    self:CreateBackdrop()
 
 	-- Health
     Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:SetHeight(FrameHeight - (PowerHeight + 1))
-    -- Health:CreateBackdrop()
-    -- Health.Backdrop:SetOutside()
+    Health:SetHeight(FrameHeight - PowerHeight - 1)
 
     Health.Background:SetAllPoints()
     Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
@@ -70,8 +70,6 @@ function UnitFrames:Pet()
     Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
     Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
     Power:SetHeight(PowerHeight)
-    -- Power:CreateBackdrop()
-    -- Power.Backdrop:SetOutside()
 
     Power.Background:SetAllPoints()
     Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))

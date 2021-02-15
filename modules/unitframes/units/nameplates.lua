@@ -34,12 +34,14 @@ function UnitFrames:Nameplates()
 
     self.Backdrop:SetBackdropColor(unpack(C.General.BackdropColor))
     self.Shadow:Kill()
+    -- self.Backdrop = nil
+    -- self:CreateBackdrop()
     
     -- Health
 	Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:SetHeight(FrameHeight - (PowerHeight + 1))
+    Health:SetHeight(FrameHeight - PowerHeight - 1)
 
 	Health.Background:SetAllPoints()
     Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
