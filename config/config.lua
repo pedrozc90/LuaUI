@@ -9,6 +9,7 @@ C["Lua"] = {
     ["Enable"] = false,                             -- enable LuaUI edit
     ["UniColor"] = true,                            -- enable unicolor theme
     ["ColorPower"] = true,                          -- enable power bar color based on power type.
+    ["ScreenMargin"] = 5,                           -- margin from screen border.
 
     -- System
     ["Setup"] = true,                               -- set console variables preferences.
@@ -36,6 +37,12 @@ C["Units"] = {
     -- ["Raid"]            = {  72, 41 }               -- set raid unitframe size.
 }
 
+-- ActionBars
+C["ActionBars"].StanceBarBackground = false         -- enable stance bar background.
+
+-- Chat
+C["Chat"].Padding = 6                               -- padding between datatext and chat background.
+
 -- Auras
 C["Auras"].Spacing = 3                              -- set spacing between auras.
 
@@ -48,6 +55,7 @@ C["NamePlates"].DebuffSpacing = 7                   -- set space between debuffs
 C["Party"].ShowSolo = false                         -- display party frame when playing solo (only player unit).
 C["Party"].WidthSize = 193                          -- 
 C["Party"].HeightSize = 25                          -- 
+C["Party"].Padding = 33 -- 39
 
 -- Raid
 C["Raid"].ShowSolo = false                          -- display raid frame when playing solo (only player unit).
@@ -190,6 +198,7 @@ C["Chat"].TextFadingTimer = 60
 C["Chat"].TabFont = C["Lua"].Font
 C["Chat"].ChatFont = "Tukui"
 C["Chat"].BubblesNames = true
+C["Chat"].LogMax = 0
 
 -- Cooldowns
 C["Cooldowns"].Font = C["Lua"].Font
@@ -239,7 +248,7 @@ C["NamePlates"].ColorThreat = false
 C["NamePlates"].HealthTag.Value = "|cff549654[Tukui:CurrentHP] - [perhp]%|r"
 
 -- Party
-C["Party"].Enable = true
+C["Party"].Enable = false
 C["Party"].ShowPets = false
 C["Party"].ShowPlayer = true
 C["Party"].ShowHealthText = true
@@ -250,8 +259,6 @@ C["Party"].HealthFont = C["Lua"].Font
 C["Party"].HighlightColor = { 0, 1, 0 }
 C["Party"].HighlightSize = 10
 C["Party"].HealthTag.Value = "|cffFF0000[missinghp]|r"
-
-C["Party"].Padding = 36 -- 39
 
 -- Raid
 C["Raid"].Enable = true
@@ -311,7 +318,7 @@ C["UnitFrames"].ClassBar = true
 C["UnitFrames"].HealComm = true
 C["UnitFrames"].PlayerAuraBars = false
 C["UnitFrames"].TargetAuraBars = false
-C["UnitFrames"].ScrollingCombatText = true
+C["UnitFrames"].ScrollingCombatText = false
 C["UnitFrames"].ScrollingCombatTextIcon = true
 C["UnitFrames"].ScrollingCombatTextFontSize = 22
 C["UnitFrames"].ScrollingCombatTextRadius = 120

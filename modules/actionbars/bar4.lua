@@ -39,9 +39,9 @@ function ActionBars:CreateBar4()
 	ActionBar4:SetWidth(Width)
 	ActionBar4:SetHeight(Height)
 	if (C.ActionBars.VerticalRightBars) then
-		ActionBar4:SetPoint("RIGHT", UIParent, "RIGHT", -7, ceil(-Height / 2) + 7)
+		ActionBar4:SetPoint("RIGHT", UIParent, "RIGHT", -C.Lua.ScreenMargin, ceil(-Height / 2) + 7)
 	else
-		ActionBar4:SetPoint("RIGHT", UIParent, "RIGHT", -7, 7)
+		ActionBar4:SetPoint("RIGHT", UIParent, "RIGHT", -C.Lua.ScreenMargin, 5)
 	end
 
     if (C.ActionBars.ShowBackdrop) then

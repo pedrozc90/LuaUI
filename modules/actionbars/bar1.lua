@@ -26,7 +26,7 @@ function ActionBars:CreateBar1()
 	local Offset = Spacing + 1
 	
     ActionBar1:ClearAllPoints()
-	ActionBar1:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 5)
+	ActionBar1:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, C.Lua.ScreenMargin)
 	ActionBar1:SetWidth((Size * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)) + 2)
 	ActionBar1:SetHeight((Size * NumRow) + (Spacing * (NumRow + 1)) + 2)
 	

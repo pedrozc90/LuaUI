@@ -45,7 +45,7 @@ function ActionBars:CreateBar5()
             ActionBar5:SetPoint("RIGHT", ActionBar4, "LEFT", -Spacing, 0)
         end
     else
-        ActionBar5:SetPoint("RIGHT", UIParent, "RIGHT", -7, 7)
+        ActionBar5:SetPoint("RIGHT", UIParent, "RIGHT", -C.Lua.ScreenMargin, 5)
     end
 
     if (C.ActionBars.ShowBackdrop) then

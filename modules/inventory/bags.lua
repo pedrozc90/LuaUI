@@ -26,7 +26,6 @@ function Bags:CreateContainer(storagetype, ...)
 
     Container.Backdrop:SetBackdropColor(BackdropR, BackdropG, BackdropB, BackdropA)
     -- Container:SetWidth((ItemsPerRow * ButtonSize) + (ItemsPerRow - 1) * ButtonSpacing + 23)
-    -- Container.Shadow:Kill()
 
     if (storagetype == "Bag") then
         local BagsContainer = Container.BagsContainer
@@ -36,8 +35,8 @@ function Bags:CreateContainer(storagetype, ...)
 		local ToggleBags = Container.ToggleBags
 
         -- container
-        -- Container:ClearAllPoints()
-        -- Container:SetPoint("BOTTOMRIGHT", UIParent, "TOPRIGHT", 0, 3)
+        Container:ClearAllPoints()
+        Container:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -11, 35)
 
         -- -- sort button
         -- Sort.ClearAllPoints = Container.ClearAllPoints
@@ -67,9 +66,9 @@ function Bags:CreateContainer(storagetype, ...)
 
         -- local Size = (Container:GetWidth() - 3) / 2
 
-        -- -- container
-        -- Container:ClearAllPoints()
-        -- Container:SetPoint("BOTTOMLEFT", DataTextLeft, "TOPLEFT", 0, 3)
+        -- container
+        Container:ClearAllPoints()
+        Container:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 11, 35)
 
         -- -- reagents button
         -- Reagent:ClearAllPoints()

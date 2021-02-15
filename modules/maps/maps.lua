@@ -2,7 +2,6 @@ local T, C, L = Tukui:unpack()
 local Minimap = T.Maps.Minimap
 local DataTexts = T.DataTexts
 local Experience = T.Miscellaneous.Experience
-local Reputation = T.Miscellaneous.Reputation
 
 ----------------------------------------------------------------
 -- Minimap
@@ -14,6 +13,7 @@ local baseAddMinimapDataTexts = Minimap.AddMinimapDataTexts
 local baseAddTaxiEarlyExit = Minimap.AddTaxiEarlyExit
 
 function Minimap:StyleMinimap()
+
     -- first, we call the base function
     baseStyleMinimap(self)
 
@@ -30,21 +30,10 @@ function Minimap:StyleMinimap()
 
     -- Ticket
     local Ticket = self.Ticket
-    local TicketAnchor = Minimap
-
-    -- if (Experience.XPBar2:IsShown()) then
-    --     TicketAnchor = Experience.XPBar2
-    -- elseif (Experience.XPBar1:IsShown()) then
-    --     TicketAnchor = Experience.XPBar1
-    -- elseif (Reputation.XPBar2:IsShown()) then
-    --     TicketAnchor = Reputation.RepBar2
-    -- elseif (Experience.XPBar1:IsShown()) then
-    --     TicketAnchor = Reputation.RepBar1
-    -- end
 
     Ticket:ClearAllPoints()
-    Ticket:SetPoint("TOPLEFT", TicketAnchor, "BOTTOMLEFT", 0, -7)
-    Ticket:SetPoint("TOPRIGHT", TicketAnchor, "BOTTOMRIGHT", 0, -7)
+    Ticket:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -3)
+    Ticket:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
     Ticket:SetHeight(23)
     
 	Ticket.Text:ClearAllPoints()
@@ -74,7 +63,7 @@ function Minimap:PositionMinimap()
 
     -- second, we edit it
     self:ClearAllPoints()
-	self:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -5, -5)
+	self:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -C.Lua.ScreenMargin, -C.Lua.ScreenMargin)
 end
 
 function Minimap:AddMinimapDataTexts()
@@ -129,13 +118,23 @@ function Minimap:AddTaxiEarlyExit()
     -- second, we edit it
     local EarlyExitButton = self.EarlyExitButton
 
-    local EarlyExitButtonAnchor = self
-
 	EarlyExitButton:ClearAllPoints()
-	EarlyExitButton:SetWidth(DataTexts.Panels.Minimap:GetWidth())
+    EarlyExitButton:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -3)
+    EarlyExitButton:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
     EarlyExitButton:SetHeight(DataTexts.Panels.Minimap:GetHeight())
-    EarlyExitButton:SetPoint("TOPLEFT", EarlyExitButtonAnchor, "BOTTOMLEFT", -2, -4)
-    EarlyExitButton:SetPoint("TOPRIGHT", EarlyExitButtonAnchor, "BOTTOMRIGHT", 2, -4)
+    EarlyExitButton:SetScript("OnShow", function (self)
+        local ExpirenceBar = Experience.XPBar1
+        local ReputationBar = Experience.XPBar2
+
+        local Anchor = Minimap
+        if (ReputationBar and ReputationBar:IsShown()) then
+            Anchor = ReputationBar
+        elseif (ExpirenceBar and ExpirenceBar:IsShown()) then
+            Anchor = ExpirenceBar
+        end
+        EarlyExitButton:SetPoint("TOPLEFT", Anchor, "BOTTOMLEFT", 0, -3)
+        EarlyExitButton:SetPoint("TOPRIGHT", Anchor, "BOTTOMRIGHT", 0, -3)
+    end)
 
     EarlyExitButton.Text:ClearAllPoints()
     EarlyExitButton.Text:SetPoint("CENTER", EarlyExitButton, "CENTER", 0, 0)

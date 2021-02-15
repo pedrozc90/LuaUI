@@ -31,7 +31,6 @@ function ActionBars:CreatePetBar()
 	local ButtonsPerRow = C.ActionBars.BarPetButtonsPerRow
 	local NumRow = ceil(NUM_PET_ACTION_SLOTS / ButtonsPerRow)
 	
-	local xOffset = 7
 	local Width = (PetSize * NumRow) + (Spacing * (NumRow + 1)) + 2
 	local Height = (PetSize * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)) + 2
 
@@ -39,14 +38,14 @@ function ActionBars:CreatePetBar()
     PetBar:SetWidth(Width)
 	PetBar:SetHeight(Height)
 	if (C.ActionBars.VerticalRightBars) then
-		local Padding = ButtonSize + (Spacing * 3) + xOffset
+		local Padding = ButtonSize + (Spacing * 3) + C.Lua.ScreenMargin
 		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -Padding, 7)
 	elseif (C.ActionBars.LeftBar) then
 		PetBar:SetPoint("RIGHT", ActionBar5, "LEFT", -Spacing, 0)
 	elseif (C.ActionBars.RightBar) then
 		PetBar:SetPoint("RIGHT", ActionBar4, "LEFT", -Spacing, 0)
 	else
-		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -xOffset, 7)
+		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -C.Lua.ScreenMargin, 7)
 	end
 
 	if (C.ActionBars.ShowBackdrop) then

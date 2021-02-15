@@ -1,7 +1,7 @@
 local T, C, L = Tukui:unpack()
 local ActionBars = T.ActionBars
 local Movers = T.Movers
-local NUM_STANCE_SLOTS = NUM_STANCE_SLOTS
+local NUM_STANCE_SLOTS = NUM_STANCE_SLOTS       -- 10
 
 ----------------------------------------------------------------
 -- StanceBar
@@ -19,12 +19,15 @@ function ActionBars:CreateStanceBar()
 	local StanceBar = ActionBars.Bars.Stance
 	local PetSize = C.ActionBars.PetButtonSize
 	local Spacing = C.ActionBars.ButtonSpacing
+    local Padding = (C.ActionBars.StanceBarBackground) and Spacing or 0
 
 	StanceBar:ClearAllPoints()
-    StanceBar:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 7, -7)
-    StanceBar:SetWidth((PetSize * 10) + (Spacing * 11))
-    StanceBar:SetHeight((PetSize * 1) + (Spacing * 2))
-    StanceBar.Backdrop:Kill()
+    StanceBar:SetPoint("TOPLEFT", UIParent, "TOPLEFT", C.Lua.ScreenMargin, -C.Lua.ScreenMargin)
+    StanceBar:SetWidth((PetSize * NUM_STANCE_SLOTS) + (Spacing * NUM_STANCE_SLOTS))
+    StanceBar:SetHeight(PetSize)
+    if (not C.ActionBars.StanceBarBackground) then
+        StanceBar.Backdrop:Kill()
+    end
 
     if (C.ActionBars.ShowBackdrop) then
 		StanceBar:SetBackdropTransparent()
@@ -39,7 +42,7 @@ function ActionBars:CreateStanceBar()
 
         if (i == 1) then
             Button:ClearAllPoints()
-            Button:SetPoint("BOTTOMLEFT", StanceBar, "BOTTOMLEFT", Spacing, Spacing)
+            Button:SetPoint("TOPLEFT", StanceBar, "TOPLEFT", Padding, -Padding)
         else
             local Previous = _G["StanceButton" .. (i-1)]
             

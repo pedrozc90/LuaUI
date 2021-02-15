@@ -1,5 +1,4 @@
 local T, C, L = Tukui:unpack()
-local Chat = T.Chat
 local DataTexts = T.DataTexts
 
 ----------------------------------------------------------------
@@ -14,20 +13,21 @@ function DataTexts:Enable()
     -- second, we edit it
 	local DataTextLeft = self.Panels.Left
 	local DataTextRight = self.Panels.Right
-	local xOffset, yOffset = 10, 10
+
+	local Padding = C.Chat.Padding + C.Lua.ScreenMargin
 
 	DataTextLeft:ClearAllPoints()
 	DataTextLeft:SetWidth(C.General.Themes.Value == "Tukui" and C.Chat.LeftWidth or 370)
 	DataTextLeft:SetHeight(23)
-	DataTextLeft:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", xOffset, yOffset)
-	DataTextRight:CreateBackdrop("Transparent")
+	DataTextLeft:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", Padding, Padding)
+	DataTextLeft:CreateBackdrop("Transparent")
 	DataTextLeft:SetFrameStrata("BACKGROUND")
 	DataTextLeft:SetFrameLevel(2)
 
 	DataTextRight:ClearAllPoints()
 	DataTextRight:SetWidth(C.General.Themes.Value == "Tukui" and C.Chat.RightWidth or 370)
 	DataTextRight:SetHeight(23)
-	DataTextRight:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -xOffset, yOffset)
+	DataTextRight:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -Padding, Padding)
 	DataTextRight:CreateBackdrop("Transparent")
 	DataTextRight:SetFrameStrata("BACKGROUND")
 	DataTextRight:SetFrameLevel(2)
@@ -122,7 +122,7 @@ function DataTexts:CreateAnchors()
 		elseif (i == 4) then
 			Frame:SetPoint("LEFT", DataTextRight, "LEFT", 1, 0)
 		elseif (i == 7) then
-			Frame:SetPoint("CENTER", MinimapDataText, 0, 0)
+			Frame:SetPoint("CENTER", MinimapDataText, "CENTER", 0, 0)
 			Frame:SetWidth(MinimapDataText:GetWidth() - 2)
 			Frame:SetHeight(MinimapDataText:GetHeight() - 2)
 		else

@@ -33,7 +33,7 @@ function ActionBars:CreateBar3()
 	local Height = (Size * NumRow) + (Spacing * (NumRow + 1)) + 2
     
     ActionBar3:ClearAllPoints()
-    ActionBar3:SetPoint("TOP", UIParent, "TOP", 0, -7)
+    ActionBar3:SetPoint("TOP", UIParent, "TOP", 0, -C.Lua.ScreenMargin)
     ActionBar3:SetWidth(Width)
 	ActionBar3:SetHeight(Height)
 
