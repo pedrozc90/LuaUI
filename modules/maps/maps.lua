@@ -112,6 +112,7 @@ function Minimap:AddZoneAndCoords()
 end
 
 function Minimap:AddTaxiEarlyExit()
+    
     -- first, we call the base function
     baseAddTaxiEarlyExit(self)
 

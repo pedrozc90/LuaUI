@@ -37,6 +37,8 @@ C["Units"] = {
     -- ["Raid"]            = {  72, 41 }            -- set raid unitframe size.
 }
 
+C["General"].OverDataTextLeft = true                -- display alternativa power bar over data text panel left.
+
 -- ActionBars
 C["ActionBars"].StanceBarBackground = false         -- enable stance bar background.
 
