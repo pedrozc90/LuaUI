@@ -33,8 +33,8 @@ C["Units"] = {
     ["FocusTarget"]     = { 205, 25 },              -- set focustarget unitframe size.
     ["Arena"]           = { 205, 25 },              -- set arena unitframe size.
     ["Boss"]            = { 205, 25 },              -- set boss unitframe size.
-    -- ["Party"]           = { 185, 25 },              -- set party unitframe size.
-    -- ["Raid"]            = {  72, 41 }               -- set raid unitframe size.
+    -- ["Party"]           = { 185, 25 },           -- set party unitframe size.
+    -- ["Raid"]            = {  72, 41 }            -- set raid unitframe size.
 }
 
 -- ActionBars
@@ -53,9 +53,9 @@ C["NamePlates"].DebuffSpacing = 7                   -- set space between debuffs
 
 -- Party
 C["Party"].ShowSolo = false                         -- display party frame when playing solo (only player unit).
-C["Party"].WidthSize = 193                          -- 
-C["Party"].HeightSize = 25                          -- 
-C["Party"].Padding = 33 -- 39
+C["Party"].WidthSize = 193                          -- party frame width
+C["Party"].HeightSize = 25                          -- party frame height
+C["Party"].Padding = 33 -- 39                       -- distance between party frames
 
 -- Raid
 C["Raid"].ShowSolo = false                          -- display raid frame when playing solo (only player unit).
@@ -63,7 +63,7 @@ C["Raid"].TestAuraWatch = false                     -- force to show aurawatch d
 C["Raid"].GroupRoles = true                         -- enables group role icon on raid frame.
 
 -- Tooltips
-C["Tooltips"].SpellID = true                        -- enables spells, items, quest ids on tooltips.
+C["Tooltips"].ShowSpellID = true                    -- enables spells, items, quest ids on tooltips.
 
 C["UnitFrames"].UnlinkPetCastBar = false            -- enable
 C["UnitFrames"].UnlinkBossCastBar = false           -- enable
@@ -273,12 +273,12 @@ C["Raid"].HealthFont = C["Lua"].Font
 C["Raid"].DesaturateNonPlayerBuffs = false
 C["Raid"].RaidBuffs.Value = "Self"
 C["Raid"].ClassRaidBuffs = true
-C["Raid"].WidthSize = 90        -- 99
-C["Raid"].HeightSize = 55           -- 69
-C["Raid"].Raid40WidthSize = 79
-C["Raid"].Raid40HeightSize = 55
-C["Raid"].Padding = 5
-C["Raid"].Padding40 = 5
+C["Raid"].WidthSize = 89        -- 99
+C["Raid"].HeightSize = 50           -- 69
+C["Raid"].Raid40WidthSize = 89
+C["Raid"].Raid40HeightSize = 50
+C["Raid"].Padding = 4
+C["Raid"].Padding40 = 4
 C["Raid"].HighlightColor = {0, 1, 0}
 C["Raid"].HighlightSize = 10
 C["Raid"].AuraTrack = true
