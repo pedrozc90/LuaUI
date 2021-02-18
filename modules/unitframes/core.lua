@@ -401,16 +401,6 @@ function UnitFrames:CreateUnits()
     -- UnitFrames.GroupHolder:SetSize(250, 20)
     -- UnitFrames.GroupHolder:CreateBackdrop("Transparent")
 
-    -- if (C.Raid.Enable) then
-    --     Raid:ClearAllPoints()
-    --     Raid:SetPoint("BOTTOMLEFT", Panels.LeftChatBG, "TOPLEFT", 0, 7)
-
-    --     if (C.Raid.ShowPets) then
-    --         RaidPet:ClearAllPoints()
-    --         RaidPet:SetPoint("BOTTOMLEFT", Raid, "TOPLEFT", 0, 7)
-    --     end
-    -- end
-
     if (C.Party.Enable) then
         local Party = self.Headers.Party
     
@@ -432,7 +422,7 @@ function UnitFrames:CreateUnits()
         local Raid40 = self.Headers.Raid40
 
         Raid:ClearAllPoints()
-        Raid:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 0, 3)
+        Raid:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 1, 3)
 
         if (C.Raid.ShowPets) then
             local RaidPet = self.Headers.RaidPet
@@ -443,7 +433,7 @@ function UnitFrames:CreateUnits()
         end
         
         Raid40:ClearAllPoints()
-        Raid40:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 0, 3)
+        Raid40:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 1, 3)
 
         if (C.Raid.ShowPets) then
             local Raid40Pet = self.Headers.Raid40Pet
@@ -454,5 +444,3 @@ function UnitFrames:CreateUnits()
         end
     end
 end
-
--- T.UnitFrames = UnitFrames

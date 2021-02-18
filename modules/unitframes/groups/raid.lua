@@ -23,13 +23,10 @@ function UnitFrames:Raid()
 	local Threat = self.ThreatIndicator
     local Highlight = self.Highlight
 
-    -- local FrameWidth, FrameHeight = unpack(C["Units"].Raid)
     local PowerHeight = 3
 
     local HealthTexture = T.GetTexture(C.Textures.UFPartyHealthTexture)
     local PowerTexture = T.GetTexture(C.Textures.UFPartyPowerTexture)
-
-    local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
 
 	self.Shadow:Kill()
 	self.Panel:Kill()
@@ -39,85 +36,76 @@ function UnitFrames:Raid()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
     Health:SetHeight(self:GetHeight() - PowerHeight - 1)
-    Health:SetFrameLevel(3)
-    Health:CreateBackdrop()
     if (C.Raid.VerticalHealth) then
 		Health:SetOrientation("VERTICAL")
 	else
         Health:SetOrientation("HORIZONTAL")
     end
 
-    Health.Background:SetAllPoints()
-    Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
+	Health.Background:SetAllPoints()
+	Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
-    Health.Value:ClearAllPoints()
-    Health.Value:SetParent(Health)
-    Health.Value:SetPoint("CENTER", Health, "CENTER", 0, -7)
-    Health.Value:SetJustifyH("CENTER")
+	Health.Value:ClearAllPoints()
+	Health.Value:SetParent(Health)
+	Health.Value:SetPoint("CENTER", Health, "CENTER", 0, -7)
+	Health.Value:SetJustifyH("CENTER")
 
-    Health.frequentUpdate = true
-    Health.isRaid = true
-    if (C.Lua.UniColor) then
-        Health.colorTapping = false
-        Health.colorDisconnected = false
-        Health.colorClass = false
-        Health.colorReaction = false
-        Health:SetStatusBarColor(unpack(C.General.BackdropColor))
-        Health.Background:SetVertexColor(unpack(C.General.BackgroundColor))
-    else
-        Health.colorTapping = true
-        Health.colorDisconnected = true
-        Health.colorClass = true
-        Health.colorReaction = true
-    end
+	Health.frequentUpdate = true
+	Health.isRaid = true
+	if (C.Lua.UniColor) then
+		Health.colorTapping = false
+		Health.colorDisconnected = false
+		Health.colorClass = false
+		Health.colorReaction = false
+		Health:SetStatusBarColor(unpack(C.General.BackdropColor))
+		Health.Background:SetVertexColor(unpack(C.General.BackgroundColor))
+	else
+		Health.colorTapping = true
+		Health.colorDisconnected = true
+		Health.colorClass = true
+		Health.colorReaction = true
+	end
 
 	-- Power
-    Power:ClearAllPoints()
-    Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
-    Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
-    Power:SetHeight(PowerHeight)
-    Power:SetFrameLevel(Health:GetFrameLevel())
+	Power:ClearAllPoints()
+	Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
+	Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
+	Power:SetHeight(PowerHeight)
+	Power:SetFrameLevel(Health:GetFrameLevel())
 
-    Power.Background:SetAllPoints()
-    Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))
+	Power.Background:SetAllPoints()
+	Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
-    Power.frequentUpdates = true
-    Power.colorDisconnected = true
-    Power.isRaid = true
-    if (C.Lua.UniColor) then
-        Power.colorClass = true
-        Power.colorPower = false
-        Power.Background.multiplier = 0.1
-    else
-        Power.colorClass = false
-        Power.colorPower = true
-    end
+	Power.frequentUpdates = true
+	Power.colorDisconnected = true
+	Power.isRaid = true
+	if (C.Lua.UniColor) then
+		Power.colorClass = true
+		Power.colorPower = false
+		Power.Background.multiplier = 0.1
+	else
+		Power.colorClass = false
+		Power.colorPower = true
+	end
 
-    -- Name
-    Name:ClearAllPoints()
-    Name:SetParent(Health)
+	-- Name
+	Name:ClearAllPoints()
+	Name:SetParent(Health)
 	Name:SetPoint("CENTER", Health, "CENTER", 0, 7)
-    Name:SetJustifyH("CENTER")
+	Name:SetJustifyH("CENTER")
 
-    -- self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameShort]")
+	-- coloring names by class color
+	self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameShort]")
 
-    -- ReadyCheck
+	-- ReadyCheck
 	ReadyCheck:ClearAllPoints()
 	ReadyCheck:SetPoint("CENTER", Power, "CENTER", 0, 0)
 	ReadyCheck:SetSize(12, 12)
 
 	-- Raid Icon
 	RaidIcon:ClearAllPoints()
-    RaidIcon:SetPoint("CENTER", Health, "TOP", 0, 3)
-    RaidIcon:SetSize(14, 14)
-
-	if C["Raid"].ShowRessurection then
-        local ResurrectIcon = self.ResurrectIndicator
-
-        ResurrectIcon:ClearAllPoints()
-        ResurrectIcon:SetPoint("CENTER", Health, "CENTER", 0, 0)
-		ResurrectIcon:SetSize(16)
-	end
+	RaidIcon:SetPoint("CENTER", Health, "TOP", 0, 3)
+	RaidIcon:SetSize(14, 14)
 
 	-- Health Prediction
 	if (C.UnitFrames.HealComm) then
@@ -204,6 +192,12 @@ function UnitFrames:Raid()
         RaidDebuffs.count:SetFont(C.Medias.Font, 12, "OUTLINE")
 		RaidDebuffs.count:SetTextColor(1, .9, 0)
 	end
+
+	-- ResurrectIndicator
+	local ResurrectIndicator = self.ResurrectIndicator
+	ResurrectIndicator:ClearAllPoints()
+	ResurrectIndicator:SetPoint("CENTER", Health, "CENTER", 0, 0)
+	ResurrectIndicator:SetSize(24, 24)
 
 	-- Threat
 	-- Threat.Override = UnitFrames.UpdateThreat
