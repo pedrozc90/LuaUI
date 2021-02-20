@@ -47,18 +47,26 @@ function UnitFrames:PostCreateAuraBar(bar)
 	end
 end
 
-function UnitFrames:UpdateBuffsHeaderPosition(height)
-	local Frame = self:GetParent()
-    local Buffs = Frame.Buffs
-    local AuraBars = Frame.AuraBars
+local UpdateBuffsHeaderPosition = function(self, height)
+    local Parent = self:GetParent()
+    local Buffs = Parent.Buffs
+    local AuraBars = Parent.AuraBars
 
 	if (Buffs) then
         Buffs:ClearAllPoints()
-        Buffs:SetPoint("BOTTOMLEFT", Frame, "TOPLEFT", 0, height)
+        Buffs:SetPoint("BOTTOMLEFT", Parent, "TOPLEFT", -1, height)
     elseif (AuraBars) then
         AuraBars:ClearAllPoints()
-        AuraBars:SetPoint("BOTTOMLEFT", Frame, "TOPLEFT", 0, height)
+        AuraBars:SetPoint("BOTTOMLEFT", Parent, "TOPLEFT", -1, height)
     end
+end
+
+function UnitFrames:MoveBuffHeaderUp()
+    UpdateBuffsHeaderPosition(self, self:GetHeight() + 5)
+end
+
+function UnitFrames:MoveBuffHeaderDown()
+    UpdateBuffsHeaderPosition(self, 3)
 end
 
 -- local function PostCreateAura(self, button)
@@ -230,21 +238,16 @@ end
 ----------------------------------------------------------------
 -- change target party/raid units border color.
 function UnitFrames:Highlight()
-    local Highlight = self.Backdrop
-
     if (not self.Backdrop) then return end
-    
-    local colors = T.Colors.assets["Highlight"]
 
     if UnitIsUnit("focus", self.unit) then
-        self.Backdrop:SetBackdropBorderColor(unpack(colors["focus"]))
-        -- PowerBackdrop:SetBackdropBorderColor(unpack(colors["focus"]))
+        self.Backdrop:SetBackdropBorderColor(0.65, 0.65, 0.65, 1)
     elseif UnitIsUnit("target", self.unit) then
-        self.Backdrop:SetBackdropBorderColor(unpack(colors["target"]))
-        -- PowerBackdrop:SetBackdropBorderColor(unpack(colors["target"]))
+        self.Backdrop:SetBackdropBorderColor(0.32, 0.65, 0.32, 1)
+    elseif UnitIsUnit("nameplate", self.unit) then
+        print("NAMEPLATE")
     else
-        self.Backdrop:SetBackdropBorderColor(unpack(colors["none"]))
-        -- PowerBackdrop:SetBackdropBorderColor(unpack(colors["none"]))
+        self.Backdrop:SetBackdropBorderColor(unpack(C.General.BorderColor))
     end
 end
 

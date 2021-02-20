@@ -203,8 +203,10 @@ function UnitFrames:Raid()
 	-- Threat.Override = UnitFrames.UpdateThreat
 
 	-- Highlight
-	-- Highlight:ClearAllPoints()
-    -- Highlight:SetAllPoints(Health)
+	Highlight:Kill()
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", UnitFrames.Highlight)
+	self:RegisterEvent("PLAYER_FOCUS_CHANGED", UnitFrames.Highlight)
+	self:RegisterEvent("RAID_ROSTER_UPDATE", UnitFrames.Highlight)
 
     -- -- Group Role
     -- if (C.Raid.GroupRoles) then
@@ -225,43 +227,39 @@ function UnitFrames:Raid()
 
 	-- 	self.Atonement = Atonement
 	-- end
-
-	-- self:RegisterEvent("PLAYER_TARGET_CHANGED", UnitFrames.Highlight)
-	-- self:RegisterEvent("RAID_ROSTER_UPDATE", UnitFrames.Highlight)
-    -- self:RegisterEvent("PLAYER_FOCUS_CHANGED", UnitFrames.Highlight)
 end
 
 ----------------------------------------------------------------
 -- Raid Attributes
 ----------------------------------------------------------------
 function UnitFrames:GetRaidFramesAttributes()
-    local Properties = C.Party.Enable and "custom [@raid6,exists] show;hide" or "solo,party,raid"
-    
+	local Properties = C.Party.Enable and "custom [@raid6,exists] show;hide" or "solo,party,raid"
+
 	return
 		"TukuiRaid",
 		nil,
 		Properties,
-		"oUF-initialConfigFunction", [[
-			local header = self:GetParent()
-			self:SetWidth(header:GetAttribute("initial-width"))
-			self:SetHeight(header:GetAttribute("initial-height"))
-		]],
-		"initial-width", C.Raid.WidthSize,
-		"initial-height", C.Raid.HeightSize,
 		"showParty", true,
 		"showRaid", true,
 		"showPlayer", true,
 		"showSolo", C.Raid.ShowSolo,
-		"xoffset", C.Raid.Padding,
-		"yOffset", -C.Raid.Padding,
+		"maxColumns", ceil(40 / 5),
 		"point", "LEFT",
+		"unitsPerColumn", C.Raid.MaxUnitPerColumn,
+		"columnSpacing", C.Raid.Padding,
+		"columnAnchorPoint", "BOTTOM",
+		"xOffset", C.Raid.Padding,
+		"yOffset", -C.Raid.Padding,
 		"groupFilter", "1,2,3,4,5,6,7,8",
 		"groupingOrder", "1,2,3,4,5,6,7,8",
 		"groupBy", C.Raid.GroupBy.Value,
-		"maxColumns", ceil(40 / 5),
-		"unitsPerColumn", C.Raid.MaxUnitPerColumn,
-		"columnSpacing", C.Raid.Padding,
-		"columnAnchorPoint", "BOTTOM"
+		"initial-width", C.Raid.WidthSize,
+		"initial-height", C.Raid.HeightSize,
+		"oUF-initialConfigFunction", [[
+			local header = self:GetParent()
+			self:SetWidth(header:GetAttribute("initial-width"))
+			self:SetHeight(header:GetAttribute("initial-height"))
+		]]
 end
 
 function UnitFrames:GetBigRaidFramesAttributes()
@@ -271,27 +269,27 @@ function UnitFrames:GetBigRaidFramesAttributes()
 		"TukuiRaid40",
 		nil,
 		Properties,
-		"oUF-initialConfigFunction", [[
-			local header = self:GetParent()
-			self:SetWidth(header:GetAttribute("initial-width"))
-			self:SetHeight(header:GetAttribute("initial-height"))
-		]],
-		"initial-width", C.Raid.Raid40WidthSize,
-		"initial-height", C.Raid.Raid40HeightSize,
 		"showParty", true,
 		"showRaid", true,
 		"showPlayer", true,
 		"showSolo", C.Raid.ShowSolo,
-		"xoffset", C.Raid.Padding40,
-		"yOffset", -C.Raid.Padding40,
+		"maxColumns", ceil(40 / 5),
 		"point", "TOP",
+		"unitsPerColumn", C.Raid.Raid40MaxUnitPerColumn,
+		"columnSpacing", C.Raid.Padding40,
+		"columnAnchorPoint", "LEFT",
+		"xOffset", C.Raid.Padding40,
+		"yOffset", -C.Raid.Padding40,
 		"groupFilter", "1,2,3,4,5,6,7,8",
 		"groupingOrder", "1,2,3,4,5,6,7,8",
 		"groupBy", C.Raid.GroupBy.Value,
-		"maxColumns", ceil(40 / 5),
-		"unitsPerColumn", C.Raid.Raid40MaxUnitPerColumn,
-		"columnSpacing", C.Raid.Padding40,
-		"columnAnchorPoint", "LEFT"
+		"initial-width", C.Raid.Raid40WidthSize,
+		"initial-height", C.Raid.Raid40HeightSize,
+		"oUF-initialConfigFunction", [[
+			local header = self:GetParent()
+			self:SetWidth(header:GetAttribute("initial-width"))
+			self:SetHeight(header:GetAttribute("initial-height"))
+		]]
 end
 
 function UnitFrames:GetPetRaidFramesAttributes()

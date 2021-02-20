@@ -21,8 +21,11 @@ function UnitFrames:Player()
 
 	-- Atonement Bar
 	Atonement:ClearAllPoints()
-	Atonement:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 3)
-	Atonement:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", 0, 3)
+	Atonement:SetParent(self)
+	Atonement:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
+	Atonement:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
 	Atonement:SetHeight(3)
 	Atonement:SetStatusBarTexture(HealthTexture)
+	Atonement:SetScript("OnShow", UnitFrames.MoveBuffHeaderUp)
+	Atonement:SetScript("OnHide", UnitFrames.MoveBuffHeaderDown)
 end

@@ -394,13 +394,8 @@ function UnitFrames:Player()
             end
         end
 
-        ComboPoints:SetScript("OnShow", function(self)
-			UnitFrames.UpdateBuffsHeaderPosition(self, 11)
-		end)
-
-        ComboPoints:SetScript("OnHide", function(self)
-			UnitFrames.UpdateBuffsHeaderPosition(self, 3)
-        end)
+        ComboPoints:SetScript("OnShow", UnitFrames.MoveBuffHeaderUp)
+        ComboPoints:SetScript("OnHide", UnitFrames.MoveBuffHeaderDown)
     end
 
     -- Raid Icon
