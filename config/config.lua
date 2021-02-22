@@ -237,15 +237,15 @@ C["Misc"].MicroToggle.Value = "ALT-M"       -- None | M | SHIFT-M | CTRL-M | ALT
 
 -- Nameplates
 C["NamePlates"].Enable = true
-C["NamePlates"].Width = 129                     -- 153
-C["NamePlates"].Height = 14                     -- 12
+C["NamePlates"].Width = 165
+C["NamePlates"].Height = 14
 C["NamePlates"].NameplateCastBar = true
 C["NamePlates"].Font = C["Lua"].Font
 C["NamePlates"].OnlySelfDebuffs = true
 C["NamePlates"].QuestIcon = true
 C["NamePlates"].ClassIcon = false
 C["NamePlates"].HighlightColor = {1, 1, 0}
-C["NamePlates"].HighlightSize = 10
+C["NamePlates"].HighlightSize = 4
 C["NamePlates"].ColorThreat = false
 C["NamePlates"].HealthTag.Value = "|cff549654[Tukui:CurrentHP] - [perhp]%|r"
 

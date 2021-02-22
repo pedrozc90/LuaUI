@@ -195,8 +195,8 @@ function UnitFrames:Nameplates()
     end
 
     -- Highlight
-    Highlight:Kill()
-    self:RegisterEvent("PLAYER_TARGET_CHANGED", UnitFrames.Highlight, true)
-    self:RegisterEvent("NAME_PLATE_UNIT_ADDED", UnitFrames.Highlight, true)
-    self:RegisterEvent("NAME_PLATE_UNIT_REMOVED", UnitFrames.Highlight, true)
+    -- Highlight:Kill()
+    -- self:RegisterEvent("PLAYER_TARGET_CHANGED", UnitFrames.Highlight, true)
+    -- self:RegisterEvent("NAME_PLATE_UNIT_ADDED", UnitFrames.Highlight, true)
+    -- self:RegisterEvent("NAME_PLATE_UNIT_REMOVED", UnitFrames.Highlight, true)
 end

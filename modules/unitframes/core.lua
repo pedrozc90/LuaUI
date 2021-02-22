@@ -4,6 +4,8 @@ local ActionBars = T.ActionBars
 local Chat = T.Chat
 local Class = select(2, UnitClass("player"))
 
+local match = string.match
+
 ----------------------------------------------------------------
 -- Health
 ----------------------------------------------------------------
@@ -236,20 +238,30 @@ end
 ----------------------------------------------------------------
 -- Highlights
 ----------------------------------------------------------------
--- change target party/raid units border color.
-function UnitFrames:Highlight()
-    if (not self.Backdrop) then return end
-
-    if UnitIsUnit("focus", self.unit) then
-        self.Backdrop:SetBackdropBorderColor(0.65, 0.65, 0.65, 1)
-    elseif UnitIsUnit("target", self.unit) then
-        self.Backdrop:SetBackdropBorderColor(0.32, 0.65, 0.32, 1)
-    elseif UnitIsUnit("nameplate", self.unit) then
-        print("NAMEPLATE")
-    else
-        self.Backdrop:SetBackdropBorderColor(unpack(C.General.BorderColor))
+local SelectHighlightColor = function(unit)
+    if UnitIsUnit("focus", unit) then
+        return { 0.65, 0.65, 0.65, 1 }
+    elseif UnitIsUnit("target", unit) then
+        return { 0.32, 0.65, 0.32, 1 }
     end
+    return C.General.BorderColor
 end
+
+-- change target party/raid units border color.
+-- function UnitFrames:Highlight()
+--     print(self:GetName())
+--     if (not self.Backdrop) then return end
+
+--     local r, g, b, a = unpack(SelectHighlightColor(self.unit))
+
+--     print(self:GetName(), self.Backdrop ~= nil, self.Backdrop.BorderTop ~= nil, "color", r, g, b, a)
+
+--     if (self.Backdrop.BorderTop) then
+--         self.Backdrop:SetBorderColor(r, g, b, a or 1)
+--     else
+--         self.Backdrop:SetBackdropColor(r, g, b, a or 1)
+--     end
+-- end
 
 -- -- change target nameplate border color.
 -- function UnitFrames:HighlightPlate()

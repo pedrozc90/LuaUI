@@ -205,7 +205,6 @@ function UnitFrames:Raid()
 	-- Highlight
 	Highlight:Kill()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UnitFrames.Highlight)
-	self:RegisterEvent("PLAYER_FOCUS_CHANGED", UnitFrames.Highlight)
 	self:RegisterEvent("RAID_ROSTER_UPDATE", UnitFrames.Highlight)
 
     -- -- Group Role
