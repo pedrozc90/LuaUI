@@ -1,4 +1,5 @@
 local T, C, L = Tukui:unpack()
+local GetNumTalentTabs, GetTalentTree, GetTalentTabInfo = GetNumTalentTabs, GetTalentTree, GetTalentTabInfo
 
 ----------------------------------------------------------------
 -- Talents
@@ -13,11 +14,6 @@ Talents.GetTalentTree = function()
         result[tabIndex] = points
     end
     return unpack(result)
-end
-
-Talents.isDruidHealer = function()
-    local balance, feral_combat, restoration = Talents.GetTalentTree()
-    return (restoration > balance and restoration > feral_combat)
 end
 
 Talents.isDruidHealer = function()

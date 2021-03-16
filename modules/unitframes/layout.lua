@@ -17,17 +17,10 @@ function UnitFrames:UpdatePosition()
 end
 
 function UnitFrames:SetDefaultLayout()
-    local Anchor = self.Anchor
     local Raid = self.Headers.Raid
     local RaidPet = self.Headers.RaidPet
-    local Holder = self.GroupHolder
 
     local LeftChatBG = Panels.LeftChatBG
-
-    Holder:ClearAllPoints()
-    Holder:SetPoint("TOPLEFT", LeftChatBG, "TOPLEFT", 0, 0)
-    Holder:SetSize(LeftChatBG:GetWidth(), 20)
-    Holder:SetAlpha(0)
 
     if (C.Raid.Enable) then
         Raid:ClearAllPoints()
@@ -41,35 +34,31 @@ function UnitFrames:SetDefaultLayout()
 end
 
 function UnitFrames:SetHealerLayout()
-    local Anchor = self.Anchor
     local Raid = self.Headers.Raid
     local RaidPet = self.Headers.RaidPet
-    local Holder = self.GroupHolder
 
-    local NumberPerRow = 5
-    local Spacing = 7
-    local Width, Height = unpack(C.Units.Raid)
-    local yOffset = 0
+    local Width, Height = C.Raid.WidthSize, C.Raid.HeightSize
+    local yOffset = Height
 
     -- move down raid frame if raid get too big
     local numGroupMembers = GetNumGroupMembers()
-    if (numGroupMembers > 5) then
-        yOffset = 39
-    elseif (numGroupMembers > 10) then
-        yOffset = 78
-    elseif (numGroupMembers > 20) then
+    if (numGroupMembers > 20) then
         self:SetDefaultLayout()
         return
+    elseif (numGroupMembers > 10) then
+        yOffset = Height
+    elseif (numGroupMembers > 5) then
+        yOffset = 2 * Height
     end
-
-    Holder:ClearAllPoints()
-    Holder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 220 - yOffset)
-    Holder:SetSize((NumberPerRow * Width) + (NumberPerRow - 1) * Spacing, 20)
-    Holder:SetAlpha(0)
 
     if (C.Raid.Enable) then
         Raid:ClearAllPoints()
-        Raid:Point("BOTTOMLEFT", Holder, "TOPLEFT", 0, 7)
+        Raid:Point("BOTTOM", UIParent, "BOTTOM", 0, 200 + yOffset)
+
+        if (C.Raid.ShowPets) then
+            RaidPet:ClearAllPoints()
+            Raid:Point("BOTTOM", UIParent, "BOTTOM", 0, 200 + yOffset)
+        end
     end
 end
 
@@ -95,12 +84,12 @@ function UnitFrames:PLAYER_ENTERING_WORLD()
     -- get instance/continent information
     local inInstance = IsInInstance()
     local instanceName, instanceType, difficultyID, difficultyName, maxPlayers,
-        dynamicDifficulty, isDynamic, instanceID, instanceGroupSize = GetInstanceInfo()
-    
-    if (C.Lua.HealerLayout.OnlyInInstance and not inInstance) then 
+    dynamicDifficulty, isDynamic, instanceID, instanceGroupSize = GetInstanceInfo()
+
+    if (C.Lua.HealerLayout.OnlyInInstance and not inInstance) then
         return
     end
-    
+
     self:UpdatePosition()
 end
 

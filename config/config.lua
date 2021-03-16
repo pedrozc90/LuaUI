@@ -90,7 +90,7 @@ C["General"].BackdropColor = { 0.05, 0.05, 0.05 }
 C["General"].BorderColor = { 0.125, 0.125, 0.125 }
 C["General"].UseGlobal = false
 C["General"].HideShadows = true
-C["General"].UIScale = T.PerfectScale
+C["General"].UIScale = 0.50                         -- T.PerfectScale
 C["General"].MinimapScale = 110
 C["General"].WorldMapScale = 59
 C["General"].Themes.Value = "Tukui 18"
@@ -117,7 +117,7 @@ C["Auras"].HideBuffs = false
 C["Auras"].HideDebuffs = false
 C["Auras"].Animation = false
 C["Auras"].BuffsPerRow = 12
-C["Auras"].Spacing = 3                                          -- set spacing between auras.
+C["Auras"].Spacing = 3                              -- set spacing between auras.
 C["Auras"].Font = C["Lua"].Font
 
 -- Bags
