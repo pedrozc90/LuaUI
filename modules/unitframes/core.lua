@@ -334,6 +334,34 @@ end
 ----------------------------------------------------------------
 local baseCreateUnits = UnitFrames.CreateUnits
 
+function UnitFrames:RaidDefaultPosition()
+    local LeftChatBG = Chat.Panels.LeftChat
+
+    local Raid = self.Headers.Raid
+    local RaidPet = self.Headers.RaidPet
+
+    local Raid40 = self.Headers.Raid40
+    local Raid40Pet = self.Headers.Raid40Pet
+
+    Raid:ClearAllPoints()
+    Raid:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 1, 3)
+
+    if (C.Raid.ShowPets) then
+        RaidPet:ClearAllPoints()
+        RaidPet:SetParent(T.PetHider)
+        RaidPet:SetPoint("TOPLEFT", Raid, "TOPRIGHT", C.Raid.Padding, 0)
+    end
+    
+    Raid40:ClearAllPoints()
+    Raid40:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 1, 3)
+
+    if (C.Raid.ShowPets) then
+        Raid40Pet:ClearAllPoints()
+        Raid40Pet:SetParent(T.PetHider)
+        Raid40Pet:SetPoint("TOPLEFT", Raid40, "TOPRIGHT", C.Raid.Padding40, 0)
+    end
+end
+
 function UnitFrames:CreateUnits()
 
     -- first, we call the base function
@@ -410,12 +438,6 @@ function UnitFrames:CreateUnits()
         end
     end
 
-    -- -- frame for raid frame positioning
-    -- UnitFrames.GroupHolder = CreateFrame("Frame", "GroupHolder", UIParent)
-    -- UnitFrames.GroupHolder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 270)
-    -- UnitFrames.GroupHolder:SetSize(250, 20)
-    -- UnitFrames.GroupHolder:CreateBackdrop("Transparent")
-
     if (C.Party.Enable) then
         local Party = self.Headers.Party
     
@@ -433,29 +455,6 @@ function UnitFrames:CreateUnits()
     end
 
     if (C.Raid.Enable) then
-        local Raid = self.Headers.Raid
-        local Raid40 = self.Headers.Raid40
-
-        Raid:ClearAllPoints()
-        Raid:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 1, 3)
-
-        if (C.Raid.ShowPets) then
-            local RaidPet = self.Headers.RaidPet
-
-            RaidPet:ClearAllPoints()
-            RaidPet:SetParent(T.PetHider)
-            RaidPet:SetPoint("TOPLEFT", Raid, "TOPRIGHT", C.Raid.Padding, 0)
-        end
-        
-        Raid40:ClearAllPoints()
-        Raid40:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 1, 3)
-
-        if (C.Raid.ShowPets) then
-            local Raid40Pet = self.Headers.Raid40Pet
-
-            Raid40Pet:ClearAllPoints()
-            Raid40Pet:SetParent(T.PetHider)
-            Raid40Pet:SetPoint("TOPLEFT", Raid40, "TOPRIGHT", C.Raid.Padding40, 0)
-        end
+        self:RaidDefaultPosition()
     end
 end

@@ -1,77 +1,76 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
-local Chat = T.Chat.Panels
+local Chat = T.Chat
 
-if (not C.Lua.Enable) then return end
+local GetSpecialization, GetSpecializationRole = GetSpecialization, GetSpecializationRole
+local GetNumGroupMembers = GetNumGroupMembers
 
 ----------------------------------------------------------------
 -- Layouts
 ----------------------------------------------------------------
+
+-- move down raid frame if raid get too big
+local function ComputeOffset()
+    local _, RaidHeight, Padding = C.Raid.WidthSize, C.Raid.HeightSize, C.Raid.Padding
+    local _, Raid40Height, Padding40 = C.Raid.Raid40WidthSize, C.Raid.Raid40HeightSize, C.Raid.Padding40
+
+    local numGroupMembers = GetNumGroupMembers()
+
+    -- 40 man raids
+    if (numGroupMembers > 20) then
+        return (Raid40Height + Padding40)
+    -- 20 man mythic raids
+    elseif (numGroupMembers > 10) then
+        return (RaidHeight + Padding)
+    end
+    -- until 10 man raid and 5 man dungeons
+    return 2 * (RaidHeight + Padding)
+end
+
 function UnitFrames:UpdatePosition()
     local spec = GetSpecialization()
     local specRole = GetSpecializationRole(spec)
 
     if (C.Lua.HealerLayout and (specRole == "HEALER")) then
-        self:SetHealerLayout()
+        self:RaidHealerPosition()
     else
-        self:SetDefaultLayout()
+        self:RaidDefaultPosition()
     end
 end
 
-function UnitFrames:SetDefaultLayout()
-    local Anchor = self.Anchor
+function UnitFrames:RaidHealerPosition()
+    if (not C.Raid.Enable) then return end
+
     local Raid = self.Headers.Raid
     local RaidPet = self.Headers.RaidPet
-    local Holder = self.GroupHolder
+    local Raid40 = self.Headers.Raid40
+    local Raid40Pet = self.Headers.Raid40Pet
 
-    local LeftChatBG = Chat.LeftChat
+    local yPosition = 281                       -- right above filger cooldowns
+    local yOffset = ComputeOffset()
 
-    Holder:ClearAllPoints()
-    Holder:SetPoint("TOPLEFT", LeftChatBG, "TOPLEFT", 0, 0)
-    Holder:SetSize(LeftChatBG:GetWidth(), 20)
-    Holder:SetAlpha(0)
+    local Anchor = { "BOTTOM", UIParent, "BOTTOM", 0, yPosition + yOffset }
 
-    if (C.Raid.Enable) then
+    if (not yOffset) then
+        self:RaidDefaultPosition()
+    else
         Raid:ClearAllPoints()
-        Raid:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 0, 7)
+        Raid:SetPoint(unpack(Anchor))
 
         if (C.Raid.ShowPets) then
             RaidPet:ClearAllPoints()
-            RaidPet:SetPoint("BOTTOMLEFT", Raid, "TOPLEFT", 0, 7)
+            RaidPet:SetParent(T.PetHider)
+            RaidPet:SetPoint(unpack(Anchor))
         end
-    end
-end
+        
+        Raid40:ClearAllPoints()
+        Raid40:SetPoint(unpack(Anchor))
 
-function UnitFrames:SetHealerLayout()
-    local Anchor = self.Anchor
-    local Raid = self.Headers.Raid
-    local RaidPet = self.Headers.RaidPet
-    local Holder = self.GroupHolder
-
-    local NumberPerRow = 5
-    local Spacing = 7
-    local Width, Height = unpack(C.Units.Raid)
-    local yOffset = 0
-
-    -- move down raid frame if raid get too big
-    local numGroupMembers = GetNumGroupMembers()
-    if (numGroupMembers > 5) then
-        yOffset = 39
-    elseif (numGroupMembers > 10) then
-        yOffset = 78
-    elseif (numGroupMembers > 20) then
-        self:SetDefaultLayout()
-        return
-    end
-
-    Holder:ClearAllPoints()
-    Holder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 220 - yOffset)
-    Holder:SetSize((NumberPerRow * Width) + (NumberPerRow - 1) * Spacing, 20)
-    Holder:SetAlpha(0)
-
-    if (C.Raid.Enable) then
-        Raid:ClearAllPoints()
-        Raid:SetPoint("BOTTOMLEFT", Holder, "TOPLEFT", 0, 7)
+        if (C.Raid.ShowPets) then
+            Raid40Pet:ClearAllPoints()
+            Raid40Pet:SetParent(T.PetHider)
+            Raid40Pet:SetPoint(unpack(Anchor))
+        end
     end
 end
 
