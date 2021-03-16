@@ -26,11 +26,9 @@ function TimerTracker:UpdateBar()
 		end
     end
     
-    -- self:ClearAllPoints()
     self:SetWidth(210)
     self:SetHeight(16)
-    -- self:SetBackdrop(nil)
-    -- self:CreateBackdrop("Default")
     self:SetStatusBarTexture(Texture)
-    self.Shadow:Kill()
+    self:SetStatusBarColor(170 / 255, 10 / 255, 10 / 255)
+    self.Backdrop.Shadow:Kill()
 end
