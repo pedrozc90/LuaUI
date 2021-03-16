@@ -27,7 +27,7 @@ function UnitFrames:Player()
 	HolyPower:SetHeight(5)
 
 	local Max = 5
-	local Spacing = 3
+	local Spacing = 1
 	local Size, Delta = T.EqualSizes(HolyPower:GetWidth(), Max, Spacing)
 
 	for i = 1, Max do
