@@ -207,15 +207,15 @@ function UnitFrames:Raid()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UnitFrames.Highlight)
 	self:RegisterEvent("RAID_ROSTER_UPDATE", UnitFrames.Highlight)
 
-    -- -- Group Role
-    -- if (C.Raid.GroupRoles) then
-    --     local GroupRoleIndicator = self:CreateTexture(nil, "OVERLAY")
-    --     GroupRoleIndicator:SetSize(12, 12)
-    --     GroupRoleIndicator:SetPoint("CENTER", Health, "CENTER", 0, -7)
-    --     GroupRoleIndicator.PostUpdate = UnitFrames.UpdateGroupRole
+    -- Group Role
+    if (C.Raid.GroupRoles) then
+        local GroupRoleIndicator = Health:CreateTexture(nil, "OVERLAY")
+        GroupRoleIndicator:SetSize(12, 12)
+        GroupRoleIndicator:SetPoint("CENTER", Health, "CENTER", 0, -7)
+        GroupRoleIndicator.PostUpdate = UnitFrames.UpdateGroupRole
 
-    --     self.GroupRoleIndicator = GroupRoleIndicator
-    -- end
+        self.GroupRoleIndicator = GroupRoleIndicator
+    end
 
 	-- if (Class == "PRIEST") then
     --     local Atonement = CreateFrame("StatusBar", nil, Power)
@@ -231,8 +231,13 @@ end
 ----------------------------------------------------------------
 -- Raid Attributes
 ----------------------------------------------------------------
+local point = "LEFT"
+local columnAnchorPoint = "BOTTOM"
+
 function UnitFrames:GetRaidFramesAttributes()
-	local Properties = C.Party.Enable and "custom [@raid6,exists] show;hide" or "solo,party,raid"
+	local Properties = C.Party.Enable and
+		"custom [@raid21,exists] hide; [@raid6,exists] show; hide" or
+		"custom [@raid21,exists] hide; [@raid6,exists] show; [@party1,exists] show; hide"
 
 	return
 		"TukuiRaid",
@@ -242,11 +247,11 @@ function UnitFrames:GetRaidFramesAttributes()
 		"showRaid", true,
 		"showPlayer", true,
 		"showSolo", C.Raid.ShowSolo,
+		"point", point,
 		"maxColumns", ceil(40 / 5),
-		"point", "LEFT",
 		"unitsPerColumn", C.Raid.MaxUnitPerColumn,
 		"columnSpacing", C.Raid.Padding,
-		"columnAnchorPoint", "BOTTOM",
+		"columnAnchorPoint", columnAnchorPoint,
 		"xOffset", C.Raid.Padding,
 		"yOffset", -C.Raid.Padding,
 		"groupFilter", "1,2,3,4,5,6,7,8",
@@ -273,10 +278,10 @@ function UnitFrames:GetBigRaidFramesAttributes()
 		"showPlayer", true,
 		"showSolo", C.Raid.ShowSolo,
 		"maxColumns", ceil(40 / 5),
-		"point", "TOP",
+		"point", point,
 		"unitsPerColumn", C.Raid.Raid40MaxUnitPerColumn,
 		"columnSpacing", C.Raid.Padding40,
-		"columnAnchorPoint", "LEFT",
+		"columnAnchorPoint", columnAnchorPoint,
 		"xOffset", C.Raid.Padding40,
 		"yOffset", -C.Raid.Padding40,
 		"groupFilter", "1,2,3,4,5,6,7,8",
@@ -292,7 +297,9 @@ function UnitFrames:GetBigRaidFramesAttributes()
 end
 
 function UnitFrames:GetPetRaidFramesAttributes()
-	local Properties = C.Party.Enable and "custom [@raid21,exists] hide; [@raid6,exists] show; hide" or "custom [@raid21,exists] hide; [@raid6,exists] show; [@party1,exists] show; hide"
+	local Properties = C.Party.Enable and
+		"custom [@raid21,exists] hide; [@raid6,exists] show; hide" or
+		"custom [@raid21,exists] hide; [@raid6,exists] show; [@party1,exists] show; hide"
 
 	return
 		"TukuiRaidPet",
@@ -303,10 +310,10 @@ function UnitFrames:GetPetRaidFramesAttributes()
 		"showPlayer", true,
 		"showSolo", C.Raid.ShowSolo,
 		"maxColumns", ceil(40 / 5),
-		"point", "TOP",
+		"point", point,
 		"unitsPerColumn", C.Raid.MaxUnitPerColumn,
 		"columnSpacing", C.Raid.Padding,
-		"columnAnchorPoint", "LEFT",
+		"columnAnchorPoint", columnAnchorPoint,
 		"yOffset", -C.Raid.Padding,
 		"xOffset", C.Raid.Padding,
 		"initial-width", C.Raid.WidthSize,
@@ -330,10 +337,10 @@ function UnitFrames:GetBigPetRaidFramesAttributes()
 		"showPlayer", true,
 		"showSolo", C.Raid.ShowSolo,
 		"maxColumns", ceil(40 / 5),
-		"point", "TOP",
+		"point", point,
 		"unitsPerColumn", C.Raid.Raid40MaxUnitPerColumn,
 		"columnSpacing", C.Raid.Padding40,
-		"columnAnchorPoint", "LEFT",
+		"columnAnchorPoint", columnAnchorPoint,
 		"yOffset", -C.Raid.Padding40,
 		"xOffset", C.Raid.Padding40,
 		"initial-width", C.Raid.Raid40WidthSize,

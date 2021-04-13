@@ -202,21 +202,21 @@ end
 --     end
 -- end
 
--- ----------------------------------------------------------------
--- -- Group Role
--- ----------------------------------------------------------------
--- function UnitFrames:UpdateGroupRole(role)
---     self:SetTexCoord(unpack(T.IconCoord))
---     if (role == "TANK") then
---         self:SetTexture(C.Medias.roleTANK)
---         self:Show()
---     elseif (role == "HEALER") then
---         self:SetTexture(C.Medias.roleHEALER)
---         self:Show()
---     else
---         self:Hide()
---     end
--- end
+----------------------------------------------------------------
+-- Group Role
+----------------------------------------------------------------
+function UnitFrames:UpdateGroupRole(role)
+    self:SetTexCoord(unpack(T.IconCoord))
+    if (role == "TANK") then
+        self:SetTexture(C.Medias.roleTANK)
+        self:Show()
+    elseif (role == "HEALER") then
+        self:SetTexture(C.Medias.roleHEALER)
+        self:Show()
+    else
+        self:Hide()
+    end
+end
 
 -- ----------------------------------------------------------------
 -- -- Name
@@ -419,7 +419,7 @@ function UnitFrames:CreateUnits()
             Arena[i]:ClearAllPoints()
             Arena[i]:SetSize(unpack(C.Units.Arena))
             if (i == 1) then
-                Arena[i]:SetPoint("TOPRIGHT", UIParent, "RIGHT", -225, 275)
+                Arena[i]:SetPoint("TOPRIGHT", UIParent, "RIGHT", -525, 275)
             else
                 Arena[i]:SetPoint("TOP", Arena[i - 1], "BOTTOM", 0, -34)
             end
@@ -431,7 +431,7 @@ function UnitFrames:CreateUnits()
             Boss[i]:ClearAllPoints()
             Boss[i]:SetSize(unpack(C.Units.Boss))
             if (i == 1) then
-                Boss[i]:SetPoint("TOPRIGHT", UIParent, "RIGHT", -225, 275)
+                Boss[i]:SetPoint("TOPRIGHT", UIParent, "RIGHT", -525, 275)
             else
                 Boss[i]:SetPoint("TOP", Boss[i - 1], "BOTTOM", 0, -34)
             end
