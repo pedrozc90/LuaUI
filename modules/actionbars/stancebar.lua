@@ -19,20 +19,26 @@ function ActionBars:CreateStanceBar()
 	local StanceBar = ActionBars.Bars.Stance
 	local PetSize = C.ActionBars.PetButtonSize
 	local Spacing = C.ActionBars.ButtonSpacing
-    local Padding = (C.ActionBars.StanceBarBackground) and Spacing or 0
+    local Offset = (C.ActionBars.StanceBarBackground) and (Spacing + 1) or 0
+
+    local Columns = (not C.ActionBars.VerticalStanceBar) and NUM_STANCE_SLOTS or 1
+    local Rows = (not C.ActionBars.VerticalStanceBar) and 1 or NUM_STANCE_SLOTS
+
+    local Width, Height = ActionBars.GetBackgroundSize(Rows, Columns, PetSize, Spacing, C.ActionBars.StanceBarBackground)
 
 	StanceBar:ClearAllPoints()
     StanceBar:SetPoint("TOPLEFT", UIParent, "TOPLEFT", C.Lua.ScreenMargin, -C.Lua.ScreenMargin)
-    StanceBar:SetWidth((PetSize * NUM_STANCE_SLOTS) + (Spacing * NUM_STANCE_SLOTS))
-    StanceBar:SetHeight(PetSize)
-    if (not C.ActionBars.StanceBarBackground) then
-        StanceBar.Backdrop:Kill()
-    end
+    StanceBar:SetWidth(Width)
+    StanceBar:SetHeight(Height)
 
     if (C.ActionBars.ShowBackdrop) then
 		StanceBar:SetBackdropTransparent()
-		StanceBar.Shadow:Kill()
+		StanceBar.Shadow:Kill() 
 	end
+
+    if (C.ActionBars.ShowBackdrop and (not C.ActionBars.StanceBarBackground)) then
+        StanceBar.Backdrop:Kill()
+    end
 
 	for i = 1, NUM_STANCE_SLOTS do
 		local Button = _G["StanceButton"..i]
@@ -42,12 +48,16 @@ function ActionBars:CreateStanceBar()
 
         if (i == 1) then
             Button:ClearAllPoints()
-            Button:SetPoint("TOPLEFT", StanceBar, "TOPLEFT", Padding, -Padding)
+            Button:SetPoint("TOPLEFT", StanceBar, "TOPLEFT", Offset, -Offset)
         else
             local Previous = _G["StanceButton" .. (i-1)]
-            
+
 			Button:ClearAllPoints()
-			Button:SetPoint("LEFT", Previous, "RIGHT", Spacing, 0)
+            if (C.ActionBars.VerticalStanceBar) then
+                Button:SetPoint("TOP", Previous, "BOTTOM", 0, -Spacing)
+            else
+			    Button:SetPoint("LEFT", Previous, "RIGHT", Spacing, 0)
+            end
 		end
 	end
 end

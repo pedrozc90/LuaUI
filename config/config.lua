@@ -40,7 +40,7 @@ C["Units"] = {
 C["General"].OverDataTextLeft = true                -- display alternativa power bar over data text panel left.
 
 -- ActionBars
-C["ActionBars"].StanceBarBackground = false         -- enable stance bar background.
+
 
 -- Chat
 C["Chat"].Padding = 6                               -- padding between datatext and chat background.
@@ -60,7 +60,7 @@ C["Party"].HeightSize = 25                          -- party frame height
 C["Party"].Padding = 33 -- 39                       -- distance between party frames
 
 -- Raid
-C["Raid"].ShowSolo = false                          -- display raid frame when playing solo (only player unit).
+C["Raid"].ShowSolo = true                          -- display raid frame when playing solo (only player unit).
 C["Raid"].TestAuraWatch = false                     -- force to show aurawatch debuff. (use for testing)
 C["Raid"].GroupRoles = true                         -- enables group role icon on raid frame.
 
@@ -124,7 +124,7 @@ C["General"].ClassColorBorder = false
 C["General"].UseGlobal = false
 C["General"].HideShadows = true
 C["General"].UIScale = 0.50     -- T.PerfectScale
-C["General"].MinimapScale = 100
+C["General"].MinimapScale = 115
 C["General"].WorldMapScale = 50
 C["General"].Themes.Value = "Tukui"
 
@@ -151,15 +151,17 @@ C["ActionBars"].Bar4NumButtons = 12
 C["ActionBars"].Bar5NumButtons = 12
 C["ActionBars"].BarPetButtonsPerRow = 10
 C["ActionBars"].NormalButtonSize = 30       -- 27
-C["ActionBars"].PetButtonSize = 32          -- 25
+C["ActionBars"].PetButtonSize = 30          -- 25
 C["ActionBars"].ButtonSpacing = 3           -- 3
 C["ActionBars"].ShowBackdrop = true
 C["ActionBars"].AutoAddNewSpell = true
 C["ActionBars"].ProcAnim = true
 C["ActionBars"].Font = C["Lua"].Font
 
-C["ActionBars"].VerticalRightBars = true
-
+C["ActionBars"].VerticalRightBars = false
+C["ActionBars"].VerticalStanceBar = true
+C["ActionBars"].StanceBarBackground = false         -- enable stance bar background.
+C["ActionBars"].ActionBar3Background = false
 -- Auras
 C["Auras"].Enable = true
 C["Auras"].Flash = true
@@ -275,8 +277,8 @@ C["Raid"].HealthFont = C["Lua"].Font
 C["Raid"].DesaturateNonPlayerBuffs = false
 C["Raid"].RaidBuffs.Value = "Self"
 C["Raid"].ClassRaidBuffs = true
-C["Raid"].WidthSize = 89        -- 99
-C["Raid"].HeightSize = 50           -- 69
+C["Raid"].WidthSize = 90        -- 99
+C["Raid"].HeightSize = 51           -- 69
 C["Raid"].Raid40WidthSize = 89
 C["Raid"].Raid40HeightSize = 50
 C["Raid"].Padding = 4

@@ -5,7 +5,7 @@ local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 local ceil = math.ceil
 
 ----------------------------------------------------------------
--- ActionBar3
+-- ActionBar3: Bottom Right ActionBar (slots 49 to 60)
 ----------------------------------------------------------------
 local baseCreateBar3 = ActionBars.CreateBar3
 
@@ -23,17 +23,19 @@ function ActionBars:CreateBar3()
 	local Spacing = C.ActionBars.ButtonSpacing
 	local ButtonsPerRow = C.ActionBars.Bar3ButtonsPerRow
 	local NumButtons = C.ActionBars.Bar3NumButtons
+
+	local Padding = (C.ActionBars.ActionBar3Background) and (Spacing + 1) or 0
 	
 	if NumButtons <= ButtonsPerRow then
 		ButtonsPerRow = NumButtons
 	end
 	
     local NumRow = ceil(NumButtons / ButtonsPerRow)
-    local Width = (Size * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)) + 2
-	local Height = (Size * NumRow) + (Spacing * (NumRow + 1)) + 2
-    
+	
+	local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRow, Size, Spacing, C.ActionBars.ActionBar3Background)
+
     ActionBar3:ClearAllPoints()
-    ActionBar3:SetPoint("TOP", UIParent, "TOP", 0, -C.Lua.ScreenMargin)
+    ActionBar3:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 250, -C.Lua.ScreenMargin)
     ActionBar3:SetWidth(Width)
 	ActionBar3:SetHeight(Height)
 
@@ -41,6 +43,10 @@ function ActionBars:CreateBar3()
         ActionBar3:SetBackdropTransparent()
         ActionBar3.Shadow:Kill()
     end
+
+	if (ActionBar3.Backdrop and (not C.ActionBars.ActionBar3Background)) then
+		ActionBar3.Backdrop:Kill()
+	end
 
     local NumPerRows = ButtonsPerRow
 	local NextRowButtonAnchor = _G["MultiBarBottomRightButton1"]
@@ -58,7 +64,7 @@ function ActionBars:CreateBar3()
 		
 		if (i <= NumButtons) then
 			if (i == 1) then
-				Button:SetPoint("TOPLEFT", ActionBar3, "TOPLEFT", Spacing + 1, -Spacing -1)
+				Button:SetPoint("TOPLEFT", ActionBar3, "TOPLEFT", Padding, -Padding)
 			elseif (i == NumPerRows + 1) then
 				Button:SetPoint("TOPLEFT", NextRowButtonAnchor, "BOTTOMLEFT", 0, -Spacing)
 

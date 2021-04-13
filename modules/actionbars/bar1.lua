@@ -23,12 +23,14 @@ function ActionBars:CreateBar1()
 	local Druid, Rogue, Warrior, Priest = "", "", "", ""
 	local ButtonsPerRow = C.ActionBars.Bar1ButtonsPerRow
 	local NumRow = ceil(12 / ButtonsPerRow)
-	local Offset = Spacing + 1
+	local Offset = (C.ActionBars.ShowBackdrop) and (Spacing + 1) or 0
+
+	local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRow, Size, Spacing, C.ActionBars.ShowBackdrop)
 	
     ActionBar1:ClearAllPoints()
 	ActionBar1:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, C.Lua.ScreenMargin)
-	ActionBar1:SetWidth((Size * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)) + 2)
-	ActionBar1:SetHeight((Size * NumRow) + (Spacing * (NumRow + 1)) + 2)
+	ActionBar1:SetWidth(Width)
+	ActionBar1:SetHeight(Height)
 	
 	if (C.ActionBars.ShowBackdrop) then
 		ActionBar1:SetBackdropTransparent()

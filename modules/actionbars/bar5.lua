@@ -25,6 +25,7 @@ function ActionBars:CreateBar5()
 	local Spacing = C.ActionBars.ButtonSpacing
 	local ButtonsPerRow = C.ActionBars.Bar5ButtonsPerRow
     local NumButtons = C.ActionBars.Bar5NumButtons
+	local Offset = (C.ActionBars.ShowBackdrop) and (Spacing + 1) or 0
     
     if (NumButtons <= ButtonsPerRow) then
 		ButtonsPerRow = NumButtons
@@ -32,8 +33,7 @@ function ActionBars:CreateBar5()
 	
 	local NumRow = ceil(NumButtons / ButtonsPerRow)
 
-    local Width = (Size * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)) + 2
-    local Height = (Size * NumRow) + (Spacing * (NumRow + 1)) + 2
+    local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRow, Size, Spacing, C.ActionBars.ShowBackdrop)
 
     ActionBar5:ClearAllPoints()
     ActionBar5:SetWidth(Width)
@@ -69,7 +69,7 @@ function ActionBars:CreateBar5()
 		
 		if i <= NumButtons then
 			if (i == 1) then
-				Button:SetPoint("TOPLEFT", ActionBar5, "TOPLEFT", (Spacing + 1), -(Spacing + 1))
+				Button:SetPoint("TOPLEFT", ActionBar5, "TOPLEFT", Offset, -Offset)
 			elseif (i == NumPerRows + 1) then
 				Button:SetPoint("TOPLEFT", NextRowButtonAnchor, "BOTTOMLEFT", 0, -Spacing)
 

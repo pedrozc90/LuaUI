@@ -25,24 +25,25 @@ function ActionBars:CreateBar2()
 	local Spacing = C.ActionBars.ButtonSpacing
 	local ButtonsPerRow = 6 -- C.ActionBars.Bar2ButtonsPerRow
     local NumButtons = 6 --C.ActionBars.Bar2NumButtons
+    local Offset = (C.ActionBars.ShowBackdrop) and (Spacing + 1) or 0
 
     local NumRow = ceil(NumButtons / ButtonsPerRow)
-
-    local Offset = Spacing + 1
+    
+    local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRow, Size, Spacing, C.ActionBars.ShowBackdrop)
 
     local ActionBar2Left = CreateFrame("Frame", "TukuiActionBar2Left", T.PetHider, "SecureHandlerStateTemplate")
-	ActionBar2Left:SetPoint("BOTTOMRIGHT", ActionBar1, "BOTTOMLEFT", -1, 0)
+	ActionBar2Left:SetPoint("BOTTOMRIGHT", ActionBar1, "BOTTOMLEFT", -3, 0)
 	ActionBar2Left:SetFrameStrata("LOW")
 	ActionBar2Left:SetFrameLevel(10)
-	ActionBar2Left:SetWidth((Size * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)) + 2)
-    ActionBar2Left:SetHeight((Size * NumRow) + (Spacing * (NumRow + 1)) + 2)
+	ActionBar2Left:SetWidth(Width)
+    ActionBar2Left:SetHeight(Height)
     
     local ActionBar2Right = CreateFrame("Frame", "TukuiActionBar2Right", T.PetHider, "SecureHandlerStateTemplate")
-	ActionBar2Right:SetPoint("BOTTOMLEFT", ActionBar1, "BOTTOMRIGHT", 1, 0)
+	ActionBar2Right:SetPoint("BOTTOMLEFT", ActionBar1, "BOTTOMRIGHT", 3, 0)
 	ActionBar2Right:SetFrameStrata("LOW")
 	ActionBar2Right:SetFrameLevel(10)
-	ActionBar2Right:SetWidth((Size * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)) + 2)
-    ActionBar2Right:SetHeight((Size * NumRow) + (Spacing * (NumRow + 1)) + 2)
+	ActionBar2Right:SetWidth(Width)
+    ActionBar2Right:SetHeight(Height)
     
     ActionBar2:Kill()
 

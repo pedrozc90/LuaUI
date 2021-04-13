@@ -5,11 +5,28 @@ local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS
 
 ----------------------------------------------------------------
+-- Utilities
+----------------------------------------------------------------
+ActionBars.GetActionBarSize = function(number, size, spacing, show_bg)
+	if (not show_bg) then
+		return (size * number) + (spacing * (number - 1))
+	end
+	return (size * number) + (spacing * (number + 1)) + 2
+end
+
+ActionBars.GetBackgroundSize = function(rows, cols, size, spacing, show_bg)
+	local a = ActionBars.GetActionBarSize(rows, size, spacing, show_bg)
+	local b = ActionBars.GetActionBarSize(cols, size, spacing, show_bg)
+	return a, b
+end
+
+----------------------------------------------------------------
 -- Skin ActionBar Buttons
 ----------------------------------------------------------------
 local baseSkinButton = ActionBars.SkinButton
 local baseSkinPetAndShiftButton = ActionBars.SkinPetAndShiftButton
 local baseMovePetBar = ActionBars.MovePetBar
+local baseUpdateStanceBar = ActionBars.UpdateStanceBar
 
 function ActionBars:SkinButton(Button)
     
@@ -96,5 +113,39 @@ function ActionBars:MovePetBar()
 		PetBar:SetPoint("RIGHT", ActionBar4, "LEFT", -Spacing, 0)
 	else
 		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -xOffset, 7)
+	end
+end
+
+function ActionBars:UpdateStanceBar()
+	
+	-- first, we call the base function
+    baseUpdateStanceBar(self)
+
+    -- second, we edit it
+	local StanceBar = self.Bars.Stance
+	local ActionBar3 = self.Bars.Bar3
+	local NumForms = GetNumShapeshiftForms()
+
+	local PetSize = C.ActionBars.PetButtonSize
+	local Spacing = C.ActionBars.ButtonSpacing
+    local Padding = (C.ActionBars.StanceBarBackground) and Spacing or 0
+
+    local Rows = (not C.ActionBars.VerticalStanceBar) and NumForms or 1
+    local Columns = (not C.ActionBars.VerticalStanceBar) and 1 or NumForms
+
+	if (NumForms == 0) then
+		if (ActionBar3) then
+			ActionBar3:ClearAllPoints()
+			ActionBar3:SetPoint("TOPLEFT", UIParent, "TOPLEFT", C.Lua.ScreenMargin, -C.Lua.ScreenMargin)
+		end
+	else
+		local Width, Height = ActionBars.GetBackgroundSize(Rows, Columns, PetSize, Spacing, C.ActionBars.StanceBarBackground)
+		
+		StanceBar:SetSize(Width, Height)
+
+		if (ActionBar3) then
+			ActionBar3:ClearAllPoints()
+			ActionBar3:SetPoint("TOPLEFT", StanceBar, "TOPRIGHT", 3, 0)
+		end
 	end
 end
