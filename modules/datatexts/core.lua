@@ -172,10 +172,10 @@ local function AddDefaults()
 
 	TukuiData[Realm][Name].DataTexts = {}
 
-	TukuiData[Realm][Name].DataTexts["Talents"] = { true, 1 }
-	TukuiData[Realm][Name].DataTexts["Character"] = { true, 2}
-	TukuiData[Realm][Name].DataTexts["Gold"] = { true, 3 }
-	TukuiData[Realm][Name].DataTexts["DPS"] = { true, 4 }
+	TukuiData[Realm][Name].DataTexts["Armor"] = { true, 1 }
+	TukuiData[Realm][Name].DataTexts["Talents"] = { true, 2 }
+	TukuiData[Realm][Name].DataTexts["Character"] = { true, 3}
+	TukuiData[Realm][Name].DataTexts["Regen"] = { true, 4 }
 	TukuiData[Realm][Name].DataTexts["System"] = { true, 5 }
 	TukuiData[Realm][Name].DataTexts["MicroMenu"] = { true, 6 }
 	TukuiData[Realm][Name].DataTexts["Time"] = { true, 7 }
