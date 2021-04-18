@@ -6,7 +6,7 @@ local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 local ceil = math.ceil
 
 ----------------------------------------------------------------
--- ActionBar5
+-- ActionBar5: Page 4 - Right ActionBars 2 (slots 37 to 48)
 ----------------------------------------------------------------
 local baseCreateBar5 = ActionBars.CreateBar5
 

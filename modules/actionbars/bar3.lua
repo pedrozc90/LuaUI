@@ -5,7 +5,7 @@ local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 local ceil = math.ceil
 
 ----------------------------------------------------------------
--- ActionBar3: Bottom Right ActionBar (slots 49 to 60)
+-- ActionBar3: Page 5 Bottom Right ActionBar (slots 49 to 60)
 ----------------------------------------------------------------
 local baseCreateBar3 = ActionBars.CreateBar3
 
@@ -61,6 +61,10 @@ function ActionBars:CreateBar3()
 		Button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_EVENT)
 
 		ActionBars:SkinButton(Button)
+
+		ActionBars.HideActionSlot(Button)
+		Button:SetScript("OnEnter", ActionBars.ShowActionSlot)
+		Button:SetScript("OnLeave", ActionBars.HideActionSlot)
 		
 		if (i <= NumButtons) then
 			if (i == 1) then

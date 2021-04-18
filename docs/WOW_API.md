@@ -1,5 +1,7 @@
 # WoW API
 
+## [Events](https://wowpedia.fandom.com/wiki/Events)
+
 ## Action Bars
 
 -   [Action Slot](https://wowpedia.fandom.com/wiki/Action_slot)

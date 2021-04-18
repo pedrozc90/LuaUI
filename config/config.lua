@@ -39,9 +39,6 @@ C["Units"] = {
 
 C["General"].OverDataTextLeft = true                -- display alternativa power bar over data text panel left.
 
--- ActionBars
-
-
 -- Chat
 C["Chat"].Padding = 6                               -- padding between datatext and chat background.
 
@@ -158,10 +155,11 @@ C["ActionBars"].AutoAddNewSpell = true
 C["ActionBars"].ProcAnim = true
 C["ActionBars"].Font = C["Lua"].Font
 
-C["ActionBars"].VerticalRightBars = false
-C["ActionBars"].VerticalStanceBar = true
-C["ActionBars"].StanceBarBackground = false         -- enable stance bar background.
-C["ActionBars"].ActionBar3Background = false
+C["ActionBars"].VerticalRightBars = false           -- enables vertical multi bars (bar 4 and 5).
+C["ActionBars"].VerticalStanceBar = true            -- enables vertical stance bar.
+C["ActionBars"].StanceBarBackground = false         -- enables stance bar background.
+C["ActionBars"].ActionBar3Background = false        -- enables action bar 3 background.
+C["ActionBars"].ActionBar3Toggle = true             -- hide button without action.
 -- Auras
 C["Auras"].Enable = true
 C["Auras"].Flash = true

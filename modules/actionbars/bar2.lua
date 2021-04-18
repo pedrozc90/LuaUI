@@ -6,7 +6,7 @@ local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 local ceil = math.ceil
 
 ----------------------------------------------------------------
--- ActionBar2
+-- ActionBar2: Page 6 - Bottom Left ActionBar (slots 61 to 72)
 ----------------------------------------------------------------
 local baseCreateBar2 = ActionBars.CreateBar2
 
@@ -23,8 +23,8 @@ function ActionBars:CreateBar2()
     local MultiBarBottomLeft = MultiBarBottomLeft
 	local Size = C.ActionBars.NormalButtonSize
 	local Spacing = C.ActionBars.ButtonSpacing
-	local ButtonsPerRow = 6 -- C.ActionBars.Bar2ButtonsPerRow
-    local NumButtons = 6 --C.ActionBars.Bar2NumButtons
+	local ButtonsPerRow = 6     -- C.ActionBars.Bar2ButtonsPerRow
+    local NumButtons = 6        -- C.ActionBars.Bar2NumButtons
     local Offset = (C.ActionBars.ShowBackdrop) and (Spacing + 1) or 0
 
     local NumRow = ceil(NumButtons / ButtonsPerRow)

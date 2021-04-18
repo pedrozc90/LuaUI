@@ -6,7 +6,7 @@ local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 local ceil = math.ceil
 
 ----------------------------------------------------------------
--- ActionBar4
+-- ActionBar4: Page 3 - Right ActionBar (slots 25 to 36)
 ----------------------------------------------------------------
 local baseCreateBar4 = ActionBars.CreateBar4
 

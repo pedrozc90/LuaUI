@@ -1,8 +1,10 @@
 local T, C, L = Tukui:unpack()
 local ActionBars = T.ActionBars
 local DataTexts = T.DataTexts.Panels
+
 local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS
+local HasAction = HasAction
 
 ----------------------------------------------------------------
 -- Utilities
@@ -27,6 +29,7 @@ local baseSkinButton = ActionBars.SkinButton
 local baseSkinPetAndShiftButton = ActionBars.SkinPetAndShiftButton
 local baseMovePetBar = ActionBars.MovePetBar
 local baseUpdateStanceBar = ActionBars.UpdateStanceBar
+local baseEnable = ActionBars.Enable
 
 function ActionBars:SkinButton(Button)
     
@@ -59,6 +62,7 @@ function ActionBars:SkinButton(Button)
     if (HotKey) then
         HotKey:ClearAllPoints()
         HotKey:SetPoint("TOPRIGHT", Button, "TOPRIGHT", -2, -2)
+		HotKey:SetTextColor(1, 1, 1)
     end
 
     if (Btname and C.ActionBars.Macro) then
@@ -148,4 +152,60 @@ function ActionBars:UpdateStanceBar()
 			ActionBar3:SetPoint("TOPLEFT", StanceBar, "TOPRIGHT", 3, 0)
 		end
 	end
+end
+
+----------------------------------------------------------------
+-- Action Slots
+----------------------------------------------------------------
+local ToggleActionButton = function(self, alpha)
+	if (not HasAction(self.action)) then
+		self:SetAlpha(alpha)
+	end
+end
+
+function ActionBars.HideActionSlot(self)
+	ToggleActionButton(self, 0)
+end
+
+function ActionBars.ShowActionSlot(self)
+	ToggleActionButton(self, 1)
+end
+
+local UpdateActionBarButtonDisplay = function(ActionBar, index)
+	if (index < 1) then return end
+	local Button = _G[ActionBar .. index]
+	if (HasAction(Button.action)) then
+		Button:SetAlpha(1)
+	else
+		Button:SetAlpha(0)
+	end
+end
+
+local UpdateMultiBarBottomRight = function(index)
+	UpdateActionBarButtonDisplay("MultiBarBottomRightButton", index)
+end
+
+function ActionBars:PLAYER_TALENT_UPDATE()
+	for i = 1, NUM_ACTIONBAR_BUTTONS do
+		UpdateMultiBarBottomRight(i)
+	end
+end
+
+function ActionBars:ACTIONBAR_SLOT_CHANGED(slot)
+	if (slot and slot >= 49 and slot <= 60) then
+		UpdateMultiBarBottomRight(slot - 48)
+	end
+end
+
+function ActionBars:Enable()
+	
+	-- first, we call the base function
+    baseEnable(self)
+
+    -- second, we edit it
+	self:RegisterEvent("PLAYER_TALENT_UPDATE")
+	self:RegisterEvent("ACTIONBAR_SLOT_CHANGED")
+	self:SetScript("OnEvent", function(self, event, ...)
+		self[event](...)
+	end)
 end
