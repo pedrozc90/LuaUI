@@ -7,18 +7,7 @@ local Install = T.Install
 
 local baseSetDefaultsCVars = Install.SetDefaultsCVars
 
-function Install:SetDefaultsCVars()
-    -- first, we call the base function
-    baseSetDefaultsCVars(self)
-
-    -- second, we edit it
-
-    -- System
-
-    -- Advanced
-    -- SetCVar("uiScale", 0.64)
-
-    -- Sound
+function Install:SetupSounds()
     SetCVar("Sound_EnableAllSound", C.Lua.Mute and 0 or 1)      -- enables all sounds
     SetCVar("Sound_MasterVolume", 0.25)                         -- set master volume (0.0 to 1.0)
     SetCVar("Sound_EnableSFX", 1)                               -- enables sound effects
@@ -29,25 +18,9 @@ function Install:SetDefaultsCVars()
     SetCVar("Sound_AmbienceVolume", 0.35)                       -- ambience volume (default = 0.6)
     SetCVar("Sound_EnableDialog", 1)                            -- enables dialog volume
     SetCVar("Sound_DialogVolume", 0.50)                         -- dialog volume (default 1.0)
+end
 
-    -- Chat
-    SetCVar("ChatAmbienceVolume", 0.3)                          -- ambience volume (default = 0.3)
-    SetCVar("ChatMusicVolume", 0.3)                             -- music volume (default = 0.3)
-    SetCVar("ChatSoundVolume", 0.4)                             -- sound volume (default = 0.4)
-
-    -- General
-    SetCVar("deselectOnClick", 1)                                   -- clear the target when clicking on terrain
-    SetCVar("autoDismount", 1)                                      -- enables automatically dismount when needed
-	SetCVar("autoDismountFlying", 1)                                -- enables automatically dismount before casting while flying
-	SetCVar("showTutorials", 0)                                     -- enables tutorials.
-    SetCVar("autoLootDefault", 1)                                   -- automatically loot items when the loot window opens
-    SetCVar("doNotFlashLowHealthWarning", 1)                        -- do not flash your screen red when you are low on health.
-
-    -- Social
-    SetCVar("chatBubbles", 1)                                       -- show in-game chat bubbles
-	SetCVar("chatBubblesParty", 0)                                  -- show in-game party chat bubbles
-    SetCVar("guildMemberNotify", 0)                                 -- enables notification when guild members log on/off (default 1)
-
+function Install:SetupNames()
     -- Names
 	SetCVar("UnitNameEnemyGuardianName", 1)                         -- default = 1
     SetCVar("UnitNameEnemyMinionName", 1)                           -- default = 1
@@ -69,7 +42,9 @@ function Install:SetDefaultsCVars()
     SetCVar("UnitNameOwn", 0)                                       -- default = 0
     SetCVar("UnitNamePlayerGuild", 0)                               -- default = 1
     SetCVar("UnitNamePlayerPVPTitle", 0)                            -- default = 1
+end
 
+function Install:SetupNameplates()
     -- Nameplates
 	SetCVar("nameplateMotion", 0)
     SetCVar("nameplateShowAll", 1)
@@ -88,12 +63,75 @@ function Install:SetDefaultsCVars()
     SetCVar("nameplateShowFriends", 0)
     SetCVar("nameplateShowOnlyNames", 0)
     SetCVar("nameplateShowSelf", 0)
+end
 
-    -- Camera
+function Install:SetupCamera()
     SetCVar("cameraView", 1)                                        -- stores the last saved camera position the camera was in. (default = 0)
     SetCVar("cameraSmoothStyle", 0)                                 -- sets the automatic camera adjustment/following style. (default = 4)
 	SetCVar("cameraSmoothTrackingStyle", 0)
     SetCVar("cameraDistanceMaxZoomFactor", 2.6)                     -- sets the factor by which maximum camera distance (equals to 15) is multiplied. (cannot exceed 39 yards, default = 1.9)
+end
+
+-- configure blizzard combat text
+function Install:SetupCombatText()
+    print("setting floating combat text")
+    -- Combat Text
+    SetCVar("enableFloatingCombatText", 1)
+    SetCVar("floatingCombatTextAllSpellMechanics", 0)
+    SetCVar("floatingCombatTextAuras", 0)
+    SetCVar("floatingCombatTextCombatDamage", 1)
+    SetCVar("floatingCombatTextCombatDamageAllAutos", 1)
+    SetCVar("floatingCombatTextCombatDamageDirectionalOffset", 1)
+    SetCVar("floatingCombatTextCombatDamageDirectionalScale", 1)
+    SetCVar("floatingCombatTextCombatHealing", 0)
+    SetCVar("floatingCombatTextCombatHealingAbsorbSelf", 1)
+    SetCVar("floatingCombatTextCombatHealingAbsorbTarget", 1)
+    SetCVar("floatingCombatTextCombatLogPeriodicSpells", 1)
+    SetCVar("floatingCombatTextCombatState", 0)
+    SetCVar("floatingCombatTextComboPoints", 0)
+    SetCVar("floatingCombatTextDamageReduction", 0)
+    SetCVar("floatingCombatTextDodgeParryMiss", 0)
+    SetCVar("floatingCombatTextEnergyGains", 0)
+    SetCVar("floatingCombatTextFloatMode", 1)
+    SetCVar("floatingCombatTextFriendlyHealers", 0)
+    SetCVar("floatingCombatTextHonorGains", 0)
+    SetCVar("floatingCombatTextLowManaHealth", 1)
+    SetCVar("floatingCombatTextPeriodicEnergyGains", 0)
+    SetCVar("floatingCombatTextPetMeleeDamage", 1)
+    SetCVar("floatingCombatTextPetSpellDamage", 1)
+    SetCVar("floatingCombatTextReactives", 1)
+    SetCVar("floatingCombatTextRepChanges", 0)
+    SetCVar("floatingCombatTextSpellMechanics", 0)
+    SetCVar("floatingCombatTextSpellMechanicsOther", 0)
+end
+
+function Install:SetDefaultsCVars()
+    -- first, we call the base function
+    baseSetDefaultsCVars(self)
+
+    -- second, we edit it
+    self:SetupSounds()
+    self:SetupNames()
+	self:SetupNameplates()
+    self:SetupCamera()
+
+    -- Chat
+    SetCVar("ChatAmbienceVolume", 0.3)                          -- ambience volume (default = 0.3)
+    SetCVar("ChatMusicVolume", 0.3)                             -- music volume (default = 0.3)
+    SetCVar("ChatSoundVolume", 0.4)                             -- sound volume (default = 0.4)
+
+    -- General
+    SetCVar("deselectOnClick", 1)                                   -- clear the target when clicking on terrain
+    SetCVar("autoDismount", 1)                                      -- enables automatically dismount when needed
+	SetCVar("autoDismountFlying", 1)                                -- enables automatically dismount before casting while flying
+	SetCVar("showTutorials", 0)                                     -- enables tutorials.
+    SetCVar("autoLootDefault", 1)                                   -- automatically loot items when the loot window opens
+    SetCVar("doNotFlashLowHealthWarning", 1)                        -- do not flash your screen red when you are low on health.
+
+    -- Social
+    SetCVar("chatBubbles", 1)                                       -- show in-game chat bubbles
+	SetCVar("chatBubblesParty", 0)                                  -- show in-game party chat bubbles
+    SetCVar("guildMemberNotify", 0)                                 -- enables notification when guild members log on/off (default 1)
 
     -- ActionBars
     if (C.ActionBars.Enable) then
