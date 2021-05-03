@@ -1,0 +1,10 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <Script file="init.lua"/>
+    <Script file="functions.lua"/>
+    <Script file="commands.lua"/>
+    <Script file="inspect.lua"/>
+    <Script file="spells.lua"/>
+    <Script file="raid_cooldown.lua"/>
+
+</Ui>

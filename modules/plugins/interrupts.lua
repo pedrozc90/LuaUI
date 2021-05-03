@@ -5,6 +5,7 @@ local T, C, L = Tukui:unpack()
 ----------------------------------------------------------------
 if (not C.Interrupts.Enable) then return end
 
+local CombatLog_Object_IsA = CombatLog_Object_IsA
 local COMBATLOG_FILTER_ME = COMBATLOG_FILTER_ME
 local COMBATLOG_FILTER_MINE = COMBATLOG_FILTER_MINE
 local COMBATLOG_FILTER_MY_PET = COMBATLOG_FILTER_MY_PET

@@ -101,12 +101,18 @@ C["PvPAlert"] = {
 }
 
 C["RaidCD"] = {
-    ["Enable"] = false,                             -- enables raid cooldowns plugin.
-    ["MaxBars"] = 10,                               -- max number of visible bars.
-    ["BarSize"] = { 230, 23 },                      -- set bar size
-    ["BarSpacing"] = 7,                             -- set spacing between bars
-    ["StatusBarHeight"] = 3,                        -- set status bar height
-    ["Anchor"] = { "TOPLEFT", UIParent, "TOPLEFT", 7, -35 },
+    ["Enable"] = false,                              -- enables raid cooldowns plugin.
+    ["Anchor"] = { "TOPLEFT", UIParent, "TOPLEFT", 400, -300 },
+    ["BarWidth"] = 256,
+    ["BarHeight"] = 25,
+    ["BarSpacing"] = 3,                             -- set spacing between bars
+    ["ShowPlayer"] = true                           -- show players cooldowns
+
+    -- ["MaxBars"] = 10,                               -- max number of visible bars.
+    -- ["BarSize"] = { 230, 23 },                      -- set bar size
+    -- ["BarSpacing"] = 7,                             -- set spacing between bars
+    -- ["StatusBarHeight"] = 3,                        -- set status bar height
+    
 }
 
 ----------------------------------------------------------------
