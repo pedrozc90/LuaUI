@@ -2,8 +2,16 @@ local _, ns = ...
 local SpellTable = ns.RaidCooldowns.SpellTable
 
 SpellTable["DRUID"] = {
+    -- All
+    { spellID = 22812, type = "defense", enabled = false },                                             -- Barkskin
+
+    -- Balance
     { spellID = 78675, type = "interrupt", specs = { [102] = true }, enabled = true },                  -- Solar Beam
-    { spellID = 106839, type = "interrupt", specs = { [103] = true, [102] = true }, enabled = true }    -- Skull Bash
+    { spellID = 102793, type = "interrupt", enabled = true },                                           -- Ursol's Vortex
+
+    -- Guardian / Feral
+    { spellID = 106839, type = "interrupt", specs = { [103] = true, [102] = true }, enabled = true },   -- Skull Bash
+    { spellID = 61336, type = "defense", specs = { [103] = true, [104] = true }, enabled = false }      -- Survival Instincts
 }
 
 SpellTable["DEATHKNIGHT"] = {
@@ -30,12 +38,21 @@ SpellTable["PALADIN"] = {
 }
 
 SpellTable["PRIEST"] = {
+    -- All
+    { spellID = 10060, type = "raid", specs = { [256] = true, [258] = true }, enabled = true },         -- Power Infusion
+
+    -- Discipline
     { spellID = 33206, type = "raid", specs = { [256] = true }, enabled = true },                       -- Pain Suppression
     { spellID = 62618, type = "raid", specs = { [256] = true }, enabled = true },                       -- Power Word: Barrier
+
+    -- Holy
     { spellID = 47788, type = "raid", specs = { [257] = true }, enabled = true },                       -- Guardian Spirit
+    { spellID = 64843, type = "raid", specs = { [257] = true }, enabled = true },                       -- Divine Hymn
+
+    -- Shadow
     { spellID = 15487, type = "interrupt", specs = { [258] = true }, enabled = true },                  -- Silence
     { spellID = 15286, type = "raid", specs = { [258] = true }, enabled = true },                       -- Vampiric Embrace
-    { spellID = 47585, type = "defense", specs = { [258] = true }, enabled = true },                    -- Dispersion
+    { spellID = 47585, type = "defense", specs = { [258] = true }, enabled = true }                     -- Dispersion
 }
 
 SpellTable["ROGUE"] = {
@@ -43,10 +60,13 @@ SpellTable["ROGUE"] = {
 }
 
 SpellTable["MONK"] = {
+    -- Mistweaver
+    { spellID = 116849, type = "raid", specs = { [270] = true }, enabled = true },                      -- Life Cocoon
+
+    -- Brewmaster
     { spellID = 116705, type = "interrupt", enabled = true },                                           -- Spear Hand Strike
     { spellID = 115203, type = "defense", specs = { [268] = true }, enabled = true },                   -- Fortigying Brew
-    { spellID = 122278, type = "defense", specs = { [268] = true }, talents = {}, enabled = true },                  -- Dampen Harm
-    { spellID = 116849, type = "raid", specs = { [270] = true }, enabled = true },                      -- Life Cocoon
+    { spellID = 122278, type = "defense", specs = { [268] = true }, talentID = 20175, enabled = true }  -- Dampen Harm
 }
 
 SpellTable["SHAMAN"] = {
@@ -58,8 +78,63 @@ SpellTable["WARLOCK"] = {
 }
 
 SpellTable["WARRIOR"] = {
-    { spellID = 871, type = "defense", specs = { [73] = true }, enabled = true },                           -- Shield Wall
-    { spellID = 6552 , type = "interrupt", enabled = true },                                                -- Pummel
-    { spellID = 97462, type = "raid", enabled = true },                                                     -- Rallying Cry
-    { spellID = 107570, type = "interrupt", specs = { [73] = true }, talent = { 2, 3 }, enabled = true },   -- Storm Bold
+    -- All
+    { spellID = 6552 , type = "interrupt", enabled = true },                                            -- Pummel
+
+    -- Protection
+    { spellID = 871, type = "defense", specs = { [73] = true }, enabled = true },                       -- Shield Wall
+    { spellID = 12975, type = "defense", specs = { [73] = true }, enabled = true },                     -- Last Stand
+    { spellID = 97462, type = "raid", enabled = true },                                                 -- Rallying Cry
+    { spellID = 107570, type = "cc", specs = { [73] = true }, talentID = 22409, enabled = true }        -- Storm Bold
+}
+
+local Specializations = {
+    -- Death Knight
+    [250] = "Blood",
+    [251] = "Frost",
+    [252] = "Unholy",
+    -- Demon Hunter
+    [577] = "Havoc",
+    [581] = "Vengeance",
+    -- Druid
+    [102] = "Balance",
+    [103] = "Feral",
+    [104] = "Guardian",
+    [105] = "Restoration",
+    -- Hunter
+    [253] = "Beast Mastery",
+    [254] = "Marksmanship",
+    [255] = "Survival",
+    -- Mage
+    [62] = "Arcane",
+    [63] = "Fire",
+    [64] = "Frost",
+    -- Monk
+    [268] = "Brewmaster",
+    [270] = "Mistweaver",
+    [269] = "Windwalker",
+    -- Paladin
+    [65] = "Holy",
+    [66] = "Protection",
+    [70] = "Retribution",
+    -- Priest
+    [256] = "Discipline",
+    [257] = "Holy",
+    [258] = "Shadow",
+    -- Rogue
+    [259] = "Assassination",
+    [260] = "Outlaw",
+    [261] = "Subtlety",
+    -- Shaman
+    [262] = "Elemental",
+    [263] = "Enhancement",
+    [264] = "Restoration",
+    -- Warlock
+    [265] = "Affliction",
+    [266] = "Demonology",
+    [267] = "Destruction",
+    -- Warrior
+    [71] = "Arms",
+    [72] = "Fury",
+    [73] = "Protection",
 }
