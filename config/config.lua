@@ -101,7 +101,7 @@ C["PvPAlert"] = {
 }
 
 C["RaidCD"] = {
-    ["Enable"] = false,                              -- enables raid cooldowns plugin.
+    ["Enable"] = true,                              -- enables raid cooldowns plugin.
     ["Anchor"] = { "TOPLEFT", UIParent, "TOPLEFT", 400, -300 },
     ["BarWidth"] = 256,
     ["BarHeight"] = 25,

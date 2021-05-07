@@ -9,32 +9,30 @@ local UnitIsConnected = _G.UnitIsConnected
 local CanInspect = _G.CanInspect
 local NotifyInspect = _G.NotifyInspect
 
-local inspect = {
-    queue = {},
-    last_inspect = 0,
-    timeout = 10,
-    threshold = 0.1,
-    delay = 1.5,
-    max_attempts = 5,
-    
-    idle = true,
-    running = false,
-    current_guid = nil
-}
+local TIMEOUT = 10
+local THRESHOLD = 0.1
+local MAX_ATTEMPTS = 5
+
+local queue = {}
+local last_inspect = 0
+local delay = 1.5
+local running = false
+local current_guid = nil
 
 function RaidCooldowns:InitQueue()
     self:SetScript("OnUpdate", self.ProcessQueue)
     self.elapsed = nil
-    inspect.running = true
+    running = true
+    current_guid = nil
 end
 
 function RaidCooldowns:StopQueue()
     self:SetScript("OnUpdate", nil)
-    inspect.running = false
+    running = false
 end
 
 function RaidCooldowns:GetQueueIndex(guid)
-    for index, data in ipairs(inspect.queue) do
+    for index, data in ipairs(queue) do
         if (data.guid == guid) then
             return index
         end
@@ -46,25 +44,30 @@ function RaidCooldowns:Queue(unit, guid)
     if (not UnitIsPlayer(unit)) then return end
 
     if (UnitIsUnit(unit, "player")) then
-        print("adding player", unit, guid, "to the inspect queue")
-    elseif (not inspect.queue[guid]) then
-        table.insert(inspect.queue, { guid = guid, attempts = 0 })
+        -- print("adding player", unit, guid, "to the inspect queue")
+        self:Inspect(guid)
+    elseif (not queue[guid]) then
+        table.insert(queue, { guid = guid, attempts = 0 })
     end
 
-    if (not inspect.running) then
+    if (not running) then
         self:InitQueue()
     end
 end
 
 function RaidCooldowns:Dequeue(index)
     if (not index) then return end
-    table.remove(inspect.queue, index)
+    table.remove(queue, index)
 end
 
 function RaidCooldowns:DequeueByGUID(guid)
     if (not guid) then return end
     local index = self:GetQueueIndex(guid)
     self:Dequeue(index)
+    if (current_guid == guid) then
+        current_guid = nil
+        last_inspect = 0
+    end
 end
 
 function RaidCooldowns.ProcessQueue(self, elapsed)
@@ -72,27 +75,20 @@ function RaidCooldowns.ProcessQueue(self, elapsed)
     if (UnitIsDead("player")) then return end                       -- you can't inspect while dead, so do not even try.
     if (InspectFrame and InspectFrame:IsShown()) then return end    -- do not mess with UI's inspection.
 
-    local queue = inspect.queue
-    local threshold = inspect.threshold or 0.1
-    local timeout = inspect.timeout or 10
-    local max_attempts = inspect.max_attempts or 5
-    local last_inspect = inspect.last_inspect or 0
-
     self.elapsed = (self.elapsed or 0) + elapsed
 
     -- run script every 0.1 seconds
-    if (self.elapsed < threshold) then return end
+    if (self.elapsed < THRESHOLD) then return end
 
     -- stop loop, if queue is empty
-    if (#queue <= 0) then
+    if (not queue or #queue <= 0) then
+        print("QUEUE IS EMPTY")
         self:StopQueue()
         return
     end
 
     -- if we are waiting the INSPECT_READY event, skip it
     -- if the elapsed time since the NotifyInspect is greater then timeout, inspect the next on the queue
-
-    print("QUEUE", self.elapsed, GetTime(), last_inspect, GetTime() - last_inspect)
 
     local index = 1
     local entity = queue[index]
@@ -103,23 +99,35 @@ function RaidCooldowns.ProcessQueue(self, elapsed)
 
     local unit = self:GuidToUnit(entity.guid)
 
-    if ((not unit) or (entity.attempts >= max_attempts)) then
-        print(unit, "max attempts reached. remove from the queue.")
-        self:Dequeue(index)
-    elseif ((not CanInspect(unit)) or (not UnitIsConnected(unit))) then
-        print(unit, "is offline or unabled to inspect.")
-        -- move to the back of the queue
-        local tmp = table.remove(queue, index)
-        table.insert(queue, tmp)
-        -- increment attempts
-        entity.attempts = entity.attempts + 1
-    else
-        print("notify inspect of", unit, entity.guid)
-        inspect.current_guid = entity.guid
-        inspect.last_inspect = GetTime()
-        NotifyInspect(unit)
-    end
+    -- print("QUEUE", unit, self.elapsed, GetTime(), last_inspect, GetTime() - last_inspect, inspect.current_guid)
 
-    -- reset elapsed time
-    self.elapsed = 0
+    -- wait inspect event
+    if (current_guid) then
+        if (self.elapsed > TIMEOUT) then
+            current_guid = nil
+            self:Dequeue(index)
+            self.elapsed = 0
+        end
+    else
+        if (entity.attempts >= MAX_ATTEMPTS) then
+            print("removing", entity.guid, "from queu because max attempts reached");
+            self:Dequeue(index)
+        elseif ((not CanInspect(unit)) or (not UnitIsConnected(unit))) then
+            print(unit, "is offline or unabled to inspect.")
+            -- move to the back of the queue
+            local tmp = table.remove(queue, index)
+            table.insert(queue, tmp)
+            -- increment attempts
+            entity.attempts = entity.attempts + 1
+        else
+            print("NOTIFY INSPECT", entity.guid)
+            -- entity.attempts = entity.attempts + 1
+            current_guid = entity.guid
+            last_inspect = GetTime()
+            NotifyInspect(unit)
+        end
+
+        -- reset elapsed time
+        self.elapsed = 0
+    end    
 end

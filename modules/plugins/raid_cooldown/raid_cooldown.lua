@@ -1,3 +1,5 @@
+local T, C, L = Tukui:unpack()
+
 local _, ns = ...
 local RaidCooldowns = ns.RaidCooldowns
 local SpellTable = ns.RaidCooldowns.SpellTable
@@ -18,6 +20,8 @@ local GetInspectSpecialization = _G.GetInspectSpecialization
 local GetSpecializationInfoByID = _G.GetSpecializationInfoByID
 local GetActiveSpecGroup = _G.GetActiveSpecGroup
 local GetTalentInfo = _G.GetTalentInfo
+local GetSpellInfo = _G.GetSpellInfo
+local GetSpellBaseCooldown = _G.GetSpellBaseCooldown
 
 ----------------------------------------------------------------
 -- Raid Cooldowns
@@ -38,7 +42,7 @@ function RaidCooldowns:ScanGroup()
             cache[guid] = true
             if (not self.group[guid]) then
                 -- insert guid into inspect queue
-                self.group[guid] = { unit = unit, name = UnitName(unit) }
+                self.group[guid] = { unit = unit }
                 self:Queue(unit, guid)
             end
         end
@@ -48,12 +52,97 @@ function RaidCooldowns:ScanGroup()
     for guid, _ in pairs(self.group) do
         if (not cache[guid]) then
             -- remove guid from inspect queue
-            self:Dequeue(guid)
+            self:DequeueByGUID(guid)
             self.group[guid] = nil
         end
     end
 
     table.wipe(cache)
+end
+
+local HasRequiredSpec = function(data, spec_id)
+    if (not data.specs) then return true end
+    if (not spec_id) then return false end
+    return data.specs[spec_id] or false
+end
+
+local HasRequiredTalent = function(data, talents)
+    if (not data.talentID) then return true end
+    if (not talents) then return false end
+    local talent = talents[data.talentID]
+    return (talent and talent.selected)
+end
+
+function RaidCooldowns:FindCooldownIndex(guid, spellID)
+    for index, f in ipairs(self) do
+        if (f.guid == guid and f.spellID == spellID) then
+            return index
+        end
+    end
+    return nil
+end
+
+function RaidCooldowns:UpdatePositions()
+    local Spacing = C.RaidCD.BarSpacing
+
+    -- table.sort(self, function(a, b)
+    --     if (a.class == b.class) then
+    --         return a.cooldown > b.cooldown
+    --     end
+    --     return a.class < b.class
+    -- end)
+
+    for index = 1, #self do
+        if (index == 1) then
+            self[index]:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
+        else
+            self[index]:SetPoint("TOP", self[index - 1], "BOTTOM", 0, -Spacing)
+        end
+    end
+end
+
+function RaidCooldowns:Spawn(guid)
+    local member = self.group[guid]
+    if (not member) then return end
+
+    local spells = SpellTable[member.class]
+    if (not spells) then return end
+
+    local spec_id = member.spec_id or 0
+
+    for _, data in ipairs(spells) do
+        if (data.enabled and HasRequiredSpec(data, spec_id) and HasRequiredTalent(data, member.talents)) then
+            local spellName, _, spellIcon, _, _, _, _ = GetSpellInfo(data.spellID)
+            if (spellName) then
+                
+                local index = self:FindCooldownIndex(guid, data.spellID);
+                if (not index) then
+                    index = (#self or 0) + 1
+
+                    local spellCooldownMs, _ = GetSpellBaseCooldown(data.spellID)
+                    local spellCooldown = (spellCooldownMs or 0) / 1000
+
+                    local frame = self:SpawnBar(index, member.name, member.realm, member.class, spellName, spellIcon)
+                    frame.sourceName = member.name
+                    frame.class = member.class
+                    frame.spellID = data.spellID
+                    frame.spellName = spellName
+                    frame.spellIcon = spellIcon
+                    frame.cooldownMs = spellCooldownMs
+                    frame.cooldown = spellCooldown
+                    frame.guid = guid
+
+                    self.CooldownReady(frame)
+
+                    self[index] = frame
+                else
+                    T.Print("spell " .. data.spellID .. " already tracked.")
+                end
+            else
+                T.Debug("spell " .. data.spellID .. " is invalid.")
+            end
+        end
+    end
 end
 
 RaidCooldowns:RegisterEvent("PLAYER_LOGIN")
@@ -83,13 +172,16 @@ function RaidCooldowns:PLAYER_ENTERING_WORLD(isLogin, isReload)
         -- loading ui
         print("login")
         self:RegisterEvent("GROUP_ROSTER_UPDATE")
-        -- self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-        -- self:RegisterEvent("UNIT_SPELLCAST_FAILED")
+        self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+        self:RegisterEvent("UNIT_SPELLCAST_FAILED")
     else
         -- zoned between map instances
         print("zone changed")
     end
     self:ScanGroup()
+
+    self:Spawn(self.guid)
+    self:UpdatePositions()
 end
 
 function RaidCooldowns:GROUP_ROSTER_UPDATE()
@@ -106,52 +198,79 @@ end
 
 function RaidCooldowns:UNIT_SPELLCAST_SUCCEEDED(unit, _, spellID)
     local guid = UnitGUID(unit)
-    if (spellID == 200749) then -- Activating Specialization
+    if (spellID == 200749) then     -- Activating Specialization
         -- if a unit changes specialization, we need to inspect it again
         -- and update its cooldowns
         self:Queue(unit, guid)
     else
-        -- self:UpdateCooldown(unit, spellID)
+        self:UpdateCooldown(unit, spellID)
     end
 end
 
 function RaidCooldowns:UNIT_SPELLCAST_FAILED(unit, _, spellID)
-    -- self:UpdateCooldown(unit, spellID)
+    self:UpdateCooldown(unit, spellID)
 end
 
 function RaidCooldowns:INSPECT_READY(guid)
+    self:Inspect(guid)
+    self:DequeueByGUID(guid)
+end
+
+function RaidCooldowns:Inspect(guid)
     local unit = self:GuidToUnit(guid) or self.unit
-    local _, class, _, _, _, name, realm = GetPlayerInfoByGUID(guid)
-    local isInspect = UnitIsUnit(unit, self.unit)
+    local _, class, _, race, sex, name, realm = GetPlayerInfoByGUID(guid)
+    local isPlayer = UnitIsUnit(unit, "player")
+    local isInspect = not isPlayer
 
     realm = self:GetRealm(realm)
     
-    local spec = (guid == self.guid) and GetSpecialization() or nil
-    local specID = (guid == self.guid) and GetSpecializationInfo(spec) or GetInspectSpecialization(unit)
-    if ((not specID) or (specID == 0)) then return end
+    local spec = (isPlayer) and GetSpecialization() or nil
+    local spec_id = (isPlayer) and GetSpecializationInfo(spec) or GetInspectSpecialization(unit)
+    if ((not spec_id) or (spec_id == 0)) then return end
+
+    local _, spec_name, spec_description, _, role, _ = GetSpecializationInfoByID(spec_id)
+    local activeSpec = GetActiveSpecGroup(isInspect)
 
     local member = self.group[guid]
+    if (not member) then return end
+    
+    member.name = name
+    member.realm = realm
+    member.class = class
+    member.race = race
+    member.sex = sex
     member.spec = spec
-    member.specID = specID
+    member.spec_id = spec_id
+    member.spec_name = spec_name
+    member.spec_description = spec_description
+    member.role = role
     
     if (not member.talents) then
         member.talents = {}
     end
 
-    local _, specName, _, _, _, _ = GetSpecializationInfoByID(specID)
-    local activeSpec = GetActiveSpecGroup(isInspect)
-
-    for row = 1, MAX_TALENT_TIERS do
-        if (not member.talents[row]) then
-            member.talents[row] = {}
-        end
-
-        for col = 1, NUM_TALENT_COLUMNS do
-            local talentID, talentName, _, selected, available, spellID, unknown, _, _, known, grantedByAura = GetTalentInfo(row, col, activeSpec, isInspect, unit)
-            print(row, col, talentID, talentName, selected)
-            member.talents[row][col] = selected
+    for tier = 1, MAX_TALENT_TIERS do
+        for column = 1, NUM_TALENT_COLUMNS do
+            local talentID, talentName, _, selected, available, spellID, unknown, _, _, known, _ = GetTalentInfo(tier, column, activeSpec, isInspect, unit)
+            member.talents[talentID] = {
+                tier = tier,
+                column = column,
+                name = talentName,
+                selected = selected,
+                available = available,
+                spellID = spellID,
+                unknown = unknown,
+                known = known
+            }
         end
     end
 
+    -- inspect done, remove it from the queue
     self:DequeueByGUID(guid)
+
+    -- spawn unit tackers
+    self:Spawn(guid)
+
+    -- update all trackers
+    self:UpdatePositions()
 end
