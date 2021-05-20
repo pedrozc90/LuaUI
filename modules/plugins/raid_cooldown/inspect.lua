@@ -5,15 +5,16 @@ local UnitGUID = _G.UnitGUID
 local UnitIsUnit = _G.UnitIsUnit
 local UnitIsPlayer = _G.UnitIsPlayer
 local UnitIsConnected = _G.UnitIsConnected
-
 local CanInspect = _G.CanInspect
 local NotifyInspect = _G.NotifyInspect
+local GetRaidRosterInfo = _G.GetRaidRosterInfo
+local GetRealZoneText = _G.GetRealZoneText
 
 local TIMEOUT = 10
 local THRESHOLD = 0.1
 local MAX_ATTEMPTS = 5
 
-local queue = {}
+local queue, waiting = {}, {}
 local last_inspect = 0
 local delay = 1.5
 local running = false
@@ -43,11 +44,13 @@ end
 function RaidCooldowns:Queue(unit, guid)
     if (not UnitIsPlayer(unit)) then return end
 
+    local index = self:GetQueueIndex(guid)
+
     if (UnitIsUnit(unit, "player")) then
         -- print("adding player", unit, guid, "to the inspect queue")
         self:Inspect(guid)
-    elseif (not queue[guid]) then
-        table.insert(queue, { guid = guid, attempts = 0 })
+    elseif (not index) then
+        table.insert(queue, { guid = guid, attempts = 0, timestamp = GetTime() })
     end
 
     if (not running) then
@@ -87,9 +90,6 @@ function RaidCooldowns.ProcessQueue(self, elapsed)
         return
     end
 
-    -- if we are waiting the INSPECT_READY event, skip it
-    -- if the elapsed time since the NotifyInspect is greater then timeout, inspect the next on the queue
-
     local index = 1
     local entity = queue[index]
     if (not entity) then
@@ -97,9 +97,7 @@ function RaidCooldowns.ProcessQueue(self, elapsed)
         return
     end
 
-    local unit = self:GuidToUnit(entity.guid)
-
-    -- print("QUEUE", unit, self.elapsed, GetTime(), last_inspect, GetTime() - last_inspect, inspect.current_guid)
+    local unit, group_index = self:GuidToUnit(entity.guid)
 
     -- wait inspect event
     if (current_guid) then
@@ -112,22 +110,41 @@ function RaidCooldowns.ProcessQueue(self, elapsed)
         if (entity.attempts >= MAX_ATTEMPTS) then
             print("removing", entity.guid, "from queu because max attempts reached");
             self:Dequeue(index)
-        elseif ((not CanInspect(unit)) or (not UnitIsConnected(unit))) then
-            print(unit, "is offline or unabled to inspect.")
-            -- move to the back of the queue
-            local tmp = table.remove(queue, index)
-            table.insert(queue, tmp)
-            -- increment attempts
-            entity.attempts = entity.attempts + 1
         else
-            print("NOTIFY INSPECT", entity.guid)
-            -- entity.attempts = entity.attempts + 1
-            current_guid = entity.guid
-            last_inspect = GetTime()
-            NotifyInspect(unit)
+            local name, _, _, _, _, class, zone, online, isDead, _, _, _ = GetRaidRosterInfo(group_index);
+            local current_zone = GetRealZoneText()
+            
+            -- if (zone ~= GetRealZoneText()) then
+            --     print(name .. " is in a differente zone", zone)
+            -- else
+            if ((not online) or (not UnitIsConnected(unit)) or (not CanInspect(unit))) then
+                print(unit, "is offline or unabled to inspect.")
+                -- move to the back of the queue
+                local tmp = table.remove(queue, index)
+                table.insert(queue, tmp)
+                -- increment attempts
+                entity.attempts = entity.attempts + 1
+            else
+                print("NOTIFY INSPECT", entity.guid, zone, current_zone, zone == current_zone)
+                -- entity.attempts = entity.attempts + 1
+                current_guid = entity.guid
+                last_inspect = GetTime()
+                NotifyInspect(unit)
+            end
         end
 
         -- reset elapsed time
         self.elapsed = 0
-    end    
+    end
+
+    --[[
+    for index_2, data in ipairs(waiting) do
+        local now = GetTime()
+        local tmp = now - (data.timestamp or now)
+        if (tmp > 10) then
+            table.remove(waiting, index_2)
+            
+        end
+    end
+    ]]
 end

@@ -101,8 +101,8 @@ C["PvPAlert"] = {
 }
 
 C["RaidCD"] = {
-    ["Enable"] = true,                              -- enables raid cooldowns plugin.
-    ["Anchor"] = { "TOPLEFT", UIParent, "TOPLEFT", 400, -300 },
+    ["Enable"] = false,                              -- enables raid cooldowns plugin.
+    ["Anchor"] = { "TOPLEFT", UIParent, "TOPLEFT", 50, -50 },
     ["BarWidth"] = 256,
     ["BarHeight"] = 25,
     ["BarSpacing"] = 3,                             -- set spacing between bars

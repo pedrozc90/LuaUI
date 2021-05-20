@@ -51,9 +51,20 @@ function RaidCooldowns:ScanGroup()
     -- look for members who left
     for guid, _ in pairs(self.group) do
         if (not cache[guid]) then
+            print(" removing " .. guid .. " from the group." )
             -- remove guid from inspect queue
             self:DequeueByGUID(guid)
             self.group[guid] = nil
+
+            local length = #self.bars
+            if (length > 0) then
+                for index = #self.bars, 1, -1 do
+                    if (self.bars[index].guid == guid) then
+                        local bar = table.remove(self.bars, index)
+                        table.insert(self.useless, #self.useless + 1, bar)
+                    end
+                end
+            end
         end
     end
 
@@ -74,7 +85,7 @@ local HasRequiredTalent = function(data, talents)
 end
 
 function RaidCooldowns:FindCooldownIndex(guid, spellID)
-    for index, f in ipairs(self) do
+    for index, f in ipairs(self.bars) do
         if (f.guid == guid and f.spellID == spellID) then
             return index
         end
@@ -84,6 +95,7 @@ end
 
 function RaidCooldowns:UpdatePositions()
     local Spacing = C.RaidCD.BarSpacing
+    local Height = C.RaidCD.BarHeight
 
     -- table.sort(self, function(a, b)
     --     if (a.class == b.class) then
@@ -92,11 +104,23 @@ function RaidCooldowns:UpdatePositions()
     --     return a.class < b.class
     -- end)
 
-    for index = 1, #self do
+    for index, bar in ipairs(self.bars) do
+        bar:ClearAllPoints()
         if (index == 1) then
-            self[index]:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
+            bar:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
         else
-            self[index]:SetPoint("TOP", self[index - 1], "BOTTOM", 0, -Spacing)
+            local previous = self.bars[index - 1]
+            bar:SetPoint("TOP", previous, "BOTTOM", 0, -Spacing)
+        end
+    end
+
+    for index, bar in ipairs(self.useless) do
+        bar:ClearAllPoints()
+        if (index == 1) then
+            bar:SetPoint("TOPLEFT", self, "TOPRIGHT", Height + (2 * Spacing), 0)
+        else
+            local previous = self.useless[index - 1]
+            bar:SetPoint("TOP", previous, "BOTTOM", 0, -Spacing)
         end
     end
 end
@@ -116,28 +140,63 @@ function RaidCooldowns:Spawn(guid)
             if (spellName) then
                 
                 local index = self:FindCooldownIndex(guid, data.spellID);
+
+                -- if spell do not have a cooldown bar, we need to add a new one
                 if (not index) then
                     index = (#self or 0) + 1
 
                     local spellCooldownMs, _ = GetSpellBaseCooldown(data.spellID)
                     local spellCooldown = (spellCooldownMs or 0) / 1000
 
-                    local frame = self:SpawnBar(index, member.name, member.realm, member.class, spellName, spellIcon)
-                    frame.sourceName = member.name
-                    frame.class = member.class
-                    frame.spellID = data.spellID
-                    frame.spellName = spellName
-                    frame.spellIcon = spellIcon
-                    frame.cooldownMs = spellCooldownMs
-                    frame.cooldown = spellCooldown
-                    frame.guid = guid
+                    local bar = nil
+                    if (#self.useless > 0) then
+                        bar = table.remove(self.useless)
+                    else
+                        bar = self:SpawnBar(index, member.name, member.realm, member.class, spellName, spellIcon)
+                    end
+                    -- check if where a bar in the useless table
+                    -- else, create a new one
 
-                    self.CooldownReady(frame)
+                    bar.sourceName = member.name
+                    bar.class = member.class
+                    bar.spellID = data.spellID
+                    bar.spellName = spellName
+                    bar.spellIcon = spellIcon
+                    bar.cooldownMs = spellCooldownMs
+                    bar.cooldown = spellCooldown
+                    bar.guid = guid
+                    
+                    self.CooldownReady(bar)
 
-                    self[index] = frame
+                    table.insert(self.bars, bar)
                 else
+                    -- update information
                     T.Print("spell " .. data.spellID .. " already tracked.")
                 end
+
+                -- if (not index) then
+                --     index = (#self or 0) + 1
+
+                --     local spellCooldownMs, _ = GetSpellBaseCooldown(data.spellID)
+                --     local spellCooldown = (spellCooldownMs or 0) / 1000
+
+                --     local frame = self:SpawnBar(index, member.name, member.realm, member.class, spellName, spellIcon)
+                --     frame.sourceName = member.name
+                --     frame.class = member.class
+                --     frame.spellID = data.spellID
+                --     frame.spellName = spellName
+                --     frame.spellIcon = spellIcon
+                --     frame.cooldownMs = spellCooldownMs
+                --     frame.cooldown = spellCooldown
+                --     frame.guid = guid
+
+                --     self.CooldownReady(frame)
+
+                --     -- self[index] = frame
+                --     table.insert(self, frame)
+                -- else
+                --     T.Print("spell " .. data.spellID .. " already tracked.")
+                -- end
             else
                 T.Debug("spell " .. data.spellID .. " is invalid.")
             end
@@ -158,13 +217,13 @@ end)
 function RaidCooldowns:PLAYER_LOGIN()
     self:SetPoint(unpack(C.RaidCD.Anchor))
     self:SetSize(C.RaidCD.BarWidth, C.RaidCD.BarHeight)
-    -- -- self:CreateBackdrop()
+    -- self:CreateBackdrop()
     self.unit = "player"
     self.guid = UnitGUID(self.unit)
     self.class = select(2, UnitClass(self.unit))
     self.group = {}
-
-    -- self:SetScript("OnUpdate", self.ProcessQueue)
+    self.bars = {}
+    self.useless = {}
 end
 
 function RaidCooldowns:PLAYER_ENTERING_WORLD(isLogin, isReload)
@@ -178,14 +237,15 @@ function RaidCooldowns:PLAYER_ENTERING_WORLD(isLogin, isReload)
         -- zoned between map instances
         print("zone changed")
     end
-    self:ScanGroup()
 
+    self:ScanGroup()
     self:Spawn(self.guid)
     self:UpdatePositions()
 end
 
 function RaidCooldowns:GROUP_ROSTER_UPDATE()
     self:ScanGroup()
+    self:UpdatePositions()
 end
 
 function RaidCooldowns:GROUP_JOINED(category, partyGUID)

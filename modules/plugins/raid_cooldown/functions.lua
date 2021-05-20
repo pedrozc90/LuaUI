@@ -55,11 +55,11 @@ function RaidCooldowns:GuidToUnit(guid)
         for index = 1,  size do
             local unit = self:GetGroupUnit(index, size, isInGroup, isInRaid)
             if (guid == UnitGUID(unit)) then
-                return unit
+                return unit, index
             end
         end
     end
-    return nil
+    return nil, nil
 end
 
 function RaidCooldowns:GetRealm(realm)
@@ -98,7 +98,7 @@ function RaidCooldowns.CooldownReady(self)
 end
 
 function RaidCooldowns:SpawnBar(index, name, realm, class, spellName, spellIcon)
-    local sourceName = (realm) and (name .. "-" .. realm) or name
+    -- local sourceName = (realm) and (name .. "-" .. realm) or name
 
     local Width, Height = C.RaidCD.BarWidth, C.RaidCD.BarHeight
     local Spacing = C.RaidCD.BarSpacing
@@ -145,7 +145,7 @@ function RaidCooldowns:SpawnBar(index, name, realm, class, spellName, spellIcon)
     Text:SetTextColor(0.84, 0.75, 0.65)
     Text:SetWidth(0.8 * Width)
     Text:SetJustifyH("LEFT")
-    Text:SetText(spellName .. ": " .. sourceName)
+    Text:SetText(spellName .. ": " .. name)
 
     local Timer = StatusBar:CreateFontString(nil, "OVERLAY")
     Timer:SetFontObject(Font)
@@ -199,7 +199,7 @@ function RaidCooldowns:UpdateCooldown(unit, spellID)
     local cooldown_ms, _ = GetSpellBaseCooldown(spellID)
     local cooldown = self:PostUpdateCooldown(guid, spellID, cooldown_ms)  
 
-    local frame = self[index]
+    local frame = self.bars[index]
     frame.expiration = GetTime() + cooldown
     frame.cooldown = cooldown
 

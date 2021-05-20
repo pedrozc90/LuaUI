@@ -10,7 +10,7 @@ SpellTable["DRUID"] = {
     { spellID = 102793, type = "interrupt", enabled = true },                                           -- Ursol's Vortex
 
     -- Guardian / Feral
-    { spellID = 106839, type = "interrupt", specs = { [103] = true, [102] = true }, enabled = true },   -- Skull Bash
+    { spellID = 106839, type = "interrupt", specs = { [103] = true, [104] = true }, enabled = true },   -- Skull Bash
     { spellID = 61336, type = "defense", specs = { [103] = true, [104] = true }, enabled = false }      -- Survival Instincts
 }
 
@@ -63,10 +63,15 @@ SpellTable["MONK"] = {
     -- Mistweaver
     { spellID = 116849, type = "raid", specs = { [270] = true }, enabled = true },                      -- Life Cocoon
 
+    { spellID = 116844, type = "raid", talentID = 19995, enabled = true },                              -- Ring of Peace
+
+    -- Windwalker
+    { spellID = 116844, type = "raid", talentID = 20173, enabled = true },                              -- Diffuse Magic
+
     -- Brewmaster
     { spellID = 116705, type = "interrupt", enabled = true },                                           -- Spear Hand Strike
     { spellID = 115203, type = "defense", specs = { [268] = true }, enabled = true },                   -- Fortigying Brew
-    { spellID = 122278, type = "defense", specs = { [268] = true }, talentID = 20175, enabled = true }  -- Dampen Harm
+    { spellID = 122278, type = "defense", specs = { [268] = true, [269] = true }, talentID = 20175, enabled = true }  -- Dampen Harm
 }
 
 SpellTable["SHAMAN"] = {
