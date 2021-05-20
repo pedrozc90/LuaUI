@@ -11,6 +11,7 @@ local basePositionMinimap = Minimap.PositionMinimap
 local baseAddZoneAndCoords = Minimap.AddZoneAndCoords
 local baseAddMinimapDataTexts = Minimap.AddMinimapDataTexts
 local baseAddTaxiEarlyExit = Minimap.AddTaxiEarlyExit
+local baseStartHighlight = Minimap.StartHighlight
 
 function Minimap:StyleMinimap()
 
@@ -140,4 +141,19 @@ function Minimap:AddTaxiEarlyExit()
     EarlyExitButton.Text:ClearAllPoints()
     EarlyExitButton.Text:SetPoint("CENTER", EarlyExitButton, "CENTER", 0, 0)
 	EarlyExitButton.Text:SetFont(C.Medias.Font, 12)
+end
+
+function Minimap:StartHighlight()
+    -- first, we call the base function
+    baseStartHighlight(self)
+
+    -- second, we edit it
+	if Minimap.Highlight then
+        Minimap.Highlight:ClearAllPoints()
+		Minimap.Highlight:SetPoint("TOP", 0, 10)
+		Minimap.Highlight:SetPoint("BOTTOM", 0, -10)
+		Minimap.Highlight:SetPoint("LEFT", -10, 0)
+		Minimap.Highlight:SetPoint("RIGHT", 10, 0)
+		Minimap.Highlight:SetBackdropBorderColor(1, 1, 0)
+	end
 end
