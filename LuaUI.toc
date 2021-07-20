@@ -1,6 +1,6 @@
 ## Interface: 90100
 ## Author: Luaerror
-## Version: 2.3
+## Version: 2.4
 ## Title: |cffb3ff19LuaUI|r
 ## Notes: External Tukui Edit
 ## Website: https://github.com/PedroZC90/LuaUI
