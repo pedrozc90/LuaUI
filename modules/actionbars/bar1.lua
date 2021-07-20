@@ -20,7 +20,6 @@ function ActionBars:CreateBar1()
 
 	local Size = C.ActionBars.NormalButtonSize
 	local Spacing = C.ActionBars.ButtonSpacing
-	local Druid, Rogue, Warrior, Priest = "", "", "", ""
 	local ButtonsPerRow = C.ActionBars.Bar1ButtonsPerRow
 	local NumRow = ceil(12 / ButtonsPerRow)
 	local Offset = (C.ActionBars.ShowBackdrop) and (Spacing + 1) or 0

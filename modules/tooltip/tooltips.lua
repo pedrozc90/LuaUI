@@ -1,6 +1,8 @@
 local T, C, L = Tukui:unpack()
 local Tooltips = T.Tooltips
 
+if (true) then return end;
+
 ----------------------------------------------------------------
 -- Tooltips
 ----------------------------------------------------------------

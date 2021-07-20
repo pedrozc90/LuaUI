@@ -3,6 +3,7 @@ local Toolkit = T00LKIT
 local UnitFrames = T.UnitFrames
 local ceil = math.ceil
 local Scale = Toolkit.Functions.Scale
+
 ----------------------------------------------------------------
 -- NamePlates
 ----------------------------------------------------------------

@@ -2,6 +2,8 @@ local T, C, L = Tukui:unpack()
 local Bags = T.Inventory.Bags
 local DataTexts = T.DataTexts
 
+if (true) then return end;
+
 local BackdropR, BackdropG, BackdropB = unpack(C.General.BackdropColor)
 local BackdropA = 0.75
 

@@ -34,7 +34,7 @@ function Auras:Skin()
         Bar:ClearAllPoints()
         Bar:SetInside()
         Bar:SetStatusBarTexture(C.Medias.Blank)
-        Bar:SetStatusBarColor(.0, .8, .0)
+        Bar:SetStatusBarColor(0, 0.80, 0)
     end
 
     if (Duration) then

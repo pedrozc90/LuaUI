@@ -55,7 +55,7 @@ function ActionBars:SkinButton(Button)
     -- Count
     if (Count) then
         Count:ClearAllPoints()
-        Count:SetPoint("BOTTOMRIGHT", Button, "BOTTOMRIGHT", 1, 1)
+        Count:SetPoint("BOTTOMRIGHT", Button, "BOTTOMRIGHT", -2, 2)
     end
 
     -- HotKey
@@ -67,7 +67,7 @@ function ActionBars:SkinButton(Button)
 
     if (Btname and C.ActionBars.Macro) then
         Btname:ClearAllPoints()
-        Btname:SetPoint("BOTTOM", Button, "BOTTOM", 1, 1)
+        Btname:SetPoint("BOTTOM", Button, "BOTTOM", 0, 2)
     end
 end
 

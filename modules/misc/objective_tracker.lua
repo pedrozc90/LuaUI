@@ -15,7 +15,7 @@ function ObjectiveTracker:SetDefaultPosition()
 
     -- second, we edit it
     local Anchor1, Parent, Anchor2, X, Y = "TOPRIGHT", UIParent, "TOPRIGHT", -268, -240
-	local Data = TukuiData[T.MyRealm][T.MyName]
+	local Data = TukuiDatabase.Variables[T.MyRealm][T.MyName]
 
 	local ObjectiveFrameHolder = _G["TukuiObjectiveTracker"]
 	ObjectiveFrameHolder:SetSize(130, 22)

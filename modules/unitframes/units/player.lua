@@ -18,6 +18,7 @@ function UnitFrames:Player()
     -- second, we edit it
     local Health = self.Health
     local Power = self.Power
+    local PowerPrediction = self.PowerPrediction.mainBar
     local AdditionalPower = self.AdditionalPower
     local Name = self.Name
 
@@ -118,38 +119,41 @@ function UnitFrames:Player()
         Power.colorPower = true
     end
 
-	Power.Prediction:SetWidth(FrameWidth)
-	Power.Prediction:SetStatusBarTexture(PowerTexture)
-	Power.Prediction:SetStatusBarColor(0, 0, 0, 0.7)
+    -- Power Prediction
+	PowerPrediction:SetWidth(FrameWidth)
+	PowerPrediction:SetStatusBarTexture(PowerTexture)
+	PowerPrediction:SetStatusBarColor(0, 0, 0, 0.7)
 
-    -- Additional Power (e.g: Shadow Priest Mana)    
-	AdditionalPower:ClearAllPoints()
-    AdditionalPower:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
-    AdditionalPower:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
-    AdditionalPower:SetHeight(AdditionalPowerHeight)
-	AdditionalPower:SetStatusBarTexture(PowerTexture)
-	AdditionalPower:SetStatusBarColor(unpack(T.Colors.power["MANA"]))
-    AdditionalPower:SetFrameLevel(Health:GetFrameLevel())
-    AdditionalPower.Backdrop:Kill()
+    -- Additional Power (e.g: Shadow Priest Mana)
+    if (T.Retail) then
+        AdditionalPower:ClearAllPoints()
+        AdditionalPower:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
+        AdditionalPower:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
+        AdditionalPower:SetHeight(AdditionalPowerHeight)
+        AdditionalPower:SetStatusBarTexture(PowerTexture)
+        AdditionalPower:SetStatusBarColor(unpack(T.Colors.power["MANA"]))
+        AdditionalPower:SetFrameLevel(Health:GetFrameLevel())
+        AdditionalPower.Backdrop:Kill()
 
-    AdditionalPower.PostVisibility = function (self, visibility)
-        if (visibility) then
-            Health:SetHeight(FrameHeight - PowerHeight - AdditionalPowerHeight - 2)
+        AdditionalPower.PostVisibility = function (self, visibility)
+            if (visibility) then
+                Health:SetHeight(FrameHeight - PowerHeight - AdditionalPowerHeight - 2)
 
-            Power:ClearAllPoints()
-            Power:SetPoint("TOPLEFT", AdditionalPower, "BOTTOMLEFT", 0, -1)
-            Power:SetPoint("TOPRIGHT", AdditionalPower, "BOTTOMRIGHT", 0, -1)
-        else
-            Health:SetHeight(FrameHeight - PowerHeight - 1)
+                Power:ClearAllPoints()
+                Power:SetPoint("TOPLEFT", AdditionalPower, "BOTTOMLEFT", 0, -1)
+                Power:SetPoint("TOPRIGHT", AdditionalPower, "BOTTOMRIGHT", 0, -1)
+            else
+                Health:SetHeight(FrameHeight - PowerHeight - 1)
 
-            Power:ClearAllPoints()
-            Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
-            Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
+                Power:ClearAllPoints()
+                Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
+                Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
+            end
         end
-    end
 
-    AdditionalPower.Background:SetAllPoints()
-    AdditionalPower.Background:SetColorTexture(unpack(C.General.BackgroundColor))
+        AdditionalPower.Background:SetAllPoints()
+        AdditionalPower.Background:SetColorTexture(unpack(C.General.BackgroundColor))
+    end
 
     Name:ClearAllPoints()
     Name:SetPoint("CENTER", Health, "CENTER", 0, 0)
@@ -252,6 +256,7 @@ function UnitFrames:Player()
 	-- Status Indicator
 	Status:ClearAllPoints()
 	Status:SetPoint("CENTER", Health, "CENTER", 0, 1)
+    Status:Hide()
 
     -- Leader Indicator
     Leader:ClearAllPoints()
@@ -407,6 +412,14 @@ function UnitFrames:Player()
     RestingIndicator:ClearAllPoints()
     RestingIndicator:SetPoint("CENTER", Health, "CENTER", 0, 0)
     RestingIndicator:SetSize(16, 16)
+    RestingIndicator:Hide()
+
+    if (T.BCC and C.UnitFrames.PowerTick) then
+		local EnergyManaRegen = self.EnergyManaRegen
+		-- EnergyManaRegen:SetFrameLevel(Power:GetFrameLevel() + 3)
+		-- EnergyManaRegen:SetAllPoints()
+		-- EnergyManaRegen.Spark = EnergyManaRegen:CreateTexture(nil, "OVERLAY")
+	end
 
     -- TotemBar
     if (C.UnitFrames.TotemBar) then

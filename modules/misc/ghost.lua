@@ -4,6 +4,8 @@ local GhostFrame = GhostFrame
 local Minimap = T.Maps.Minimap
 local Experience = T.Miscellaneous.Experience
 
+if (true) then return end;
+
 ----------------------------------------------------------------
 -- Ghost
 ----------------------------------------------------------------

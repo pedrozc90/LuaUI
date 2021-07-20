@@ -1,6 +1,8 @@
 local T, C, L = Tukui:unpack()
 local Tooltips = T.Tooltips
 
+if (true) then return end;
+
 ----------------------------------------------------------------
 -- NOT MY CODE
 -- Reference: https://github.com/silverwind/idTip on February 3th, 2019

@@ -22,40 +22,34 @@ function Minimap:StyleMinimap()
     local Mail = MiniMapMailFrame
 	local MailBorder = MiniMapMailBorder
 	local MailIcon = MiniMapMailIcon
-	local QueueStatusMinimapButton = QueueStatusMinimapButton
-	local QueueStatusFrame = QueueStatusFrame
-	local MiniMapInstanceDifficulty = MiniMapInstanceDifficulty
-	local GuildInstanceDifficulty = GuildInstanceDifficulty
-	local HelpOpenTicketButton = HelpOpenTicketButton
-	local Tracking = MiniMapTrackingButton
 
-    -- Ticket
-    local Ticket = self.Ticket
+    if (T.Retail) then
+        local QueueStatusMinimapButton = QueueStatusMinimapButton
+        local QueueStatusFrame = QueueStatusFrame
+        local MiniMapInstanceDifficulty = MiniMapInstanceDifficulty
+        local GuildInstanceDifficulty = GuildInstanceDifficulty
+        local HelpOpenTicketButton = HelpOpenTicketButton
+        
+        -- QueueStatusMinimapButton
+        QueueStatusMinimapButton:ClearAllPoints()
+        QueueStatusMinimapButton:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 3, -3)
 
-    Ticket:ClearAllPoints()
-    Ticket:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -3)
-    Ticket:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
-    Ticket:SetHeight(23)
-    
-	Ticket.Text:ClearAllPoints()
-	Ticket.Text:SetFontTemplate(C.Medias.Font, 12)
-	Ticket.Text:SetPoint("CENTER", Ticket, "CENTER", 0, 1)
-    
-    -- QueueStatusMinimapButton
-	QueueStatusMinimapButton:ClearAllPoints()
-    QueueStatusMinimapButton:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 3, -3)
+        -- Mail
+        Mail:ClearAllPoints()
+        Mail:SetPoint("TOPRIGHT", self, "TOPRIGHT", 4, 4)
+        
+        -- MiniMapInstanceDifficulty
+        MiniMapInstanceDifficulty:ClearAllPoints()
+        MiniMapInstanceDifficulty:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
 
-    -- Mail
-	Mail:ClearAllPoints()
-	Mail:SetPoint("TOPRIGHT", self, "TOPRIGHT", 4, 4)
-	
-	-- MiniMapInstanceDifficulty
-    MiniMapInstanceDifficulty:ClearAllPoints()
-	MiniMapInstanceDifficulty:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
-
-	-- GuildInstanceDifficulty
-	GuildInstanceDifficulty:ClearAllPoints()
-	GuildInstanceDifficulty:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+        -- GuildInstanceDifficulty
+        GuildInstanceDifficulty:ClearAllPoints()
+        GuildInstanceDifficulty:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+    else
+        local BGFrame = MiniMapBattlefieldFrame
+		local BGFrameBorder = MiniMapBattlefieldBorder
+		local BGFrameIcon = MiniMapBattlefieldIcon
+    end
 end
 
 function Minimap:PositionMinimap()
@@ -86,7 +80,6 @@ function Minimap:AddZoneAndCoords()
 
     -- second, we edit it
     local MinimapZone = self.MinimapZone
-    local MinimapCoords = self.MinimapCoords
     
     -- MinimapZone
     MinimapZone:ClearAllPoints()
@@ -101,15 +94,19 @@ function Minimap:AddZoneAndCoords()
     MinimapZone.Text:SetJustifyH("CENTER")
 
     -- MinimapCoords
-    MinimapCoords:ClearAllPoints()
-    MinimapCoords:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 2, 2)
-    MinimapCoords:SetSize(40, 20)
-    MinimapCoords:SetTemplate("Transparent")
+    if C.Maps.MinimapCoords then
+        local MinimapCoords = self.MinimapCoords
 
-    MinimapCoords.Text:ClearAllPoints()
-    MinimapCoords.Text:SetPoint("CENTER", MinimapCoords, "CENTER", 0, 0)
-    MinimapCoords.Text:SetFont(C.Medias.Font, 10)
-    MinimapCoords.Text:SetJustifyH("CENTER")
+        MinimapCoords:ClearAllPoints()
+        MinimapCoords:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 2, 2)
+        MinimapCoords:SetSize(40, 20)
+        MinimapCoords:SetTemplate("Transparent")
+
+        MinimapCoords.Text:ClearAllPoints()
+        MinimapCoords.Text:SetPoint("CENTER", MinimapCoords, "CENTER", 0, 0)
+        MinimapCoords.Text:SetFont(C.Medias.Font, 10)
+        MinimapCoords.Text:SetJustifyH("CENTER")
+    end
 end
 
 function Minimap:AddTaxiEarlyExit()

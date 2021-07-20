@@ -1,7 +1,7 @@
 local T, C, L = Tukui:unpack()
 local ActionBars = T.ActionBars
 local Movers = T.Movers
-local NUM_STANCE_SLOTS = NUM_STANCE_SLOTS       -- 10
+local NUM_STANCE_SLOTS = NUM_STANCE_SLOTS
 
 ----------------------------------------------------------------
 -- StanceBar

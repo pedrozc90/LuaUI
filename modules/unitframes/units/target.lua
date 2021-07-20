@@ -19,7 +19,8 @@ function UnitFrames:Target()
     local Name = self.Name
     local AltPowerBar = self.AlternativePower
 	local RaidIcon = self.RaidTargetIndicator
-    local Threat = self.ThreatIndicator
+    local Leader = self.LeaderIndicator
+	local MasterLooter = self.MasterLooterIndicator
 
     local FrameWidth, FrameHeight = unpack(C.Units.Target)
     local PowerHeight = 5
@@ -122,18 +123,20 @@ function UnitFrames:Target()
     self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameLong] [Tukui:Classification][Tukui:DiffColor][level]")
 
     -- Alternative Power Bar
-    AltPowerBar:ClearAllPoints()
-    AltPowerBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 7)
-	AltPowerBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 7)
-	AltPowerBar:SetHeight(5)
-    AltPowerBar:SetStatusBarColor(.0, .0, .0)
-    AltPowerBar:SetFrameLevel(Health:GetFrameLevel())
-    -- AltPowerBar:CreateBackdrop()
-    -- AltPowerBar.Backdrop:SetOutside()
+    if (T.Retail) then
+        AltPowerBar:ClearAllPoints()
+        AltPowerBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 7)
+        AltPowerBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 7)
+        AltPowerBar:SetHeight(5)
+        AltPowerBar:SetStatusBarColor(.0, .0, .0)
+        AltPowerBar:SetFrameLevel(Health:GetFrameLevel())
+        -- AltPowerBar:CreateBackdrop()
+        -- AltPowerBar.Backdrop:SetOutside()
 
-	if (AltPowerBar.Value) then
-		AltPowerBar.Value:ClearAllPoints()
-		AltPowerBar.Value:SetPoint("CENTER", AltPowerBar, "CENTER", 0, 1)
+        if (AltPowerBar.Value) then
+            AltPowerBar.Value:ClearAllPoints()
+            AltPowerBar.Value:SetPoint("CENTER", AltPowerBar, "CENTER", 0, 1)
+        end
     end
 
     if (C.UnitFrames.CastBar) then
@@ -212,30 +215,7 @@ function UnitFrames:Target()
         Portrait.Shadow:Kill()
     end
 
-    if (C.UnitFrames.TargetAuraBars) then
-        local Gap = (T.MyClass == "ROGUE" or T.MyClass == "DRUID") and 8 or 0
-
-		local AuraBars = CreateFrame("Frame", self:GetName() .. "AuraBars", self)
-		AuraBars:SetHeight(10)
-		AuraBars:SetWidth(250)
-        AuraBars:SetPoint("TOPLEFT", 0, 13 + Gap)
-        
-		AuraBars.gap = 3
-        AuraBars.height = 17
-        AuraBars.width = FrameWidth - AuraBars.height - AuraBars.gap
-        AuraBars.growth = "UP"
-        AuraBars.initialAnchor = "BOTTOMLEFT"
-		AuraBars.spellNameObject = T.GetFont(C.UnitFrames.Font)
-        AuraBars.spellTimeObject = T.GetFont(C.UnitFrames.Font)
-        AuraBars.auraBarTexture = PowerTexture
-        AuraBars.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
-        
-        AuraBars.PostCreateBar = UnitFrames.PostCreateAuraBar
-
-		T.Movers:RegisterFrame(AuraBars, "Target Aura Bars")
-
-        self.AuraBars = AuraBars
-    else
+    do
         local AuraSize = 28
         local AuraSpacing = 1
         local AuraPerRow = 9
@@ -297,4 +277,14 @@ function UnitFrames:Target()
     RaidIcon:ClearAllPoints()
     RaidIcon:SetPoint("CENTER", self, "TOP", 0, 3)
     RaidIcon:SetSize(16, 16)
+
+    -- Leader Icon
+    Leader:ClearAllPoints()
+	Leader:SetSize(14, 14)
+	Leader:SetPoint("TOPLEFT", 2, 8)
+
+    -- Master Looter Icon
+	MasterLooter:ClearAllPoints()
+	MasterLooter:SetSize(14, 14)
+	MasterLooter:SetPoint("TOPRIGHT", -2, 8)
 end

@@ -161,6 +161,7 @@ function UnitFrames:FocusTarget()
         -- Debuffs.PostUpdateIcon = UnitFrames.PostUpdateAura
 	end
 
+    --[[
 	if (C.UnitFrames.HealComm) then
 		local myBar = self.HealthPrediction.myBar
 		local otherBar = self.HealthPrediction.otherBar
@@ -178,4 +179,5 @@ function UnitFrames:FocusTarget()
         absorbBar:SetHeight(Health:GetHeight())
 		absorbBar:SetStatusBarTexture(HealthTexture)
 	end
+    ]]
 end

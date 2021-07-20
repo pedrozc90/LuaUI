@@ -26,8 +26,6 @@ function UnitFrames:Pet()
     local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
     local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
 
-	-- self.Backdrop:SetBackdropColor(unpack(C.General.BackdropColor))
-	-- self.Backdrop:Kill()
 	self.Shadow:Kill()
 	self.Panel:Kill()
     self.Backdrop = nil

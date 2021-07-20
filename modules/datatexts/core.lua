@@ -1,6 +1,8 @@
 local T, C, L = Tukui:unpack()
 local DataTexts = T.DataTexts
 
+if (true) then return end;
+
 ----------------------------------------------------------------
 -- DataTexts
 ----------------------------------------------------------------
@@ -181,4 +183,3 @@ local function AddDefaults()
 	TukuiData[Realm][Name].DataTexts["Time"] = { true, 7 }
 end
 hooksecurefunc(DataTexts, "AddDefaults", AddDefaults)
-

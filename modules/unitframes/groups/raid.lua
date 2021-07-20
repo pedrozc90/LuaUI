@@ -126,7 +126,7 @@ function UnitFrames:Raid()
 		absorbBar:SetStatusBarTexture(HealthTexture)
     end
 
-    if (C.Raid.AuraTrack) then
+    if (C.Raid.RaidBuffsStyle.Value == "Aura Track") then
         local AuraTrack = self.AuraTrack
 		
 		-- AuraTrack:ClearAllPoints()
@@ -138,7 +138,7 @@ function UnitFrames:Raid()
 		-- AuraTrack.Icons = C.Raid.AuraTrackIcons
 		-- AuraTrack.SpellTextures = C.Raid.AuraTrackSpellTextures
 		-- AuraTrack.Thickness = C.Raid.AuraTrackThickness
-	elseif (C.Raid.RaidBuffs.Value ~= "Hide") then
+	elseif (C.Raid.RaidBuffsStyle.Value == "Standard") then
         local Buffs = self.Buffs
 
 		local onlyShowPlayer = C.Raid.RaidBuffs.Value == "Self"

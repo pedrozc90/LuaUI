@@ -26,7 +26,6 @@ function UnitFrames:Focus()
 	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
     local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
 
-    -- self.Backdrop:Kill()
     self.Backdrop = nil
     self:CreateBackdrop()
 
