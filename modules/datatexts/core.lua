@@ -1,11 +1,26 @@
 local T, C, L = Tukui:unpack()
 local DataTexts = T.DataTexts
 
-if (true) then return end;
-
 ----------------------------------------------------------------
 -- DataTexts
 ----------------------------------------------------------------
+
+function DataTexts:AddDefaults()
+	local Name = UnitName("player")
+	local Realm = GetRealmName()
+
+	TukuiDatabase.Variables[Realm][Name].DataTexts = {}
+
+	TukuiDatabase.Variables[Realm][Name].DataTexts["Guild"] = { true, 1 }
+	TukuiDatabase.Variables[Realm][Name].DataTexts["Character"] = { true, 2 }
+	TukuiDatabase.Variables[Realm][Name].DataTexts["System"] = { true, 3 }
+	TukuiDatabase.Variables[Realm][Name].DataTexts["Friends"] = { true, 4 }
+	TukuiDatabase.Variables[Realm][Name].DataTexts["MicroMenu"] = { true, 5 }
+	TukuiDatabase.Variables[Realm][Name].DataTexts["Gold"] = { true, 6 }
+	TukuiDatabase.Variables[Realm][Name].DataTexts["Time"] = { true, 7 }
+end
+
+--[[
 local baseEnable = DataTexts.Enable
 
 function DataTexts:Enable()
@@ -164,22 +179,4 @@ end
 --         DataText.GetTooltipAnchor = GetTooltipAnchor
 --     end
 -- end
-
-----------------------------------------------------------------
--- Set Default DataTexts
-----------------------------------------------------------------
-local function AddDefaults()
-	local Name = UnitName("player")
-	local Realm = GetRealmName()
-
-	TukuiData[Realm][Name].DataTexts = {}
-
-	TukuiData[Realm][Name].DataTexts["Armor"] = { true, 1 }
-	TukuiData[Realm][Name].DataTexts["Talents"] = { true, 2 }
-	TukuiData[Realm][Name].DataTexts["Character"] = { true, 3}
-	TukuiData[Realm][Name].DataTexts["Regen"] = { true, 4 }
-	TukuiData[Realm][Name].DataTexts["System"] = { true, 5 }
-	TukuiData[Realm][Name].DataTexts["MicroMenu"] = { true, 6 }
-	TukuiData[Realm][Name].DataTexts["Time"] = { true, 7 }
-end
-hooksecurefunc(DataTexts, "AddDefaults", AddDefaults)
+]]--
