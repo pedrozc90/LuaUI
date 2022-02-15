@@ -1,4 +1,4 @@
-## Interface: 90100
+## Interface: 90105
 ## Author: Luaerror
 ## Version: 2.4
 ## Title: |cffb3ff19LuaUI|r
