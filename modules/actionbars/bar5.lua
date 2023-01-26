@@ -25,7 +25,7 @@ function ActionBars:CreateBar5()
 	local Spacing = C.ActionBars.ButtonSpacing
 	local ButtonsPerRow = C.ActionBars.Bar5ButtonsPerRow
     local NumButtons = C.ActionBars.Bar5NumButtons
-	local Offset = (C.ActionBars.ShowBackdrop) and (Spacing + 1) or 0
+	local Padding = (C.ActionBars.ShowBackdrop) and Spacing or 0
     
     if (NumButtons <= ButtonsPerRow) then
 		ButtonsPerRow = NumButtons
@@ -38,14 +38,10 @@ function ActionBars:CreateBar5()
     ActionBar5:ClearAllPoints()
     ActionBar5:SetWidth(Width)
 	ActionBar5:SetHeight(Height)
-    if (C.ActionBars.RightBar) then
-        if (C.ActionBars.VerticalRightBars) then
-            ActionBar5:SetPoint("BOTTOMRIGHT", ActionBar4, "TOPRIGHT", 0, Spacing - 2)
-        else
-            ActionBar5:SetPoint("RIGHT", ActionBar4, "LEFT", -Spacing, 0)
-        end
+    if (ActionBar4 and C.ActionBars.RightBar) then
+        ActionBar5:SetPoint("RIGHT", ActionBar4, "LEFT", -Spacing, 0)
     else
-        ActionBar5:SetPoint("RIGHT", UIParent, "RIGHT", -C.Lua.ScreenMargin, 5)
+        ActionBar5:SetPoint("RIGHT", UIParent, "RIGHT", -C.Lua.ScreenMargin, 0)
     end
 
     if (C.ActionBars.ShowBackdrop) then
@@ -63,13 +59,16 @@ function ActionBars:CreateBar5()
 		Button:SetSize(Size, Size)
 		Button:ClearAllPoints()
 		Button:SetAttribute("showgrid", 1)
-		Button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_EVENT)
+
+        if (not T.Retail) then
+			ActionButton_ShowGrid(Button)	
+		end
 
 		ActionBars:SkinButton(Button)
 		
 		if i <= NumButtons then
 			if (i == 1) then
-				Button:SetPoint("TOPLEFT", ActionBar5, "TOPLEFT", Offset, -Offset)
+				Button:SetPoint("TOPLEFT", ActionBar5, "TOPLEFT", Padding, -Padding)
 			elseif (i == NumPerRows + 1) then
 				Button:SetPoint("TOPLEFT", NextRowButtonAnchor, "BOTTOMLEFT", 0, -Spacing)
 

@@ -11,7 +11,6 @@ local ceil = math.ceil
 local basePlayer = UnitFrames.Player
 
 function UnitFrames:Player()
-
     -- first, we call the base function
     basePlayer(self)
 
@@ -72,25 +71,6 @@ function UnitFrames:Player()
         Health.colorDisconnected = true
         Health.colorClass = true
         Health.colorReaction = true
-    end
-
-    -- Health Prediction
-	if (C.UnitFrames.HealBar) then
-        local myBar = self.HealthPrediction.myBar
-        local otherBar = self.HealthPrediction.otherBar
-        local absorbBar = self.HealthPrediction.absorbBar
-
-        myBar:SetWidth(FrameWidth)
-        myBar:SetHeight(Health:GetHeight())
-		myBar:SetStatusBarTexture(HealthTexture)
-
-        otherBar:SetWidth(FrameWidth)
-        otherBar:SetHeight(Health:GetHeight())
-		otherBar:SetStatusBarTexture(HealthTexture)
-
-        absorbBar:SetWidth(FrameWidth)
-        absorbBar:SetHeight(Health:GetHeight())
-		absorbBar:SetStatusBarTexture(HealthTexture)
     end
 
     -- Power
@@ -188,7 +168,7 @@ function UnitFrames:Player()
         -- AuraBars.PostCreateBar = UnitFrames.PostCreateAuraBar
     else
         local AuraSize = 28
-        local AuraSpacing = 1
+        local AuraSpacing = 3
         local AuraPerRow = 9
         local AuraWidth = (AuraPerRow * AuraSize) + ((AuraPerRow - 1) * AuraSpacing)
 
@@ -196,7 +176,7 @@ function UnitFrames:Player()
             local Buffs = self.Buffs
             
 			Buffs:ClearAllPoints()
-			Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, 2 + Gap)
+			Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, AuraSpacing + Gap)
             Buffs:SetHeight(AuraSize)
             Buffs:SetWidth(AuraWidth)
             
@@ -227,7 +207,7 @@ function UnitFrames:Player()
 			if (self.Buffs) then
 				Debuffs:SetPoint("BOTTOMLEFT", self.Buffs, "TOPLEFT", 0, 18)
 			else
-				Debuffs:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 1, 2 + Gap)
+				Debuffs:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, AuraSpacing + Gap)
 			end
 				
 			Debuffs.size = AuraSize
@@ -305,7 +285,7 @@ function UnitFrames:Player()
         if (C.UnitFrames.CastBarIcon) then
             local IconSize = FrameHeight + Power:GetHeight() + 1
             CastBar.Icon:ClearAllPoints()
-            CastBar.Icon:SetPoint("TOPRIGHT", Health, "TOPLEFT", -3, 0)
+            CastBar.Icon:SetPoint("TOPRIGHT", Health, "TOPLEFT", -4, 0)
             CastBar.Icon:SetSize(IconSize, IconSize)
             CastBar.Icon:SetTexCoord(unpack(T.IconCoord))
 
@@ -314,9 +294,16 @@ function UnitFrames:Player()
 		end
 
 		if (C.UnitFrames.UnlinkCastBar) then
+            local ButtonSize = C.ActionBars.NormalButtonSize
+            local ButtonSpacing = C.ActionBars.ButtonSpacing
+            local ButtonsPerRow = C.ActionBars.Bar1ButtonsPerRow
+            local NumRow = ceil(12 / ButtonsPerRow)
+            local IconSize = (CastBar.Button) and CastBar.Button:GetWidth() or 0
+            local Width = (ButtonsPerRow * ButtonSize) + ((ButtonsPerRow + 1) * ButtonSpacing) - IconSize
+
 			CastBar:ClearAllPoints()
-            CastBar:SetPoint("BOTTOM", ActionBars.Bars.Bar1, "TOP", 0, 2)
-            CastBar:SetWidth(ActionBars.Bars.Bar1:GetWidth() - 2)                 -- CastBar:SetWidth(350)
+            CastBar:SetPoint("BOTTOM", UIParent, "BOTTOM", 12, 50)
+            CastBar:SetWidth(Width)
             CastBar:SetHeight(20)
             CastBar.Shadow:Kill()
 
@@ -414,12 +401,31 @@ function UnitFrames:Player()
     RestingIndicator:SetSize(16, 16)
     RestingIndicator:Hide()
 
-    if (T.BCC and C.UnitFrames.PowerTick) then
+    if ((T.Classic or T.BCC) and C.UnitFrames.PowerTick) then
 		local EnergyManaRegen = self.EnergyManaRegen
 		-- EnergyManaRegen:SetFrameLevel(Power:GetFrameLevel() + 3)
 		-- EnergyManaRegen:SetAllPoints()
 		-- EnergyManaRegen.Spark = EnergyManaRegen:CreateTexture(nil, "OVERLAY")
 	end
+
+    -- Health Prediction
+	if (C.UnitFrames.HealComm) then
+        local myBar = self.HealthPrediction.myBar
+        local otherBar = self.HealthPrediction.otherBar
+        local absorbBar = self.HealthPrediction.absorbBar
+
+        myBar:SetWidth(FrameWidth)
+        myBar:SetHeight(Health:GetHeight())
+		myBar:SetStatusBarTexture(HealthTexture)
+
+        otherBar:SetWidth(FrameWidth)
+        otherBar:SetHeight(Health:GetHeight())
+		otherBar:SetStatusBarTexture(HealthTexture)
+
+        absorbBar:SetWidth(FrameWidth)
+        absorbBar:SetHeight(Health:GetHeight())
+		absorbBar:SetStatusBarTexture(HealthTexture)
+    end
 
     -- TotemBar
     if (C.UnitFrames.TotemBar) then
@@ -448,5 +454,46 @@ function UnitFrames:Player()
 				Totems[i]:SetPoint("LEFT", Totems[i - 1], "RIGHT", Spacing, 0)
 			end
 		end
-	end
+	elseif C.UnitFrames.TotemBarStyle.Value == "On Player" then
+        -- Bar:SetPoint("TOPLEFT", self, "TOPLEFT", -1, 10)
+        -- Bar:SetFrameStrata(Health:GetFrameStrata())
+        -- Bar:SetFrameLevel(Health:GetFrameLevel() + 3)
+        -- Bar:SetSize(252, 10)
+        -- Bar:CreateBackdrop()
+
+        -- for i = 1, 4 do
+        --     local r, g, b = unpack(T.Colors.totems[i])
+
+        --     Bar[i] = CreateFrame("StatusBar", self:GetName().."Totem"..i, Bar)
+        --     Bar[i]:SetStatusBarTexture(HealthTexture)
+        --     Bar[i]:SetStatusBarColor(r, g, b)
+        --     Bar[i]:SetMinMaxValues(0, 1)
+        --     Bar[i]:SetValue(0)
+
+        --     if i == 1 then
+        --         Bar[i]:SetPoint("TOPLEFT", Bar, "TOPLEFT", 1, -1)
+        --         Bar[i]:SetSize(61, 8)
+        --     else
+        --         Bar[i]:SetPoint("TOPLEFT", Bar[i-1], "TOPRIGHT", 1, 0)
+        --         Bar[i]:SetSize(62, 8)
+        --     end
+
+        --     Bar[i].Background = Bar[i]:CreateTexture(nil, "BORDER")
+        --     Bar[i].Background:SetParent(Bar)
+        --     Bar[i].Background:SetAllPoints(Bar[i])
+        --     Bar[i].Background:SetTexture(HealthTexture)
+        --     Bar[i].Background:SetVertexColor(r, g, b)
+        --     Bar[i].Background:SetAlpha(.15)
+        -- end
+
+        -- self.Shadow:SetPoint("TOPLEFT", -4, 12)
+
+        -- if self.AuraBars then
+        --     self.AuraBars:ClearAllPoints()
+        --     self.AuraBars:SetPoint("TOPLEFT", 0, 22)
+        -- elseif self.Buffs then
+        --     self.Buffs:ClearAllPoints()
+        --     self.Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 13)
+        -- end
+    end
 end

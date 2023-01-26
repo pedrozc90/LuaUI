@@ -8,7 +8,6 @@ local ceil = math.ceil
 local baseArena = UnitFrames.Arena
 
 function UnitFrames:Arena()
-
     -- first, we call the base function
     baseArena(self)
 
@@ -119,7 +118,7 @@ function UnitFrames:Arena()
         local AuraWidth = (AuraSize * AuraPerRow) + (AuraSpacing * (AuraPerRow + 1))
 
 		Buffs:ClearAllPoints()
-        Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -3, 0)
+        Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -4, 0)
         Buffs:SetWidth(AuraWidth)
         Buffs:SetHeight(AuraSize)
 
@@ -132,7 +131,7 @@ function UnitFrames:Arena()
         Buffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
 
 		Debuffs:ClearAllPoints()
-        Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 3, 0)
+        Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 4, 0)
         Debuffs:SetWidth(AuraWidth)
         Debuffs:SetHeight(AuraSize)
 
@@ -168,5 +167,15 @@ function UnitFrames:Arena()
             CastBar.Button:SetSize(CastBar:GetHeight())
             CastBar.Button:SetPoint("TOPLEFT", CastBar, "TOPRIGHT", 7, 0)
         end
+	end
+
+    -- Trinket Icon
+    if (T.BCC or T.WotLK) then
+		local Trinket = self.Trinket
+        
+        Trinket:ClearAllPoints()
+        Trinket:SetPoint("TOPRIGHT", SpecIcon, "TOPLEFT", -7, 0)
+        Trinket:SetSize(FrameHeight)
+        Trinket.Backdrop.Shadow:Kill()
 	end
 end

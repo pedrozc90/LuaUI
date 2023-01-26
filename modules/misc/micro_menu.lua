@@ -1,5 +1,6 @@
 local T, C, L = Tukui:unpack()
+local MicroMenu = T.Miscellaneous.MicroMenu
 
 ----------------------------------------------------------------
--- LuaUI Initialization
+-- Micro Menu
 ----------------------------------------------------------------

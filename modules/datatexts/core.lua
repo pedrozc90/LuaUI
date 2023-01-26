@@ -20,19 +20,18 @@ function DataTexts:AddDefaults()
 	TukuiDatabase.Variables[Realm][Name].DataTexts["Time"] = { true, 7 }
 end
 
---[[
 local baseEnable = DataTexts.Enable
 
 function DataTexts:Enable()
 	-- first, we call the base function
-    baseEnable(self)
-
-    -- second, we edit it
+	baseEnable(self)
+	
+	-- second, we edit it
 	local DataTextLeft = self.Panels.Left
 	local DataTextRight = self.Panels.Right
-
+	
 	local Padding = C.Chat.Padding + C.Lua.ScreenMargin
-
+	
 	DataTextLeft:ClearAllPoints()
 	DataTextLeft:SetWidth(C.General.Themes.Value == "Tukui" and C.Chat.LeftWidth or 370)
 	DataTextLeft:SetHeight(23)
@@ -40,7 +39,7 @@ function DataTexts:Enable()
 	DataTextLeft:CreateBackdrop("Transparent")
 	DataTextLeft:SetFrameStrata("BACKGROUND")
 	DataTextLeft:SetFrameLevel(2)
-
+	
 	DataTextRight:ClearAllPoints()
 	DataTextRight:SetWidth(C.General.Themes.Value == "Tukui" and C.Chat.RightWidth or 370)
 	DataTextRight:SetHeight(23)
@@ -50,6 +49,7 @@ function DataTexts:Enable()
 	DataTextRight:SetFrameLevel(2)
 end
 
+--[[
 local RemoveData = function(self)
 	if self.Data then
 		self.Data.Position = 0

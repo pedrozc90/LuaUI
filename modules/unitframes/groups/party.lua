@@ -3,13 +3,13 @@ local UnitFrames = T.UnitFrames
 local Class = select(2, UnitClass("player"))
 
 local ceil = math.ceil
+
 ----------------------------------------------------------------
 -- Party
 ----------------------------------------------------------------
 local baseParty = UnitFrames.Party
 
 function UnitFrames:Party()
-
     -- first, we call the base function
     baseParty(self)
 
@@ -27,6 +27,7 @@ function UnitFrames:Party()
     local Threat = self.ThreatIndicator
     local Range = self.Range
     local Highlight = self.Highlight
+    local ResurrectIndicator = self.ResurrectIndicator
 
     local FrameWidth = C.Party.WidthSize
     local FrameHeight = C.Party.HeightSize
@@ -34,10 +35,10 @@ function UnitFrames:Party()
 
     local HealthTexture = T.GetTexture(C.Textures.UFPartyHealthTexture)
     local PowerTexture = T.GetTexture(C.Textures.UFPartyPowerTexture)
+    local Font = T.GetFont(C.Party.Font)
+	local HealthFont = T.GetFont(C.Party.HealthFont)
 
-    local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
-
-	self.Shadow:Kill()
+    self.Shadow:Kill()
 
     -- Health
     Health:ClearAllPoints()
@@ -52,7 +53,6 @@ function UnitFrames:Party()
     if (C.Party.ShowHealthText) then
         Health.Value:ClearAllPoints()
         Health.Value:SetParent(Health)
-        -- Health.Value:SetPoint("CENTER", Health, "CENTER", 1, -7)
         Health.Value:SetPoint("TOPRIGHT", Health, "TOPRIGHT", -4, 6)
         Health.Value:SetJustifyH("CENTER")
 
@@ -109,29 +109,40 @@ function UnitFrames:Party()
     -- self:Tag(Name, "[Tukui:NameShort] [Tukui:Role]")
 
     -- Auras
-    local AuraSize = FrameHeight + 2
-    local AuraSpacing = 1
-    local AuraPerRow = 7
-    local AuraWidth = (AuraPerRow * AuraSize) + ((AuraPerRow - 1) * AuraSpacing)
+    if C.Party.Buffs then
+        local AuraSize = FrameHeight + 2
+        local AuraSpacing = 1
+        local AuraPerRow = 7
+        local AuraWidth = (AuraPerRow * AuraSize) + ((AuraPerRow - 1) * AuraSpacing)
 
-    Buffs:ClearAllPoints()
-    Buffs:SetPoint("TOPLEFT", Power, "BOTTOMLEFT", -1, -3)
-    Buffs:SetHeight(AuraSize)
-    Buffs:SetWidth(AuraWidth)
-    Buffs.size = AuraSize
-    Buffs.spacing = AuraSpacing
-    Buffs.num = 6
-	Buffs.numRow = ceil(Buffs.num / AuraPerRow)
-	Buffs.initialAnchor = "TOPLEFT"
+        Buffs:ClearAllPoints()
+        Buffs:SetPoint("TOPLEFT", Power, "BOTTOMLEFT", 0, -AuraSpacing)
+        Buffs:SetHeight(AuraSize)
+        Buffs:SetWidth(AuraWidth)
+
+        Buffs.size = AuraSize
+        Buffs.spacing = AuraSpacing
+        Buffs.num = 6
+        Buffs.numRow = 1
+        Buffs.initialAnchor = "TOPLEFT"
+    end
 	
-	Debuffs:ClearAllPoints()
-	Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 3, 1)
-    Debuffs:SetHeight(AuraSize)
-	Debuffs:SetWidth(AuraWidth)
-    Debuffs.size = AuraSize
-    Debuffs.spacing = AuraSpacing
-    Debuffs.num = 6
-	Debuffs.initialAnchor = "TOPLEFT"
+    if C.Party.Debuffs then
+        local AuraSize = FrameHeight + 2
+        local AuraSpacing = 1
+        local AuraPerRow = 7
+        local AuraWidth = (AuraPerRow * AuraSize) + ((AuraPerRow - 1) * AuraSpacing)
+
+        Debuffs:ClearAllPoints()
+        Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", AuraSpacing, 0)
+        Debuffs:SetHeight(AuraSize)
+        Debuffs:SetWidth(AuraWidth)
+
+        Debuffs.size = AuraSize
+        Debuffs.spacing = AuraSpacing
+        Debuffs.num = 6
+        Debuffs.initialAnchor = "TOPLEFT"
+    end
 
     -- Leader
 	Leader:ClearAllPoints()
@@ -177,6 +188,10 @@ function UnitFrames:Party()
 		absorbBar:SetStatusBarTexture(HealthTexture)
     end
 
+    ResurrectIndicator:ClearAllPoints()
+	ResurrectIndicator:SetSize(24, 24)
+	ResurrectIndicator:SetPoint("CENTER", Health, "CENTER", 0, 0)
+
 	-- Threat
 	-- Threat.Override = UnitFrames.UpdateThreat
 
@@ -203,7 +218,7 @@ function UnitFrames:GetPartyFramesAttributes()
 	return
 		"TukuiParty",
 		nil,
-		"custom [@raid6,exists] hide;show",
+		"custom [@raid6,exists] hide; [@raid1,exists] show; [@party1,exists] show; hide",
 		"oUF-initialConfigFunction", [[
 			local header = self:GetParent()
 			self:SetWidth(header:GetAttribute("initial-width"))

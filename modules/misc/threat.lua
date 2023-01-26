@@ -8,7 +8,6 @@ local DataTexts = T.DataTexts
 local baseCreate = ThreatBar.Create
 
 function ThreatBar:Create()
-
     -- first, we call the base function
     baseCreate(self)
 

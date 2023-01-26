@@ -10,7 +10,6 @@ local Scale = Toolkit.Functions.Scale
 local baseNameplates = UnitFrames.Nameplates
 
 function UnitFrames:Nameplates()
-
     -- first, we call the base function
     baseNameplates(self)
 
@@ -29,10 +28,8 @@ function UnitFrames:Nameplates()
     local HealthTexture = T.GetTexture(C.Textures.NPHealthTexture)
     local PowerTexture = T.GetTexture(C.Textures.NPPowerTexture)
     local CastTexture = T.GetTexture(C.Textures.NPCastTexture)
-    -- local Font, FontSize, FontStyle = C.Medias.PixelFont, 14, "MONOCHROMEOUTLINE"
-
-    local PowerHeight = 3
     local NameLength = C.NamePlates.HealthTag.Value == "" and "[Tukui:NameMedium]" or "[Tukui:NameShort]"
+    local PowerHeight = 3
 
     self.Backdrop:SetBackdropColor(unpack(C.General.BackdropColor))
     self.Shadow:Kill()
@@ -41,7 +38,7 @@ function UnitFrames:Nameplates()
     Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-    Health:SetHeight(FrameHeight - PowerHeight - 1)
+    Health:SetHeight(FrameHeight - PowerHeight)
 
     Health.Background:SetAllPoints()
     Health.Background:SetColorTexture(unpack(C.General.BackgroundColor))
@@ -82,64 +79,48 @@ function UnitFrames:Nameplates()
 
     self:Tag(Name, "[Tukui:Classification][Tukui:DiffColor][level] [Tukui:GetNameHostilityColor]" .. NameLength)
 
-    -- Debuffs
-    Debuffs:ClearAllPoints()
-    Debuffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 18)
-    Debuffs.size = C["NamePlates"].DebuffSize
-    Debuffs.num = 7
-    Debuffs.numRow = 1
-    Debuffs.spacing = C["NamePlates"].DebuffSpacing
-    Debuffs.initialAnchor = "BOTTOMLEFT"
-    Debuffs["growth-y"] = "UP"
-    Debuffs["growth-x"] = "RIGHT"
-    Debuffs:SetHeight(Debuffs.size)
-    Debuffs:SetWidth(Debuffs.num * Debuffs.size + (Debuffs.num - 1) * Debuffs.spacing)
-
     -- Buffs
-    local BuffSize = self:GetHeight()
+    local BuffSize = self:GetHeight() + 2
     local BuffSpacing = 1
-    local BuffPerRow = 3
-    local BuffWidth = (BuffSize * BuffPerRow) + (BuffSpacing * (BuffPerRow + 1))
+    local BuffPerRow = 4
+    local BuffWidth = (BuffPerRow * BuffSize) + ((BuffPerRow + 1) * BuffSpacing)
 
     Buffs:ClearAllPoints()
-    Buffs:SetHeight(BuffSize, BuffSize)
+    Buffs:SetHeight(BuffSize)
     Buffs:SetWidth(BuffWidth)
     Buffs:SetPoint("LEFT", self, "RIGHT", 3, 0)
 
     Buffs.size = BuffSize
     Buffs.spacing = BuffSpacing
     Buffs.num = 3
-    Buffs.numRow = ceil(Buffs.num / BuffPerRow)
-    Buffs.disableMouse = true	
+    Buffs.numRow = 1
     Buffs.initialAnchor = "BOTTOMLEFT"
+    Buffs.disableMouse = true
+    Buffs.isNameplate = true
     Buffs["growth-y"] = "DOWN"
     Buffs["growth-x"] = "RIGHT"
     Buffs.CustomFilter = UnitFrames.BuffIsStealable
-    -- Buffs.PostCreateIcon = UnitFrames.PostCreateAura
-    -- Buffs.PostUpdateIcon = UnitFrames.PostUpdateAura
 
     -- Debuffs
-    local DebuffSize = 24
-    local DebuffSpacing = 1
-    local DebuffPerRow = math.ceil(C.NamePlates.Width / 26)
-    local DebuffWidth = (DebuffSize * DebuffPerRow) + (DebuffSpacing * (DebuffPerRow + 1))
+    local DebuffSize = 26
+    local DebuffSpacing = 4
+    local DebuffPerRow = math.ceil(C.NamePlates.Width / DebuffSize)
+    local DebuffWidth = (DebuffPerRow * DebuffSize) + ((DebuffPerRow - 1) * DebuffSpacing)
 
     Debuffs:ClearAllPoints()
-    Debuffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -3)
+    Debuffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 18)
     Debuffs:SetHeight(DebuffSize)
     Debuffs:SetWidth(DebuffWidth)
 
     Debuffs.size = DebuffSize
-    Debuffs.spacing = DebuffSpacing
     Debuffs.num = DebuffPerRow
-    Debuffs.numRow = ceil(Debuffs.num / DebuffPerRow)
-    Debuffs.disableMouse = true
+    Debuffs.numRow = 1
+    Debuffs.spacing = DebuffSpacing
     Debuffs.initialAnchor = "BOTTOMLEFT"
-    Debuffs["growth-y"] = "DOWN"
+    Debuffs.disableMouse = true
+    Debuffs.isNameplate = true
+    Debuffs["growth-y"] = "UP"
     Debuffs["growth-x"] = "RIGHT"
-    Debuffs.onlyShowPlayer = C.NamePlates.OnlySelfDebuffs
-    -- Debuffs.PostCreateIcon = UnitFrames.PostCreateAura
-    -- Debuffs.PostUpdateIcon = UnitFrames.PostUpdateAura
 
     -- CastBar
     if (C.NamePlates.NameplateCastBar) then
@@ -161,7 +142,7 @@ function UnitFrames:Nameplates()
     RaidIcon:SetPoint("RIGHT", Name, "LEFT", -5, -1)
     RaidIcon:SetSize(18, 18)
 
-    if (C.NamePlates.QuestIcon) then
+    if (T.Retail and C.NamePlates.QuestIcon) then
         local QuestIcon = self.QuestIcon
 
         QuestIcon:ClearAllPoints()
@@ -172,9 +153,11 @@ function UnitFrames:Nameplates()
     if (C.NamePlates.ClassIcon) then
         local ClassIcon = self.ClassIcon
 
-        -- ClassIcon:ClearAllPoints()
-        -- ClassIcon:SetSize(self:GetHeight() + 14, self:GetHeight() + 14)
-        -- ClassIcon:SetPoint("BOTTOMRIGHT", self, "BOTTOMLEFT", -3, 0)
+        local IconSize = self:GetHeight() + 16
+        
+        ClassIcon:ClearAllPoints()
+        ClassIcon:SetPoint("BOTTOMRIGHT", self, "BOTTOMLEFT", -4, 0)
+        ClassIcon:SetSize(IconSize, IconSize)
         -- ClassIcon:CreateBackdrop()
         -- ClassIcon:SetAlpha(0)
         -- ClassIcon.Backdrop.Shadow:Kill()

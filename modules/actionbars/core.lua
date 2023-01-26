@@ -13,7 +13,7 @@ ActionBars.GetActionBarSize = function(number, size, spacing, show_bg)
 	if (not show_bg) then
 		return (size * number) + (spacing * (number - 1))
 	end
-	return (size * number) + (spacing * (number + 1)) + 2
+	return (size * number) + (spacing * (number + 1))
 end
 
 ActionBars.GetBackgroundSize = function(rows, cols, size, spacing, show_bg)
@@ -23,7 +23,7 @@ ActionBars.GetBackgroundSize = function(rows, cols, size, spacing, show_bg)
 end
 
 ----------------------------------------------------------------
--- Skin ActionBar Buttons
+--[[ Skin ActionBar Buttons
 ----------------------------------------------------------------
 local baseSkinButton = ActionBars.SkinButton
 local baseSkinPetAndShiftButton = ActionBars.SkinPetAndShiftButton
@@ -89,37 +89,6 @@ function ActionBars:SkinPetAndShiftButton(Normal, Button, Icon, Name, Pet)
 	end
 end
 
-function ActionBars:MovePetBar()
-    
-    -- first, we call the base function
-    baseMovePetBar(self)
-
-    -- second, we edit it
-    local PetBar = TukuiPetActionBar
-	local ActionBar5 = TukuiActionBar5
-	local ActionBar4 = TukuiActionBar4
-	local Data1 = TukuiData[T.MyRealm][T.MyName].Move.TukuiActionBar5
-    local Data2 = TukuiData[T.MyRealm][T.MyName].Move.TukuiPetActionBar
-    
-    local ButtonSize = C.ActionBars.NormalButtonSize
-    local Spacing = C.ActionBars.ButtonSpacing
-    local xOffset = 7
-
-	-- Don't run if player moved bar 5 or pet bar
-    -- if (Data1 or Data2) then return end
-    
-    if (C.ActionBars.VerticalRightBars) then
-		local Padding = ButtonSize + (Spacing * 3) + xOffset
-		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -Padding, 7)
-	elseif (C.ActionBars.LeftBar) then
-		PetBar:SetPoint("RIGHT", ActionBar5, "LEFT", -Spacing, 0)
-	elseif (C.ActionBars.RightBar) then
-		PetBar:SetPoint("RIGHT", ActionBar4, "LEFT", -Spacing, 0)
-	else
-		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -xOffset, 7)
-	end
-end
-
 function ActionBars:UpdateStanceBar()
 	
 	-- first, we call the base function
@@ -152,10 +121,10 @@ function ActionBars:UpdateStanceBar()
 			ActionBar3:SetPoint("TOPLEFT", StanceBar, "TOPRIGHT", 3, 0)
 		end
 	end
-end
+end]]--
 
 ----------------------------------------------------------------
--- Action Slots
+--[[ Action Slots
 ----------------------------------------------------------------
 local ToggleActionButton = function(self, alpha)
 	if (not HasAction(self.action)) then
@@ -208,4 +177,4 @@ function ActionBars:Enable()
 	self:SetScript("OnEvent", function(self, event, ...)
 		self[event](...)
 	end)
-end
+end]]--

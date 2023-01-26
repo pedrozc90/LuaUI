@@ -9,7 +9,6 @@ local baseSetDefaultPosition = ObjectiveTracker.SetDefaultPosition
 local baseUpdateProgressBar = ObjectiveTracker.UpdateProgressBar
 
 function ObjectiveTracker:SetDefaultPosition()
-
     -- first, we call the base function
     baseSetDefaultPosition(self)
 
@@ -34,6 +33,7 @@ function ObjectiveTracker:SetDefaultPosition()
 	end
 end
 
+--[[
 function ObjectiveTracker:UpdateProgressBar(_, line)
     
     -- first, we call the base function
@@ -65,4 +65,4 @@ function ObjectiveTracker:UpdateProgressBar(_, line)
             end
         end
     end
-end
+end --]]

@@ -2,9 +2,7 @@ local T, C, L = Tukui:unpack()
 local Misc = T.Miscellaneous
 local Panels = T.Panels
 
-if (true) then return end;
-
--- Lib Globals
+--[[ Lib Globals
 local _G = _G
 local unpack = unpack
 local select = select
@@ -49,3 +47,4 @@ function f:ADDON_LOADED(addon)
     self:UnregisterAllEvents()
     self:SetScript("OnEvent", nil)
 end
+--]]

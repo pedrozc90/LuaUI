@@ -8,7 +8,6 @@ local Minimap = T.Maps.Minimap
 local baseCreate = Experience.Create
 
 function Experience:Create()
-
     -- first, we call the base function
     baseCreate(self)
 

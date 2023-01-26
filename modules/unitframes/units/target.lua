@@ -9,7 +9,6 @@ local ceil = math.ceil
 local baseTarget = UnitFrames.Target
 
 function UnitFrames:Target()
-
     -- first, we call the base function
     baseTarget(self)
 
@@ -68,25 +67,6 @@ function UnitFrames:Target()
     -- fix target status bar color
     Health.PreUpdate = UnitFrames.PreUpdateHealth
 
-    -- Health Prediction
-	if (C.UnitFrames.HealBar) then
-        local myBar = self.HealthPrediction.myBar
-        local otherBar = self.HealthPrediction.otherBar
-        local absorbBar = self.HealthPrediction.absorbBar
-
-        myBar:SetWidth(FrameWidth)
-        myBar:SetHeight(Health:GetHeight())
-		myBar:SetStatusBarTexture(HealthTexture)
-
-        otherBar:SetWidth(FrameWidth)
-        otherBar:SetHeight(Health:GetHeight())
-		otherBar:SetStatusBarTexture(HealthTexture)
-
-        absorbBar:SetWidth(FrameWidth)
-        absorbBar:SetHeight(Health:GetHeight())
-		absorbBar:SetStatusBarTexture(HealthTexture)
-    end
-
     -- Power
     Power:ClearAllPoints()
     Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
@@ -114,14 +94,6 @@ function UnitFrames:Target()
         Power.colorPower = true
     end
 
-    -- Name
-    Name:ClearAllPoints()
-    Name:SetParent(Health)
-	Name:SetPoint("LEFT", Health, "LEFT", 5, 0)
-    Name:SetJustifyH("LEFT")
-
-    self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameLong] [Tukui:Classification][Tukui:DiffColor][level]")
-
     -- Alternative Power Bar
     if (T.Retail) then
         AltPowerBar:ClearAllPoints()
@@ -138,6 +110,14 @@ function UnitFrames:Target()
             AltPowerBar.Value:SetPoint("CENTER", AltPowerBar, "CENTER", 0, 1)
         end
     end
+
+    -- Name
+    Name:ClearAllPoints()
+    Name:SetParent(Health)
+	Name:SetPoint("LEFT", Health, "LEFT", 5, 0)
+    Name:SetJustifyH("LEFT")
+
+    self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameLong] [Tukui:Classification][Tukui:DiffColor][level]")
 
     if (C.UnitFrames.CastBar) then
         local CastBar = self.Castbar
@@ -179,9 +159,16 @@ function UnitFrames:Target()
 		end
 
 		if (C.UnitFrames.UnlinkCastBar) then
+            local ButtonSize = C.ActionBars.NormalButtonSize
+            local ButtonSpacing = C.ActionBars.ButtonSpacing
+            local ButtonsPerRow = C.ActionBars.Bar1ButtonsPerRow
+            local NumRow = ceil(12 / ButtonsPerRow)
+            local IconSize = (CastBar.Button) and CastBar.Button:GetWidth() or 0
+            local Width = (ButtonsPerRow * ButtonSize) + ((ButtonsPerRow + 1) * ButtonSpacing) - IconSize
+
 			CastBar:ClearAllPoints()
             CastBar:SetPoint("CENTER", UIParent, "CENTER", 0, 300)
-            CastBar:SetWidth(ActionBars.Bars.Bar1:GetWidth() - 2)
+            CastBar:SetWidth(Width)
             CastBar:SetHeight(20)
             CastBar.Shadow:Kill()
 
@@ -217,7 +204,7 @@ function UnitFrames:Target()
 
     do
         local AuraSize = 28
-        local AuraSpacing = 1
+        local AuraSpacing = 3
         local AuraPerRow = 9
         local AuraWidth = (AuraPerRow * AuraSize) + ((AuraPerRow - 1) * AuraSpacing)
 
@@ -227,7 +214,7 @@ function UnitFrames:Target()
             local yOffset = (self.AlternativePower.IsEnable) and 10 or 0
 
             Buffs:ClearAllPoints()
-            Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, 2)
+            Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, AuraSpacing)
             Buffs:SetWidth(AuraWidth)
             Buffs:SetHeight(AuraSize)
 
@@ -271,6 +258,25 @@ function UnitFrames:Target()
 		CombatFeedbackText:ClearAllPoints()
         CombatFeedbackText:SetPoint("CENTER", Health, "CENTER", 0, 0)
         CombatFeedbackText:SetFont(Font, 13, FontStyle)
+    end
+
+    -- Health Prediction
+	if (C.UnitFrames.HealComm) then
+        local myBar = self.HealthPrediction.myBar
+        local otherBar = self.HealthPrediction.otherBar
+        local absorbBar = self.HealthPrediction.absorbBar
+
+        myBar:SetWidth(FrameWidth)
+        myBar:SetHeight(Health:GetHeight())
+		myBar:SetStatusBarTexture(HealthTexture)
+
+        otherBar:SetWidth(FrameWidth)
+        otherBar:SetHeight(Health:GetHeight())
+		otherBar:SetStatusBarTexture(HealthTexture)
+
+        absorbBar:SetWidth(FrameWidth)
+        absorbBar:SetHeight(Health:GetHeight())
+		absorbBar:SetStatusBarTexture(HealthTexture)
     end
 
     -- Raid Icon

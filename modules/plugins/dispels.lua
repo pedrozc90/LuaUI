@@ -27,7 +27,7 @@ local DispellList = {
     [117235] = true,        -- Purified
     [123011] = true,        -- Terrorize
     -- Throne of Thunder
-    -- Siege od Orgrimmar
+    -- Siege of Orgrimmar
     [143791] = true,        -- Corrosive Blood
 }
 

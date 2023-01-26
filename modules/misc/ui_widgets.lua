@@ -1,8 +1,6 @@
 local T, C, L = Tukui:unpack()
 local UIWidgets = T.Miscellaneous.UIWidgets
 
-if (true) then return end;
-
 ----------------------------------------------------------------
 -- UI Widgets
 ----------------------------------------------------------------
@@ -10,17 +8,14 @@ if (true) then return end;
 local baseEnable = UIWidgets.Enable
 
 -- function UIWidgets:SkinUIWidgetStatusBar(widgetInfo, widgetContainer)
-
 --     -- first, we call the base function
 --     baseSkinUIWidgetStatusBar(self, widgetInfo, widgetContainer)
 
 --     -- second, we edit it
 --     local Texture = T.GetTexture(C.Lua.Texture)
-
 -- end
 
 function UIWidgets:Enable()
-
     -- first, we call the base function
     baseEnable(self)
 

@@ -11,7 +11,6 @@ local ceil = math.ceil
 local baseCreatePetBar = ActionBars.CreatePetBar
 
 function ActionBars:CreatePetBar()
-
 	-- first, we call the base function
     baseCreatePetBar(self)
 
@@ -22,55 +21,40 @@ function ActionBars:CreatePetBar()
 
 	local ActionBar4 = ActionBars.Bars.Bar4
 	local ActionBar5 = ActionBars.Bars.Bar5
+	local ActionBar6 = ActionBars.Bars.Bar6
+	local ActionBar7 = ActionBars.Bars.Bar7
+	local ActionBar8 = ActionBars.Bars.Bar8
 
-	local PetSize = C.ActionBars.PetButtonSize
+    local PetSize = C.ActionBars.PetButtonSize
 	local ButtonSize = C.ActionBars.NormalButtonSize
-	local Spacing = C.ActionBars.ButtonSpacing
-	local PetActionBarFrame = PetActionBarFrame
-	-- local PetActionBar_UpdateCooldowns = PetActionBar_UpdateCooldowns
+    local Spacing = C.ActionBars.ButtonSpacing
+	local PetActionBarFrame = T.Retail and PetActionBar or PetActionBarFrame
+	local PetActionBar_UpdateCooldowns = PetActionBar_UpdateCooldowns
 	local ButtonsPerRow = C.ActionBars.BarPetButtonsPerRow
-	local NumRow = ceil(NUM_PET_ACTION_SLOTS / ButtonsPerRow)
+	local NumRows = ceil(NUM_PET_ACTION_SLOTS / ButtonsPerRow)
 	
-	local Width = (PetSize * NumRow) + (Spacing * (NumRow + 1)) + 2
-	local Height = (PetSize * ButtonsPerRow) + (Spacing * (ButtonsPerRow + 1)) + 2
+	local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRows, PetSize, Spacing, C.ActionBars.ShowBackdrop)
 
 	PetBar:ClearAllPoints()
     PetBar:SetWidth(Width)
 	PetBar:SetHeight(Height)
-	if (C.ActionBars.VerticalRightBars) then
-		local Padding = ButtonSize + (Spacing * 3) + C.Lua.ScreenMargin
-		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -Padding, 7)
-	elseif (C.ActionBars.LeftBar) then
-		PetBar:SetPoint("RIGHT", ActionBar5, "LEFT", -Spacing, 0)
-	elseif (C.ActionBars.RightBar) then
-		PetBar:SetPoint("RIGHT", ActionBar4, "LEFT", -Spacing, 0)
-	else
-		PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -C.Lua.ScreenMargin, 7)
-	end
+
+    if (ActionBar8 and C.ActionBars.Bar8) then
+        PetBar:SetPoint("RIGHT", ActionBar8, "LEFT", -Spacing, 0)
+    elseif (ActionBar7 and C.ActionBars.Bar7) then
+        PetBar:SetPoint("RIGHT", ActionBar7, "LEFT", -Spacing, 0)
+    elseif (ActionBar6 and C.ActionBars.Bar6) then
+        PetBar:SetPoint("RIGHT", ActionBar6, "LEFT", -Spacing, 0)
+    elseif (ActionBar5 and C.ActionBars.LeftBar) then
+        PetBar:SetPoint("RIGHT", ActionBar5, "LEFT", -Spacing, 0)
+    elseif (ActionBar4 and C.ActionBars.RightBar) then
+        PetBar:SetPoint("RIGHT", ActionBar4, "LEFT", -Spacing, 0)
+    else
+        PetBar:SetPoint("RIGHT", UIParent, "RIGHT", -C.Lua.ScreenMargin, 0)
+    end
 
 	if (C.ActionBars.ShowBackdrop) then
 		PetBar:SetBackdropTransparent()
 		PetBar.Shadow:Kill()
-	end
-
-	local j = 1
-	for i = 1, NUM_PET_ACTION_SLOTS do
-		local Button = _G["PetActionButton" .. i]
-		local PreviousButton = _G["PetActionButton" .. (i-1)]
-		
-		-- Button:SetParent(Bar)
-		-- Button:ClearAllPoints()
-		-- Button:SetSize(PetSize, PetSize)
-		-- Button:SetNormalTexture("")
-		-- Button:Show()
-
-		if (i == 1) then
-			Button:SetPoint("TOPLEFT", PetBar, "TOPLEFT", Spacing + 1, -Spacing - 1)
-		elseif  ((i % ButtonsPerRow) == 1) then
-			Button:SetPoint("TOPLEFT", _G["PetActionButton" .. j], "TOPRIGHT", Spacing, 0)
-			j = j + ButtonsPerRow
-		else
-			Button:SetPoint("TOPLEFT", PreviousButton, "BOTTOMLEFT", 0, -Spacing)
-		end
 	end
 end

@@ -8,7 +8,6 @@ local ceil = math.ceil
 local baseTargetOfTarget = UnitFrames.TargetOfTarget
 
 function UnitFrames:TargetOfTarget()
-
     -- first, we call the base function
     baseTargetOfTarget(self)
 
@@ -141,6 +140,7 @@ function UnitFrames:TargetOfTarget()
 		end
 	end
 
+    -- Health Prediction
 	if (C.UnitFrames.HealComm) then
 		local myBar = self.HealthPrediction.myBar
 		local otherBar = self.HealthPrediction.otherBar

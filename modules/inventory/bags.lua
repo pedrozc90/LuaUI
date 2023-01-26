@@ -1,8 +1,14 @@
 local T, C, L = Tukui:unpack()
 local Bags = T.Inventory.Bags
-local DataTexts = T.DataTexts
+local BankFrame = BankFrame
 
-if (true) then return end;
+local BlizzardBags = {
+	CharacterBag0Slot,
+	CharacterBag1Slot,
+	CharacterBag2Slot,
+	CharacterBag3Slot,
+	CharacterReagentBag0Slot,
+}
 
 local BackdropR, BackdropG, BackdropB = unpack(C.General.BackdropColor)
 local BackdropA = 0.75
@@ -10,51 +16,106 @@ local BackdropA = 0.75
 ----------------------------------------------------------------
 -- Bags
 ----------------------------------------------------------------
+local baseHideBlizzard = Bags.HideBlizzard
 local baseCreateContainer = Bags.CreateContainer
 
+function Bags:HideBlizzard()
+    -- first, we call the base function
+    baseHideBlizzard(self)
+
+    if (T.Retail) then
+        local BankFrameTitleText = _G["BankFrameTitleText"]
+		local BankFramePortrait = _G["BankFramePortrait"]
+		local BankFrameBg = _G["BankFrameBg"]
+
+        BankFrame.NineSlice:Hide()
+        BankFrameTitleText:Hide()
+		BankFramePortrait:Hide()
+		BankFrameBg:Hide()
+    end
+end
+
 function Bags:CreateContainer(storagetype, ...)
-    
     -- first, we call the base function
     baseCreateContainer(self, storagetype, ...)
 
     -- second, we edit it
     local Container = self[storagetype]
-    local DataTextLeft = DataTexts.Panels.Left
-    local DataTextRight = DataTexts.Panels.Right
 
     local ButtonSize = C.Bags.ButtonSize
 	local ButtonSpacing = C.Bags.Spacing
 	local ItemsPerRow = C.Bags.ItemsPerRow
 
     Container.Backdrop:SetBackdropColor(BackdropR, BackdropG, BackdropB, BackdropA)
-    -- Container:SetWidth((ItemsPerRow * ButtonSize) + (ItemsPerRow - 1) * ButtonSpacing + 23)
 
     if (storagetype == "Bag") then
         local BagsContainer = Container.BagsContainer
-		local ToggleBagsContainer = Container.ToggleBagsContainer
-		local Sort = Container.Sort
+		local ToggleBagsContainer = Container.CloseButton
+		local Sort = Container.SortButton
 		local SearchBox = Container.SearchBox
 		local ToggleBags = Container.ToggleBags
+		local Keys = Container.Keys
 
-        -- container
         Container:ClearAllPoints()
-        Container:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -11, 35)
+        Container:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -10, 35)
 
-        -- -- sort button
-        -- Sort.ClearAllPoints = Container.ClearAllPoints
-		-- Sort.SetPoint = Container.SetPoint
-        -- Sort:ClearAllPoints()
-        -- Sort:SetPoint("BOTTOMLEFT", Container, "TOPLEFT", 0, 3)
-        -- Sort:SetPoint("BOTTOMRIGHT", Container, "TOPRIGHT", 0, 3)
-        -- Sort.ClearAllPoints = function() end
-        -- Sort.SetPoint = function() end
-        
-        SearchBox.Backdrop:SetBackdropColor(unpack(C.General.BackdropColor))
+        BagsContainer:ClearAllPoints()
+        BagsContainer:SetPoint("TOPRIGHT", Container, "TOPLEFT", -5, 0)
 
-        SearchBox.Title:ClearAllPoints()
-        SearchBox.Title:SetPoint("CENTER", SearchBox, "CENTER", 0, 1)
-        -- SearchBox.Title:SetFont(C.Medias.Font, 14)
+        for _, Button in pairs(BlizzardBags) do
+			if Button then
+				local Count = _G[Button:GetName().."Count"]
+				local Icon = _G[Button:GetName().."IconTexture"]
 
+				Button:ClearAllPoints()
+				Button:SetParent(BagsContainer)
+				Button:SetWidth(ButtonSize)
+				Button:SetHeight(ButtonSize)
+
+				if LastButtonBag then
+					Button:SetPoint("RIGHT", LastButtonBag, "LEFT", ButtonSpacing, 0)
+				else
+					Button:SetPoint("TOPRIGHT", BagsContainer, "TOPRIGHT", ButtonSpacing, -ButtonSpacing)
+				end
+
+				LastButtonBag = Button
+				
+                local NumBags = getn(BlizzardBags)
+				BagsContainer:SetWidth((ButtonSize * NumBags) + (ButtonSpacing * (NumBags + 1)))
+				BagsContainer:SetHeight(ButtonSize + (ButtonSpacing * 2))
+			end
+		end
+
+        -- SearchBox
+		SearchBox.Backdrop:SetBackdropColor(0.01, 0.01, 0.01, 1)
+        SearchBox.Backdrop:SetBorderColor(unpack(C.General.BorderColor))
+
+        SearchBox.Title:SetText("Search")
+
+        SearchBox:SetScript("OnEscapePressed", function(self)
+            self:ClearFocus()
+            self:SetText("")
+        end)
+		SearchBox:SetScript("OnEnterPressed", function(self)
+            self:ClearFocus()
+            self:SetText("")
+        end)
+		SearchBox:SetScript("OnEditFocusLost", function(self)
+            if not self:HasText() then
+                self.Title:Show()
+            end
+            -- self.Backdrop:SetBorderColor(.3, .3, .3, 1)
+            self.Backdrop:SetBorderColor(0.01, 0.01, 0.01, 1)
+        end)
+		SearchBox:SetScript("OnEditFocusGained", function(self)
+            self.Title:Hide()
+            self.Backdrop:SetBorderColor(1, 1, 1, 1)
+        end)
+    elseif (storagetype == "BagReagent") then
+        local TukuiBag = _G["TukuiBag"]
+
+        Container:ClearAllPoints()
+        Container:SetPoint("BOTTOMRIGHT", TukuiBag, "TOPRIGHT", 0, 3)
     elseif (storagetype == "Bank") then
         local PurchaseButton = BankFramePurchaseButton
 		local CostText = BankFrameSlotCost
@@ -66,25 +127,7 @@ function Bags:CreateContainer(storagetype, ...)
 		local SwitchReagentButton = Container.ReagentButton
 		local SortButton = Container.SortButton
 
-        -- local Size = (Container:GetWidth() - 3) / 2
-
-        -- container
         Container:ClearAllPoints()
-        Container:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 11, 35)
-
-        -- -- reagents button
-        -- Reagent:ClearAllPoints()
-        -- Reagent:SetPoint("BOTTOMLEFT", Container, "TOPLEFT", 0, 3)
-        -- Reagent:SetSize(Size, 23)
-
-        -- -- sort button
-        -- Sort:ClearAllPoints()
-        -- Sort:SetPoint("LEFT", Reagent, "RIGHT", 3, 0)
-        -- Sort:SetSize(Size - 1, 23)
-
-        -- -- bank purchase info
-        -- Purchase:ClearAllPoints()
-        -- Purchase:SetPoint("BOTTOMLEFT", Reagent, "TOPLEFT", -50, 3)
-        -- Purchase:SetWidth(Container:GetWidth() + 50)
+        Container:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 10, 35)
     end
 end

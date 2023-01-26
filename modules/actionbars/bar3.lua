@@ -23,8 +23,7 @@ function ActionBars:CreateBar3()
 	local Spacing = C.ActionBars.ButtonSpacing
 	local ButtonsPerRow = C.ActionBars.Bar3ButtonsPerRow
 	local NumButtons = C.ActionBars.Bar3NumButtons
-
-	local Padding = (C.ActionBars.ActionBar3Background) and (Spacing + 1) or 0
+	local Padding = (C.ActionBars.ShowBackdrop) and Spacing or 0
 	
 	if NumButtons <= ButtonsPerRow then
 		ButtonsPerRow = NumButtons
@@ -32,7 +31,7 @@ function ActionBars:CreateBar3()
 	
     local NumRow = ceil(NumButtons / ButtonsPerRow)
 	
-	local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRow, Size, Spacing, C.ActionBars.ActionBar3Background)
+	local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRow, Size, Spacing, C.ActionBars.ShowBackdrop)
 
     ActionBar3:ClearAllPoints()
     ActionBar3:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 250, -C.Lua.ScreenMargin)
@@ -44,7 +43,7 @@ function ActionBars:CreateBar3()
         ActionBar3.Shadow:Kill()
     end
 
-	if (ActionBar3.Backdrop and (not C.ActionBars.ActionBar3Background)) then
+	if (ActionBar3.Backdrop and (not C.ActionBars.ShowBackdrop)) then
 		ActionBar3.Backdrop:Kill()
 	end
 
@@ -58,11 +57,15 @@ function ActionBars:CreateBar3()
 		Button:SetSize(Size, Size)
 		Button:ClearAllPoints()
 		Button:SetAttribute("showgrid", 1)
-		Button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_EVENT)
+		-- Button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_EVENT)
+		
+		if (not T.Retail) then
+			ActionButton_ShowGrid(Button)	
+		end
 
 		ActionBars:SkinButton(Button)
 
-		ActionBars.HideActionSlot(Button)
+		-- ActionBars.HideActionSlot(Button)
 		Button:SetScript("OnEnter", ActionBars.ShowActionSlot)
 		Button:SetScript("OnLeave", ActionBars.HideActionSlot)
 		

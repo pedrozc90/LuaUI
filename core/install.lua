@@ -134,54 +134,54 @@ function Install:SetDefaultsCVars()
     SetCVar("guildMemberNotify", 0)                                 -- enables notification when guild members log on/off (default 1)
 
     -- ActionBars
-    if (C.ActionBars.Enable) then
-        SetActionBarToggles(1, 1, 1, 1, 1)                          -- enable all extra action bars.
-    end
+    -- if (C.ActionBars.Enable) then
+    --     SetActionBarToggles(1, 1, 1, 1, 1)                          -- enable all extra action bars.
+    -- end
 
     -- LuaUIData[GetRealmName()][UnitName("player")].InstallDone = true
 end
 
--- initialize saved variables
--- local f = CreateFrame("Frame")
--- f:RegisterEvent("ADDON_LOADED")
--- f:SetScript("OnEvent", function(self, event, addon)
---     if (addon ~= "LuaUI") then return end
+-- -- initialize saved variables
+-- -- local f = CreateFrame("Frame")
+-- -- f:RegisterEvent("ADDON_LOADED")
+-- -- f:SetScript("OnEvent", function(self, event, addon)
+-- --     if (addon ~= "LuaUI") then return end
 
---     local Name = UnitName("player")
---     local Realm = GetRealmName()
+-- --     local Name = UnitName("player")
+-- --     local Realm = GetRealmName()
 
---     if (not LuaUIData) then
---         LuaUIData = {}
---     end
+-- --     if (not LuaUIData) then
+-- --         LuaUIData = {}
+-- --     end
 
---     if (not LuaUIData[Realm]) then
---         LuaUIData[Realm] = {}
---     end
+-- --     if (not LuaUIData[Realm]) then
+-- --         LuaUIData[Realm] = {}
+-- --     end
 
---     if (not LuaUIData[Realm][Name]) then
---         LuaUIData[Realm][Name] = {}
---     end
+-- --     if (not LuaUIData[Realm][Name]) then
+-- --         LuaUIData[Realm][Name] = {}
+-- --     end
 
---     if (LuaUIDataPerChar) then
---         LuaUIData[Realm][Name] = LuaUIDataPerChar
---         LuaUIDataPerChar = nil
---     end
+-- --     if (LuaUIDataPerChar) then
+-- --         LuaUIData[Realm][Name] = LuaUIDataPerChar
+-- --         LuaUIDataPerChar = nil
+-- --     end
 
---     local IsInstalled = LuaUIData[Realm][Name].InstallDone
+-- --     local IsInstalled = LuaUIData[Realm][Name].InstallDone
 
---     -- check if LuaUI was already installed
---     if (not IsInstalled) then
---         local Data = LuaUIData[Realm][Name]
+-- --     -- check if LuaUI was already installed
+-- --     if (not IsInstalled) then
+-- --         local Data = LuaUIData[Realm][Name]
 
---         -- define visible actionbars
---         Data["HideBar2"] = false
---         Data["HideBar3"] = false
---         Data["HideBar4"] = false
---         Data["HideBar5"] = true
---         Data["HideBar6"] = true
+-- --         -- define visible actionbars
+-- --         Data["HideBar2"] = false
+-- --         Data["HideBar3"] = false
+-- --         Data["HideBar4"] = false
+-- --         Data["HideBar5"] = true
+-- --         Data["HideBar6"] = true
 
---         SetVariables()
---     end
+-- --         SetVariables()
+-- --     end
 
---     self:UnregisterEvent("ADDON_LOADED")
--- end)
+-- --     self:UnregisterEvent("ADDON_LOADED")
+-- -- end)

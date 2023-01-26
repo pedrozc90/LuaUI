@@ -8,7 +8,6 @@ local ceil = math.ceil
 local baseBoss = UnitFrames.Boss
 
 function UnitFrames:Boss()
-
     -- first, we call the base function
     baseBoss(self)
 

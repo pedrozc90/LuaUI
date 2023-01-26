@@ -12,7 +12,6 @@ local ZoneAbilities = ZoneAbilityFrame
 local baseSetupExtraButton = ActionBars.SetupExtraButton
 
 function ActionBars:SetupExtraButton()
-
     -- first, we call the base function
     baseSetupExtraButton(self)
 
@@ -29,7 +28,14 @@ function ActionBars:SetupExtraButton()
     Container:SetPoint("CENTER", Holder, "CENTER", 0, 0)
 
     -- Button:SetSize(42, 42)
-    Button.Shadow:Kill()
+
+    if (C.ActionBars.ShowBackdrop) then
+        Button:SetBackdropTransparent()
+    end
+
+    if (Button.Shadow) then
+        Button.Shadow:Kill()
+    end
 
     -- extra button
     -- Bar:ClearAllPoints()

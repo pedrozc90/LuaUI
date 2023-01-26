@@ -8,7 +8,6 @@ local ceil = math.ceil
 local baseFocusTarget = UnitFrames.FocusTarget
 
 function UnitFrames:FocusTarget()
-
     -- first, we call the base function
     baseFocusTarget(self)
 
@@ -99,85 +98,31 @@ function UnitFrames:FocusTarget()
         local Buffs = self.Buffs
         local Debuffs = self.Debuffs
 
+        local AuraSize = FrameHeight + PowerHeight - 1
+        local AuraSpacing = 1
+        local AuraPerRow = 3
+        local AuraWidth = (AuraSize * AuraPerRow) + (AuraSpacing * (AuraPerRow - 1))
+
 		Buffs:ClearAllPoints()
-		Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -7, 0)
-		Buffs.size = FrameHeight
+		Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -3, 1)
+        Buffs:SetHeight(AuraSize)
+        Buffs:SetWidth(AuraWidth)
+
+		Buffs.size = AuraSize
 		Buffs.num = 3
 		Buffs.spacing = 7
 		Buffs.initialAnchor = "RIGHT"
         Buffs["growth-x"] = "LEFT"
 
-        Buffs:SetWidth(Buffs.num * Buffs.size + (Buffs.num - 1) * Buffs.spacing)
-        Buffs:SetHeight(Buffs.size)
-
 		Debuffs:ClearAllPoints()
-		Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 7, 0)
-		Debuffs.size = Buffs.size
+		Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 3, 1)
+        Debuffs:SetHeight(AuraSize)
+        Debuffs:SetWidth(AuraWidth)
+
+		Debuffs.size = AuraSize
 		Debuffs.num = 5
 		Debuffs.spacing = Buffs.spacing
 		Debuffs.initialAnchor = "LEFT"
 		Debuffs["growth-x"] = "RIGHT"
-        Debuffs:SetWidth(Debuffs.num * Debuffs.size + (Debuffs.num - 1) * Debuffs.spacing)
-        Debuffs:SetHeight(Debuffs.size)
 	end
-
-	if (C.UnitFrames.FocusAuras) then
-		local Buffs = self.Buffs
-        local Debuffs = self.Debuffs
-        
-        local AuraSize = FrameHeight
-        local AuraSpacing = 1
-        local AuraPerRow = 3
-        local AuraWidth = (AuraSize * AuraPerRow) + (AuraSpacing * (AuraPerRow + 1))
-
-		Buffs:ClearAllPoints()
-		Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -2, 1)
-		Buffs:SetHeight(AuraSize)
-        Buffs:SetWidth(AuraWidth)
-        
-		Buffs.size = AuraSize
-        Buffs.spacing = AuraSpacing
-        Buffs.num = 3
-        Buffs.numRow = ceil(Buffs.num / AuraPerRow)
-		Buffs.initialAnchor = "TOPRIGHT"
-		Buffs["growth-x"] = "LEFT"
-        Buffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
-        -- Buffs.PostCreateIcon = UnitFrames.PostCreateAura
-		-- Buffs.PostUpdateIcon = UnitFrames.PostUpdateAura
-
-		Debuffs:ClearAllPoints()
-        Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 2, 1)
-        Debuffs:SetHeight(AuraSize)
-		Debuffs:SetWidth(AuraWidth)
-        
-		Debuffs.size = AuraSize
-        Debuffs.spacing = AuraSpacing
-        Debuffs.num = 4
-        Debuffs.numRow = ceil(Debuffs.num / AuraPerRow)
-		Debuffs.initialAnchor = "TOPLEFT"
-		Debuffs["growth-x"] = "RIGHT"
-        Debuffs.onlyShowPlayer = C.UnitFrames.OnlySelfDebuffs
-        -- Debuffs.PostCreateIcon = UnitFrames.PostCreateAura
-        -- Debuffs.PostUpdateIcon = UnitFrames.PostUpdateAura
-	end
-
-    --[[
-	if (C.UnitFrames.HealComm) then
-		local myBar = self.HealthPrediction.myBar
-		local otherBar = self.HealthPrediction.otherBar
-        local absorbBar = self.HealthPrediction.absorbBar
-
-		myBar:SetWidth(FrameWidth)
-        myBar:SetHeight(Health:GetHeight())
-		myBar:SetStatusBarTexture(HealthTexture)
-
-        otherBar:SetWidth(FrameWidth)
-        otherBar:SetHeight(Health:GetHeight())
-		otherBar:SetStatusBarTexture(HealthTexture)
-
-        absorbBar:SetWidth(FrameWidth)
-        absorbBar:SetHeight(Health:GetHeight())
-		absorbBar:SetStatusBarTexture(HealthTexture)
-	end
-    ]]
 end

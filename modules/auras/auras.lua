@@ -2,7 +2,6 @@ local T, C, L = Tukui:unpack()
 local Auras = T.Auras
 local Minimap = T.Maps.Minimap
 
--- if (not C.Lua.Enable) then return end
 local baseSkin = Auras.Skin
 local baseCreateHeaders = Auras.CreateHeaders
 
@@ -18,6 +17,7 @@ function Auras:Skin()
     local Duration = self.Duration
 	local Bar = self.Bar
 	local Holder = self.Holder
+	local Filter = self.Filter
 	local Icon = self.Icon
 	local Count = self.Count
 	
@@ -39,8 +39,16 @@ function Auras:Skin()
 
     if (Duration) then
         Duration:ClearAllPoints()
-        Duration:SetPoint("BOTTOM", self, "BOTTOM", 2, -15)
+        Duration:SetPoint("BOTTOM", self, "BOTTOM", 0, -15)
     end
+
+    if (C.Auras.Flash) then
+		local Animation = self.Animation
+	end
+
+	if (C.Auras.Animation and not self.AuraGrowth) then
+		local AuraGrowth = self.AuraGrowth
+	end
 end
 
 ----------------------------------------------------------------
@@ -56,7 +64,7 @@ function Auras:CreateHeaders()
     local Buffs = Headers[1]
     local Debuffs = Headers[2]
 
-    local xOffset, yOffset = 3, 0
+    local xOffset, yOffset = 5, 0
     local AuraSpacing = C.Auras.Spacing or 5
     local AuraXOffset = Buffs:GetHeight() + AuraSpacing
     local AuraYOffset = (C.Auras.ClassicTimer) and 51 or 40

@@ -24,7 +24,6 @@ function UnitFrames:Player()
 	Runes:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 	Runes:SetWidth(PlayerWidth)
 	Runes:SetHeight(5)
-	-- Runes:CreateBackdrop()
 	Runes.Backdrop:Kill()
 
 	local Max = 6

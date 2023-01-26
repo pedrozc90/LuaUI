@@ -1,6 +1,6 @@
-## Interface: 90105
+## Interface: 100005
 ## Author: Luaerror
-## Version: 2.4
+## Version: 10.0
 ## Title: |cffb3ff19LuaUI|r
 ## Notes: External Tukui Edit
 ## Website: https://github.com/PedroZC90/LuaUI

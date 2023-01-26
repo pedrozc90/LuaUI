@@ -19,36 +19,54 @@ function Minimap:StyleMinimap()
     baseStyleMinimap(self)
 
     -- second, we edit it
-    local Mail = MiniMapMailFrame
+    local Mail = MinimapCluster and MinimapCluster.MailFrame or MiniMapMailFrame
 	local MailBorder = MiniMapMailBorder
 	local MailIcon = MiniMapMailIcon
+
+    if (Mail) then
+        if (T.Retail) then
+            Mail:SetParent(Minimap)
+        end
+
+        Mail:ClearAllPoints()
+        Mail:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 4, 4)
+    end
 
     if (T.Retail) then
         local QueueStatusMinimapButton = QueueStatusMinimapButton
         local QueueStatusFrame = QueueStatusFrame
+        local QueueStatusButton = QueueStatusButton
         local MiniMapInstanceDifficulty = MiniMapInstanceDifficulty
         local GuildInstanceDifficulty = GuildInstanceDifficulty
         local HelpOpenTicketButton = HelpOpenTicketButton
         
-        -- QueueStatusMinimapButton
-        QueueStatusMinimapButton:ClearAllPoints()
-        QueueStatusMinimapButton:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 3, -3)
+        print("QueueStatusMinimapButton", QueueStatusMinimapButton)
+        print("QueueStatusFrame", QueueStatusFrame)
+        if (QueueStatusMinimapButton) then
+            QueueStatusMinimapButton:ClearAllPoints()
+            QueueStatusMinimapButton:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 3, -3)
+        end
 
-        -- Mail
-        Mail:ClearAllPoints()
-        Mail:SetPoint("TOPRIGHT", self, "TOPRIGHT", 4, 4)
+        if (QueueStatusButton) then
+            QueueStatusButton:ClearAllPoints()
+            QueueStatusButton:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -20)
+        end
         
-        -- MiniMapInstanceDifficulty
-        MiniMapInstanceDifficulty:ClearAllPoints()
-        MiniMapInstanceDifficulty:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+        if (MiniMapInstanceDifficulty) then
+            MiniMapInstanceDifficulty:ClearAllPoints()
+            MiniMapInstanceDifficulty:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+        end
 
-        -- GuildInstanceDifficulty
-        GuildInstanceDifficulty:ClearAllPoints()
-        GuildInstanceDifficulty:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+        if (GuildInstanceDifficulty) then
+            GuildInstanceDifficulty:ClearAllPoints()
+            GuildInstanceDifficulty:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+        end
     else
         local BGFrame = MiniMapBattlefieldFrame
 		local BGFrameBorder = MiniMapBattlefieldBorder
 		local BGFrameIcon = MiniMapBattlefieldIcon
+		local LFGFrame = MiniMapLFGFrame
+		local LFGFrameBorder = MiniMapLFGFrameBorder
     end
 end
 

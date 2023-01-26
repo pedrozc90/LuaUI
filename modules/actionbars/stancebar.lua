@@ -1,7 +1,7 @@
 local T, C, L = Tukui:unpack()
 local ActionBars = T.ActionBars
 local Movers = T.Movers
-local NUM_STANCE_SLOTS = NUM_STANCE_SLOTS
+local NUM_STANCE_SLOTS = NUM_STANCE_SLOTS or 10
 
 ----------------------------------------------------------------
 -- StanceBar
@@ -9,7 +9,6 @@ local NUM_STANCE_SLOTS = NUM_STANCE_SLOTS
 local baseCreateStanceBar = ActionBars.CreateStanceBar
 
 function ActionBars:CreateStanceBar()
-
     -- first, we call the base function
     baseCreateStanceBar(self)
 
@@ -19,7 +18,7 @@ function ActionBars:CreateStanceBar()
 	local StanceBar = ActionBars.Bars.Stance
 	local PetSize = C.ActionBars.PetButtonSize
 	local Spacing = C.ActionBars.ButtonSpacing
-    local Offset = (C.ActionBars.StanceBarBackground) and (Spacing + 1) or 0
+    local Padding = (C.ActionBars.StanceBarBackground) and Spacing or 0
 
     local Columns = (not C.ActionBars.VerticalStanceBar) and NUM_STANCE_SLOTS or 1
     local Rows = (not C.ActionBars.VerticalStanceBar) and 1 or NUM_STANCE_SLOTS
@@ -36,27 +35,33 @@ function ActionBars:CreateStanceBar()
 		StanceBar.Shadow:Kill() 
 	end
 
-    if (C.ActionBars.ShowBackdrop and (not C.ActionBars.StanceBarBackground)) then
+    -- if (C.ActionBars.ShowBackdrop and (not C.ActionBars.StanceBarBackground)) then
+    if (StanceBar.Backdrop) then
         StanceBar.Backdrop:Kill()
     end
 
 	for i = 1, NUM_STANCE_SLOTS do
 		local Button = _G["StanceButton"..i]
+        local FakeButton = _G["TukuiStanceActionBarButton"..i]
 
-        Button:ClearAllPoints()
-        Button:SetSize(PetSize, PetSize)
+        if (not T.Retail) then
+			Button:SetParent(Bar)
+		end
+
+        FakeButton:ClearAllPoints()
+        FakeButton:SetSize(PetSize, PetSize)
 
         if (i == 1) then
-            Button:ClearAllPoints()
-            Button:SetPoint("TOPLEFT", StanceBar, "TOPLEFT", Offset, -Offset)
+            FakeButton:ClearAllPoints()
+            FakeButton:SetPoint("TOPLEFT", StanceBar, "TOPLEFT", Padding, -Padding)
         else
-            local Previous = _G["StanceButton" .. (i-1)]
+            local Previous = _G["TukuiStanceActionBarButton"..i-1]
 
-			Button:ClearAllPoints()
+			FakeButton:ClearAllPoints()
             if (C.ActionBars.VerticalStanceBar) then
-                Button:SetPoint("TOP", Previous, "BOTTOM", 0, -Spacing)
+                FakeButton:SetPoint("TOP", Previous, "BOTTOM", 0, -Spacing)
             else
-			    Button:SetPoint("LEFT", Previous, "RIGHT", Spacing, 0)
+			    FakeButton:SetPoint("LEFT", Previous, "RIGHT", Spacing, 0)
             end
 		end
 	end

@@ -1,8 +1,6 @@
 local T, C, L = Tukui:unpack()
 local TimerTracker = T.Miscellaneous.TimerTracker
 
-if (true) then return end;
-
 ----------------------------------------------------------------
 -- Timer Tracker (e.g: Battleground Timer)
 ----------------------------------------------------------------

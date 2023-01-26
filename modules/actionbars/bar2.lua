@@ -11,7 +11,6 @@ local ceil = math.ceil
 local baseCreateBar2 = ActionBars.CreateBar2
 
 function ActionBars:CreateBar2()
-
     -- first, we call the base function
     baseCreateBar2(self)
 
@@ -23,36 +22,44 @@ function ActionBars:CreateBar2()
     local MultiBarBottomLeft = MultiBarBottomLeft
 	local Size = C.ActionBars.NormalButtonSize
 	local Spacing = C.ActionBars.ButtonSpacing
-	local ButtonsPerRow = 6     -- C.ActionBars.Bar2ButtonsPerRow
-    local NumButtons = 6        -- C.ActionBars.Bar2NumButtons
-    local Offset = (C.ActionBars.ShowBackdrop) and (Spacing + 1) or 0
+	local ButtonsPerRow = 6 -- C.ActionBars.Bar2ButtonsPerRow
+    local NumButtons = 6    -- C.ActionBars.Bar2NumButtons
+    local Padding = (C.ActionBars.ShowBackdrop) and Spacing or 0
 
     local NumRow = ceil(NumButtons / ButtonsPerRow)
     
     local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRow, Size, Spacing, C.ActionBars.ShowBackdrop)
 
+    if (ActionBar2) then
+        ActionBar2:Kill()
+    end
+
     local ActionBar2Left = CreateFrame("Frame", "TukuiActionBar2Left", T.PetHider, "SecureHandlerStateTemplate")
-	ActionBar2Left:SetPoint("BOTTOMRIGHT", ActionBar1, "BOTTOMLEFT", -3, 0)
+	ActionBar2Left:SetPoint("BOTTOMRIGHT", ActionBar1, "BOTTOMLEFT", -Spacing, 0)
 	ActionBar2Left:SetFrameStrata("LOW")
 	ActionBar2Left:SetFrameLevel(10)
 	ActionBar2Left:SetWidth(Width)
     ActionBar2Left:SetHeight(Height)
     
     local ActionBar2Right = CreateFrame("Frame", "TukuiActionBar2Right", T.PetHider, "SecureHandlerStateTemplate")
-	ActionBar2Right:SetPoint("BOTTOMLEFT", ActionBar1, "BOTTOMRIGHT", 3, 0)
+	ActionBar2Right:SetPoint("BOTTOMLEFT", ActionBar1, "BOTTOMRIGHT", Spacing, 0)
 	ActionBar2Right:SetFrameStrata("LOW")
 	ActionBar2Right:SetFrameLevel(10)
 	ActionBar2Right:SetWidth(Width)
     ActionBar2Right:SetHeight(Height)
-    
-    ActionBar2:Kill()
 
     if (C.ActionBars.ShowBackdrop) then
         ActionBar2Left:CreateBackdrop("Transparent")
         ActionBar2Right:CreateBackdrop("Transparent")
     end
 
-    MultiBarBottomLeft:SetShown(true)
+    if (not T.Retail) then
+		MultiBarBottomLeft:SetShown(true)
+	else
+		Settings.SetValue("PROXY_SHOW_ACTIONBAR_2", true)
+	end
+
+    -- MultiBarBottomLeft:SetShown(true)
 	MultiBarBottomLeft:SetParent(ActionBar2Left)
 
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
@@ -61,18 +68,18 @@ function ActionBars:CreateBar2()
         Button:SetSize(Size, Size)
 		Button:ClearAllPoints()
 		Button:SetAttribute("showgrid", 1)
-        Button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_EVENT)
+        -- Button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_EVENT)
         
         ActionBars:SkinButton(Button)
 
         if (i == 1) then
-			Button:SetPoint("BOTTOMRIGHT", ActionBar2Left, "BOTTOMRIGHT", -Offset, Offset)
-		elseif (i == 7) then
-            Button:SetPoint("BOTTOMRIGHT", ActionBar2Right, "BOTTOMRIGHT", -Offset, Offset)
+            Button:SetPoint("BOTTOMRIGHT", ActionBar2Left, "BOTTOMRIGHT", -Padding, Padding)
+        elseif (i == 7) then
+            Button:SetPoint("BOTTOMRIGHT", ActionBar2Right, "BOTTOMRIGHT", -Padding, Padding)
         else
             local PreviousButton = _G["MultiBarBottomLeftButton" .. (i-1)]
-			Button:SetPoint("RIGHT", PreviousButton, "LEFT", -Spacing, 0)
-		end
+            Button:SetPoint("RIGHT", PreviousButton, "LEFT", -Spacing, 0)
+        end
 
 		ActionBar2["Button" .. i] = Button
 	end

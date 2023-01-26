@@ -8,7 +8,6 @@ local ceil = math.ceil
 local basePet = UnitFrames.Pet
 
 function UnitFrames:Pet()
-
     -- first, we call the base function
     basePet(self)
 

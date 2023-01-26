@@ -24,52 +24,52 @@ function UnitFrames:PreUpdateHealth(unit)
 	end
 end
 
-----------------------------------------------------------------
--- Auras
-----------------------------------------------------------------
-function UnitFrames:PostCreateAuraBar(bar)
+-- ----------------------------------------------------------------
+-- -- Auras
+-- ----------------------------------------------------------------
+-- function UnitFrames:PostCreateAuraBar(bar)
 
-    -- second, we edit it
-    if (not bar.Backdrop) then
+--     -- second, we edit it
+--     if (not bar.Backdrop) then
 
-        bar.spark:Kill()
+--         bar.spark:Kill()
         
-        bar:CreateBackdrop("Transparent")
-        bar.Backdrop:SetOutside()
-        bar.icon:ClearAllPoints()
-        bar.icon:SetPoint("RIGHT", bar, "LEFT", -(self.gap or 2), 0)
-        bar.icon:SetSize(self.height, self.height)
-        bar.icon:SetTexCoord(unpack(T.IconCoord))
+--         bar:CreateBackdrop("Transparent")
+--         bar.Backdrop:SetOutside()
+--         bar.icon:ClearAllPoints()
+--         bar.icon:SetPoint("RIGHT", bar, "LEFT", -(self.gap or 2), 0)
+--         bar.icon:SetSize(self.height, self.height)
+--         bar.icon:SetTexCoord(unpack(T.IconCoord))
 
-        bar.button = CreateFrame("Frame", nil, bar)
-        bar.button:CreateBackdrop()
-        bar.button:SetOutside(bar.icon)
-        bar.button:SetFrameLevel(bar:GetFrameLevel() - 3)
+--         bar.button = CreateFrame("Frame", nil, bar)
+--         bar.button:CreateBackdrop()
+--         bar.button:SetOutside(bar.icon)
+--         bar.button:SetFrameLevel(bar:GetFrameLevel() - 3)
 
-	end
-end
+-- 	end
+-- end
 
-local UpdateBuffsHeaderPosition = function(self, height)
-    local Parent = self:GetParent()
-    local Buffs = Parent.Buffs
-    local AuraBars = Parent.AuraBars
+-- local UpdateBuffsHeaderPosition = function(self, height)
+--     local Parent = self:GetParent()
+--     local Buffs = Parent.Buffs
+--     local AuraBars = Parent.AuraBars
 
-	if (Buffs) then
-        Buffs:ClearAllPoints()
-        Buffs:SetPoint("BOTTOMLEFT", Parent, "TOPLEFT", -1, height)
-    elseif (AuraBars) then
-        AuraBars:ClearAllPoints()
-        AuraBars:SetPoint("BOTTOMLEFT", Parent, "TOPLEFT", -1, height)
-    end
-end
+-- 	if (Buffs) then
+--         Buffs:ClearAllPoints()
+--         Buffs:SetPoint("BOTTOMLEFT", Parent, "TOPLEFT", -1, height)
+--     elseif (AuraBars) then
+--         AuraBars:ClearAllPoints()
+--         AuraBars:SetPoint("BOTTOMLEFT", Parent, "TOPLEFT", -1, height)
+--     end
+-- end
 
-function UnitFrames:MoveBuffHeaderUp()
-    UpdateBuffsHeaderPosition(self, self:GetHeight() + 5)
-end
+-- function UnitFrames:MoveBuffHeaderUp()
+--     UpdateBuffsHeaderPosition(self, self:GetHeight() + 5)
+-- end
 
-function UnitFrames:MoveBuffHeaderDown()
-    UpdateBuffsHeaderPosition(self, 3)
-end
+-- function UnitFrames:MoveBuffHeaderDown()
+--     UpdateBuffsHeaderPosition(self, 3)
+-- end
 
 ----------------------------------------------------------------
 -- Group Role
@@ -87,99 +87,99 @@ function UnitFrames:UpdateGroupRole(role)
     end
 end
 
-----------------------------------------------------------------
--- Highlights
-----------------------------------------------------------------
-local SelectHighlightColor = function(unit)
-    if UnitIsUnit("focus", unit) then
-        return { 0.65, 0.65, 0.65, 1 }
-    elseif UnitIsUnit("target", unit) then
-        return { 0.32, 0.65, 0.32, 1 }
-    end
-    return C.General.BorderColor
-end
-
--- change target party/raid units border color.
--- function UnitFrames:Highlight()
---     print(self:GetName())
---     if (not self.Backdrop) then return end
-
---     local r, g, b, a = unpack(SelectHighlightColor(self.unit))
-
---     print(self:GetName(), self.Backdrop ~= nil, self.Backdrop.BorderTop ~= nil, "color", r, g, b, a)
-
---     if (self.Backdrop.BorderTop) then
---         self.Backdrop:SetBorderColor(r, g, b, a or 1)
---     else
---         self.Backdrop:SetBackdropColor(r, g, b, a or 1)
+-- ----------------------------------------------------------------
+-- -- Highlights
+-- ----------------------------------------------------------------
+-- local SelectHighlightColor = function(unit)
+--     if UnitIsUnit("focus", unit) then
+--         return { 0.65, 0.65, 0.65, 1 }
+--     elseif UnitIsUnit("target", unit) then
+--         return { 0.32, 0.65, 0.32, 1 }
 --     end
+--     return C.General.BorderColor
 -- end
 
--- -- change target nameplate border color.
--- function UnitFrames:HighlightPlate()
---     local HealthBackdrop = self.Health.Backdrop
---     local PowerBackdrop = self.Power.Backdrop
---     local colors = T.Colors.assets["Highlight"]
+-- -- change target party/raid units border color.
+-- -- function UnitFrames:Highlight()
+-- --     print(self:GetName())
+-- --     if (not self.Backdrop) then return end
 
---     if (HealthBackdrop) then
---         if (UnitIsUnit("target", self.unit)) then
---             HealthBackdrop:SetBackdropBorderColor(unpack(colors["target"]))
---         else
---             HealthBackdrop:SetBackdropBorderColor(unpack(colors["none"]))
---         end
---     end
+-- --     local r, g, b, a = unpack(SelectHighlightColor(self.unit))
 
---     if (PowerBackdrop) then
---         if (UnitIsUnit("target", self.unit)) then
---             PowerBackdrop:SetBackdropBorderColor(unpack(colors["target"]))
---         else
---             PowerBackdrop:SetBackdropBorderColor(unpack(colors["none"]))
---         end
---     end
+-- --     print(self:GetName(), self.Backdrop ~= nil, self.Backdrop.BorderTop ~= nil, "color", r, g, b, a)
+
+-- --     if (self.Backdrop.BorderTop) then
+-- --         self.Backdrop:SetBorderColor(r, g, b, a or 1)
+-- --     else
+-- --         self.Backdrop:SetBackdropColor(r, g, b, a or 1)
+-- --     end
+-- -- end
+
+-- -- -- change target nameplate border color.
+-- -- function UnitFrames:HighlightPlate()
+-- --     local HealthBackdrop = self.Health.Backdrop
+-- --     local PowerBackdrop = self.Power.Backdrop
+-- --     local colors = T.Colors.assets["Highlight"]
+
+-- --     if (HealthBackdrop) then
+-- --         if (UnitIsUnit("target", self.unit)) then
+-- --             HealthBackdrop:SetBackdropBorderColor(unpack(colors["target"]))
+-- --         else
+-- --             HealthBackdrop:SetBackdropBorderColor(unpack(colors["none"]))
+-- --         end
+-- --     end
+
+-- --     if (PowerBackdrop) then
+-- --         if (UnitIsUnit("target", self.unit)) then
+-- --             PowerBackdrop:SetBackdropBorderColor(unpack(colors["target"]))
+-- --         else
+-- --             PowerBackdrop:SetBackdropBorderColor(unpack(colors["none"]))
+-- --         end
+-- --     end
+-- -- end
+
+-- ----------------------------------------------------------------
+-- -- NamePlates
+-- ----------------------------------------------------------------
+-- function UnitFrames:DisplayNameplatePowerAndCastBar(unit, cur, min, max)
+-- 	if (not unit) then unit = self:GetParent().unit end
+-- 	if (not unit) then return end
+
+-- 	if not cur then
+-- 		cur, max = UnitPower(unit), UnitPowerMax(unit)
+-- 	end
+
+-- 	local CurrentPower = cur
+-- 	local MaxPower = max
+-- 	local Nameplate = self:GetParent()
+-- 	local PowerBar = Nameplate.Power
+-- 	local CastBar = Nameplate.Castbar
+-- 	local Health = Nameplate.Health
+-- 	local IsPowerHidden = PowerBar.IsHidden
+
+--     -- check if unit has a power bar
+--     if (not CastBar:IsShown()) and (CurrentPower and CurrentPower == 0) and (MaxPower and MaxPower == 0) then
+-- 		if (not IsPowerHidden) then
+-- 			Health:ClearAllPoints()
+--             Health:SetPoint("TOPLEFT", Nameplate, "TOPLEFT", 0, 0)
+--             Health:SetPoint("TOPRIGHT", Nameplate, "TOPRIGHT", 0, 0)
+--             Health:SetHeight(C["NamePlates"].Height)
+
+-- 			PowerBar:Hide()
+-- 			PowerBar.IsHidden = true
+-- 		end
+-- 	else
+-- 		if (IsPowerHidden) then
+-- 			Health:ClearAllPoints()
+--             Health:SetPoint("TOPLEFT", Nameplate, "TOPLEFT", 0, 0)
+--             Health:SetPoint("TOPRIGHT", Nameplate, "TOPRIGHT", 0, 0)
+--             Health:SetHeight(C["NamePlates"].Height - 4)
+
+-- 			PowerBar:Show()
+-- 			PowerBar.IsHidden = false
+-- 		end
+-- 	end
 -- end
-
-----------------------------------------------------------------
--- NamePlates
-----------------------------------------------------------------
-function UnitFrames:DisplayNameplatePowerAndCastBar(unit, cur, min, max)
-	if (not unit) then unit = self:GetParent().unit end
-	if (not unit) then return end
-
-	if not cur then
-		cur, max = UnitPower(unit), UnitPowerMax(unit)
-	end
-
-	local CurrentPower = cur
-	local MaxPower = max
-	local Nameplate = self:GetParent()
-	local PowerBar = Nameplate.Power
-	local CastBar = Nameplate.Castbar
-	local Health = Nameplate.Health
-	local IsPowerHidden = PowerBar.IsHidden
-
-    -- check if unit has a power bar
-    if (not CastBar:IsShown()) and (CurrentPower and CurrentPower == 0) and (MaxPower and MaxPower == 0) then
-		if (not IsPowerHidden) then
-			Health:ClearAllPoints()
-            Health:SetPoint("TOPLEFT", Nameplate, "TOPLEFT", 0, 0)
-            Health:SetPoint("TOPRIGHT", Nameplate, "TOPRIGHT", 0, 0)
-            Health:SetHeight(C["NamePlates"].Height)
-
-			PowerBar:Hide()
-			PowerBar.IsHidden = true
-		end
-	else
-		if (IsPowerHidden) then
-			Health:ClearAllPoints()
-            Health:SetPoint("TOPLEFT", Nameplate, "TOPLEFT", 0, 0)
-            Health:SetPoint("TOPRIGHT", Nameplate, "TOPRIGHT", 0, 0)
-            Health:SetHeight(C["NamePlates"].Height - 4)
-
-			PowerBar:Show()
-			PowerBar.IsHidden = false
-		end
-	end
-end
 
 ----------------------------------------------------------------
 -- UnitFrames Anchor
@@ -232,34 +232,31 @@ function UnitFrames:CreateUnits()
     local FocusTarget = self.Units.FocusTarget
     local Arena = self.Units.Arena
     local Boss = self.Units.Boss
-    -- local Party = self.Headers.Party
-    -- local Raid = self.Headers.Raid
-    -- local RaidPet = self.Headers.RaidPet
 
-    local ActionBar1 = ActionBars.Bars.Bar1
-    local ActionBar2Left = ActionBars.Bars.Bar2Left
-    local ActionBar2Right = ActionBars.Bars.Bar2Right
+    local ActionBar1 = _G["TukuiActionBar1"]            -- ActionBars.Bars.Bar1
+    local ActionBar2Left = _G["TukuiActionBar2Left"]    -- ActionBars.Bars.Bar2Left
+    local ActionBar2Right = _G["TukuiActionBar2Right"]  -- ActionBars.Bars.Bar2Right
     local RightChatBG = Chat.Panels.RightChat
     local LeftChatBG = Chat.Panels.LeftChat
 
     Player:ClearAllPoints()
-    Player:SetPoint("BOTTOMLEFT", ActionBar2Left, "TOPLEFT", 1, 25)
+    Player:SetPoint("BOTTOM", T.PetHider, "BOTTOM", -312, 75)
     Player:SetSize(unpack(C.Units.Player))
 
     Target:ClearAllPoints()
-    Target:SetPoint("BOTTOMRIGHT",  ActionBar2Right, "TOPRIGHT", -1, 25)
+    Target:SetPoint("BOTTOM", T.PetHider, "BOTTOM", 312, 75)
     Target:SetSize(unpack(C.Units.Target))
 
     TargetOfTarget:ClearAllPoints()
-    TargetOfTarget:SetPoint("BOTTOM",  ActionBar1, "TOP", 0, 25)
+    TargetOfTarget:SetPoint("BOTTOM", T.PetHider, "BOTTOM", 0, 75)
     TargetOfTarget:SetSize(unpack(C.Units.TargetOfTarget))
 
     Pet:ClearAllPoints()
-    Pet:SetPoint("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", -1, 2)
+    Pet:SetPoint("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 4)
     Pet:SetSize(unpack(C.Units.Pet))
 
     Focus:ClearAllPoints()
-    Focus:SetPoint("BOTTOMLEFT",  RightChatBG, "TOPLEFT", 1, 2)
+    Focus:SetPoint("BOTTOMLEFT", RightChatBG, "TOPLEFT", 0, 4)
     Focus:SetSize(unpack(C.Units.Focus))
 
     FocusTarget:ClearAllPoints()

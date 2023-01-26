@@ -8,7 +8,6 @@ local ceil = math.ceil
 local baseFocus = UnitFrames.Focus
 
 function UnitFrames:Focus()
-
     -- first, we call the base function
     baseFocus(self)
 
@@ -100,13 +99,13 @@ function UnitFrames:Focus()
 		local Buffs = self.Buffs
         local Debuffs = self.Debuffs
         
-        local AuraSize = FrameHeight
+        local AuraSize = FrameHeight + PowerHeight - 1
         local AuraSpacing = 1
         local AuraPerRow = 3
         local AuraWidth = (AuraSize * AuraPerRow) + (AuraSpacing * (AuraPerRow + 1))
 
 		Buffs:ClearAllPoints()
-		Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -2, 1)
+		Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -3, 1)
 		Buffs:SetHeight(AuraSize)
         Buffs:SetWidth(AuraWidth)
         
@@ -121,7 +120,7 @@ function UnitFrames:Focus()
 		-- Buffs.PostUpdateIcon = UnitFrames.PostUpdateAura
 
 		Debuffs:ClearAllPoints()
-        Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 2, 1)
+        Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 3, 1)
         Debuffs:SetHeight(AuraSize)
 		Debuffs:SetWidth(AuraWidth)
         

@@ -16,6 +16,9 @@
     <Script file="modules\actionbars\bar3.lua"/>
     <Script file="modules\actionbars\bar4.lua"/>
     <Script file="modules\actionbars\bar5.lua"/>
+    <Script file="modules\actionbars\bar6.lua"/>
+    <Script file="modules\actionbars\bar7.lua"/>
+    <Script file="modules\actionbars\bar8.lua"/>
     <Script file="modules\actionbars\petbar.lua"/>
     <Script file="modules\actionbars\stancebar.lua"/>
     <Script file="modules\actionbars\buttons.lua"/>

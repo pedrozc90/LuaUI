@@ -1,8 +1,6 @@
 local T, C, L = Tukui:unpack()
 local Tooltips = T.Tooltips
 
-if (true) then return end;
-
 ----------------------------------------------------------------
 -- Tooltips
 ----------------------------------------------------------------
@@ -12,7 +10,6 @@ local baseSkinHealthBar = Tooltips.SkinHealthBar
 local baseEnable = Tooltips.Enable
 
 function Tooltips:CreateAnchor()
-
     -- first, we call the base function
     baseCreateAnchor(self)
 
@@ -25,7 +22,6 @@ function Tooltips:CreateAnchor()
 end
 
 function Tooltips:SetTooltipDefaultAnchor(parent)
-    
     -- first, we call the base function
     baseSetTooltipDefaultAnchor(self, parent)
 
@@ -46,7 +42,6 @@ function Tooltips:SetTooltipDefaultAnchor(parent)
 end
 
 function Tooltips:SkinHealthBar()
-
     -- first, we call the base function
     baseSkinHealthBar(self)
 
@@ -69,15 +64,14 @@ function Tooltips:SkinHealthBar()
 	end
 end
 
-function Tooltips:Enable()
+-- function Tooltips:Enable()
+--     -- first, we call the base function
+--     baseEnable(self)
 
-    -- first, we call the base function
-    baseEnable(self)
+--     -- second, we edit it
+-- 	if (not C.Tooltips.Enable) then return end
 
-    -- second, we edit it
-	if (not C.Tooltips.Enable) then return end
-
-    if (C.Tooltips.ShowSpellID) then
-        self:AddSpellID()
-    end
-end
+--     if (C.Tooltips.ShowSpellID) then
+--         self:AddSpellID()
+--     end
+-- end

@@ -9,7 +9,6 @@ local ceil = math.ceil
 local baseRaid = UnitFrames.Raid
 
 function UnitFrames:Raid()
-
     -- first, we call the base function
     baseRaid(self)
 
@@ -22,11 +21,14 @@ function UnitFrames:Raid()
 	local RaidIcon = self.RaidTargetIndicator
 	local Threat = self.ThreatIndicator
     local Highlight = self.Highlight
+    local ResurrectIndicator = self.ResurrectIndicator
 
-    local PowerHeight = 3
+    local PowerHeight = 5
 
     local HealthTexture = T.GetTexture(C.Textures.UFPartyHealthTexture)
     local PowerTexture = T.GetTexture(C.Textures.UFPartyPowerTexture)
+    local Font = T.GetFont(C.Raid.Font)
+	local HealthFont = T.GetFont(C.Raid.HealthFont)
 
 	self.Shadow:Kill()
 	self.Panel:Kill()
@@ -107,25 +109,6 @@ function UnitFrames:Raid()
 	RaidIcon:SetPoint("CENTER", Health, "TOP", 0, 3)
 	RaidIcon:SetSize(14, 14)
 
-	-- Health Prediction
-	if (C.UnitFrames.HealComm) then
-        local myBar = self.HealthPrediction.myBar
-        local otherBar = self.HealthPrediction.otherBar
-        local absorbBar = self.HealthPrediction.absorbBar
-
-        myBar:SetWidth(self:GetWidth())
-        myBar:SetHeight(Health:GetHeight())
-		myBar:SetStatusBarTexture(HealthTexture)
-
-        otherBar:SetWidth(self:GetWidth())
-        otherBar:SetHeight(Health:GetHeight())
-		otherBar:SetStatusBarTexture(HealthTexture)
-
-        absorbBar:SetWidth(self:GetWidth())
-        absorbBar:SetHeight(Health:GetHeight())
-		absorbBar:SetStatusBarTexture(HealthTexture)
-    end
-
     if (C.Raid.RaidBuffsStyle.Value == "Aura Track") then
         local AuraTrack = self.AuraTrack
 		
@@ -192,6 +175,25 @@ function UnitFrames:Raid()
         RaidDebuffs.count:SetFont(C.Medias.Font, 12, "OUTLINE")
 		RaidDebuffs.count:SetTextColor(1, .9, 0)
 	end
+
+    -- Health Prediction
+	if (C.UnitFrames.HealComm) then
+        local myBar = self.HealthPrediction.myBar
+        local otherBar = self.HealthPrediction.otherBar
+        local absorbBar = self.HealthPrediction.absorbBar
+
+        myBar:SetWidth(self:GetWidth())
+        myBar:SetHeight(Health:GetHeight())
+		myBar:SetStatusBarTexture(HealthTexture)
+
+        otherBar:SetWidth(self:GetWidth())
+        otherBar:SetHeight(Health:GetHeight())
+		otherBar:SetStatusBarTexture(HealthTexture)
+
+        absorbBar:SetWidth(self:GetWidth())
+        absorbBar:SetHeight(Health:GetHeight())
+		absorbBar:SetStatusBarTexture(HealthTexture)
+    end
 
 	-- ResurrectIndicator
 	local ResurrectIndicator = self.ResurrectIndicator

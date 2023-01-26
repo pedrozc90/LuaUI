@@ -10,7 +10,6 @@ local baseUpdate = AltPowerBar.Update
 local baseCreate = AltPowerBar.Create
 
 function AltPowerBar:Update()
-
     -- first, call the base function
     baseUpdate(self)
 
@@ -31,7 +30,6 @@ function AltPowerBar:Update()
 end
 
 function AltPowerBar:Create()
-
     -- first, call the base function
     baseCreate(self)
 
