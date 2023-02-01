@@ -223,7 +223,7 @@ C["Chat"].TextFadingTimer = 60
 C["Chat"].TabFont = "Tukui"
 C["Chat"].ChatFont = "Tukui"
 C["Chat"].BubblesNames = true
-C["Chat"].LogMax = 250
+C["Chat"].LogMax = 0
 
 -- Cooldowns
 C["Cooldowns"].Font = "Tukui Outline"
@@ -353,7 +353,7 @@ C["Textures"].NPCastTexture = "Tukui"
 
 -- UnitFrames
 C["UnitFrames"].Enable = true
-C["UnitFrames"].TotemBar = T.MyClass == "SHAMAN" and true or false
+C["UnitFrames"].TotemBar = (T.MyClass == "SHAMAN") and true or false
 C["UnitFrames"].TotemBarStyle.Value = "On Screen"
 C["UnitFrames"].ClassBar = true
 C["UnitFrames"].PlayerAuraBars = false

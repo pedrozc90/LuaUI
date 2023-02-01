@@ -24,7 +24,7 @@ function UnitFrames:Player()
 	HolyPower:ClearAllPoints()
 	HolyPower:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 	HolyPower:SetWidth(PlayerWidth)
-	HolyPower:SetHeight(5)
+	HolyPower:SetHeight(6)
 
 	local Max = 5
 	local Spacing = 1

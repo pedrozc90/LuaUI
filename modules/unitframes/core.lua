@@ -24,30 +24,27 @@ function UnitFrames:PreUpdateHealth(unit)
 	end
 end
 
--- ----------------------------------------------------------------
--- -- Auras
--- ----------------------------------------------------------------
--- function UnitFrames:PostCreateAuraBar(bar)
-
---     -- second, we edit it
---     if (not bar.Backdrop) then
-
---         bar.spark:Kill()
+----------------------------------------------------------------
+-- Auras
+----------------------------------------------------------------
+function UnitFrames:PostCreateAuraBar(bar)
+    -- second, we edit it
+    if (not bar.Backdrop) then
+        bar.spark:Kill()
         
---         bar:CreateBackdrop("Transparent")
---         bar.Backdrop:SetOutside()
---         bar.icon:ClearAllPoints()
---         bar.icon:SetPoint("RIGHT", bar, "LEFT", -(self.gap or 2), 0)
---         bar.icon:SetSize(self.height, self.height)
---         bar.icon:SetTexCoord(unpack(T.IconCoord))
+        bar:CreateBackdrop("Transparent")
+        bar.Backdrop:SetOutside()
+        bar.icon:ClearAllPoints()
+        bar.icon:SetPoint("RIGHT", bar, "LEFT", -(self.gap or 3), 0)
+        bar.icon:SetSize(self.height, self.height)
+        bar.icon:SetTexCoord(unpack(T.IconCoord))
 
---         bar.button = CreateFrame("Frame", nil, bar)
---         bar.button:CreateBackdrop()
---         bar.button:SetOutside(bar.icon)
---         bar.button:SetFrameLevel(bar:GetFrameLevel() - 3)
-
--- 	end
--- end
+        bar.button = CreateFrame("Frame", nil, bar)
+        bar.button:CreateBackdrop()
+        bar.button:SetOutside(bar.icon)
+        bar.button:SetFrameLevel(bar:GetFrameLevel() - 3)
+	end
+end
 
 -- local UpdateBuffsHeaderPosition = function(self, height)
 --     local Parent = self:GetParent()
@@ -215,7 +212,6 @@ function UnitFrames:RaidDefaultPosition()
 end
 
 function UnitFrames:CreateUnits()
-
     -- first, we call the base function
     baseCreateUnits(self)
 

@@ -164,8 +164,6 @@ function UnitFrames:Player()
         AuraBars.initialAnchor = "BOTTOMLEFT"
         AuraBars.auraBarTexture = PowerTexture
         AuraBars.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
-        
-        -- AuraBars.PostCreateBar = UnitFrames.PostCreateAuraBar
     else
         local AuraSize = 28
         local AuraSpacing = 3
@@ -431,69 +429,57 @@ function UnitFrames:Player()
     if (C.UnitFrames.TotemBar) then
         local Totems = self.Totems
 
-        local Size = 27
-        local Spacing = 3
+        if (C.UnitFrames.TotemBarStyle.Value == "On Screen") then
+            -- Totems:SetPoint("CENTER", UIParent, "BOTTOM", 0, 300)
+            -- Totems:SetWidth((Size * MAX_TOTEMS) + (Spacing * (MAX_TOTEMS + 1)))
+            -- Totems:SetHeight(Size)
 
-		Totems:ClearAllPoints()
-        Totems:SetPoint("CENTER", UIParent, "BOTTOM", 0, 300)
-        Totems:SetWidth((Size * MAX_TOTEMS) + (Spacing * (MAX_TOTEMS + 1)))
-        Totems:SetHeight(Size)
+            -- for i = 1, MAX_TOTEMS do
+            --     Totems[i]:ClearAllPoints()
+            --     Totems[i]:SetSize(Size, Size)
+            --     Totems[i].Backdrop.Shadow:Kill()
 
-		for i = 1, MAX_TOTEMS do
-			Totems[i]:ClearAllPoints()
-			Totems[i]:SetSize(Size, Size)
-            Totems[i].Shadow:Kill()
+            --     -- change cooldown font
+            --     Totems[i].Cooldown:ClearAllPoints()
+            --     Totems[i].Cooldown:SetPoint("CENTER", Totems[i], "CENTER", 0, 0)
 
-            -- change cooldown font
-            Totems[i].Cooldown:ClearAllPoints()
-            Totems[i].Cooldown:SetPoint("CENTER", Totems[i], "CENTER", 0, 0)
+            --     if i == 1 then
+            --         Totems[i]:SetPoint("BOTTOMLEFT", Totems, "BOTTOMLEFT", 0, 0)
+            --     else
+            --         Totems[i]:SetPoint("LEFT", Totems[i - 1], "RIGHT", Spacing, 0)
+            --     end
+            -- end
+        elseif (C.UnitFrames.TotemBarStyle.Value == "On Player") then
+            Totems:ClearAllPoints()
+            Totems:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, 3)
+            Totems:SetHeight(10)
+            Totems:SetWidth(FrameWidth + 2)
 
-			if i == 1 then
-				Totems[i]:SetPoint("BOTTOMLEFT", Totems, "BOTTOMLEFT", 0, 0)
-			else
-				Totems[i]:SetPoint("LEFT", Totems[i - 1], "RIGHT", Spacing, 0)
-			end
-		end
-	elseif C.UnitFrames.TotemBarStyle.Value == "On Player" then
-        -- Bar:SetPoint("TOPLEFT", self, "TOPLEFT", -1, 10)
-        -- Bar:SetFrameStrata(Health:GetFrameStrata())
-        -- Bar:SetFrameLevel(Health:GetFrameLevel() + 3)
-        -- Bar:SetSize(252, 10)
-        -- Bar:CreateBackdrop()
+            local Width, Delta = T.EqualSizes(FrameWidth - 2, MAX_TOTEMS, 0)
 
-        -- for i = 1, 4 do
-        --     local r, g, b = unpack(T.Colors.totems[i])
+            for i = 1, MAX_TOTEMS do
+                Totems[i]:SetHeight(8)
 
-        --     Bar[i] = CreateFrame("StatusBar", self:GetName().."Totem"..i, Bar)
-        --     Bar[i]:SetStatusBarTexture(HealthTexture)
-        --     Bar[i]:SetStatusBarColor(r, g, b)
-        --     Bar[i]:SetMinMaxValues(0, 1)
-        --     Bar[i]:SetValue(0)
+                if ((Delta > 0) and (i <= Delta)) then
+                    Totems[i]:SetWidth(Width + 1)
+                else
+                    Totems[i]:SetWidth(Width)
+                end
 
-        --     if i == 1 then
-        --         Bar[i]:SetPoint("TOPLEFT", Bar, "TOPLEFT", 1, -1)
-        --         Bar[i]:SetSize(61, 8)
-        --     else
-        --         Bar[i]:SetPoint("TOPLEFT", Bar[i-1], "TOPRIGHT", 1, 0)
-        --         Bar[i]:SetSize(62, 8)
-        --     end
+                if i == 1 then
+                    Totems[i]:SetPoint("TOPLEFT", Totems, "TOPLEFT", 1, -1)
+                else
+                    Totems[i]:SetPoint("TOPLEFT", Totems[i-1], "TOPRIGHT", 1, 0)
+                end
+            end
 
-        --     Bar[i].Background = Bar[i]:CreateTexture(nil, "BORDER")
-        --     Bar[i].Background:SetParent(Bar)
-        --     Bar[i].Background:SetAllPoints(Bar[i])
-        --     Bar[i].Background:SetTexture(HealthTexture)
-        --     Bar[i].Background:SetVertexColor(r, g, b)
-        --     Bar[i].Background:SetAlpha(.15)
-        -- end
-
-        -- self.Shadow:SetPoint("TOPLEFT", -4, 12)
-
-        -- if self.AuraBars then
-        --     self.AuraBars:ClearAllPoints()
-        --     self.AuraBars:SetPoint("TOPLEFT", 0, 22)
-        -- elseif self.Buffs then
-        --     self.Buffs:ClearAllPoints()
-        --     self.Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 13)
-        -- end
+            if (self.AuraBars) then
+                self.AuraBars:ClearAllPoints()
+                self.AuraBars:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 15)
+            elseif (self.Buffs) then
+                self.Buffs:ClearAllPoints()
+                self.Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, 15)
+            end
+        end
     end
 end

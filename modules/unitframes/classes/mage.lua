@@ -2,6 +2,8 @@ local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
 local Class = select(2, UnitClass("player"))
 
+local ARCANE_CHARGES = 4
+
 ----------------------------------------------------------------
 -- Mage Class Resources
 ----------------------------------------------------------------
@@ -10,7 +12,6 @@ if (Class ~= "MAGE") then return end
 local basePlayer = UnitFrames.Player
 
 function UnitFrames:Player()
-
 	-- first, we call the base function
     basePlayer(self)
 
@@ -25,11 +26,10 @@ function UnitFrames:Player()
 	ArcaneChargeBar:SetWidth(PlayerWidth)
 	ArcaneChargeBar:SetHeight(5)
 
-	local Max = 4
 	local Spacing = 3
-	local Size, Delta = T.EqualSizes(ArcaneChargeBar:GetWidth(), Max, Spacing)
+	local Size, Delta = T.EqualSizes(ArcaneChargeBar:GetWidth(), ARCANE_CHARGES, Spacing)
 
-	for i = 1, Max do
+	for i = 1, ARCANE_CHARGES do
 		ArcaneChargeBar[i]:ClearAllPoints()
 		ArcaneChargeBar[i]:SetHeight(ArcaneChargeBar:GetHeight())
 		ArcaneChargeBar[i]:CreateBackdrop()

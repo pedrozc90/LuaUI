@@ -40,8 +40,6 @@ function Minimap:StyleMinimap()
         local GuildInstanceDifficulty = GuildInstanceDifficulty
         local HelpOpenTicketButton = HelpOpenTicketButton
         
-        print("QueueStatusMinimapButton", QueueStatusMinimapButton)
-        print("QueueStatusFrame", QueueStatusFrame)
         if (QueueStatusMinimapButton) then
             QueueStatusMinimapButton:ClearAllPoints()
             QueueStatusMinimapButton:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 3, -3)

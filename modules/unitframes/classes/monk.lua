@@ -9,6 +9,9 @@ local STAGGER_YELLOW_INDEX = STAGGER_YELLOW_INDEX or 2
 local STAGGER_GREEN_TRANSITION = STAGGER_GREEN_TRANSITION
 local STAGGER_GREEN_INDEX = STAGGER_GREEN_INDEX or 1
 
+local HARMONY_ASCENSION = 6
+local HARMONY_NO_TALENT = 5
+
 ----------------------------------------------------------------
 -- Monk Class Resources
 ----------------------------------------------------------------
@@ -41,7 +44,6 @@ end
 local basePlayer = UnitFrames.Player
 
 function UnitFrames:Player()
-
 	-- first, we call the base function
     basePlayer(self)
 
@@ -60,10 +62,10 @@ function UnitFrames:Player()
 	Harmony:SetHeight(5)
 
 	local Spacing = 1
-	local SizeAscension, DeltaAscension = T.EqualSizes(Harmony:GetWidth(), 6, Spacing)
-	local SizeNoTalent, DeltaNoTalent = T.EqualSizes(Harmony:GetWidth(), 5, Spacing)
+	local SizeAscension, DeltaAscension = T.EqualSizes(Harmony:GetWidth(), HARMONY_ASCENSION, Spacing)
+	local SizeNoTalent, DeltaNoTalent = T.EqualSizes(Harmony:GetWidth(), HARMONY_NO_TALENT, Spacing)
 
-	for i = 1, 6 do
+	for i = 1, HARMONY_ASCENSION do
 		Harmony[i]:ClearAllPoints()
 		Harmony[i]:SetHeight(Harmony:GetHeight())
 		Harmony[i]:SetWidth(SizeAscension)

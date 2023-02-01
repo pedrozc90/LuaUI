@@ -2,6 +2,8 @@ local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
 local Class = select(2, UnitClass("player"))
 
+local SOUL_SHARDS = 5
+
 ----------------------------------------------------------------
 -- Warlock Class Resources
 ----------------------------------------------------------------
@@ -10,7 +12,6 @@ if (Class ~= "WARLOCK") then return end
 local basePlayer = UnitFrames.Player
 
 function UnitFrames:Player()
-
 	-- first, we call the base function
     basePlayer(self)
 
@@ -25,11 +26,10 @@ function UnitFrames:Player()
 	SoulShards:SetWidth(PlayerWidth)
 	SoulShards:SetHeight(5)
 
-	local Max = 5
 	local Spacing = 1
-	local Size, Delta = T.EqualSizes(SoulShards:GetWidth(), Max, Spacing)
+	local Size, Delta = T.EqualSizes(SoulShards:GetWidth(), SOUL_SHARDS, Spacing)
 
-	for i = 1, Max do
+	for i = 1, SOUL_SHARDS do
 		SoulShards[i]:ClearAllPoints()
 		SoulShards[i]:SetHeight(SoulShards:GetHeight())
 
