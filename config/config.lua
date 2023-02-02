@@ -69,7 +69,7 @@ C["Raid"].TestAuraWatch = false                     -- force to show aurawatch d
 C["Raid"].GroupRoles = true                         -- enables group role icon on raid frame.
 
 -- -- Tooltips
--- C["Tooltips"].ShowSpellID = true                    -- enables spells, items, quest ids on tooltips.
+C["Tooltips"].ShowSpellID = true                    -- enables spells, items, quest ids on tooltips.
 
 C["UnitFrames"].UnlinkPetCastBar = false            -- enable
 C["UnitFrames"].UnlinkBossCastBar = false           -- enable

@@ -64,14 +64,11 @@ function Tooltips:SkinHealthBar()
 	end
 end
 
--- function Tooltips:Enable()
---     -- first, we call the base function
---     baseEnable(self)
+function Tooltips:Enable()
+    -- first, we call the base function
+    baseEnable(self)
 
---     -- second, we edit it
--- 	if (not C.Tooltips.Enable) then return end
-
---     if (C.Tooltips.ShowSpellID) then
---         self:AddSpellID()
---     end
--- end
+    if (C.Tooltips.ShowSpellID) then
+        self:AddSpellID()
+    end
+end

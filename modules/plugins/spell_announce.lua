@@ -428,9 +428,7 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
                 end
             end
         end
-
     elseif (eventType:find("UNIT")) then
-        
         -- filter units that belong to player
         if (band(destFlags, COMBATLOG_FILTER_TOTEM) > 0) then 
 
