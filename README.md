@@ -36,6 +36,24 @@ Interface for [**World of Warcraft Classic**](https://worldofwarcraft.com/en-us/
 5. Copy/Paste **Tukui** and **LuaUI** folders into WoW interface folder (*../World of Warcraft/_retail_/Interface/AddOns*)
 6. Now you are ready to start World of Warcraft.
 
+## Macros
+
+```lua
+#showtooltip
+/cast [known: 120644] Halo; [known: 122121] Divine Star; Purify
+```
+
+Void Tendrils - 108920
+Vampiric Embrace - 15286
+Leap of Faith - 73325
+Angelic Feather - 121536
+Silence - 15487
+Mind Sear - 48045
+Mind Spike - 73510
+Shadow Crash - 205385
+Void Torrent - 263165
+Mass Dispel - 32375
+
 ## License:
 
 Please see [LICENSE](https://github.com/PedroZC90/LuaUI/tree/master/LICENSE) file.
