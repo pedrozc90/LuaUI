@@ -110,13 +110,13 @@ function UnitFrames:Raid()
 	RaidIcon:SetSize(14, 14)
 
     if (C.Raid.RaidBuffsStyle.Value == "Aura Track") then
-        local AuraTrack = self.AuraTrack
+		local AuraTrack = self.AuraTrack
 		
 		-- AuraTrack:ClearAllPoints()
 		-- AuraTrack:SetPoint("TOPLEFT", Health, "TOPLEFT", 1, -1)
 		-- AuraTrack:SetWidth(self:GetWidth() - 2)
 		-- AuraTrack:SetHeight(self:GetHeight() - 2)
-		AuraTrack:SetAllPoints(Health)
+		-- AuraTrack:SetAllPoints(Health)
 		-- AuraTrack.Texture = C.Medias.Normal
 		-- AuraTrack.Icons = C.Raid.AuraTrackIcons
 		-- AuraTrack.SpellTextures = C.Raid.AuraTrackSpellTextures
@@ -151,7 +151,7 @@ function UnitFrames:Raid()
 		-- Buffs.PostCreateIcon = UnitFrames.PostCreateAura
 	end
 
-	-- AuraWatch (corner and center icon)
+	-- AuraWatch
     if (C.Raid.DebuffWatch) then
         local RaidDebuffs = self.RaidDebuffs
 
