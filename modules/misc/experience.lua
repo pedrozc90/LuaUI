@@ -27,7 +27,7 @@ function Experience:Create()
     ExpBar:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -Spacing)
     ExpBar:SetHeight(Height)
     ExpBar:SetStatusBarTexture(Texture)
-    
+
     ExpRestedBar:SetAllPoints(ExpBar)
     ExpRestedBar:SetStatusBarTexture(Texture)
 

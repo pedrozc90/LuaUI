@@ -21,7 +21,7 @@ function UnitFrames:FocusTarget()
     local PowerHeight = 3
 
     local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)
-	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
+    local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
     local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
 
     self.Backdrop = nil
@@ -84,7 +84,7 @@ function UnitFrames:FocusTarget()
     -- Name
     Name:ClearAllPoints()
     Name:SetParent(Health)
-	Name:SetPoint("LEFT", Health, "LEFT", 5, 1)
+    Name:SetPoint("LEFT", Health, "LEFT", 5, 1)
     Name:SetJustifyH("LEFT")
 
     -- self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameLong] [Tukui:Classification][Tukui:DiffColor][level]")
@@ -103,26 +103,26 @@ function UnitFrames:FocusTarget()
         local AuraPerRow = 3
         local AuraWidth = (AuraSize * AuraPerRow) + (AuraSpacing * (AuraPerRow - 1))
 
-		Buffs:ClearAllPoints()
-		Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -3, 1)
+        Buffs:ClearAllPoints()
+        Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -3, 1)
         Buffs:SetHeight(AuraSize)
         Buffs:SetWidth(AuraWidth)
 
-		Buffs.size = AuraSize
-		Buffs.num = 3
-		Buffs.spacing = 7
-		Buffs.initialAnchor = "RIGHT"
+        Buffs.size = AuraSize
+        Buffs.num = 3
+        Buffs.spacing = 7
+        Buffs.initialAnchor = "RIGHT"
         Buffs["growth-x"] = "LEFT"
 
-		Debuffs:ClearAllPoints()
-		Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 3, 1)
+        Debuffs:ClearAllPoints()
+        Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 3, 1)
         Debuffs:SetHeight(AuraSize)
         Debuffs:SetWidth(AuraWidth)
 
-		Debuffs.size = AuraSize
-		Debuffs.num = 5
-		Debuffs.spacing = Buffs.spacing
-		Debuffs.initialAnchor = "LEFT"
-		Debuffs["growth-x"] = "RIGHT"
-	end
+        Debuffs.size = AuraSize
+        Debuffs.num = 5
+        Debuffs.spacing = Buffs.spacing
+        Debuffs.initialAnchor = "LEFT"
+        Debuffs["growth-x"] = "RIGHT"
+    end
 end

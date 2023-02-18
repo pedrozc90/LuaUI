@@ -10,11 +10,10 @@ if (Class ~= "PALADIN") then return end
 local basePlayer = UnitFrames.Player
 
 function UnitFrames:Player()
-
 	-- first, we call the base function
-    basePlayer(self)
+	basePlayer(self)
 
-    -- second, we edit it
+	-- second, we edit it
 	local HolyPower = self.HolyPower
 
 	local PlayerWidth, _ = unpack(C.Units.Player)

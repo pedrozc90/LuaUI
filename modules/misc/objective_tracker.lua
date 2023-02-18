@@ -14,28 +14,27 @@ function ObjectiveTracker:SetDefaultPosition()
 
     -- second, we edit it
     local Anchor1, Parent, Anchor2, X, Y = "TOPRIGHT", UIParent, "TOPRIGHT", -268, -240
-	local Data = TukuiDatabase.Variables[T.MyRealm][T.MyName]
+    local Data = TukuiDatabase.Variables[T.MyRealm][T.MyName]
 
-	local ObjectiveFrameHolder = _G["TukuiObjectiveTracker"]
-	ObjectiveFrameHolder:SetSize(130, 22)
-	ObjectiveFrameHolder:SetPoint(Anchor1, Parent, Anchor2, X, Y)
+    local ObjectiveFrameHolder = _G["TukuiObjectiveTracker"]
+    ObjectiveFrameHolder:SetSize(130, 22)
+    ObjectiveFrameHolder:SetPoint(Anchor1, Parent, Anchor2, X, Y)
 
-	ObjectiveTrackerFrame:ClearAllPoints()
-	ObjectiveTrackerFrame:SetPoint("TOP", ObjectiveFrameHolder, "TOP", 0, 0)
+    ObjectiveTrackerFrame:ClearAllPoints()
+    ObjectiveTrackerFrame:SetPoint("TOP", ObjectiveFrameHolder, "TOP", 0, 0)
     ObjectiveTrackerFrame:SetHeight(T.ScreenHeight - 520)
-	ObjectiveTrackerFrame.IsUserPlaced = function() return true end
+    ObjectiveTrackerFrame.IsUserPlaced = function() return true end
 
-	Movers:RegisterFrame(ObjectiveFrameHolder, "Objectives Tracker")
+    Movers:RegisterFrame(ObjectiveFrameHolder, "Objectives Tracker")
 
-	if Data and Data.Move and Data.Move.TukuiObjectiveTracker then
-		ObjectiveFrameHolder:ClearAllPoints()
-		ObjectiveFrameHolder:SetPoint(unpack(Data.Move.TukuiObjectiveTracker))
-	end
+    if (Data and Data.Move and Data.Move.TukuiObjectiveTracker) then
+        ObjectiveFrameHolder:ClearAllPoints()
+        ObjectiveFrameHolder:SetPoint(unpack(Data.Move.TukuiObjectiveTracker))
+    end
 end
 
 --[[
 function ObjectiveTracker:UpdateProgressBar(_, line)
-    
     -- first, we call the base function
     baseUpdateProgressBar(self, _, line)
 

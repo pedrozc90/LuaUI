@@ -28,14 +28,14 @@ function ActionBars:CreateBar7()
 	local ButtonsPerRow = C.ActionBars.Bar7ButtonsPerRow
 	local NumButtons = C.ActionBars.Bar7NumButtons
 	local Padding = (C.ActionBars.ShowBackdrop) and Spacing or 0
-    
-    if (NumButtons <= ButtonsPerRow) then
+
+	if (NumButtons <= ButtonsPerRow) then
 		ButtonsPerRow = NumButtons
 	end
-	
+
 	local NumRow = ceil(NumButtons / ButtonsPerRow)
 
-    local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRow, Size, Spacing, C.ActionBars.ShowBackdrop)
+	local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRow, Size, Spacing, C.ActionBars.ShowBackdrop)
 
 	ActionBar7:ClearAllPoints()
 	ActionBar7:SetWidth(Width)
@@ -52,7 +52,7 @@ function ActionBars:CreateBar7()
 	end
 
 	if (C.ActionBars.ShowBackdrop) then
-        ActionBar7:SetBackdropTransparent()
-        ActionBar7.Shadow:Kill()
-    end
+		ActionBar7:SetBackdropTransparent()
+		ActionBar7.Shadow:Kill()
+	end
 end

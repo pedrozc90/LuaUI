@@ -12,9 +12,9 @@ local baseCreateBar1 = ActionBars.CreateBar1
 
 function ActionBars:CreateBar1()
 	-- first, we call the base function
-    baseCreateBar1(self)
+	baseCreateBar1(self)
 
-    -- second, we edit it
+	-- second, we edit it
 	local ActionBar1 = ActionBars.Bars.Bar1
 
 	local Size = C.ActionBars.NormalButtonSize
@@ -25,11 +25,11 @@ function ActionBars:CreateBar1()
 
 	local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRow, Size, Spacing, C.ActionBars.ShowBackdrop)
 
-    ActionBar1:ClearAllPoints()
+	ActionBar1:ClearAllPoints()
 	ActionBar1:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, C.Lua.ScreenMargin)
 	ActionBar1:SetWidth(Width)
 	ActionBar1:SetHeight(Height)
-	
+
 	if (C.ActionBars.ShowBackdrop) then
 		ActionBar1:SetBackdropTransparent()
 		ActionBar1.Shadow:Kill()

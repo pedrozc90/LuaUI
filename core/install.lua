@@ -22,7 +22,7 @@ end
 
 function Install:SetupNames()
     -- Names
-	SetCVar("UnitNameEnemyGuardianName", 1)                         -- default = 1
+    SetCVar("UnitNameEnemyGuardianName", 1)                         -- default = 1
     SetCVar("UnitNameEnemyMinionName", 1)                           -- default = 1
     SetCVar("UnitNameEnemyPetName", 1)                              -- default = 1
     SetCVar("UnitNameEnemyPlayerName", 1)                           -- default = 1
@@ -46,7 +46,7 @@ end
 
 function Install:SetupNameplates()
     -- Nameplates
-	SetCVar("nameplateMotion", 0)
+    SetCVar("nameplateMotion", 0)
     SetCVar("nameplateShowAll", 1)
     SetCVar("nameplateShowDebuffsOnFriendly", 0)
     SetCVar("nameplateShowEnemies", 1)
@@ -68,7 +68,7 @@ end
 function Install:SetupCamera()
     SetCVar("cameraView", 1)                                        -- stores the last saved camera position the camera was in. (default = 0)
     SetCVar("cameraSmoothStyle", 0)                                 -- sets the automatic camera adjustment/following style. (default = 4)
-	SetCVar("cameraSmoothTrackingStyle", 0)
+    SetCVar("cameraSmoothTrackingStyle", 0)
     SetCVar("cameraDistanceMaxZoomFactor", 2.6)                     -- sets the factor by which maximum camera distance (equals to 15) is multiplied. (cannot exceed 39 yards, default = 1.9)
 end
 
@@ -112,7 +112,7 @@ function Install:SetDefaultsCVars()
     -- second, we edit it
     self:SetupSounds()
     self:SetupNames()
-	self:SetupNameplates()
+    self:SetupNameplates()
     self:SetupCamera()
 
     -- Chat
@@ -123,14 +123,14 @@ function Install:SetDefaultsCVars()
     -- General
     SetCVar("deselectOnClick", 1)                                   -- clear the target when clicking on terrain
     SetCVar("autoDismount", 1)                                      -- enables automatically dismount when needed
-	SetCVar("autoDismountFlying", 1)                                -- enables automatically dismount before casting while flying
-	SetCVar("showTutorials", 0)                                     -- enables tutorials.
+    SetCVar("autoDismountFlying", 1)                                -- enables automatically dismount before casting while flying
+    SetCVar("showTutorials", 0)                                     -- enables tutorials.
     SetCVar("autoLootDefault", 1)                                   -- automatically loot items when the loot window opens
     SetCVar("doNotFlashLowHealthWarning", 1)                        -- do not flash your screen red when you are low on health.
 
     -- Social
     SetCVar("chatBubbles", 1)                                       -- show in-game chat bubbles
-	SetCVar("chatBubblesParty", 0)                                  -- show in-game party chat bubbles
+    SetCVar("chatBubblesParty", 0)                                  -- show in-game party chat bubbles
     SetCVar("guildMemberNotify", 0)                                 -- enables notification when guild members log on/off (default 1)
 
     -- ActionBars
@@ -141,47 +141,47 @@ function Install:SetDefaultsCVars()
     -- LuaUIData[GetRealmName()][UnitName("player")].InstallDone = true
 end
 
--- -- initialize saved variables
--- -- local f = CreateFrame("Frame")
--- -- f:RegisterEvent("ADDON_LOADED")
--- -- f:SetScript("OnEvent", function(self, event, addon)
--- --     if (addon ~= "LuaUI") then return end
+--[[ initialize saved variables
+local f = CreateFrame("Frame")
+f:RegisterEvent("ADDON_LOADED")
+f:SetScript("OnEvent", function(self, event, addon)
+    if (addon ~= "LuaUI") then return end
 
--- --     local Name = UnitName("player")
--- --     local Realm = GetRealmName()
+    local Name = UnitName("player")
+    local Realm = GetRealmName()
 
--- --     if (not LuaUIData) then
--- --         LuaUIData = {}
--- --     end
+    if (not LuaUIData) then
+        LuaUIData = {}
+    end
 
--- --     if (not LuaUIData[Realm]) then
--- --         LuaUIData[Realm] = {}
--- --     end
+    if (not LuaUIData[Realm]) then
+        LuaUIData[Realm] = {}
+    end
 
--- --     if (not LuaUIData[Realm][Name]) then
--- --         LuaUIData[Realm][Name] = {}
--- --     end
+    if (not LuaUIData[Realm][Name]) then
+        LuaUIData[Realm][Name] = {}
+    end
 
--- --     if (LuaUIDataPerChar) then
--- --         LuaUIData[Realm][Name] = LuaUIDataPerChar
--- --         LuaUIDataPerChar = nil
--- --     end
+    if (LuaUIDataPerChar) then
+        LuaUIData[Realm][Name] = LuaUIDataPerChar
+        LuaUIDataPerChar = nil
+    end
 
--- --     local IsInstalled = LuaUIData[Realm][Name].InstallDone
+    local IsInstalled = LuaUIData[Realm][Name].InstallDone
 
--- --     -- check if LuaUI was already installed
--- --     if (not IsInstalled) then
--- --         local Data = LuaUIData[Realm][Name]
+    -- check if LuaUI was already installed
+    if (not IsInstalled) then
+        local Data = LuaUIData[Realm][Name]
 
--- --         -- define visible actionbars
--- --         Data["HideBar2"] = false
--- --         Data["HideBar3"] = false
--- --         Data["HideBar4"] = false
--- --         Data["HideBar5"] = true
--- --         Data["HideBar6"] = true
+        -- define visible actionbars
+        Data["HideBar2"] = false
+        Data["HideBar3"] = false
+        Data["HideBar4"] = false
+        Data["HideBar5"] = true
+        Data["HideBar6"] = true
 
--- --         SetVariables()
--- --     end
+        SetVariables()
+    end
 
--- --     self:UnregisterEvent("ADDON_LOADED")
--- -- end)
+    self:UnregisterEvent("ADDON_LOADED")
+end)--]]

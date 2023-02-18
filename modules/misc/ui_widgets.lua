@@ -21,6 +21,6 @@ function UIWidgets:Enable()
 
     -- second, we edit it
     self.Holder:ClearAllPoints()
-	self.Holder:SetSize(220, 20)
-	self.Holder:SetPoint("TOP", UIParent, "TOP", 3, -96)
+    self.Holder:SetSize(220, 20)
+    self.Holder:SetPoint("TOP", UIParent, "TOP", 3, -96)
 end

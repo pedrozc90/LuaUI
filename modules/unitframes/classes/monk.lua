@@ -19,35 +19,35 @@ if (Class ~= "MONK") then return end
 
 -- post update stagger bar
 local PostUpdateStagger = function(self, cur, max)
-	local perc = cur / max
-	local colors = T.Colors.power["STAGGER"]
+local perc = cur / max
+local colors = T.Colors.power["STAGGER"]
 
-	local r, g, b
-	if (perc >= STAGGER_RED_TRANSITION) then
-		r, g, b = unpack(colors[STAGGER_RED_INDEX or 3])	-- red
-	elseif (perc > STAGGER_YELLOW_TRANSITION) then
-		r, g, b = unpack(colors[STAGGER_YELLOW_INDEX or 2])	-- yellow
-	else
-		r, g, b = unpack(colors[STAGGER_GREEN_INDEX or 1])	-- green
-	end
+local r, g, b
+if (perc >= STAGGER_RED_TRANSITION) then
+r, g, b = unpack(colors[STAGGER_RED_INDEX or 3])	-- red
+elseif (perc > STAGGER_YELLOW_TRANSITION) then
+r, g, b = unpack(colors[STAGGER_YELLOW_INDEX or 2])	-- yellow
+else
+r, g, b = unpack(colors[STAGGER_GREEN_INDEX or 1])	-- green
+end
 
-	self:SetStatusBarColor(r, g, b)
-	self.Value:SetFormattedText("%s / %s - %.1f%%", T.ShortValue(cur), T.ShortValue(max), 100 * (cur / max))
+self:SetStatusBarColor(r, g, b)
+self.Value:SetFormattedText("%s / %s - %.1f%%", T.ShortValue(cur), T.ShortValue(max), 100 * (cur / max))
 
-	if (cur ~= 0) then
-		self:Show()
-	else
-		self:Hide()
-	end
+if (cur ~= 0) then
+self:Show()
+else
+self:Hide()
+end
 end
 
 local basePlayer = UnitFrames.Player
 
 function UnitFrames:Player()
 	-- first, we call the base function
-    basePlayer(self)
+	basePlayer(self)
 
-    -- second, we edit it
+	-- second, we edit it
 	local Harmony = self.HarmonyBar
 
 	local PlayerWidth, _ = unpack(C.Units.Player)

@@ -11,15 +11,15 @@ local ceil = math.ceil
 local baseCreateBar4 = ActionBars.CreateBar4
 
 function ActionBars:CreateBar4()
-    -- first, we call the base function
-    baseCreateBar4(self)
+	-- first, we call the base function
+	baseCreateBar4(self)
 
 	-- second, we edit it
 	if (not C.ActionBars.RightBar) then return end
 
 	local ActionBar4 = ActionBars.Bars.Bar4
 
-    local MultiBarRight = MultiBarRight
+	local MultiBarRight = MultiBarRight
 	local Size = C.ActionBars.NormalButtonSize
 	local Spacing = C.ActionBars.ButtonSpacing
 	local ButtonsPerRow = C.ActionBars.Bar4ButtonsPerRow
@@ -29,7 +29,7 @@ function ActionBars:CreateBar4()
 	if (NumButtons <= ButtonsPerRow) then
 		ButtonsPerRow = NumButtons
 	end
-	
+
 	local NumRow = ceil(NumButtons / ButtonsPerRow)
 
 	local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRow, Size, Spacing, C.ActionBars.ShowBackdrop)
@@ -37,14 +37,14 @@ function ActionBars:CreateBar4()
 	ActionBar4:ClearAllPoints()
 	ActionBar4:SetWidth(Width)
 	ActionBar4:SetHeight(Height)
-    ActionBar4:SetPoint("RIGHT", UIParent, "RIGHT", -C.Lua.ScreenMargin, 0)
+	ActionBar4:SetPoint("RIGHT", UIParent, "RIGHT", -C.Lua.ScreenMargin, 0)
 
-    if (C.ActionBars.ShowBackdrop) then
+	if (C.ActionBars.ShowBackdrop) then
 		ActionBar4:SetBackdropTransparent()
 		ActionBar4.Shadow:Kill()
-    end
+	end
 
-    if (not T.Retail) then
+	if (not T.Retail) then
 		MultiBarRight:SetShown(true)
 	else
 		Settings.SetValue("PROXY_SHOW_ACTIONBAR_4", true)
@@ -56,17 +56,17 @@ function ActionBars:CreateBar4()
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
 		local Button = _G["MultiBarRightButton"..i]
 		local PreviousButton = _G["MultiBarRightButton"..i-1]
-		
+
 		Button:SetSize(Size, Size)
 		Button:ClearAllPoints()
 		Button:SetAttribute("showgrid", 1)
 
-        if (not T.Retail) then
+		if (not T.Retail) then
 			ActionButton_ShowGrid(Button)	
 		end
 
 		ActionBars:SkinButton(Button)
-		
+
 		if i <= NumButtons then
 			if (i == 1) then
 				Button:SetPoint("TOPLEFT", ActionBar4, "TOPLEFT", Padding, -Padding)

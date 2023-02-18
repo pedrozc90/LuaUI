@@ -17,15 +17,15 @@ function UnitFrames:Target()
     local Power = self.Power
     local Name = self.Name
     local AltPowerBar = self.AlternativePower
-	local RaidIcon = self.RaidTargetIndicator
+    local RaidIcon = self.RaidTargetIndicator
     local Leader = self.LeaderIndicator
-	local MasterLooter = self.MasterLooterIndicator
+    local MasterLooter = self.MasterLooterIndicator
 
     local FrameWidth, FrameHeight = unpack(C.Units.Target)
     local PowerHeight = 5
 
     local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)
-	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
+    local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
     local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
     local Font, FontSize, FontStyle = C.Medias.Font, 12, nil
 
@@ -114,7 +114,7 @@ function UnitFrames:Target()
     -- Name
     Name:ClearAllPoints()
     Name:SetParent(Health)
-	Name:SetPoint("LEFT", Health, "LEFT", 5, 0)
+    Name:SetPoint("LEFT", Health, "LEFT", 5, 0)
     Name:SetJustifyH("LEFT")
 
     self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameLong] [Tukui:Classification][Tukui:DiffColor][level]")
@@ -131,20 +131,20 @@ function UnitFrames:Target()
         CastBar:CreateBackdrop()
         CastBar.Backdrop:SetOutside()
 
-		CastBar.Background:SetAllPoints()
-		CastBar.Background:SetTexture(CastTexture)
-		CastBar.Background:SetVertexColor(unpack(C.General.BackgroundColor))
+        CastBar.Background:SetAllPoints()
+        CastBar.Background:SetTexture(CastTexture)
+        CastBar.Background:SetVertexColor(unpack(C.General.BackgroundColor))
 
-		CastBar.Time:ClearAllPoints()
-		CastBar.Time:SetPoint("RIGHT", CastBar, "RIGHT", -5, 0)
-		CastBar.Time:SetTextColor(0.84, 0.75, 0.65)
-		CastBar.Time:SetJustifyH("RIGHT")
+        CastBar.Time:ClearAllPoints()
+        CastBar.Time:SetPoint("RIGHT", CastBar, "RIGHT", -5, 0)
+        CastBar.Time:SetTextColor(0.84, 0.75, 0.65)
+        CastBar.Time:SetJustifyH("RIGHT")
 
-		CastBar.Text:ClearAllPoints()
-		CastBar.Text:SetPoint("LEFT", CastBar, "LEFT", 5, 0)
-		CastBar.Text:SetTextColor(0.84, 0.75, 0.65)
-		CastBar.Text:SetWidth(CastBar:GetWidth())
-		CastBar.Text:SetJustifyH("LEFT")
+        CastBar.Text:ClearAllPoints()
+        CastBar.Text:SetPoint("LEFT", CastBar, "LEFT", 5, 0)
+        CastBar.Text:SetTextColor(0.84, 0.75, 0.65)
+        CastBar.Text:SetWidth(CastBar:GetWidth())
+        CastBar.Text:SetJustifyH("LEFT")
 
         if (C.UnitFrames.CastBarIcon) then
             local IconSize = FrameHeight + Power:GetHeight() + 1
@@ -156,9 +156,9 @@ function UnitFrames:Target()
 
             CastBar.Button:ClearAllPoints()
             CastBar.Button:SetOutside(CastBar.Icon)
-		end
+        end
 
-		if (C.UnitFrames.UnlinkCastBar) then
+        if (C.UnitFrames.UnlinkCastBar) then
             local ButtonSize = C.ActionBars.NormalButtonSize
             local ButtonSpacing = C.ActionBars.ButtonSpacing
             local ButtonsPerRow = C.ActionBars.Bar1ButtonsPerRow
@@ -166,18 +166,18 @@ function UnitFrames:Target()
             local IconSize = (CastBar.Button) and CastBar.Button:GetWidth() or 0
             local Width = (ButtonsPerRow * ButtonSize) + ((ButtonsPerRow + 1) * ButtonSpacing) - IconSize
 
-			CastBar:ClearAllPoints()
+            CastBar:ClearAllPoints()
             CastBar:SetPoint("CENTER", UIParent, "CENTER", 0, 300)
             CastBar:SetWidth(Width)
             CastBar:SetHeight(20)
             CastBar.Shadow:Kill()
 
-			if (C.UnitFrames.CastBarIcon) then
-				CastBar.Icon:ClearAllPoints()
-				CastBar.Icon:SetPoint("LEFT", CastBar, "RIGHT", 3, 0)
-				CastBar.Icon:SetSize(CastBar:GetHeight(), CastBar:GetHeight())
-			end
-		end
+            if (C.UnitFrames.CastBarIcon) then
+                CastBar.Icon:ClearAllPoints()
+                CastBar.Icon:SetPoint("LEFT", CastBar, "RIGHT", 3, 0)
+                CastBar.Icon:SetSize(CastBar:GetHeight(), CastBar:GetHeight())
+            end
+        end
     end
 
     -- Portrait
@@ -210,7 +210,7 @@ function UnitFrames:Target()
 
         if (C.UnitFrames.TargetBuffs) then
             local Buffs = self.Buffs
-            
+
             local yOffset = (self.AlternativePower.IsEnable) and 10 or 0
 
             Buffs:ClearAllPoints()
@@ -252,31 +252,30 @@ function UnitFrames:Target()
     end
 
     -- CombatLog
-	if (C.UnitFrames.CombatLog) then
+    if (C.UnitFrames.CombatLog) then
         local CombatFeedbackText = self.CombatFeedbackText
-
-		CombatFeedbackText:ClearAllPoints()
+        CombatFeedbackText:ClearAllPoints()
         CombatFeedbackText:SetPoint("CENTER", Health, "CENTER", 0, 0)
         CombatFeedbackText:SetFont(Font, 13, FontStyle)
     end
 
     -- Health Prediction
-	if (C.UnitFrames.HealComm) then
+    if (C.UnitFrames.HealComm) then
         local myBar = self.HealthPrediction.myBar
         local otherBar = self.HealthPrediction.otherBar
         local absorbBar = self.HealthPrediction.absorbBar
 
         myBar:SetWidth(FrameWidth)
         myBar:SetHeight(Health:GetHeight())
-		myBar:SetStatusBarTexture(HealthTexture)
+        myBar:SetStatusBarTexture(HealthTexture)
 
         otherBar:SetWidth(FrameWidth)
         otherBar:SetHeight(Health:GetHeight())
-		otherBar:SetStatusBarTexture(HealthTexture)
+        otherBar:SetStatusBarTexture(HealthTexture)
 
         absorbBar:SetWidth(FrameWidth)
         absorbBar:SetHeight(Health:GetHeight())
-		absorbBar:SetStatusBarTexture(HealthTexture)
+        absorbBar:SetStatusBarTexture(HealthTexture)
     end
 
     -- Raid Icon
@@ -286,11 +285,11 @@ function UnitFrames:Target()
 
     -- Leader Icon
     Leader:ClearAllPoints()
-	Leader:SetSize(14, 14)
-	Leader:SetPoint("TOPLEFT", 2, 8)
+    Leader:SetSize(14, 14)
+    Leader:SetPoint("TOPLEFT", 2, 8)
 
     -- Master Looter Icon
-	MasterLooter:ClearAllPoints()
-	MasterLooter:SetSize(14, 14)
-	MasterLooter:SetPoint("TOPRIGHT", -2, 8)
+    MasterLooter:ClearAllPoints()
+    MasterLooter:SetSize(14, 14)
+    MasterLooter:SetPoint("TOPRIGHT", -2, 8)
 end

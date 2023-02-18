@@ -13,9 +13,9 @@ local basePlayer = UnitFrames.Player
 
 function UnitFrames:Player()
 	-- first, we call the base function
-    basePlayer(self)
+	basePlayer(self)
 
-    -- second, we edit it
+	-- second, we edit it
 	local SoulShards = self.SoulShards
 
 	local PlayerWidth, PlayerHeight = unpack(C.Units.Player)

@@ -15,17 +15,17 @@ function TimerTracker:UpdateBar()
     local Font, FontSize, FontStyle = C.Medias.Font, 12, nil
 
     for i = 1, self:GetNumRegions() do
-		local Region = select(i, self:GetRegions())
+        local Region = select(i, self:GetRegions())
 
-		if (Region:GetObjectType() == "Texture") then
-			Region:SetTexture(nil)
+        if (Region:GetObjectType() == "Texture") then
+            Region:SetTexture(nil)
         elseif (Region:GetObjectType() == "FontString") then
             Region:SetPoint("CENTER", self, "CENTER", 0, -1)
-			Region:SetFont(Font, FontSize, FontStyle)
-			Region:SetShadowColor(0,0,0,0)
-		end
+            Region:SetFont(Font, FontSize, FontStyle)
+            Region:SetShadowColor(0,0,0,0)
+        end
     end
-    
+
     self:SetWidth(210)
     self:SetHeight(16)
     self:SetStatusBarTexture(Texture)

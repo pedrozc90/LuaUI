@@ -40,7 +40,8 @@ local CombatEvents = {
 local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_LOGIN")
 f:SetScript("OnEvent", function(self, event, ...)
-    -- callone of the function below
+    -- call one of the event handlers
+    if (not self[event]) then return end
     self[event](self, ...)
 end)
 
@@ -71,7 +72,7 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
 
     -- filter casters, only player or belong to player
     if (band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= COMBATLOG_OBJECT_AFFILIATION_MINE) or (sourceGUID ~= playerGUID) then return end
-    
+
     local spellID, spellName, spellSchool, extraSpellID, extraSpellName, extraSchool,
     auraType = select(12, CombatLogGetCurrentEventInfo())
 
@@ -87,4 +88,4 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
         end
     end
 end 
-    
+

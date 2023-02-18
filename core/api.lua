@@ -31,7 +31,7 @@ local function AddAPI(object)
 	local mt = getmetatable(object).__index
 
 	if not object.SetBackdropTransparent then mt.SetBackdropTransparent = SetBackdropTransparent end
-    -- create new API
+	-- create new API
 	-- if not object.Kill then mt.Kill = Kill end
 end
 

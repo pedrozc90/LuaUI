@@ -39,7 +39,8 @@ local Interrupt = CreateFrame("Frame")
 Interrupt:RegisterEvent("PLAYER_LOGIN")
 Interrupt:RegisterEvent("PLAYER_ENTERING_WORLD")
 Interrupt:SetScript("OnEvent", function(self, event, ...)
-    -- call one of the event handlers.
+    -- call one of the event handlers
+    if (not self[event]) then return end
     self[event](self, ...)
 end)
 
@@ -78,7 +79,6 @@ function Interrupt:COMBAT_LOG_EVENT_UNFILTERED()
 
     -- check if event type was a spell interrupt
     if (eventType == "SPELL_INTERRUPT") then
-
         -- spell standard
         local spellID, spellName, spellSchool, extraSpellID, extraSpellName,
         extraSchool = select(12, CombatLogGetCurrentEventInfo())

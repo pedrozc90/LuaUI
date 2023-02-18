@@ -13,19 +13,19 @@ function UnitFrames:Boss()
 
     -- second, we edit it
     local Health = self.Health
-	local Power = self.Power
-	local Name = self.Name
-	local AltPowerBar = self.AlternativePower
+    local Power = self.Power
+    local Name = self.Name
+    local AltPowerBar = self.AlternativePower
     local RaidIcon = self.RaidTargetIndicator
 
     local FrameWidth, FrameHeight = unpack(C.Units.Boss)
     local PowerHeight = 3
 
     local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)
-	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
-	local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
+    local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
+    local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
 
-	-- Health
+    -- Health
     Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
@@ -54,7 +54,7 @@ function UnitFrames:Boss()
         Health.colorReaction = true
     end
 
-	-- Power
+    -- Power
     Power:ClearAllPoints()
     Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
     Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
@@ -82,9 +82,9 @@ function UnitFrames:Boss()
     end
 
     -- Name
-	Name:ClearAllPoints()
+    Name:ClearAllPoints()
     Name:SetParent(Health)
-	Name:SetPoint("CENTER", Health, "CENTER", 0, 1)
+    Name:SetPoint("CENTER", Health, "CENTER", 0, 1)
     Name:SetJustifyH("CENTER")
 
     self:Tag(Name, "[Tukui:Classification][Tukui:DiffColor][level] [Tukui:GetNameColor][Tukui:NameMedium]")
@@ -95,7 +95,7 @@ function UnitFrames:Boss()
     RaidIcon:SetSize(16, 16)
 
     -- Auras
-	if (C.UnitFrames.BossAuras) then
+    if (C.UnitFrames.BossAuras) then
         local Buffs = self.Buffs
         local Debuffs = self.Debuffs
 
@@ -104,36 +104,36 @@ function UnitFrames:Boss()
         local AuraPerRow = 3
         local AuraWidth = (AuraSize * AuraPerRow) + (AuraSpacing * (AuraPerRow + 1))
 
-		Buffs:ClearAllPoints()
+        Buffs:ClearAllPoints()
         Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -3, 0)
         Buffs:SetWidth(AuraWidth)
         Buffs:SetHeight(AuraSize)
 
-		Buffs.size = AuraSize
+        Buffs.size = AuraSize
         Buffs.spacing = AuraSpacing
         Buffs.num = 3
         Buffs.numRow = ceil(Buffs.num / AuraPerRow)
-		Buffs.initialAnchor = "RIGHT"
+        Buffs.initialAnchor = "RIGHT"
         Buffs["growth-x"] = "LEFT"
         Buffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
 
-		Debuffs:ClearAllPoints()
+        Debuffs:ClearAllPoints()
         Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 3, 0)
         Debuffs:SetWidth(AuraWidth)
         Debuffs:SetHeight(AuraSize)
 
-		Debuffs.size = AuraSize
+        Debuffs.size = AuraSize
         Debuffs.spacing = AuraSpacing
         Debuffs.num = 5
-		Debuffs.numRow = ceil(Debuffs.num / AuraPerRow)
-		Debuffs.initialAnchor = "LEFT"
+        Debuffs.numRow = ceil(Debuffs.num / AuraPerRow)
+        Debuffs.initialAnchor = "LEFT"
         Debuffs["growth-x"] = "RIGHT"
         Debuffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
-	end
+    end
 
     -- CastBar
-	if (C.UnitFrames.CastBar) then
-		local CastBar = self.Castbar
+    if (C.UnitFrames.CastBar) then
+        local CastBar = self.Castbar
 
         if (C.UnitFrames.UnlinkBossCastBar) then
             CastBar:ClearAllPoints()
@@ -158,21 +158,21 @@ function UnitFrames:Boss()
     end
 
     -- Health Prediction
-	if (C.UnitFrames.HealBar) then
+    if (C.UnitFrames.HealBar) then
         local myBar = self.HealthPrediction.myBar
         local otherBar = self.HealthPrediction.otherBar
         local absorbBar = self.HealthPrediction.absorbBar
 
         myBar:SetWidth(FrameWidth)
         myBar:SetHeight(Health:GetHeight())
-		myBar:SetStatusBarTexture(HealthTexture)
+        myBar:SetStatusBarTexture(HealthTexture)
 
         otherBar:SetWidth(FrameWidth)
         otherBar:SetHeight(Health:GetHeight())
-		otherBar:SetStatusBarTexture(HealthTexture)
+        otherBar:SetStatusBarTexture(HealthTexture)
 
         absorbBar:SetWidth(FrameWidth)
         absorbBar:SetHeight(Health:GetHeight())
-		absorbBar:SetStatusBarTexture(HealthTexture)
+        absorbBar:SetStatusBarTexture(HealthTexture)
     end
 end

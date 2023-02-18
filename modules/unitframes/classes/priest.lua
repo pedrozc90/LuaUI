@@ -12,9 +12,9 @@ local basePlayer = UnitFrames.Player
 
 function UnitFrames:Player()
 	-- first, we call the base function
-    basePlayer(self)
+	basePlayer(self)
 
-    -- second, we edit it
+	-- second, we edit it
 	local Atonement = self.Atonement
 
 	local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)

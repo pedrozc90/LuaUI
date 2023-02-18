@@ -13,10 +13,10 @@ function UnitFrames:Arena()
 
     -- second, we edit it
     local Health = self.Health
-	local Power = self.Power
-	local Name = self.Name
-	local SpecIcon = self.PVPSpecIcon
-	local Trinket = self.Trinket
+    local Power = self.Power
+    local Name = self.Name
+    local SpecIcon = self.PVPSpecIcon
+    local Trinket = self.Trinket
     local RaidIcon = self.RaidTargetIndicator
 
     local FrameWidth, FrameHeight = unpack(C.Units.Arena)
@@ -24,10 +24,10 @@ function UnitFrames:Arena()
     local Spacing = 1
 
     local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)
-	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
-	local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
+    local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
+    local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
 
-	-- Health
+    -- Health
     Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
@@ -56,7 +56,7 @@ function UnitFrames:Arena()
         Health.colorReaction = true
     end
 
-	-- Power
+    -- Power
     Power:ClearAllPoints()
     Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
     Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
@@ -83,9 +83,9 @@ function UnitFrames:Arena()
     end
 
     -- Name
-	Name:ClearAllPoints()
+    Name:ClearAllPoints()
     Name:SetParent(Health)
-	Name:SetPoint("CENTER", Health, "CENTER", 0, 0)
+    Name:SetPoint("CENTER", Health, "CENTER", 0, 0)
     Name:SetJustifyH("CENTER")
 
     -- self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameLong]")
@@ -96,19 +96,19 @@ function UnitFrames:Arena()
     RaidIcon:SetSize(16, 16)
 
     -- -- Spec Icon
-	-- SpecIcon:ClearAllPoints()
+    -- SpecIcon:ClearAllPoints()
     -- SpecIcon:SetPoint("TOPRIGHT", self, "TOPLEFT", -7, 0)
     -- SpecIcon:SetSize(FrameHeight)
     -- SpecIcon.Backdrop.Shadow:Kill()
 
     -- -- Trinket Icon
-	-- Trinket:ClearAllPoints()
+    -- Trinket:ClearAllPoints()
     -- Trinket:SetPoint("TOPRIGHT", SpecIcon, "TOPLEFT", -7, 0)
     -- Trinket:SetSize(FrameHeight)
-	-- Trinket.Backdrop.Shadow:Kill()
+    -- Trinket.Backdrop.Shadow:Kill()
 
     -- Auras
-	if (C.UnitFrames.ArenaAuras) then
+    if (C.UnitFrames.ArenaAuras) then
         local Buffs = self.Buffs
         local Debuffs = self.Debuffs
 
@@ -117,36 +117,36 @@ function UnitFrames:Arena()
         local AuraPerRow = 3
         local AuraWidth = (AuraSize * AuraPerRow) + (AuraSpacing * (AuraPerRow + 1))
 
-		Buffs:ClearAllPoints()
+        Buffs:ClearAllPoints()
         Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -4, 0)
         Buffs:SetWidth(AuraWidth)
         Buffs:SetHeight(AuraSize)
 
-		Buffs.size = AuraSize
+        Buffs.size = AuraSize
         Buffs.spacing = AuraSpacing
         Buffs.num = 3
         Buffs.numRow = ceil(Buffs.num / AuraPerRow)
-		Buffs.initialAnchor = "RIGHT"
+        Buffs.initialAnchor = "RIGHT"
         Buffs["growth-x"] = "LEFT"
         Buffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
 
-		Debuffs:ClearAllPoints()
+        Debuffs:ClearAllPoints()
         Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 4, 0)
         Debuffs:SetWidth(AuraWidth)
         Debuffs:SetHeight(AuraSize)
 
-		Debuffs.size = AuraSize
+        Debuffs.size = AuraSize
         Debuffs.spacing = AuraSpacing
         Debuffs.num = 4
-		Debuffs.numRow = ceil(Debuffs.num / AuraPerRow)
-		Debuffs.initialAnchor = "LEFT"
+        Debuffs.numRow = ceil(Debuffs.num / AuraPerRow)
+        Debuffs.initialAnchor = "LEFT"
         Debuffs["growth-x"] = "RIGHT"
         Debuffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
-	end
+    end
 
     -- CastBar
-	if (C.UnitFrames.CastBar) then
-		local CastBar = self.Castbar
+    if (C.UnitFrames.CastBar) then
+        local CastBar = self.Castbar
 
         if (C.UnitFrames.UnlinkArenaCastBar) then
             CastBar:ClearAllPoints()
@@ -167,15 +167,15 @@ function UnitFrames:Arena()
             CastBar.Button:SetSize(CastBar:GetHeight())
             CastBar.Button:SetPoint("TOPLEFT", CastBar, "TOPRIGHT", 7, 0)
         end
-	end
+    end
 
     -- Trinket Icon
     if (T.BCC or T.WotLK) then
-		local Trinket = self.Trinket
-        
+        local Trinket = self.Trinket
+
         Trinket:ClearAllPoints()
         Trinket:SetPoint("TOPRIGHT", SpecIcon, "TOPLEFT", -7, 0)
         Trinket:SetSize(FrameHeight)
         Trinket.Backdrop.Shadow:Kill()
-	end
+    end
 end

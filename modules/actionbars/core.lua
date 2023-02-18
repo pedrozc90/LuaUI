@@ -31,13 +31,12 @@ local baseMovePetBar = ActionBars.MovePetBar
 local baseUpdateStanceBar = ActionBars.UpdateStanceBar
 local baseEnable = ActionBars.Enable
 
-function ActionBars:SkinButton(Button)
-    
-    -- first, we call the base function
-    baseSkinButton(self, Button)
+	function ActionBars:SkinButton(Button)
+	-- first, we call the base function
+	baseSkinButton(self, Button)
 
-    -- second, we edit it
-    local Name = Button:GetName()
+	-- second, we edit it
+	local Name = Button:GetName()
 	local Action = Button.action
 	local KeybindTex = Button.QuickKeybindHighlightTexture
 	local Icon = _G[Name.."Icon"]
@@ -50,61 +49,59 @@ function ActionBars:SkinButton(Button)
 	local BtnBG = _G[Name.."FloatingBG"]
 	local Font = T.GetFont(C["ActionBars"].Font)
 
-    -- Button:SetTemplate("Transparent")
+	-- Button:SetTemplate("Transparent")
 
-    -- Count
-    if (Count) then
-        Count:ClearAllPoints()
-        Count:SetPoint("BOTTOMRIGHT", Button, "BOTTOMRIGHT", -2, 2)
-    end
+	-- Count
+	if (Count) then
+		Count:ClearAllPoints()
+		Count:SetPoint("BOTTOMRIGHT", Button, "BOTTOMRIGHT", -2, 2)
+	end
 
-    -- HotKey
-    if (HotKey) then
-        HotKey:ClearAllPoints()
-        HotKey:SetPoint("TOPRIGHT", Button, "TOPRIGHT", -2, -2)
+	-- HotKey
+	if (HotKey) then
+		HotKey:ClearAllPoints()
+		HotKey:SetPoint("TOPRIGHT", Button, "TOPRIGHT", -2, -2)
 		HotKey:SetTextColor(1, 1, 1)
-    end
+	end
 
-    if (Btname and C.ActionBars.Macro) then
-        Btname:ClearAllPoints()
-        Btname:SetPoint("BOTTOM", Button, "BOTTOM", 0, 2)
-    end
+	if (Btname and C.ActionBars.Macro) then
+		Btname:ClearAllPoints()
+		Btname:SetPoint("BOTTOM", Button, "BOTTOM", 0, 2)
+	end
 end
 
 function ActionBars:SkinPetAndShiftButton(Normal, Button, Icon, Name, Pet)
-    
-    -- first, we call the base function
-    baseSkinPetAndShiftButton(self, Normal, Button, Icon, Name, Pet)
+	-- first, we call the base function
+	baseSkinPetAndShiftButton(self, Normal, Button, Icon, Name, Pet)
 
-    -- second, we edit it
-    local PetSize = C.ActionBars.PetButtonSize
+	-- second, we edit it
+	local PetSize = C.ActionBars.PetButtonSize
 	local HotKey = _G[Button:GetName().."HotKey"]
 	local Cooldown = _G[Button:GetName().."Cooldown"]
 	local Flash = _G[Name.."Flash"]
 	local Font = T.GetFont(C["ActionBars"].Font)
 
-    if (C.ActionBars.HotKey) then
+	if (C.ActionBars.HotKey) then
 		HotKey:ClearAllPoints()
 		HotKey:SetPoint("TOPRIGHT", Button, "TOPRIGHT", 0, 0)
 	end
 end
 
 function ActionBars:UpdateStanceBar()
-	
 	-- first, we call the base function
-    baseUpdateStanceBar(self)
+	baseUpdateStanceBar(self)
 
-    -- second, we edit it
+	-- second, we edit it
 	local StanceBar = self.Bars.Stance
 	local ActionBar3 = self.Bars.Bar3
 	local NumForms = GetNumShapeshiftForms()
 
 	local PetSize = C.ActionBars.PetButtonSize
 	local Spacing = C.ActionBars.ButtonSpacing
-    local Padding = (C.ActionBars.StanceBarBackground) and Spacing or 0
+	local Padding = (C.ActionBars.StanceBarBackground) and Spacing or 0
 
-    local Rows = (not C.ActionBars.VerticalStanceBar) and NumForms or 1
-    local Columns = (not C.ActionBars.VerticalStanceBar) and 1 or NumForms
+	local Rows = (not C.ActionBars.VerticalStanceBar) and NumForms or 1
+	local Columns = (not C.ActionBars.VerticalStanceBar) and 1 or NumForms
 
 	if (NumForms == 0) then
 		if (ActionBar3) then
@@ -113,7 +110,7 @@ function ActionBars:UpdateStanceBar()
 		end
 	else
 		local Width, Height = ActionBars.GetBackgroundSize(Rows, Columns, PetSize, Spacing, C.ActionBars.StanceBarBackground)
-		
+
 		StanceBar:SetSize(Width, Height)
 
 		if (ActionBar3) then
@@ -167,11 +164,10 @@ function ActionBars:ACTIONBAR_SLOT_CHANGED(slot)
 end
 
 function ActionBars:Enable()
-	
 	-- first, we call the base function
-    baseEnable(self)
+	baseEnable(self)
 
-    -- second, we edit it
+	-- second, we edit it
 	self:RegisterEvent("PLAYER_TALENT_UPDATE")
 	self:RegisterEvent("ACTIONBAR_SLOT_CHANGED")
 	self:SetScript("OnEvent", function(self, event, ...)

@@ -29,14 +29,14 @@ function ActionBars:CreateBar8()
 	local ButtonsPerRow = C.ActionBars.Bar8ButtonsPerRow
 	local NumButtons = C.ActionBars.Bar8NumButtons
 	local Padding = (C.ActionBars.ShowBackdrop) and Spacing or 0
-    
-    if (NumButtons <= ButtonsPerRow) then
+
+	if (NumButtons <= ButtonsPerRow) then
 		ButtonsPerRow = NumButtons
 	end
-	
+
 	local NumRow = ceil(NumButtons / ButtonsPerRow)
 
-    local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRow, Size, Spacing, C.ActionBars.ShowBackdrop)
+	local Width, Height = ActionBars.GetBackgroundSize(ButtonsPerRow, NumRow, Size, Spacing, C.ActionBars.ShowBackdrop)
 
 	ActionBar8:ClearAllPoints()
 	ActionBar8:SetWidth(Width)
@@ -55,7 +55,7 @@ function ActionBars:CreateBar8()
 	end
 
 	if (C.ActionBars.ShowBackdrop) then
-        ActionBar8:SetBackdropTransparent()
-        ActionBar8.Shadow:Kill()
-    end
+		ActionBar8:SetBackdropTransparent()
+		ActionBar8.Shadow:Kill()
+	end
 end

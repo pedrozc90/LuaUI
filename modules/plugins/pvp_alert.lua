@@ -38,7 +38,7 @@ local SpellList = {
     [5782] = true, 			            -- Fear
 
     -- Druid
-	[33786] = true, 		            -- Cyclone
+    [33786] = true, 		            -- Cyclone
 
     -- Paladin
     [20066] = true, 		            -- Repentance
@@ -50,8 +50,8 @@ local SpellList = {
 }
 
 local CombatEvents = {
-    SPELL_CAST_START = true,
-    SPELL_CAST_SUCCESS = true,
+SPELL_CAST_START = true,
+SPELL_CAST_SUCCESS = true,
 }
 
 local playerGUID = nil
@@ -107,9 +107,9 @@ f:SetFadeDuration(3)
 
 f:RegisterEvent("PLAYER_LOGIN")
 f:RegisterEvent("PLAYER_ENTERING_WORLD")
--- f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 f:SetScript("OnEvent", function(self, event, ...)
-    -- call one of the functions below
+    -- call one of the event handlers
+    if (not self[event]) then return end
     self[event](self, ...)
 end)
 
@@ -160,7 +160,7 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
                 template = ACTION_SPELL_CAST_START_FULL_TEXT_NO_DEST
             elseif (destName) then
                 template = ACTION_SPELL_CAST_START_FULL_TEXT_NO_SOURCE
-            end	
+            end
         elseif (eventType == "SPELL_CAST_SUCCESS") then
             if (sourceName and destName) then
                 template = ACTION_SPELL_CAST_SUCCESS_FULL_TEXT

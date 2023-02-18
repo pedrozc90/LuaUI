@@ -16,7 +16,7 @@ function ActionBars:SetupExtraButton()
     baseSetupExtraButton(self)
 
     -- second, we edit it
-	local Holder = _G["TukuiExtraActionButton"]
+    local Holder = _G["TukuiExtraActionButton"]
     local Bar = ExtraActionBarFrame
     local Icon = ExtraActionButton1Icon
 

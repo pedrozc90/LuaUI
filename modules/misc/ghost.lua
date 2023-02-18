@@ -10,20 +10,20 @@ local Experience = T.Miscellaneous.Experience
 local baseCreateButton = Ghost.CreateButton
 
 function Ghost:CreateButton()
-	-- first, we call the base function
+    -- first, we call the base function
     baseCreateButton(self)
 
     -- second, we edit it
-	local Button = self.Button
+    local Button = self.Button
 
-	local ExpBar = Experience.XPBar1
+    local ExpBar = Experience.XPBar1
     local HonorBar = Experience.XPBar2
 
-	Button:ClearAllPoints()
-	Button:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -3)
-	Button:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -3)
-	Button:SetHeight(23)
-	Button:SetScript("OnShow", function (element)
+    Button:ClearAllPoints()
+    Button:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -3)
+    Button:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -3)
+    Button:SetHeight(23)
+    Button:SetScript("OnShow", function (element)
         local ExpirenceBar = Experience.XPBar1
         local ReputationBar = Experience.XPBar2
 
@@ -36,5 +36,5 @@ function Ghost:CreateButton()
         element:SetPoint("TOPLEFT", Anchor, "BOTTOMLEFT", 0, -3)
         element:SetPoint("TOPRIGHT", Anchor, "BOTTOMRIGHT", 0, -3)
     end)
-	Button:Hide()
+    Button:Hide()
 end

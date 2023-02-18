@@ -11,17 +11,17 @@ local match = string.match
 ----------------------------------------------------------------
 function UnitFrames:PreUpdateHealth(unit)
     local UniColor = C.Lua.UniColor
-	local HostileColor = C["UnitFrames"].TargetEnemyHostileColor
+    local HostileColor = C["UnitFrames"].TargetEnemyHostileColor
 
-	if ((UniColor == true) or (HostileColor ~= true)) then
-		return
-	end
+    if ((UniColor == true) or (HostileColor ~= true)) then
+        return
+    end
 
-	if UnitIsEnemy(unit, "player") then
-		self.colorClass = false
-	else
-		self.colorClass = true
-	end
+    if UnitIsEnemy(unit, "player") then
+        self.colorClass = false
+    else
+        self.colorClass = true
+    end
 end
 
 ----------------------------------------------------------------
@@ -31,7 +31,7 @@ function UnitFrames:PostCreateAuraBar(bar)
     -- second, we edit it
     if (not bar.Backdrop) then
         bar.spark:Kill()
-        
+
         bar:CreateBackdrop("Transparent")
         bar.Backdrop:SetOutside()
         bar.icon:ClearAllPoints()
@@ -43,7 +43,7 @@ function UnitFrames:PostCreateAuraBar(bar)
         bar.button:CreateBackdrop()
         bar.button:SetOutside(bar.icon)
         bar.button:SetFrameLevel(bar:GetFrameLevel() - 3)
-	end
+    end
 end
 
 -- local UpdateBuffsHeaderPosition = function(self, height)
@@ -200,7 +200,7 @@ function UnitFrames:RaidDefaultPosition()
         RaidPet:SetParent(T.PetHider)
         RaidPet:SetPoint("TOPLEFT", Raid, "TOPRIGHT", C.Raid.Padding, 0)
     end
-    
+
     Raid40:ClearAllPoints()
     Raid40:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 1, 3)
 
@@ -285,7 +285,7 @@ function UnitFrames:CreateUnits()
 
     if (C.Party.Enable) then
         local Party = self.Headers.Party
-    
+
         Party:ClearAllPoints()
         Party:SetParent(T.PetHider)
         Party:SetPoint("LEFT", T.PetHider, "LEFT", 7, 150)

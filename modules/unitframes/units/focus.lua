@@ -22,7 +22,7 @@ function UnitFrames:Focus()
     local PowerHeight = 3
 
     local HealthTexture = T.GetTexture(C.Textures.UFHealthTexture)
-	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
+    local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
     local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
 
     self.Backdrop = nil
@@ -85,7 +85,7 @@ function UnitFrames:Focus()
     -- Name
     Name:ClearAllPoints()
     Name:SetParent(Health)
-	Name:SetPoint("LEFT", Health, "LEFT", 5, 0)
+    Name:SetPoint("LEFT", Health, "LEFT", 5, 0)
     Name:SetJustifyH("LEFT")
 
     -- self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameLong] [Tukui:Classification][Tukui:DiffColor][level]")
@@ -96,52 +96,52 @@ function UnitFrames:Focus()
     RaidIcon:SetSize(16, 16)
 
     if (C.UnitFrames.FocusAuras) then
-		local Buffs = self.Buffs
+        local Buffs = self.Buffs
         local Debuffs = self.Debuffs
-        
+
         local AuraSize = FrameHeight + PowerHeight - 1
         local AuraSpacing = 1
         local AuraPerRow = 3
         local AuraWidth = (AuraSize * AuraPerRow) + (AuraSpacing * (AuraPerRow + 1))
 
-		Buffs:ClearAllPoints()
-		Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -3, 1)
-		Buffs:SetHeight(AuraSize)
+        Buffs:ClearAllPoints()
+        Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -3, 1)
+        Buffs:SetHeight(AuraSize)
         Buffs:SetWidth(AuraWidth)
-        
-		Buffs.size = AuraSize
+
+        Buffs.size = AuraSize
         Buffs.spacing = AuraSpacing
         Buffs.num = 3
         Buffs.numRow = ceil(Buffs.num / AuraPerRow)
-		Buffs.initialAnchor = "TOPRIGHT"
-		Buffs["growth-x"] = "LEFT"
+        Buffs.initialAnchor = "TOPRIGHT"
+        Buffs["growth-x"] = "LEFT"
         Buffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
         -- Buffs.PostCreateIcon = UnitFrames.PostCreateAura
-		-- Buffs.PostUpdateIcon = UnitFrames.PostUpdateAura
+        -- Buffs.PostUpdateIcon = UnitFrames.PostUpdateAura
 
-		Debuffs:ClearAllPoints()
+        Debuffs:ClearAllPoints()
         Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 3, 1)
         Debuffs:SetHeight(AuraSize)
-		Debuffs:SetWidth(AuraWidth)
-        
-		Debuffs.size = AuraSize
+        Debuffs:SetWidth(AuraWidth)
+
+        Debuffs.size = AuraSize
         Debuffs.spacing = AuraSpacing
         Debuffs.num = 4
         Debuffs.numRow = ceil(Debuffs.num / AuraPerRow)
-		Debuffs.initialAnchor = "TOPLEFT"
-		Debuffs["growth-x"] = "RIGHT"
+        Debuffs.initialAnchor = "TOPLEFT"
+        Debuffs["growth-x"] = "RIGHT"
         Debuffs.onlyShowPlayer = C.UnitFrames.OnlySelfDebuffs
         -- Debuffs.PostCreateIcon = UnitFrames.PostCreateAura
         -- Debuffs.PostUpdateIcon = UnitFrames.PostUpdateAura
-	end
+    end
 
-	if (C.UnitFrames.CastBar) then
+    if (C.UnitFrames.CastBar) then
         local CastBar = self.Castbar
-        
+
         -- CastBar.Backdrop:Kill()
 
         CastBar:ClearAllPoints()
-		CastBar:SetPoint("CENTER", UIParent, "CENTER", 0, 180)
+        CastBar:SetPoint("CENTER", UIParent, "CENTER", 0, 180)
         CastBar:SetWidth(250)
         CastBar:SetHeight(20)
         CastBar:SetStatusBarTexture(CastTexture)
@@ -149,44 +149,44 @@ function UnitFrames:Focus()
         CastBar.Backdrop:SetOutside()
 
         CastBar.Background = CastBar:CreateTexture(nil, "BORDER")
-		CastBar.Background:SetAllPoints(CastBar)
-		CastBar.Background:SetTexture(CastTexture)
-		CastBar.Background:SetVertexColor(unpack(C.General.BackgroundColor))
+        CastBar.Background:SetAllPoints(CastBar)
+        CastBar.Background:SetTexture(CastTexture)
+        CastBar.Background:SetVertexColor(unpack(C.General.BackgroundColor))
 
-		-- CastBar.Time:ClearAllPoints()
-		-- CastBar.Time:SetPoint("RIGHT", CastBar, "RIGHT", -5, 1)
-		-- CastBar.Time:SetJustifyH("RIGHT")
+        -- CastBar.Time:ClearAllPoints()
+        -- CastBar.Time:SetPoint("RIGHT", CastBar, "RIGHT", -5, 1)
+        -- CastBar.Time:SetJustifyH("RIGHT")
 
-		CastBar.Text:ClearAllPoints()
-		CastBar.Text:SetPoint("CENTER", CastBar, "CENTER", 0, 0)
+        CastBar.Text:ClearAllPoints()
+        CastBar.Text:SetPoint("CENTER", CastBar, "CENTER", 0, 0)
         CastBar.Text:SetJustifyH("CENTER")
         CastBar.Text:SetWidth(CastBar:GetWidth())
 
-		CastBar.Button:ClearAllPoints()
-		CastBar.Button:SetSize(CastBar:GetHeight(), CastBar:GetHeight())
-		CastBar.Button:SetPoint("TOPLEFT", CastBar, "TOPRIGHT", 5, 0)
+        CastBar.Button:ClearAllPoints()
+        CastBar.Button:SetSize(CastBar:GetHeight(), CastBar:GetHeight())
+        CastBar.Button:SetPoint("TOPLEFT", CastBar, "TOPRIGHT", 5, 0)
         CastBar.Button:CreateBackdrop()
         CastBar.Button.Backdrop.Shadow:Kill()
-	end
+    end
 
     if (C.UnitFrames.HealComm) then
-		local myBar = self.HealthPrediction.myBar
-		local otherBar = self.HealthPrediction.otherBar
+        local myBar = self.HealthPrediction.myBar
+        local otherBar = self.HealthPrediction.otherBar
         local absorbBar = self.HealthPrediction.absorbBar
 
-		myBar:SetWidth(FrameWidth)
+        myBar:SetWidth(FrameWidth)
         myBar:SetHeight(Health:GetHeight())
-		myBar:SetStatusBarTexture(HealthTexture)
+        myBar:SetStatusBarTexture(HealthTexture)
 
         otherBar:SetWidth(FrameWidth)
         otherBar:SetHeight(Health:GetHeight())
-		otherBar:SetStatusBarTexture(HealthTexture)
+        otherBar:SetStatusBarTexture(HealthTexture)
 
         absorbBar:SetWidth(FrameWidth)
         absorbBar:SetHeight(Health:GetHeight())
-		absorbBar:SetStatusBarTexture(HealthTexture)
+        absorbBar:SetStatusBarTexture(HealthTexture)
     end
-    
+
     -- Highlight
     Highlight:Kill()
 

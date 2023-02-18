@@ -28,14 +28,14 @@ local ZoneTypes = {
     ["party"]= true,                            -- when in a 5-man instance
     ["raid"] = true,                            -- when in a raid instance
     ["scenario"] = false,                       -- when in a scenario
-	-- nil when in an unknown kind of instance
+    -- nil when in an unknown kind of instance
 }
 
 ----------------------------------------------------------------
 -- Wait Function
-    -- delay: amount of time to wait (in seconds) before the provided function is triggered.
-    -- func: function to run once the wait delay is over.
-    -- param: list of any additional parameters.
+-- delay: amount of time to wait (in seconds) before the provided function is triggered.
+-- func: function to run once the wait delay is over.
+-- param: list of any additional parameters.
 -- NOT MY CODE. Got it here: http://www.wowwiki.com/Wait on January 20th, 2019
 ----------------------------------------------------------------
 local tremove = table.remove
@@ -86,7 +86,8 @@ end
 local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_LOGIN")
 f:SetScript("OnEvent", function(self, event, ...)
-    -- call one of the functions below
+    -- call one of the event handlers
+    if (not self[event]) then return end
     self[event](self, ...)
 end)
 
@@ -154,7 +155,7 @@ end
 
 function f:BOSS_KILL(...)
     local bossID, bossName = ...
-    
+
     if (bossName) then
         -- display bos
         if (C.ScreenShots.Messages) then
@@ -172,7 +173,7 @@ end
 
 function f:ENCOUNTER_START(...)
     local encounterID, encounterName, difficultyID, groupSize = ...
-    
+
     -- record encounter start time
     self.EncounterStartTimer = time()
 end
@@ -193,7 +194,6 @@ function f:ENCOUNTER_END(...)
 
     -- filter encounters difficulty which we want to take screenshots.
     if (EncounterDifficulty[difficultyID]) then
-        
         -- display encounter info
         T.Print("Defeted", encounterName, difficulty, "(" .. groupSize .. "-man)")
         T.Print("Date:", date("%m/%d/%y %H:%M:%S"))

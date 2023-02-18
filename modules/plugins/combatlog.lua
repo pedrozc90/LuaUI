@@ -35,7 +35,6 @@ local function Message(color, ...)
         else
             t[k] = v
         end
-        
     end
     Debug(unpack(t))
 end
@@ -46,6 +45,8 @@ f:RegisterEvent("PLAYER_ENTERING_WORLD")
 -- f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 -- f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 f:SetScript("OnEvent", function(self, event, ...)
+    -- call one of the event handlers
+    if (not self[event]) then return end
     self[event](self, ...)
 end)
 
@@ -76,7 +77,6 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
     destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
 
     if (eventType:find("SPELL")) then
-
         local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
 
         -- check if caster is player or belongs to player
@@ -97,9 +97,7 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
 
         Message(color, sourceName, format("(0x%08x)", sourceFlags), eventType,
         destName, format("(0x%08x)", destFlags), spellID, spellName, select(15, CombatLogGetCurrentEventInfo()))
-    
     elseif (eventType:find("UNIT")) then
-
         local color = { .87, .92, .08 }
 
         Message(color, sourceName, STRING_HEX:format(sourceFlags), eventType,

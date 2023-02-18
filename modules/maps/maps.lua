@@ -14,14 +14,13 @@ local baseAddTaxiEarlyExit = Minimap.AddTaxiEarlyExit
 local baseStartHighlight = Minimap.StartHighlight
 
 function Minimap:StyleMinimap()
-
     -- first, we call the base function
     baseStyleMinimap(self)
 
     -- second, we edit it
     local Mail = MinimapCluster and MinimapCluster.MailFrame or MiniMapMailFrame
-	local MailBorder = MiniMapMailBorder
-	local MailIcon = MiniMapMailIcon
+    local MailBorder = MiniMapMailBorder
+    local MailIcon = MiniMapMailIcon
 
     if (Mail) then
         if (T.Retail) then
@@ -39,7 +38,7 @@ function Minimap:StyleMinimap()
         local MiniMapInstanceDifficulty = MiniMapInstanceDifficulty
         local GuildInstanceDifficulty = GuildInstanceDifficulty
         local HelpOpenTicketButton = HelpOpenTicketButton
-        
+
         if (QueueStatusMinimapButton) then
             QueueStatusMinimapButton:ClearAllPoints()
             QueueStatusMinimapButton:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 3, -3)
@@ -49,7 +48,7 @@ function Minimap:StyleMinimap()
             QueueStatusButton:ClearAllPoints()
             QueueStatusButton:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -20)
         end
-        
+
         if (MiniMapInstanceDifficulty) then
             MiniMapInstanceDifficulty:ClearAllPoints()
             MiniMapInstanceDifficulty:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
@@ -61,10 +60,10 @@ function Minimap:StyleMinimap()
         end
     else
         local BGFrame = MiniMapBattlefieldFrame
-		local BGFrameBorder = MiniMapBattlefieldBorder
-		local BGFrameIcon = MiniMapBattlefieldIcon
-		local LFGFrame = MiniMapLFGFrame
-		local LFGFrameBorder = MiniMapLFGFrameBorder
+        local BGFrameBorder = MiniMapBattlefieldBorder
+        local BGFrameIcon = MiniMapBattlefieldIcon
+        local LFGFrame = MiniMapLFGFrame
+        local LFGFrameBorder = MiniMapLFGFrameBorder
     end
 end
 
@@ -74,7 +73,7 @@ function Minimap:PositionMinimap()
 
     -- second, we edit it
     self:ClearAllPoints()
-	self:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -C.Lua.ScreenMargin, -C.Lua.ScreenMargin)
+    self:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -C.Lua.ScreenMargin, -C.Lua.ScreenMargin)
 end
 
 function Minimap:AddMinimapDataTexts()
@@ -96,7 +95,7 @@ function Minimap:AddZoneAndCoords()
 
     -- second, we edit it
     local MinimapZone = self.MinimapZone
-    
+
     -- MinimapZone
     MinimapZone:ClearAllPoints()
     MinimapZone:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
@@ -110,7 +109,7 @@ function Minimap:AddZoneAndCoords()
     MinimapZone.Text:SetJustifyH("CENTER")
 
     -- MinimapCoords
-    if C.Maps.MinimapCoords then
+    if (C.Maps.MinimapCoords) then
         local MinimapCoords = self.MinimapCoords
 
         MinimapCoords:ClearAllPoints()
@@ -126,14 +125,13 @@ function Minimap:AddZoneAndCoords()
 end
 
 function Minimap:AddTaxiEarlyExit()
-    
     -- first, we call the base function
     baseAddTaxiEarlyExit(self)
 
     -- second, we edit it
     local EarlyExitButton = self.EarlyExitButton
 
-	EarlyExitButton:ClearAllPoints()
+    EarlyExitButton:ClearAllPoints()
     EarlyExitButton:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -3)
     EarlyExitButton:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
     EarlyExitButton:SetHeight(DataTexts.Panels.Minimap:GetHeight())
@@ -153,7 +151,7 @@ function Minimap:AddTaxiEarlyExit()
 
     EarlyExitButton.Text:ClearAllPoints()
     EarlyExitButton.Text:SetPoint("CENTER", EarlyExitButton, "CENTER", 0, 0)
-	EarlyExitButton.Text:SetFont(C.Medias.Font, 12)
+    EarlyExitButton.Text:SetFont(C.Medias.Font, 12)
 end
 
 function Minimap:StartHighlight()
@@ -161,12 +159,12 @@ function Minimap:StartHighlight()
     baseStartHighlight(self)
 
     -- second, we edit it
-	if Minimap.Highlight then
+    if (Minimap.Highlight) then
         Minimap.Highlight:ClearAllPoints()
-		Minimap.Highlight:SetPoint("TOP", 0, 10)
-		Minimap.Highlight:SetPoint("BOTTOM", 0, -10)
-		Minimap.Highlight:SetPoint("LEFT", -10, 0)
-		Minimap.Highlight:SetPoint("RIGHT", 10, 0)
-		Minimap.Highlight:SetBackdropBorderColor(1, 1, 0)
-	end
+        Minimap.Highlight:SetPoint("TOP", 0, 10)
+        Minimap.Highlight:SetPoint("BOTTOM", 0, -10)
+        Minimap.Highlight:SetPoint("LEFT", -10, 0)
+        Minimap.Highlight:SetPoint("RIGHT", 10, 0)
+        Minimap.Highlight:SetBackdropBorderColor(1, 1, 0)
+    end
 end

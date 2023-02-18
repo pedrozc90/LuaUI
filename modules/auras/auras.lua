@@ -9,28 +9,27 @@ local baseCreateHeaders = Auras.CreateHeaders
 -- Auras Timer Ajustments
 ----------------------------------------------------------------
 function Auras:Skin()
-
     -- first, we call the base function
     baseSkin(self)
 
     -- second, we edit it
     local Duration = self.Duration
-	local Bar = self.Bar
-	local Holder = self.Holder
-	local Filter = self.Filter
-	local Icon = self.Icon
-	local Count = self.Count
-	
-	Count:ClearAllPoints()
-	Count:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -1, 2)
+    local Bar = self.Bar
+    local Holder = self.Holder
+    local Filter = self.Filter
+    local Icon = self.Icon
+    local Count = self.Count
 
-	Holder:ClearAllPoints()
+    Count:ClearAllPoints()
+    Count:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -1, 2)
+
+    Holder:ClearAllPoints()
     Holder:SetPoint("TOP", self, "BOTTOM", 0, -3)
     Holder:SetSize(self:GetWidth(), 6)
-	Holder:SetTemplate("Transparent")
-	Holder.Shadow:Kill()
+    Holder:SetTemplate("Transparent")
+    Holder.Shadow:Kill()
 
-	if (Bar) then
+    if (Bar) then
         Bar:ClearAllPoints()
         Bar:SetInside()
         Bar:SetStatusBarTexture(C.Medias.Blank)
@@ -43,24 +42,23 @@ function Auras:Skin()
     end
 
     if (C.Auras.Flash) then
-		local Animation = self.Animation
-	end
+        local Animation = self.Animation
+    end
 
-	if (C.Auras.Animation and not self.AuraGrowth) then
-		local AuraGrowth = self.AuraGrowth
-	end
+    if (C.Auras.Animation and not self.AuraGrowth) then
+        local AuraGrowth = self.AuraGrowth
+    end
 end
 
 ----------------------------------------------------------------
 -- Anchoring Buffs/Debuffs next to the Minimap
 ----------------------------------------------------------------
 function Auras:CreateHeaders()
-    
     -- first, we call the base function
     baseCreateHeaders(self)
 
     -- second, we edit it
-	local Headers = Auras.Headers
+    local Headers = Auras.Headers
     local Buffs = Headers[1]
     local Debuffs = Headers[2]
 

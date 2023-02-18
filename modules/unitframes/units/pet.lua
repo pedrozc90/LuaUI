@@ -13,8 +13,8 @@ function UnitFrames:Pet()
 
     -- second, we edit it
     local Health = self.Health
-	local Power = self.Power
-	local Name = self.Name
+    local Power = self.Power
+    local Name = self.Name
     local RaidIcon = self.RaidTargetIndicator
 
     local FrameWidth, FrameHeight = unpack(C.Units.Pet)
@@ -25,12 +25,12 @@ function UnitFrames:Pet()
     local CastTexture = T.GetTexture(C.Textures.UFCastTexture)
     local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
 
-	self.Shadow:Kill()
-	self.Panel:Kill()
+    self.Shadow:Kill()
+    self.Panel:Kill()
     self.Backdrop = nil
     self:CreateBackdrop()
 
-	-- Health
+    -- Health
     Health:ClearAllPoints()
     Health:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     Health:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
@@ -42,7 +42,7 @@ function UnitFrames:Pet()
     Health.Value:ClearAllPoints()
     Health.Value:SetParent(Health)
     Health.Value:SetPoint("RIGHT", Health, "RIGHT", -5, 0)
-    
+
     Health.frequentUpdate = true
     if (C.Lua.UniColor) then
         Health.colorTapping = false
@@ -59,10 +59,10 @@ function UnitFrames:Pet()
     end
 
     if (C.UnitFrames.Smooth) then
-		Health.Smooth = true
-	end
+        Health.Smooth = true
+    end
 
-	-- Power
+    -- Power
     Power:ClearAllPoints()
     Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
     Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
@@ -75,7 +75,7 @@ function UnitFrames:Pet()
     Power.Value:ClearAllPoints()
     Power.Value:SetParent(Health)
     Power.Value:SetPoint("LEFT", Health, "LEFT", 5, 0)
-    
+
     Power.frequentUpdates = true
     if (C.Lua.UniColor) then
         Power.colorClass = false
@@ -86,84 +86,84 @@ function UnitFrames:Pet()
         Power.colorPower = true
     end
 
-	-- Name
+    -- Name
     Name:ClearAllPoints()
     Name:SetParent(Health)
-	Name:SetPoint("CENTER", Health, "CENTER", 0, 0)
+    Name:SetPoint("CENTER", Health, "CENTER", 0, 0)
     Name:SetJustifyH("CENTER")
 
     -- self:Tag(Name, "[Tukui:GetNameColor][Tukui:NameMedium] [Tukui:DiffColor][level]")
 
-	-- Raid Icon
+    -- Raid Icon
     RaidIcon:ClearAllPoints()
     RaidIcon:SetPoint("CENTER", self, "TOP", 0, 3)
     RaidIcon:SetSize(16, 16)
 
     if (C.UnitFrames.PetAuras) then
-		local Buffs = self.Buffs
+        local Buffs = self.Buffs
         local Debuffs = self.Debuffs
-        
+
         local AuraSize = 21
         local AuraSpacing = 1
         local AuraPerRow = 4
         local AuraWidth = (AuraSize * AuraPerRow) + (AuraSpacing * (AuraPerRow + 1))
 
-		Buffs:ClearAllPoints()
-		Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, 2)
-		Buffs:SetHeight(AuraSize)
+        Buffs:ClearAllPoints()
+        Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, 2)
+        Buffs:SetHeight(AuraSize)
         Buffs:SetWidth(AuraWidth)
-        
-		Buffs.size = AuraSize
+
+        Buffs.size = AuraSize
         Buffs.spacing = AuraSpacing
         Buffs.num = 3
         Buffs.numRow = ceil(Buffs.num / AuraPerRow)
-		Buffs.initialAnchor = "TOPLEFT"
+        Buffs.initialAnchor = "TOPLEFT"
         Buffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
         -- Buffs.PostCreateIcon = UnitFrames.PostCreateAura
-		-- Buffs.PostUpdateIcon = UnitFrames.PostUpdateAura
+        -- Buffs.PostUpdateIcon = UnitFrames.PostUpdateAura
 
-		Debuffs:SetFrameStrata(self:GetFrameStrata())
-		Debuffs:SetHeight(AuraSize)
-		Debuffs:SetWidth(129)
+        Debuffs:SetFrameStrata(self:GetFrameStrata())
+        Debuffs:SetHeight(AuraSize)
+        Debuffs:SetWidth(129)
         Debuffs:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 1, 2)
-        
-		Debuffs.size = AuraSize
+
+        Debuffs.size = AuraSize
         Debuffs.spacing = AuraSpacing
         Debuffs.num = 3
         Debuffs.numRow = ceil(Debuffs.num / AuraPerRow)
-		Debuffs.initialAnchor = "TOPRIGHT"
-		Debuffs["growth-x"] = "LEFT"
+        Debuffs.initialAnchor = "TOPRIGHT"
+        Debuffs["growth-x"] = "LEFT"
         Debuffs.onlyShowPlayer = C.UnitFrames.OnlySelfDebuffs
         -- Debuffs.PostCreateIcon = UnitFrames.PostCreateAura
-		-- Debuffs.PostUpdateIcon = UnitFrames.PostUpdateAura
+        -- Debuffs.PostUpdateIcon = UnitFrames.PostUpdateAura
 
-		if (C.UnitFrames.AurasBelow) then
-			Buffs:ClearAllPoints()
-			Buffs:SetPoint("TOPLEFT", Power, "BOTTOMLEFT", -1, -2)
-			
-			Debuffs:ClearAllPoints()
-			Debuffs:SetPoint("TOPRIGHT", Power, "BOTTOMRIGHT", 1, -2)
-		end
-	end
+        if (C.UnitFrames.AurasBelow) then
+            Buffs:ClearAllPoints()
+            Buffs:SetPoint("TOPLEFT", Power, "BOTTOMLEFT", -1, -2)
 
-	if (C.UnitFrames.HealComm) then
-		local myBar = self.HealthPrediction.myBar
-		local otherBar = self.HealthPrediction.otherBar
+            Debuffs:ClearAllPoints()
+            Debuffs:SetPoint("TOPRIGHT", Power, "BOTTOMRIGHT", 1, -2)
+        end
+    end
+
+    if (C.UnitFrames.HealComm) then
+        local myBar = self.HealthPrediction.myBar
+        local otherBar = self.HealthPrediction.otherBar
         local absorbBar = self.HealthPrediction.absorbBar
 
-		myBar:SetWidth(FrameWidth)
+        myBar:SetWidth(FrameWidth)
         myBar:SetHeight(Health:GetHeight())
-		myBar:SetStatusBarTexture(HealthTexture)
+        myBar:SetStatusBarTexture(HealthTexture)
 
         otherBar:SetWidth(FrameWidth)
         otherBar:SetHeight(Health:GetHeight())
-		otherBar:SetStatusBarTexture(HealthTexture)
+        otherBar:SetStatusBarTexture(HealthTexture)
 
         absorbBar:SetWidth(FrameWidth)
         absorbBar:SetHeight(Health:GetHeight())
-		absorbBar:SetStatusBarTexture(HealthTexture)
-	end
-	
+        absorbBar:SetStatusBarTexture(HealthTexture)
+    end
+
     if (C.UnitFrames.CastBar) then
         local CastBar = self.Castbar
 
@@ -187,7 +187,7 @@ function UnitFrames:Pet()
             CastBar.Text:ClearAllPoints()
             CastBar.Text:SetPoint("LEFT", CastBar, "LEFT", 5, 0)
             CastBar.Text:SetJustifyH("LEFT")
-            
+
             CastBar.Spark:Kill()
         else
             CastBar:ClearAllPoints()
@@ -202,7 +202,7 @@ function UnitFrames:Pet()
             CastBar.Background:SetPoint("TOP", 0, 1)
             CastBar.Background:SetTexture(CastTexture)
             CastBar.Background:SetVertexColor(unpack(C.General.BackgroundColor))
-            
+
             CastBar.Time:ClearAllPoints()
             CastBar.Time:SetPoint("RIGHT", CastBar, "RIGHT", -5, 0)
             CastBar.Time:SetJustifyH("RIGHT")
@@ -211,5 +211,5 @@ function UnitFrames:Pet()
             CastBar.Text:SetPoint("LEFT", CastBar, "LEFT", 5, 0)
             CastBar.Text:SetJustifyH("LEFT")
         end
-	end
+    end
 end

@@ -21,9 +21,9 @@ end
 
 -- returns a round number
 T.RoundValue = function(number, decimals)
-	if (not decimals) then decimals = 0 end
+    if (not decimals) then decimals = 0 end
     local mult = pow(10, decimals)
-	return floor(mult * number) / mult
+    return floor(mult * number) / mult
 end
 
 -- returns the size of frames such as combo-points/runes/chi, where

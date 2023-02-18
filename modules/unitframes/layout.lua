@@ -62,7 +62,7 @@ function UnitFrames:RaidHealerPosition()
             RaidPet:SetParent(T.PetHider)
             RaidPet:SetPoint(unpack(Anchor))
         end
-        
+
         Raid40:ClearAllPoints()
         Raid40:SetPoint(unpack(Anchor))
 

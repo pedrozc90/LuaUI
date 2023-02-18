@@ -144,7 +144,6 @@ function UnitFrames:Nameplates()
 
     if (T.Retail and C.NamePlates.QuestIcon) then
         local QuestIcon = self.QuestIcon
-
         QuestIcon:ClearAllPoints()
         QuestIcon:SetPoint("LEFT", self, "RIGHT", 4, 0)
         QuestIcon:SetSize(C.NamePlates.Height, C.NamePlates.Height)
@@ -154,7 +153,7 @@ function UnitFrames:Nameplates()
         local ClassIcon = self.ClassIcon
 
         local IconSize = self:GetHeight() + 16
-        
+
         ClassIcon:ClearAllPoints()
         ClassIcon:SetPoint("BOTTOMRIGHT", self, "BOTTOMLEFT", -4, 0)
         ClassIcon:SetSize(IconSize, IconSize)

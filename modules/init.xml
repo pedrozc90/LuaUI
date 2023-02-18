@@ -58,7 +58,7 @@
     <Script file="modules\unitframes\classes\shaman.lua"/>
     <Script file="modules\unitframes\classes\warlock.lua"/>
     <Script file="modules\unitframes\classes\warrior.lua"/>
-    
+
     <Script file="modules\unitframes\units\player.lua"/>
     <Script file="modules\unitframes\units\target.lua"/>
     <Script file="modules\unitframes\units\tot.lua"/>
@@ -71,7 +71,7 @@
 
     <Script file="modules\unitframes\groups\party.lua"/>
     <Script file="modules\unitframes\groups\raid.lua"/>
-    
+
     <!-- Plugins -->
     <Include file="modules\plugins\init.xml"/>
 
