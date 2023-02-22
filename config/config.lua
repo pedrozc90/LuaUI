@@ -37,25 +37,14 @@ C["Units"] = {
     ["Raid"]            = {  60, 38 }               -- set raid unitframe size.
 }
 
--- C["General"].OverDataTextLeft = true                -- display alternativa power bar over data text panel left.
-
 -- Action Bars
--- C["ActionBars"].VerticalRightBars = false           -- enables vertical multi bars (bar 4 and 5).
--- C["ActionBars"].VerticalStanceBar = true            -- enables vertical stance bar.
 C["ActionBars"].StanceBarBackground = false         -- enables stance bar background.
--- C["ActionBars"].ActionBar3Background = false        -- enables action bar 3 background.
--- C["ActionBars"].ActionBar3Toggle = true             -- hide button without action.
 
 -- Chat
 C["Chat"].Padding = 5                               -- padding between datatext and chat background.
 
 -- Auras
 C["Auras"].Spacing = 4                              -- set spacing between auras.
-
--- -- Nameplate
--- C["NamePlates"].PowerBar = false                    -- enables nameplates powerbar.
--- C["NamePlates"].DebuffSize = 18                     -- set debuff icon size.
--- C["NamePlates"].DebuffSpacing = 7                   -- set space between debuffs.
 
 -- Party
 C["Party"].ShowSolo = false                         -- display party frame when playing solo (only player unit).
@@ -105,6 +94,10 @@ C["SpellAnnounce"] = {
 
 C["PvPAlert"] = {
     ["Enable"] = false,                             -- enables pvp alert plugin.
+}
+
+C["WorldEvents"] = {
+    ["Enable"] = false,                             -- enables world events plugin.
 }
 
 C["RaidCD"] = {
