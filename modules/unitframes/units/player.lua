@@ -222,8 +222,7 @@ function UnitFrames:Player()
                 if (not C.UnitFrames.PlayerBuffs) then
                     Debuffs:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 0, -32)
                 end
-                    Debuffs["growth-y"] = "DOWN"
-                end
+                Debuffs["growth-y"] = "DOWN"
             end
         end
     end
@@ -316,77 +315,77 @@ function UnitFrames:Player()
 
     -- Portrait
     if (C.UnitFrames.Portrait) then
-    local Portrait = self.Portrait
-    local PortraitHolder = Portrait:GetParent()
+        local Portrait = self.Portrait
+        local PortraitHolder = Portrait:GetParent()
 
-    if (C.UnitFrames.Portrait2D) then
-    local PortraitSize = FrameHeight + Power:GetHeight() + 1
+        if (C.UnitFrames.Portrait2D) then
+            local PortraitSize = FrameHeight + Power:GetHeight() + 1
 
-    PortraitHolder:ClearAllPoints()
-    PortraitHolder:SetPoint("TOPRIGHT", Health, "TOPLEFT", -3, 0)
-    PortraitHolder:SetSize(PortraitSize, PortraitSize)
-    else
-    Portrait:SetParent(Health)
-    Portrait:SetAllPoints(Health)
-    Portrait:SetAlpha(.35)
+            PortraitHolder:ClearAllPoints()
+            PortraitHolder:SetPoint("TOPRIGHT", Health, "TOPLEFT", -3, 0)
+            PortraitHolder:SetSize(PortraitSize, PortraitSize)
+        else
+            Portrait:SetParent(Health)
+            Portrait:SetAllPoints(Health)
+            Portrait:SetAlpha(.35)
 
-    PortraitHolder:Kill()
-    end
+            PortraitHolder:Kill()
+        end
 
-    Portrait.Shadow:Kill()
+        Portrait.Shadow:Kill()
     end
 
     -- CombatLog
     if (C.UnitFrames.CombatLog) then
-    local CombatFeedbackText = self.CombatFeedbackText
+        local CombatFeedbackText = self.CombatFeedbackText
 
-    CombatFeedbackText:ClearAllPoints()
-    CombatFeedbackText:SetPoint("CENTER", Health, "CENTER", 0, 0)
-    CombatFeedbackText:SetFont(Font, FontSize, FontStyle)
+        CombatFeedbackText:ClearAllPoints()
+        CombatFeedbackText:SetPoint("CENTER", Health, "CENTER", 0, 0)
+        CombatFeedbackText:SetFont(Font, FontSize, FontStyle)
     end
 
     -- ComboPoints
     if (C.UnitFrames.ComboBar) and (Class == "ROGUE" or Class == "DRUID") then
-    local ComboPoints = self.ComboPointsBar
+        local ComboPoints = self.ComboPointsBar
 
-    ComboPoints:ClearAllPoints()
-    ComboPoints:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-    ComboPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
-    ComboPoints:SetHeight(5)
-    ComboPoints.Backdrop:Kill()
+        ComboPoints:ClearAllPoints()
+        ComboPoints:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
+        ComboPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
+        ComboPoints:SetHeight(5)
+        ComboPoints.Backdrop:Kill()
 
-    local Spacing = 3           -- spacing between combo-points
-    local SizeMax5, DeltaMax5 = T.EqualSizes(FrameWidth, 5, Spacing)
-    local SizeMax6, DeltaMax6 = T.EqualSizes(FrameWidth, 6, Spacing)
+        local Spacing = 3           -- spacing between combo-points
+        local SizeMax5, DeltaMax5 = T.EqualSizes(FrameWidth, 5, Spacing)
+        local SizeMax6, DeltaMax6 = T.EqualSizes(FrameWidth, 6, Spacing)
 
-    for i = 1, 6 do
-    ComboPoints[i]:ClearAllPoints()
-    ComboPoints[i]:SetHeight(ComboPoints:GetHeight())
-    ComboPoints[i]:SetWidth(SizeMax6)
-    ComboPoints[i]:CreateBackdrop()
-    ComboPoints[i].Backdrop:SetOutside()
+        for i = 1, 6 do
+            ComboPoints[i]:ClearAllPoints()
+            ComboPoints[i]:SetHeight(ComboPoints:GetHeight())
+            ComboPoints[i]:SetWidth(SizeMax6)
+            ComboPoints[i]:CreateBackdrop()
+            ComboPoints[i].Backdrop:SetOutside()
 
-    if ((DeltaMax5 > 0) and (i <= DeltaMax5)) then
-    ComboPoints[i].BarSizeForMaxComboIs5 = SizeMax5 + 1
-    else
-    ComboPoints[i].BarSizeForMaxComboIs5 = SizeMax5
-    end
+            if ((DeltaMax5 > 0) and (i <= DeltaMax5)) then
+                ComboPoints[i].BarSizeForMaxComboIs5 = SizeMax5 + 1
+            else
+                ComboPoints[i].BarSizeForMaxComboIs5 = SizeMax5
+            end
 
-    if ((DeltaMax6 > 0) and (i <= DeltaMax6)) then
-    ComboPoints[i].BarSizeForMaxComboIs6 = SizeMax6 + 1
-    else
-    ComboPoints[i].BarSizeForMaxComboIs6 = SizeMax6
-    end
+            if ((DeltaMax6 > 0) and (i <= DeltaMax6)) then
+                ComboPoints[i].BarSizeForMaxComboIs6 = SizeMax6 + 1
+            else
+                ComboPoints[i].BarSizeForMaxComboIs6 = SizeMax6
+            end
 
-    if (i == 1) then
-    ComboPoints[i]:SetPoint("LEFT", ComboPoints, "LEFT", 0, 0)
-    else
-    ComboPoints[i]:SetPoint("LEFT", ComboPoints[i - 1], "RIGHT", Spacing, 0)
-    end
-    end
+            if (i == 1) then
+                ComboPoints[i]:SetPoint("LEFT", ComboPoints, "LEFT", 0, 0)
+            else
+                ComboPoints[i]:SetPoint("LEFT", ComboPoints[i - 1], "RIGHT", Spacing, 0)
+            end
+        end
 
-    ComboPoints:SetScript("OnShow", UnitFrames.MoveBuffHeaderUp)
-    ComboPoints:SetScript("OnHide", UnitFrames.MoveBuffHeaderDown)
+        ComboPoints:SetScript("OnShow", UnitFrames.MoveBuffHeaderUp)
+        ComboPoints:SetScript("OnHide", UnitFrames.MoveBuffHeaderDown)
     end
 
     -- Raid Icon
@@ -401,86 +400,86 @@ function UnitFrames:Player()
     RestingIndicator:Hide()
 
     if ((T.Classic or T.BCC) and C.UnitFrames.PowerTick) then
-    local EnergyManaRegen = self.EnergyManaRegen
-    -- EnergyManaRegen:SetFrameLevel(Power:GetFrameLevel() + 3)
-    -- EnergyManaRegen:SetAllPoints()
-    -- EnergyManaRegen.Spark = EnergyManaRegen:CreateTexture(nil, "OVERLAY")
+        local EnergyManaRegen = self.EnergyManaRegen
+        -- EnergyManaRegen:SetFrameLevel(Power:GetFrameLevel() + 3)
+        -- EnergyManaRegen:SetAllPoints()
+        -- EnergyManaRegen.Spark = EnergyManaRegen:CreateTexture(nil, "OVERLAY")
     end
 
     -- Health Prediction
     if (C.UnitFrames.HealComm) then
-    local myBar = self.HealthPrediction.myBar
-    local otherBar = self.HealthPrediction.otherBar
-    local absorbBar = self.HealthPrediction.absorbBar
+        local myBar = self.HealthPrediction.myBar
+        local otherBar = self.HealthPrediction.otherBar
+        local absorbBar = self.HealthPrediction.absorbBar
 
-    myBar:SetWidth(FrameWidth)
-    myBar:SetHeight(Health:GetHeight())
-    myBar:SetStatusBarTexture(HealthTexture)
+        myBar:SetWidth(FrameWidth)
+        myBar:SetHeight(Health:GetHeight())
+        myBar:SetStatusBarTexture(HealthTexture)
 
-    otherBar:SetWidth(FrameWidth)
-    otherBar:SetHeight(Health:GetHeight())
-    otherBar:SetStatusBarTexture(HealthTexture)
+        otherBar:SetWidth(FrameWidth)
+        otherBar:SetHeight(Health:GetHeight())
+        otherBar:SetStatusBarTexture(HealthTexture)
 
-    absorbBar:SetWidth(FrameWidth)
-    absorbBar:SetHeight(Health:GetHeight())
-    absorbBar:SetStatusBarTexture(HealthTexture)
+        absorbBar:SetWidth(FrameWidth)
+        absorbBar:SetHeight(Health:GetHeight())
+        absorbBar:SetStatusBarTexture(HealthTexture)
     end
 
     -- TotemBar
     if (C.UnitFrames.TotemBar) then
-    local Totems = self.Totems
+        local Totems = self.Totems
 
-    if (C.UnitFrames.TotemBarStyle.Value == "On Screen") then
-    -- Totems:SetPoint("CENTER", UIParent, "BOTTOM", 0, 300)
-    -- Totems:SetWidth((Size * MAX_TOTEMS) + (Spacing * (MAX_TOTEMS + 1)))
-    -- Totems:SetHeight(Size)
+        if (C.UnitFrames.TotemBarStyle.Value == "On Screen") then
+            -- Totems:SetPoint("CENTER", UIParent, "BOTTOM", 0, 300)
+            -- Totems:SetWidth((Size * MAX_TOTEMS) + (Spacing * (MAX_TOTEMS + 1)))
+            -- Totems:SetHeight(Size)
 
-    -- for i = 1, MAX_TOTEMS do
-    --     Totems[i]:ClearAllPoints()
-    --     Totems[i]:SetSize(Size, Size)
-    --     Totems[i].Backdrop.Shadow:Kill()
+            -- for i = 1, MAX_TOTEMS do
+            --     Totems[i]:ClearAllPoints()
+            --     Totems[i]:SetSize(Size, Size)
+            --     Totems[i].Backdrop.Shadow:Kill()
 
-    --     -- change cooldown font
-    --     Totems[i].Cooldown:ClearAllPoints()
-    --     Totems[i].Cooldown:SetPoint("CENTER", Totems[i], "CENTER", 0, 0)
+            --     -- change cooldown font
+            --     Totems[i].Cooldown:ClearAllPoints()
+            --     Totems[i].Cooldown:SetPoint("CENTER", Totems[i], "CENTER", 0, 0)
 
-    --     if i == 1 then
-    --         Totems[i]:SetPoint("BOTTOMLEFT", Totems, "BOTTOMLEFT", 0, 0)
-    --     else
-    --         Totems[i]:SetPoint("LEFT", Totems[i - 1], "RIGHT", Spacing, 0)
-    --     end
-    -- end
-    elseif (C.UnitFrames.TotemBarStyle.Value == "On Player") then
-    Totems:ClearAllPoints()
-    Totems:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, 3)
-    Totems:SetHeight(10)
-    Totems:SetWidth(FrameWidth + 2)
+            --     if i == 1 then
+            --         Totems[i]:SetPoint("BOTTOMLEFT", Totems, "BOTTOMLEFT", 0, 0)
+            --     else
+            --         Totems[i]:SetPoint("LEFT", Totems[i - 1], "RIGHT", Spacing, 0)
+            --     end
+            -- end
+        elseif (C.UnitFrames.TotemBarStyle.Value == "On Player") then
+            Totems:ClearAllPoints()
+            Totems:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, 3)
+            Totems:SetHeight(10)
+            Totems:SetWidth(FrameWidth + 2)
 
-    local Width, Delta = T.EqualSizes(FrameWidth - 2, MAX_TOTEMS, 0)
+            local Width, Delta = T.EqualSizes(FrameWidth - 2, MAX_TOTEMS, 0)
 
-    for i = 1, MAX_TOTEMS do
-    Totems[i]:SetHeight(8)
+            for i = 1, MAX_TOTEMS do
+                Totems[i]:SetHeight(8)
 
-    if ((Delta > 0) and (i <= Delta)) then
-    Totems[i]:SetWidth(Width + 1)
-    else
-    Totems[i]:SetWidth(Width)
-    end
+                if ((Delta > 0) and (i <= Delta)) then
+                    Totems[i]:SetWidth(Width + 1)
+                else
+                    Totems[i]:SetWidth(Width)
+                end
 
-    if i == 1 then
-    Totems[i]:SetPoint("TOPLEFT", Totems, "TOPLEFT", 1, -1)
-    else
-    Totems[i]:SetPoint("TOPLEFT", Totems[i-1], "TOPRIGHT", 1, 0)
-    end
-    end
+                if i == 1 then
+                    Totems[i]:SetPoint("TOPLEFT", Totems, "TOPLEFT", 1, -1)
+                else
+                    Totems[i]:SetPoint("TOPLEFT", Totems[i-1], "TOPRIGHT", 1, 0)
+                end
+            end
 
-    if (self.AuraBars) then
-    self.AuraBars:ClearAllPoints()
-    self.AuraBars:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 15)
-    elseif (self.Buffs) then
-    self.Buffs:ClearAllPoints()
-    self.Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, 15)
-    end
-    end
+            if (self.AuraBars) then
+                self.AuraBars:ClearAllPoints()
+                self.AuraBars:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 15)
+            elseif (self.Buffs) then
+                self.Buffs:ClearAllPoints()
+                self.Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, 15)
+            end
+        end
     end
 end
