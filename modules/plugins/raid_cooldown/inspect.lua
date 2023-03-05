@@ -14,7 +14,7 @@ local TIMEOUT = 10
 local THRESHOLD = 0.1
 local MAX_ATTEMPTS = 5
 
-local queue, waiting = {}, {}
+-- local queue, waiting = {}, {}
 local last_inspect = 0
 local delay = 1.5
 local running = false
@@ -47,10 +47,9 @@ function RaidCooldowns:Queue(unit, guid)
     local index = self:GetQueueIndex(guid)
 
     if (UnitIsUnit(unit, "player")) then
-        -- print("adding player", unit, guid, "to the inspect queue")
         self:Inspect(guid)
     elseif (not index) then
-        table.insert(queue, { guid = guid, attempts = 0, timestamp = GetTime() })
+        table.insert(self.queue, { unit = unit, guid = guid, attempts = 0, timestamp = GetTime() })
     end
 
     if (not running) then
@@ -60,7 +59,7 @@ end
 
 function RaidCooldowns:Dequeue(index)
     if (not index) then return end
-    table.remove(queue, index)
+    table.remove(self.queue, index)
 end
 
 function RaidCooldowns:DequeueByGUID(guid)

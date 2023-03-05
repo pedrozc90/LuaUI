@@ -36,14 +36,19 @@ function RaidCooldowns:ScanGroup()
     -- look for new group members
     for index = 1, size do
         local unit = self:GetGroupUnit(index, size, isGrupo, isRaid)
+
         local guid = UnitGUID(unit)
-        
         if (guid) then
             cache[guid] = true
             if (not self.group[guid]) then
-                -- insert guid into inspect queue
                 self.group[guid] = { unit = unit }
                 self:Queue(unit, guid)
+            else
+                self.group[guid].unit = unit
+                local elapsed = GetTime() - (self.group[guid].last_inspect or 0)
+                if (elapsed > 300) then
+                    self:Queue(unit, guid)
+                end
             end
         end
     end
@@ -51,18 +56,14 @@ function RaidCooldowns:ScanGroup()
     -- look for members who left
     for guid, _ in pairs(self.group) do
         if (not cache[guid]) then
-            print(" removing " .. guid .. " from the group." )
-            -- remove guid from inspect queue
             self:DequeueByGUID(guid)
+            
             self.group[guid] = nil
 
-            local length = #self.bars
-            if (length > 0) then
-                for index = #self.bars, 1, -1 do
-                    if (self.bars[index].guid == guid) then
-                        local bar = table.remove(self.bars, index)
-                        table.insert(self.useless, #self.useless + 1, bar)
-                    end
+            for index = #self.bars, 1, -1 do
+                if (self.bars[index].guid == guid) then
+                    local bar = table.remove(self.bars, index)
+                    -- table.insert(self.useless, #self.useless + 1, bar)
                 end
             end
         end
@@ -72,9 +73,10 @@ function RaidCooldowns:ScanGroup()
 end
 
 local HasRequiredSpec = function(data, spec_id)
-    if (not data.specs) then return true end
-    if (not spec_id) then return false end
-    return data.specs[spec_id] or false
+    -- if (not data.specs) then return true end
+    -- if (not spec_id) then return false end
+    -- return data.specs[spec_id] or false
+    return (not data.specs) or (spec_id and data.specs[spec_id]) or false
 end
 
 local HasRequiredTalent = function(data, talents)
@@ -223,7 +225,7 @@ function RaidCooldowns:PLAYER_LOGIN()
     self.class = select(2, UnitClass(self.unit))
     self.group = {}
     self.bars = {}
-    self.useless = {}
+    self.queue = {}
 end
 
 function RaidCooldowns:PLAYER_ENTERING_WORLD(isLogin, isReload)
@@ -276,6 +278,60 @@ function RaidCooldowns:INSPECT_READY(guid)
     self:DequeueByGUID(guid)
 end
 
+function RaidCooldowns:GetTalentBoA(unit, guid)
+    local talents = {}
+
+    for tier = 1, MAX_TALENT_TIERS do
+        for column = 1, NUM_TALENT_COLUMNS do
+            local talentID, talentName, _, selected, available, spellID, unknown, _, _, known, _ = GetTalentInfo(tier, column, activeSpec, isInspect, unit)
+            talents[talentID] = {
+                tier = tier,
+                column = column,
+                name = talentName,
+                selected = selected,
+                available = available,
+                spellID = spellID,
+                unknown = unknown,
+                known = known
+            }
+        end
+    end
+
+    return talents
+end
+
+function RaidCooldowns:GetTalentDF(unit, guid)
+    local talents = {}
+
+    local configID = (guid == self.guid) and C_ClassTalents.GetActiveConfigID() or -1
+
+    local configInfo = C_Traits.GetConfigInfo(configID)
+    for _, treeID in ipairs(configInfo.treeIDs) do
+        local nodeIDs = C_Traits.GetTreeNodes(treeID)
+        for _, nodeID in ipairs(nodeIDs) do
+            local nodeInfo = C_Traits.GetNodeInfo(configID, nodeID)
+            if (nodeInfo) then
+                local activeEntry = nodeInfo.activeEntry
+                local activeRank = nodeInfo.activeRank
+                if (activeRank and activeRank > 0) then
+                    local entryInfo = C_Traits.GetEntryInfo(configID, activeEntry.entryID)
+                    if (entryInfo) then
+                        local definitionInfo = C_Traits.GetDefinitionInfo(definitionID)
+                        if (definitionInfo) then
+                            local spellName = definitionInfo.overrideName
+                            talents[definitionInfo.spellID] = true
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    return talents
+end
+
+function RaidCooldowns:GetTalent = (T.Dragonflight and RaidCooldowns.GetTalentDF or RaidCooldowns.GetTalentBoA)
+
 function RaidCooldowns:Inspect(guid)
     local unit = self:GuidToUnit(guid) or self.unit
     local _, class, _, race, sex, name, realm = GetPlayerInfoByGUID(guid)
@@ -305,25 +361,7 @@ function RaidCooldowns:Inspect(guid)
     member.spec_description = spec_description
     member.role = role
     
-    if (not member.talents) then
-        member.talents = {}
-    end
-
-    for tier = 1, MAX_TALENT_TIERS do
-        for column = 1, NUM_TALENT_COLUMNS do
-            local talentID, talentName, _, selected, available, spellID, unknown, _, _, known, _ = GetTalentInfo(tier, column, activeSpec, isInspect, unit)
-            member.talents[talentID] = {
-                tier = tier,
-                column = column,
-                name = talentName,
-                selected = selected,
-                available = available,
-                spellID = spellID,
-                unknown = unknown,
-                known = known
-            }
-        end
-    end
+    member.talents = self:GetTalent(unit, guid)
 
     -- inspect done, remove it from the queue
     self:DequeueByGUID(guid)
