@@ -316,8 +316,8 @@ function UnitFrames:GetPetRaidFramesAttributes()
 		"unitsPerColumn", C.Raid.MaxUnitPerColumn,
 		"columnSpacing", C.Raid.Padding,
 		"columnAnchorPoint", columnAnchorPoint,
-		"yOffset", -C.Raid.Padding,
 		"xOffset", C.Raid.Padding,
+		"yOffset", -C.Raid.Padding,
 		"initial-width", C.Raid.WidthSize,
 		"initial-height", C.Raid.HeightSize,
 		"oUF-initialConfigFunction", [[
@@ -343,8 +343,8 @@ function UnitFrames:GetBigPetRaidFramesAttributes()
 		"unitsPerColumn", C.Raid.Raid40MaxUnitPerColumn,
 		"columnSpacing", C.Raid.Padding40,
 		"columnAnchorPoint", columnAnchorPoint,
-		"yOffset", -C.Raid.Padding40,
 		"xOffset", C.Raid.Padding40,
+		"yOffset", -C.Raid.Padding40,
 		"initial-width", C.Raid.Raid40WidthSize,
 		"initial-height", C.Raid.Raid40HeightSize,
 		"oUF-initialConfigFunction", [[

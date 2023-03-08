@@ -32,9 +32,7 @@ C["Units"] = {
     ["Focus"]           = { 205, 25 },              -- set focus unitframe size.
     ["FocusTarget"]     = { 205, 25 },              -- set focustarget unitframe size.
     ["Arena"]           = { 205, 25 },              -- set arena unitframe size.
-    ["Boss"]            = { 205, 25 },              -- set boss unitframe size.
-    ["Party"]           = { 185, 25 },              -- set party unitframe size.
-    ["Raid"]            = {  60, 38 }               -- set raid unitframe size.
+    ["Boss"]            = { 205, 25 }               -- set boss unitframe size.
 }
 
 -- Action Bars
@@ -69,12 +67,12 @@ C["UnitFrames"].UnlinkArenaCastBar = false          -- enable
 ----------------------------------------------------------------
 C["Dispels"] = {
     ["Enable"] = true,                              -- enables dispel announce plugin.
-    ["SpellLink"] = true,                           -- display spell link, else just the spell name.
+    ["SpellLink"] = true                            -- display spell link, else just the spell name.
 }
 
 C["Interrupts"] = {
     ["Enable"] = true,                              -- enables interrupt annouce plugin.
-    ["SpellLink"] = false,                          -- display spell link, else just the spell name.
+    ["SpellLink"] = false                           -- display spell link, else just the spell name.
 }
 
 C["ScreenShots"] = {
@@ -83,13 +81,13 @@ C["ScreenShots"] = {
     ["BossKills"] = false,                          -- enables screenshots of successful boss encounters.
     ["ChallendeMode"] = false,                      -- enables screenshots of successful challenge modes.
     ["LevelUp"] = false,                            -- enables screenshots when player level up.
-    ["Messages"] = false,                           -- enables debug messages.
+    ["Messages"] = false                            -- enables debug messages.
 }
 
 C["SpellAnnounce"] = {
     ["Enable"] = false,                             -- enables spell announce plugin.
     ["GroupChat"] = true,                           -- set announce chat channel to by group type and instance.
-    ["SpellLink"] = true,                           -- enable spell link one messages.
+    ["SpellLink"] = true                            -- enable spell link one messages.
 }
 
 C["PvPAlert"] = {
@@ -97,7 +95,7 @@ C["PvPAlert"] = {
 }
 
 C["WorldEvents"] = {
-    ["Enable"] = false,                             -- enables world events plugin.
+    ["Enable"] = false                              -- enables world events plugin.
 }
 
 C["RaidCD"] = {
@@ -299,7 +297,7 @@ C["Raid"].ShowPets = false
 C["Raid"].RangeAlpha = 0.3
 C["Raid"].VerticalHealth = false
 C["Raid"].MaxUnitPerColumn = 5
-C["Raid"].Raid40MaxUnitPerColumn = 10
+C["Raid"].Raid40MaxUnitPerColumn = 5
 C["Raid"].Font = "Tukui"
 C["Raid"].HealthFont = "Tukui Outline"
 C["Raid"].DesaturateBuffs = false
