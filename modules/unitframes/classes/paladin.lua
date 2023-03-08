@@ -21,9 +21,10 @@ function UnitFrames:Player()
 
 	-- Holy Power
 	HolyPower:ClearAllPoints()
-	HolyPower:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-	HolyPower:SetWidth(PlayerWidth)
-	HolyPower:SetHeight(6)
+	-- HolyPower:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
+	HolyPower:SetPoint("CENTER", UIParent, "BOTTOM", 0, 288)
+	HolyPower:SetWidth(255)
+	HolyPower:SetHeight(14)
 
 	local Max = 5
 	local Spacing = 1
@@ -34,6 +35,7 @@ function UnitFrames:Player()
 		HolyPower[i]:SetHeight(HolyPower:GetHeight())
 		HolyPower[i]:SetStatusBarColor(unpack(T.Colors.power["HOLY_POWER"]))
 		-- HolyPower[i]:SetStatusBarColor(0.89, 0.88, 0.06)
+		HolyPower[i]:SetStatusBarTexture(PowerTexture)
 		HolyPower[i]:CreateBackdrop()
 		HolyPower[i].Backdrop:SetOutside()
 
