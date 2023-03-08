@@ -330,7 +330,7 @@ function RaidCooldowns:GetTalentDF(unit, guid)
     return talents
 end
 
-function RaidCooldowns:GetTalent = (T.Dragonflight and RaidCooldowns.GetTalentDF or RaidCooldowns.GetTalentBoA)
+RaidCooldowns.GetTalent = (T.Dragonflight and RaidCooldowns.GetTalentDF or RaidCooldowns.GetTalentBoA)
 
 function RaidCooldowns:Inspect(guid)
     local unit = self:GuidToUnit(guid) or self.unit

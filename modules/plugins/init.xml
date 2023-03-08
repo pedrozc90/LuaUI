@@ -4,6 +4,6 @@
     <Script file="pvp_alert.lua"/>
     <Script file="screenshots.lua"/>
     <Script file="spell_announce.lua"/>
-    <Include file="raid_cooldown\init.xml" />
     <Script file="combatlog.lua"/>
+    <Include file="raid_cooldown\init.xml" />
 </Ui>
