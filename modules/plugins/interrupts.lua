@@ -46,6 +46,7 @@ end)
 
 function Interrupt:PLAYER_LOGIN()
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    self.guid = UnitGUID("player")
 end
 
 function Interrupt:PLAYER_ENTERING_WORLD()
@@ -75,13 +76,16 @@ end
 
 function Interrupt:COMBAT_LOG_EVENT_UNFILTERED()
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
-    destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
+        destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
 
     -- check if event type was a spell interrupt
     if (eventType == "SPELL_INTERRUPT") then
         -- spell standard
         local spellID, spellName, spellSchool, extraSpellID, extraSpellName,
         extraSchool = select(12, CombatLogGetCurrentEventInfo())
+        
+        -- do not announce self interrputs (quake from mythic affixes)
+        if (sourceGUID == destGUID and destGUID == self.guid) then return end
 
         -- prevents spam announcements
         if (spellID == lastSpellID) and (timestamp - lastTimestamp <= 1) then return end
@@ -93,7 +97,6 @@ function Interrupt:COMBAT_LOG_EVENT_UNFILTERED()
         if (CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_ME) or
             CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MINE) or
             CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MY_PET)) then
-
             if (C.Interrupts.SpellLink) then
                 local extraSpellLink = GetSpellLink(extraSpellID)
                 SendChatMessage(STRING_INTERRUPT:format(StringPossesion(destName or "?"), extraSpellLink or "Error"), chatType)
