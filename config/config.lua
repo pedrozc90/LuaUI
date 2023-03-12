@@ -61,6 +61,9 @@ C["Tooltips"].ShowSpellID = true                    -- enables spells, items, qu
 C["UnitFrames"].UnlinkPetCastBar = false            -- enable
 C["UnitFrames"].UnlinkBossCastBar = false           -- enable
 C["UnitFrames"].UnlinkArenaCastBar = false          -- enable
+C["UnitFrames"].ClassBarWidth = 225
+C["UnitFrames"].ClassBarHeight = 14
+C["UnitFrames"].ClassBarAnchor = { "CENTER", UIParent, "BOTTOM", 0, 289 }
 
 ----------------------------------------------------------------
 -- Plugins Settings

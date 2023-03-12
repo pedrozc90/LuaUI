@@ -21,7 +21,8 @@ function ActionBars:SetupExtraButton()
     local Icon = ExtraActionButton1Icon
 
     Holder:ClearAllPoints()
-    Holder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 288)
+    -- Holder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 288)
+    Holder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 300)
     Holder:SetSize(160, 80)
 
     Container:ClearAllPoints()

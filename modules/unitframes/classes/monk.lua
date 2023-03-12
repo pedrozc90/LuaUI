@@ -19,26 +19,26 @@ if (Class ~= "MONK") then return end
 
 -- post update stagger bar
 local PostUpdateStagger = function(self, cur, max)
-local perc = cur / max
-local colors = T.Colors.power["STAGGER"]
+	local perc = cur / max
+	local colors = T.Colors.power["STAGGER"]
 
-local r, g, b
-if (perc >= STAGGER_RED_TRANSITION) then
-r, g, b = unpack(colors[STAGGER_RED_INDEX or 3])	-- red
-elseif (perc > STAGGER_YELLOW_TRANSITION) then
-r, g, b = unpack(colors[STAGGER_YELLOW_INDEX or 2])	-- yellow
-else
-r, g, b = unpack(colors[STAGGER_GREEN_INDEX or 1])	-- green
-end
+	local r, g, b
+	if (perc >= STAGGER_RED_TRANSITION) then
+		r, g, b = unpack(colors[STAGGER_RED_INDEX or 3])	-- red
+	elseif (perc > STAGGER_YELLOW_TRANSITION) then
+		r, g, b = unpack(colors[STAGGER_YELLOW_INDEX or 2])	-- yellow
+	else
+		r, g, b = unpack(colors[STAGGER_GREEN_INDEX or 1])	-- green
+	end
 
-self:SetStatusBarColor(r, g, b)
-self.Value:SetFormattedText("%s / %s - %.1f%%", T.ShortValue(cur), T.ShortValue(max), 100 * (cur / max))
+	self:SetStatusBarColor(r, g, b)
+	self.Value:SetFormattedText("%s / %s - %.1f%%", T.ShortValue(cur), T.ShortValue(max), 100 * (cur / max))
 
-if (cur ~= 0) then
-self:Show()
-else
-self:Hide()
-end
+	if (cur ~= 0) then
+		self:Show()
+	else
+		self:Hide()
+	end
 end
 
 local basePlayer = UnitFrames.Player
@@ -50,24 +50,27 @@ function UnitFrames:Player()
 	-- second, we edit it
 	local Harmony = self.HarmonyBar
 
-	local PlayerWidth, _ = unpack(C.Units.Player)
+	local Width, Height = C.UnitFrames.ClassBarWidth, C.UnitFrames.ClassBarHeight
 
 	local PowerTexture = T.GetTexture(C.Textures.UFPowerTexture)
 	local Font, FontSize, FontStyle = C.Medias.PixelFont, 12, "MONOCHROMEOUTLINE"
 
 	-- Harmony Bar
 	Harmony:ClearAllPoints()
-	Harmony:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-	Harmony:SetWidth(PlayerWidth)
-	Harmony:SetHeight(5)
+	-- Harmony:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
+	-- Harmony:SetWidth(PlayerWidth)
+	-- Harmony:SetHeight(5)
+	Harmony:SetPoint(unpack(C.UnitFrames.ClassBarAnchor))
+	Harmony:SetWidth(Width)
+	Harmony:SetHeight(Height)
 
 	local Spacing = 1
-	local SizeAscension, DeltaAscension = T.EqualSizes(Harmony:GetWidth(), HARMONY_ASCENSION, Spacing)
-	local SizeNoTalent, DeltaNoTalent = T.EqualSizes(Harmony:GetWidth(), HARMONY_NO_TALENT, Spacing)
+	local SizeAscension, DeltaAscension = T.EqualSizes(Width, HARMONY_ASCENSION, Spacing)
+	local SizeNoTalent, DeltaNoTalent = T.EqualSizes(Width, HARMONY_NO_TALENT, Spacing)
 
 	for i = 1, HARMONY_ASCENSION do
 		Harmony[i]:ClearAllPoints()
-		Harmony[i]:SetHeight(Harmony:GetHeight())
+		Harmony[i]:SetHeight(Height)
 		Harmony[i]:SetWidth(SizeAscension)
 		Harmony[i]:CreateBackdrop()
 
@@ -92,9 +95,9 @@ function UnitFrames:Player()
 
 	-- Stagger Bar
 	local Stagger = CreateFrame("StatusBar", self:GetName() .. "StaggerBar", self)
-	Stagger:SetPoint("CENTER", UIParent, "BOTTOM", 0, 288)
-	Stagger:SetWidth(225)
-	Stagger:SetHeight(14)
+	Stagger:SetPoint(unpack(C.UnitFrames.ClassBarAnchor))
+	Stagger:SetWidth(Width)
+	Stagger:SetHeight(Height)
 	Stagger:SetStatusBarTexture(PowerTexture)
 	Stagger:CreateBackdrop()
 	Stagger.Backdrop:SetOutside()

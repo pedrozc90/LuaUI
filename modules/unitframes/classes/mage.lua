@@ -18,20 +18,23 @@ function UnitFrames:Player()
 	-- second, we edit it
 	local ArcaneChargeBar = self.ArcaneChargeBar
 
-	local PlayerWidth, _ = unpack(C.Units.Player)
+	local Width, Height = C.UnitFrames.ClassBarWidth, C.UnitFrames.ClassBarHeight
 
 	-- Arcane Charges
 	ArcaneChargeBar:ClearAllPoints()
-	ArcaneChargeBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-	ArcaneChargeBar:SetWidth(PlayerWidth)
-	ArcaneChargeBar:SetHeight(5)
+	-- ArcaneChargeBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
+	-- ArcaneChargeBar:SetWidth(PlayerWidth)
+	-- ArcaneChargeBar:SetHeight(5)
+	ArcaneChargeBar:SetPoint(unpack(C.UnitFrames.ClassBarAnchor))
+	ArcaneChargeBar:SetWidth(Width)
+	ArcaneChargeBar:SetHeight(Height)
 
 	local Spacing = 3
-	local Size, Delta = T.EqualSizes(ArcaneChargeBar:GetWidth(), ARCANE_CHARGES, Spacing)
+	local Size, Delta = T.EqualSizes(Width, ARCANE_CHARGES, Spacing)
 
 	for i = 1, ARCANE_CHARGES do
 		ArcaneChargeBar[i]:ClearAllPoints()
-		ArcaneChargeBar[i]:SetHeight(ArcaneChargeBar:GetHeight())
+		ArcaneChargeBar[i]:SetHeight(Height)
 		ArcaneChargeBar[i]:CreateBackdrop()
 		ArcaneChargeBar[i].Backdrop:SetOutside()
 

@@ -16,22 +16,28 @@ function UnitFrames:Player()
 	-- second, we edit it
 	local Runes = self.Runes
 
-	local PlayerWidth, _ = unpack(C.Units.Player)
+	local Width, Height = C.UnitFrames.ClassBarWidth, C.UnitFrames.ClassBarHeight
 
 	-- Runes
 	Runes:ClearAllPoints()
-	Runes:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-	Runes:SetWidth(PlayerWidth)
-	Runes:SetHeight(5)
-	Runes.Backdrop:Kill()
+	-- Runes:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
+	-- Runes:SetWidth(PlayerWidth)
+	-- Runes:SetHeight(5)
+	Runes:SetPoint(unpack(C.UnitFrames.ClassBarAnchor))
+	Runes:SetWidth(Width)
+	Runes:SetHeight(Height)
 
-	local Max = 6
+	if (Runes.Backdrop) then
+		Runes.Backdrop:Kill()
+	end
+
+	local MAX = 6
 	local Spacing = 3
-	local Size, Delta = T.EqualSizes(Runes:GetWidth(), Max, Spacing)
+	local Size, Delta = T.EqualSizes(Width, MAX, Spacing)
 
-	for i = 1, Max do
+	for i = 1, MAX do
 		Runes[i]:ClearAllPoints()
-		Runes[i]:SetHeight(Runes:GetHeight())
+		Runes[i]:SetHeight(Height)
 		Runes[i]:SetStatusBarColor(unpack(T.Colors.power["RUNES"]))
 		Runes[i]:CreateBackdrop()
 		Runes[i].Backdrop:SetOutside()

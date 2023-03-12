@@ -2,6 +2,8 @@ local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
 local Class = select(2, UnitClass("player"))
 
+local HOLY_POWERS = 5
+
 ----------------------------------------------------------------
 -- Paladin Class Resources
 ----------------------------------------------------------------
@@ -16,25 +18,25 @@ function UnitFrames:Player()
 	-- second, we edit it
 	local HolyPower = self.HolyPower
 
-	local PlayerWidth, _ = unpack(C.Units.Player)
+	local Width, Height = C.UnitFrames.ClassBarWidth, C.UnitFrames.ClassBarHeight
 	local PowerTexture = T.GetTexture(C["Textures"].UFPowerTexture)
 
 	-- Holy Power
 	HolyPower:ClearAllPoints()
 	-- HolyPower:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-	HolyPower:SetPoint("CENTER", UIParent, "BOTTOM", 0, 288)
-	HolyPower:SetWidth(255)
-	HolyPower:SetHeight(14)
+	-- HolyPower:SetWidth(PlayerWidth)
+	-- HolyPower:SetHeight(5)
+	HolyPower:SetPoint(unpack(C.UnitFrames.ClassBarAnchor))
+	HolyPower:SetWidth(Width)
+	HolyPower:SetHeight(Height)
 
-	local Max = 5
 	local Spacing = 1
-	local Size, Delta = T.EqualSizes(HolyPower:GetWidth(), Max, Spacing)
+	local Size, Delta = T.EqualSizes(Width, HOLY_POWERS, Spacing)
 
-	for i = 1, Max do
+	for i = 1, HOLY_POWERS do
 		HolyPower[i]:ClearAllPoints()
-		HolyPower[i]:SetHeight(HolyPower:GetHeight())
+		HolyPower[i]:SetHeight(Height)
 		HolyPower[i]:SetStatusBarColor(unpack(T.Colors.power["HOLY_POWER"]))
-		-- HolyPower[i]:SetStatusBarColor(0.89, 0.88, 0.06)
 		HolyPower[i]:SetStatusBarTexture(PowerTexture)
 		HolyPower[i]:CreateBackdrop()
 		HolyPower[i].Backdrop:SetOutside()

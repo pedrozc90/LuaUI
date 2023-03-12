@@ -49,6 +49,7 @@
     <Script file="modules\unitframes\classes\deathknight.lua"/>
     <Script file="modules\unitframes\classes\demonhunter.lua"/>
     <Script file="modules\unitframes\classes\druid.lua"/>
+    <Script file="modules\unitframes\classes\evoker.lua"/>
     <Script file="modules\unitframes\classes\hunter.lua"/>
     <Script file="modules\unitframes\classes\mage.lua"/>
     <Script file="modules\unitframes\classes\monk.lua"/>
