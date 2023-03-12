@@ -164,7 +164,7 @@ function UnitFrames:Raid()
 
 		RaidDebuffs.forceShow = C.Raid.TestAuraWatch
 		RaidDebuffs.onlyMatchSpellID = true
-		RaidDebuffs.showDispellableDebuff = false
+		RaidDebuffs.showDispellableDebuff = true
 
 		RaidDebuffs.time:ClearAllPoints()
 		RaidDebuffs.time:SetPoint("CENTER", RaidDebuffs, "CENTER", 1, 0)

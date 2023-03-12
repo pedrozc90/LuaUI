@@ -260,7 +260,10 @@ end
 
 function RaidCooldowns:UNIT_SPELLCAST_SUCCEEDED(unit, _, spellID)
     local guid = UnitGUID(unit)
-    if (spellID == 200749) then     -- Activating Specialization
+    
+    -- 200749 = 'Activating Specialization'
+    -- 384255 = 'Changing Talents'
+    if (spellID == 200749 or spellID == 384255) then
         -- if a unit changes specialization, we need to inspect it again
         -- and update its cooldowns
         self:Queue(unit, guid)
@@ -313,12 +316,11 @@ function RaidCooldowns:GetTalentDF(unit, guid)
             if (nodeInfo) then
                 local activeEntry = nodeInfo.activeEntry
                 local activeRank = nodeInfo.activeRank
-                if (activeRank and activeRank > 0) then
+                if (activeEntry and activeRank > 0) then
                     local entryInfo = C_Traits.GetEntryInfo(configID, activeEntry.entryID)
                     if (entryInfo) then
-                        local definitionInfo = C_Traits.GetDefinitionInfo(definitionID)
+                        local definitionInfo = C_Traits.GetDefinitionInfo(entryInfo.definitionID)
                         if (definitionInfo) then
-                            local spellName = definitionInfo.overrideName
                             talents[definitionInfo.spellID] = true
                         end
                     end
