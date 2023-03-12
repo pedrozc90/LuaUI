@@ -165,7 +165,7 @@ function UnitFrames:Player()
         AuraBars.auraBarTexture = PowerTexture
         AuraBars.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
     else
-        local AuraSize = 28
+        local AuraSize = 27
         local AuraSpacing = 3
         local AuraPerRow = 9
         local AuraWidth = (AuraPerRow * AuraSize) + ((AuraPerRow - 1) * AuraSpacing)

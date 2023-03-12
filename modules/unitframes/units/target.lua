@@ -203,7 +203,7 @@ function UnitFrames:Target()
     end
 
     do
-        local AuraSize = 28
+        local AuraSize = 27
         local AuraSpacing = 3
         local AuraPerRow = 9
         local AuraWidth = (AuraPerRow * AuraSize) + ((AuraPerRow - 1) * AuraSpacing)

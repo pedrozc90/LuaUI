@@ -25,8 +25,8 @@ C["Lua"] = {
 
 -- UnitsFrames Size
 C["Units"] = {
-    ["Player"]          = { 258, 30 },              -- set player unitframe size.
-    ["Target"]          = { 258, 30 },              -- set target unitframe size.
+    ["Player"]          = { 265, 30 },              -- set player unitframe size.
+    ["Target"]          = { 265, 30 },              -- set target unitframe size.
     ["TargetOfTarget"]  = { 177, 30 },              -- set targetoftarget unitframe size.
     ["Pet"]             = { 181, 25 },              -- set pet unitframe size.
     ["Focus"]           = { 205, 25 },              -- set focus unitframe size.
