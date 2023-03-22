@@ -56,31 +56,26 @@ function UnitFrames:RaidHealerPosition()
 
     local numGroupMembers = GetNumGroupMembers() or 0
 
-    local yPosition = 281
-    local yOffset = ComputeOffset(numGroupMembers) or 0
-
-    local Anchor = { "BOTTOM", UIParent, "BOTTOM", 0, yPosition + yOffset }
-
     if (Raid) then
         Raid:ClearAllPoints()
-        Raid:SetPoint(unpack(Anchor))
-    end
+        Raid:SetPoint("BOTTOM", T.PetHider, "BOTTOM", 0, 300)
 
-    if (RaidPet) then
-        RaidPet:ClearAllPoints()
-        RaidPet:SetParent(T.PetHider)
-        RaidPet:SetPoint(unpack(Anchor))
+        if (RaidPet) then
+            RaidPet:ClearAllPoints()
+            RaidPet:SetParent(T.PetHider)
+            RaidPet:SetPoint("TOPLEFT", Raid, "TOPRIGHT", C.Raid.Padding, 0)
+        end
     end
 
     if (Raid40) then
         Raid40:ClearAllPoints()
-        Raid40:SetPoint(unpack(Anchor))
-    end
+        Raid40:SetPoint("BOTTOM", T.PetHider, "BOTTOM", 0, 300)
 
-    if (Raid40Pet) then
-        Raid40Pet:ClearAllPoints()
-        Raid40Pet:SetParent(T.PetHider)
-        Raid40Pet:SetPoint(unpack(Anchor))
+        if (Raid40Pet) then
+            Raid40Pet:ClearAllPoints()
+            Raid40Pet:SetParent(T.PetHider)
+            Raid40Pet:SetPoint("TOPLEFT", Raid40, "TOPRIGHT", C.Raid.Padding40, 0)
+        end
     end
 end
 
