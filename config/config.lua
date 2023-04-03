@@ -101,19 +101,13 @@ C["WorldEvents"] = {
     ["Enable"] = false                              -- enables world events plugin.
 }
 
-C["RaidCD"] = {
-    ["Enable"] = false,                              -- enables raid cooldowns plugin.
-    ["Anchor"] = { "TOPLEFT", UIParent, "TOPLEFT", 50, -50 },
-    ["BarWidth"] = 256,
-    ["BarHeight"] = 25,
+C["SpellTracker"] = {
+    ["Enable"] = false,                             -- enables raid cooldowns plugin.
+    ["Anchor"] = { "TOPLEFT", UIParent, "TOPLEFT", 30, -30 },
+    ["BarWidth"] = 175,
+    ["BarHeight"] = 16,
     ["BarSpacing"] = 3,                             -- set spacing between bars
     ["ShowPlayer"] = true                           -- show players cooldowns
-
-    -- ["MaxBars"] = 10,                               -- max number of visible bars.
-    -- ["BarSize"] = { 230, 23 },                      -- set bar size
-    -- ["BarSpacing"] = 7,                             -- set spacing between bars
-    -- ["StatusBarHeight"] = 3,                        -- set status bar height
-    
 }
 
 ----------------------------------------------------------------

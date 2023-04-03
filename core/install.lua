@@ -9,15 +9,15 @@ local baseSetDefaultsCVars = Install.SetDefaultsCVars
 
 function Install:SetupSounds()
     SetCVar("Sound_EnableAllSound", C.Lua.Mute and 0 or 1)      -- enables all sounds
-    SetCVar("Sound_MasterVolume", 0.25)                         -- set master volume (0.0 to 1.0)
+    SetCVar("Sound_MasterVolume", 0.15)                         -- set master volume (0.0 to 1.0)
     SetCVar("Sound_EnableSFX", 1)                               -- enables sound effects
-    SetCVar("Sound_SFXVolume", 0.20)                            -- sound effects volume (default = 1.0)
+    SetCVar("Sound_SFXVolume", 0.15)                            -- sound effects volume (default = 1.0)
     SetCVar("Sound_EnableMusic", 1)                             -- enables music sounds
-    SetCVar("Sound_MusicVolume", 0.20)                          -- set music volume (default = 0.4)
+    SetCVar("Sound_MusicVolume", 0.10)                          -- set music volume (default = 0.4)
     SetCVar("Sound_EnableAmbience", 1)                          -- enables ambience sounds
-    SetCVar("Sound_AmbienceVolume", 0.35)                       -- ambience volume (default = 0.6)
+    SetCVar("Sound_AmbienceVolume", 0.20)                       -- ambience volume (default = 0.6)
     SetCVar("Sound_EnableDialog", 1)                            -- enables dialog volume
-    SetCVar("Sound_DialogVolume", 0.50)                         -- dialog volume (default 1.0)
+    SetCVar("Sound_DialogVolume", 0.20)                         -- dialog volume (default 1.0)
 end
 
 function Install:SetupNames()
