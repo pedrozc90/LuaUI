@@ -107,8 +107,8 @@ function UnitFrames:Player()
     -- Additional Power (e.g: Shadow Priest Mana)
     if (T.Retail) then
         AdditionalPower:ClearAllPoints()
-        AdditionalPower:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 0, -1)
-        AdditionalPower:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", 0, -1)
+        AdditionalPower:SetPoint("BOTTOMLEFT", Health, "BOTTOMLEFT", 0, -1)
+		AdditionalPower:SetPoint("BOTTOMRIGHT", Health, "BOTTOMRIGHT", 0, -1)
         AdditionalPower:SetHeight(AdditionalPowerHeight)
         AdditionalPower:SetStatusBarTexture(PowerTexture)
         AdditionalPower:SetStatusBarColor(unpack(T.Colors.power["MANA"]))
@@ -140,20 +140,20 @@ function UnitFrames:Player()
     Name:SetJustifyH("CENTER")
     Name:SetAlpha(0)
 
-    local Gap = (
-        (T.MyClass == "ROGUE") or
-        (T.MyClass == "DRUID") or
-        (T.MyClass == "MAGE") or
-        (T.MyClass == "PALADIN") or
-        (T.MyClass == "WARLOCK") or
-        (T.MyClass == "DEATHKNIGHT")
-    ) and 8 or 0
+    -- local Gap = (
+    --     (T.MyClass == "ROGUE") or
+    --     (T.MyClass == "DRUID") or
+    --     (T.MyClass == "MAGE") or
+    --     (T.MyClass == "PALADIN") or
+    --     (T.MyClass == "WARLOCK") or
+    --     (T.MyClass == "DEATHKNIGHT")
+    -- ) and 8 or 0
 
     if (C.UnitFrames.PlayerAuraBars) then
         local AuraBars = self.AuraBars
 
         AuraBars:ClearAllPoints()
-        AuraBars:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 3 + Gap)
+        AuraBars:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 3)
         AuraBars:SetHeight(10)
         AuraBars:SetWidth(250)
 
@@ -174,7 +174,7 @@ function UnitFrames:Player()
             local Buffs = self.Buffs
 
             Buffs:ClearAllPoints()
-            Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, AuraSpacing + Gap)
+            Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, AuraSpacing)
             Buffs:SetHeight(AuraSize)
             Buffs:SetWidth(AuraWidth)
 
@@ -205,7 +205,7 @@ function UnitFrames:Player()
             if (self.Buffs) then
                 Debuffs:SetPoint("BOTTOMLEFT", self.Buffs, "TOPLEFT", 0, 18)
             else
-                Debuffs:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, AuraSpacing + Gap)
+                Debuffs:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, AuraSpacing)
             end
 
             Debuffs.size = AuraSize
@@ -348,10 +348,15 @@ function UnitFrames:Player()
     if (C.UnitFrames.ComboBar) and (Class == "ROGUE" or Class == "DRUID") then
         local ComboPoints = self.ComboPointsBar
 
+        local Width, Height = C.UnitFrames.ClassBarWidth, C.UnitFrames.ClassBarHeight
+
         ComboPoints:ClearAllPoints()
-        ComboPoints:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-        ComboPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
-        ComboPoints:SetHeight(5)
+        -- ComboPoints:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
+        -- ComboPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
+        -- ComboPoints:SetHeight(5)
+        ComboPoints:SetPoint(unpack(C.UnitFrames.ClassBarAnchor))
+        ComboPoints:SetWidth(Width)
+        ComboPoints:SetHeight(Height)
         ComboPoints.Backdrop:Kill()
 
         local Spacing = 3           -- spacing between combo-points
@@ -384,8 +389,8 @@ function UnitFrames:Player()
             end
         end
 
-        ComboPoints:SetScript("OnShow", UnitFrames.MoveBuffHeaderUp)
-        ComboPoints:SetScript("OnHide", UnitFrames.MoveBuffHeaderDown)
+        -- ComboPoints:SetScript("OnShow", UnitFrames.MoveBuffHeaderUp)
+        -- ComboPoints:SetScript("OnHide", UnitFrames.MoveBuffHeaderDown)
     end
 
     -- Raid Icon

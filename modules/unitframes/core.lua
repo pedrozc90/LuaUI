@@ -252,17 +252,21 @@ function UnitFrames:CreateUnits()
     local RightChatBG = Chat.Panels.RightChat
     local LeftChatBG = Chat.Panels.LeftChat
 
-    Player:ClearAllPoints()
-    Player:SetPoint("BOTTOM", T.PetHider, "BOTTOM", -312, 75)
-    Player:SetSize(unpack(C.Units.Player))
+    do
+        local xPos, yPos = 312, 75
 
-    Target:ClearAllPoints()
-    Target:SetPoint("BOTTOM", T.PetHider, "BOTTOM", 312, 75)
-    Target:SetSize(unpack(C.Units.Target))
+        Player:ClearAllPoints()
+        Player:SetPoint("BOTTOM", T.PetHider, "BOTTOM", -xPos, yPos)
+        Player:SetSize(unpack(C.Units.Player))
 
-    TargetOfTarget:ClearAllPoints()
-    TargetOfTarget:SetPoint("BOTTOM", T.PetHider, "BOTTOM", 0, 75)
-    TargetOfTarget:SetSize(unpack(C.Units.TargetOfTarget))
+        Target:ClearAllPoints()
+        Target:SetPoint("BOTTOM", T.PetHider, "BOTTOM", xPos, yPos)
+        Target:SetSize(unpack(C.Units.Target))
+
+        TargetOfTarget:ClearAllPoints()
+        TargetOfTarget:SetPoint("BOTTOM", T.PetHider, "BOTTOM", 0, yPos)
+        TargetOfTarget:SetSize(unpack(C.Units.TargetOfTarget))
+    end
 
     Pet:ClearAllPoints()
     Pet:SetPoint("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 4)

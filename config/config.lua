@@ -175,7 +175,7 @@ C["Auras"].ClassicTimer = true
 C["Auras"].HideBuffs = false
 C["Auras"].HideDebuffs = false
 C["Auras"].Animation = false
-C["Auras"].BuffsPerRow = 12
+C["Auras"].BuffsPerRow = 20
 C["Auras"].Font = "Tukui Outline"
 
 -- Bags
@@ -366,8 +366,8 @@ C["UnitFrames"].CastBarLatency = true
 C["UnitFrames"].Smooth = true
 C["UnitFrames"].TargetEnemyHostileColor = true
 C["UnitFrames"].CombatLog = true
-C["UnitFrames"].PlayerBuffs = true
-C["UnitFrames"].PlayerDebuffs = true
+C["UnitFrames"].PlayerBuffs = false
+C["UnitFrames"].PlayerDebuffs = false
 C["UnitFrames"].TargetBuffs = true
 C["UnitFrames"].TargetDebuffs = true
 C["UnitFrames"].DesaturateDebuffs = true
