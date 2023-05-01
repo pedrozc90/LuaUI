@@ -1,13 +1,14 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
-local Class = select(2, UnitClass("player"))
 
-local ARCANE_CHARGES = 4
+local class = select(2, UnitClass("player"))
 
 ----------------------------------------------------------------
 -- Mage Class Resources
 ----------------------------------------------------------------
-if (Class ~= "MAGE") then return end
+if (class ~= "MAGE" or not T.Retail or not C.UnitFrames.ClassBar) then return end
+
+local ARCANE_CHARGES = 4
 
 local basePlayer = UnitFrames.Player
 

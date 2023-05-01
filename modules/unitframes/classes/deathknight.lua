@@ -1,11 +1,12 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
-local Class = select(2, UnitClass("player"))
+
+local class = select(2, UnitClass("player"))
 
 ----------------------------------------------------------------
 -- DeathKnight Class Resources
 ----------------------------------------------------------------
-if (Class ~= "DEATHKNIGHT") then return end
+if (class ~= "DEATHKNIGHT") then return end
 
 local basePlayer = UnitFrames.Player
 

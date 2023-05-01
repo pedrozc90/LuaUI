@@ -1,12 +1,12 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
-local Class = select(2, UnitClass("player"))
+
+local class = select(2, UnitClass("player"))
 
 ----------------------------------------------------------------
 -- Priest Class Resources
 ----------------------------------------------------------------
-if (Class ~= "PRIEST") then return end
-if (not T.Retail or not C.UnitFrames.ClassBar) then return end
+if (class ~= "PRIEST" or not T.Retail or not C.UnitFrames.ClassBar) then return end
 
 local basePlayer = UnitFrames.Player
 

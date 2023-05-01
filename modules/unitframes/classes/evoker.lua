@@ -1,14 +1,14 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
-local Class = select(2, UnitClass("player"))
 
-local ESSENCES = 6
+local class = select(2, UnitClass("player"))
 
 ----------------------------------------------------------------
 -- Evoker Class Resources
 ----------------------------------------------------------------
-if (Class ~= "EVOKER") then return end
-if (not T.Retail or not C.UnitFrames.ClassBar) then return end
+if (class ~= "EVOKER" or not C.UnitFrames.ClassBar) then return end
+
+local ESSENCES = 6
 
 local basePlayer = UnitFrames.Player
 

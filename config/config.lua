@@ -88,7 +88,7 @@ C["ScreenShots"] = {
 }
 
 C["SpellAnnounce"] = {
-    ["Enable"] = false,                             -- enables spell announce plugin.
+    ["Enable"] = true,                              -- enables spell announce plugin.
     ["GroupChat"] = true,                           -- set announce chat channel to by group type and instance.
     ["SpellLink"] = true                            -- enable spell link one messages.
 }

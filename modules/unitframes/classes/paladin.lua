@@ -1,13 +1,14 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
-local Class = select(2, UnitClass("player"))
 
-local HOLY_POWERS = 5
+local class = select(2, UnitClass("player"))
 
 ----------------------------------------------------------------
 -- Paladin Class Resources
 ----------------------------------------------------------------
-if (Class ~= "PALADIN") then return end
+if (class ~= "PALADIN" or not T.Retail or not C.UnitFrames.ClassBar) then return end
+
+local HOLY_POWERS = 5
 
 local basePlayer = UnitFrames.Player
 

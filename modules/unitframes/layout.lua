@@ -3,8 +3,9 @@ local UnitFrames = T.UnitFrames
 local Chat = T.Chat
 local Talents = T.Talents
 
-local GetSpecialization, GetSpecializationRole = GetSpecialization, GetSpecializationRole
-local GetNumGroupMembers = GetNumGroupMembers
+local GetSpecialization = _G.GetSpecialization
+local GetSpecializationRole = _G.GetSpecializationRole
+local GetNumGroupMembers = _G.GetNumGroupMembers
 
 if ((not C.Raid.Enable) or (not C.Lua.HealerLayout)) then return end
 ----------------------------------------------------------------
@@ -28,7 +29,7 @@ local function ComputeOffset(numGroupMembers)
 end
 
 function UnitFrames:IsHealerClassic()
-    local specRole = Talents.GetPlayerRole(T.Class)
+    local specRole = Talents.GetPlayerRole(T.MyClass)
     return (specRole == "HEALER")
 end
 
@@ -38,7 +39,7 @@ function UnitFrames:IsHealerRetail()
     return (specRole == "HEALER")
 end
 
-UnitFrames.IsHealer = ((T.Classic) and UnitFrames.IsHealerClassic or UnitFrames.IsHealerRetail)
+UnitFrames.IsHealer = ((T.Retail) and UnitFrames.IsHealerRetail or UnitFrames.IsHealerClassic)
 
 function UnitFrames:UpdatePosition()
     if (self:IsHealer()) then
@@ -88,10 +89,10 @@ end)
 
 function UnitFrames:PLAYER_LOGIN()
     self:RegisterEvent("GROUP_ROSTER_UPDATE")
-    if (T.Classic) then
-        self:RegisterEvent("SPELLS_CHANGED")
-    else
+    if (T.Retail) then
         self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
+    else
+        self:RegisterEvent("SPELLS_CHANGED")
     end
     self.unit = "player"
 end

@@ -27,7 +27,7 @@
     <!-- Misc. -->
     <Script file="modules\misc\altpowerbar.lua"/>
     <Script file="modules\misc\archeology_progressbar.lua"/>
-    <Script file="modules\misc\experience.lua"/>    
+    <Script file="modules\misc\experience.lua"/>
     <Script file="modules\misc\ghost.lua"/>
     <Script file="modules\misc\mirror_timers.lua"/>
     <Script file="modules\misc\objective_tracker.lua"/>

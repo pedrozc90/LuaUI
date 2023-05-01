@@ -1,6 +1,7 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
-local Class = select(2, UnitClass("player"))
+
+local class = select(2, UnitClass("player"))
 
 local STAGGER_RED_TRANSITION = STAGGER_RED_TRANSITION
 local STAGGER_RED_INDEX = STAGGER_RED_INDEX or 3
@@ -15,7 +16,7 @@ local HARMONY_NO_TALENT = 5
 ----------------------------------------------------------------
 -- Monk Class Resources
 ----------------------------------------------------------------
-if (Class ~= "MONK") then return end
+if (class ~= "MONK" or not C.UnitFrames.ClassBar) then return end
 
 -- post update stagger bar
 local PostUpdateStagger = function(self, cur, max)

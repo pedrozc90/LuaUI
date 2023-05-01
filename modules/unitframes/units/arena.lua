@@ -175,7 +175,7 @@ function UnitFrames:Arena()
 
         Trinket:ClearAllPoints()
         Trinket:SetPoint("TOPRIGHT", SpecIcon, "TOPLEFT", -7, 0)
-        Trinket:SetSize(FrameHeight)
-        Trinket.Backdrop.Shadow:Kill()
+        Trinket:SetSize(FrameHeight, FrameHeight)
+        Trinket.Shadow:Kill()
     end
 end

@@ -12,9 +12,90 @@
 ## X-LuaUI-ProjectID: 1
 ## X-LuaUI-ProjectFolders: LuaUI
 
+## initialization
 core/init.lua
+
+## configurations
 config/config.lua
+
+## medias
 medias/medias.lua
 
-core/init.xml
-modules/init.xml
+## core
+core\api.lua
+core\functions.lua
+core\talents.lua
+core\colors.lua
+core\commands.lua
+core\development.lua
+core\install.lua
+
+## modules
+modules\datatexts\core.lua
+
+modules\chatframes\core.lua
+
+modules\inventory\bags.lua
+
+modules\actionbars\core.lua
+modules\actionbars\bar1.lua
+modules\actionbars\bar2.lua
+modules\actionbars\bar3.lua
+modules\actionbars\bar4.lua
+modules\actionbars\bar5.lua
+modules\actionbars\bar6.lua
+modules\actionbars\bar7.lua
+modules\actionbars\bar8.lua
+modules\actionbars\petbar.lua
+modules\actionbars\stancebar.lua
+modules\actionbars\buttons.lua
+modules\actionbars\extra.lua
+
+modules\misc\archeology_progressbar.lua
+modules\misc\experience.lua
+modules\misc\mirror_timers.lua
+modules\misc\objective_tracker.lua
+modules\misc\threat.lua
+modules\misc\ui_widgets.lua
+
+modules\auras\auras.lua
+
+modules\maps\maps.lua
+
+modules\unitframes\core.lua
+modules\unitframes\tags.lua
+modules\unitframes\layout.lua
+
+modules\unitframes\classes\druid.lua
+modules\unitframes\classes\hunter.lua
+modules\unitframes\classes\mage.lua
+modules\unitframes\classes\paladin.lua
+modules\unitframes\classes\priest.lua
+modules\unitframes\classes\rogue.lua
+modules\unitframes\classes\shaman.lua
+modules\unitframes\classes\warlock.lua
+modules\unitframes\classes\warrior.lua
+
+modules\unitframes\units\player.lua
+modules\unitframes\units\target.lua
+modules\unitframes\units\tot.lua
+modules\unitframes\units\pet.lua
+modules\unitframes\units\focus.lua
+modules\unitframes\units\focustarget.lua
+modules\unitframes\units\arena.lua
+modules\unitframes\units\boss.lua
+modules\unitframes\units\nameplates.lua
+
+modules\unitframes\groups\party.lua
+modules\unitframes\groups\raid.lua
+
+modules\plugins\combatlog.lua
+modules\plugins\dispels.lua
+modules\plugins\interrupts.lua
+modules\plugins\pvp_alert.lua
+modules\plugins\screenshots.lua
+modules\plugins\spell_announce.lua
+modules\plugins\spell_tracker.lua
+
+modules\tooltip\spell_ids.lua
+modules\tooltip\tooltips.lua

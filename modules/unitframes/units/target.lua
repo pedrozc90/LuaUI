@@ -211,7 +211,7 @@ function UnitFrames:Target()
         if (C.UnitFrames.TargetBuffs) then
             local Buffs = self.Buffs
 
-            local yOffset = (self.AlternativePower.IsEnable) and 10 or 0
+            local yOffset = (AlternativePower and AlternativePower.IsEnable) and 10 or 0
 
             Buffs:ClearAllPoints()
             Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, AuraSpacing)

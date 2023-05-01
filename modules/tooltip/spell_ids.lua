@@ -6,6 +6,9 @@ local ItemRefTooltip = ItemRefTooltip
 
 local UnitBuff, UnitDebuff, UnitAura, UnitGUID, GetGlyphSocketInfo, tonumber, strfind = UnitBuff, UnitDebuff, UnitAura, UnitGUID, GetGlyphSocketInfo, tonumber, strfind
 
+local GetTalentInfo = _G.GetTalentInfo
+local GetTalentTabInfo = _G.GetTalentTabInfo
+
 local kinds = {
     spell = "SpellID",
     item = "ItemID",
@@ -235,11 +238,13 @@ function Tooltips:AddSpellID(...)
         addLine(self, powerInfo.spellID, kinds.spell)
     end)
       
-    hook(GameTooltip, "SetTalent", function(self, id)
-        local spellID = select(6, GetTalentInfoByID(id))
-        addLine(self, id, kinds.talent)
-        addLine(self, spellID, kinds.spell)
-    end)
+    if (T.Retail) then
+        hook(GameTooltip, "SetTalent", function(self, id)
+            local spellID = select(6, GetTalentInfoByID(id))
+            addLine(self, id, kinds.talent)
+            addLine(self, spellID, kinds.spell)
+        end)
+    end
       
     hook(GameTooltip, "SetPvpTalent", function(self, id)
         local spellID = select(6, GetPvpTalentInfoByID(id))
@@ -349,7 +354,7 @@ function Tooltips:AddSpellID(...)
     f:SetScript("OnEvent", function(_, _, what)
         if (what == "Blizzard_AchievementUI") then
             if AchievementFrameAchievementsContainer then
-                for i,button in ipairs(AchievementFrameAchievementsContainer.buttons) do
+                for i, button in ipairs(AchievementFrameAchievementsContainer.buttons) do
                     hookScript(button, "OnEnter", function()
                         GameTooltip:SetOwner(button, "ANCHOR_NONE")
                         GameTooltip:SetPoint("TOPLEFT", button, "TOPRIGHT", 0, 0)

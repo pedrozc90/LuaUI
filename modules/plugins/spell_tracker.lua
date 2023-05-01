@@ -15,7 +15,7 @@ local GetSpellBaseCooldown = _G.GetSpellBaseCooldown
 ----------------------------------------------------------------
 -- SPELL TRACKER
 ----------------------------------------------------------------
-if (not C.SpellTracker.Enabled) then return end
+if (not C.SpellTracker.Enable) then return end
 
 -- local INSPECT_DELAY = 2
 local INSPECT_INTERVAL = 1
@@ -236,7 +236,67 @@ end
 ----------------------------------------------------------------
 -- TALENTS
 ----------------------------------------------------------------
+local GetNumTalents = _G.GetNumTalents
+local GetNumTalentTabs = _G.GetNumTalentTabs
+local GetActiveSpecGroup = _G.GetActiveSpecGroup
+
 local function GetTalentsClassic(self, unit, guid)
+    -- reference: https://wowpedia.fandom.com/wiki/API_GetTalentInfo/Classic
+    local talents = {}
+
+    local isInspect = (unit ~= "player")
+    local ntabs = GetNumberTalentTabs()
+    for tabIndex = 1, tabs do
+        local ntalents = GetNumTalents(tabIndex)
+        for talentIndex = 1, ntalents do
+            local name, iconTexture, tier, column, rank, maxRank, isExceptional, available = GetTalentInfo(tabIndex, talentIndex, isInspect)
+            -- talents[talentID] = {
+            --     tier = tier,
+            --     column = column,
+            --     name = talentName,
+            --     selected = selected,
+            --     available = available,
+            --     spellID = spellID,
+            --     unknown = unknown,
+            --     known = known
+            -- }
+        end
+    end
+
+    return talents
+end
+
+local function GetTalentsWrath(self, unit, guid)
+    -- reference: https://wowpedia.fandom.com/wiki/API_GetTalentInfo/Wrath
+    local talents = {}
+
+    local isInspect = (unit ~= "player")
+    local isPet = (unit)
+    local groupIndex = GetActiveSpecGroup(isInspect)
+
+    local ntabs = GetNumberTalentTabs()
+    for tabIndex = 1, tabs do
+        local ntalents = GetNumTalents(tabIndex)
+        for talentIndex = 1, ntalents do
+            local name, iconTexture, tier, column, rank, maxRank, isExceptional, available, previewRank, previewAvailable = GetTalentInfo(tabIndex, talentIndex, isInspect, isPet, groupIndex)
+            print(unit, tabIndex, talentIndex, groupIndex, name, tier, column)
+            -- talents[talentID] = {
+            --     tier = tier,
+            --     column = column,
+            --     name = talentName,
+            --     selected = selected,
+            --     available = available,
+            --     spellID = spellID,
+            --     unknown = unknown,
+            --     known = known
+            -- }
+        end
+    end
+
+    return talents
+end
+
+local function GetTalentsUnknown(self, unit, guid)
     local talents = {}
 
     for tier = 1, MAX_TALENT_TIERS do
@@ -258,7 +318,7 @@ local function GetTalentsClassic(self, unit, guid)
     return talents
 end
 
-local function GetTalentsDragonflight(self, unit, guid)
+local function GetTalentsRetail(self, unit, guid)
     local talents = {}
 
     local configID = (guid == self.guid) and C_ClassTalents.GetActiveConfigID() or -1
@@ -287,7 +347,12 @@ local function GetTalentsDragonflight(self, unit, guid)
     return talents
 end
 
-SpellTracker.GetTalents = (T.Retail and GetTalentsDragonflight or GetTalentsClassic)
+SpellTracker.GetTalents = (
+    (T.Retail and GetTalentsRetail)
+    or (T.Classic and GetTalentsClassic)
+    or (T.WotLK and GetTalentsWrath)
+    or GetTalentsUnknown
+)
 
 function SpellTracker:UNIT_SPELLCAST_SUCCEEDED(unit, _, spellID)
     local guid = UnitGUID(unit)
@@ -323,11 +388,12 @@ local cache = {}
 function SpellTracker:OnGroupMembersChanged()
     self.is_party = IsInGroup()
     self.is_raid = IsInRaid()
-    self.group_size = GetNumGroupMembers()
-
+    self.group_size = GetNumGroupMembers() or 1
+    
+    self.group_size = (self.group_size ~= 0) and self.group_size or 1
     -- look for new group members
     for index = 1, self.group_size do
-        local unit = self:GetGroupUnit(index)
+        local unit = self:GetGroupUnit(index) or "player"
         if (unit) then
             local guid = UnitGUID(unit)     
             if (guid) then

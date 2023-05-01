@@ -31,6 +31,7 @@ local SpellList = {
         -- Restoration
         { spellID = 740   , type = "raid,channeled", announce = true }, -- Tranquility
         { spellID = 102342, type = "external", announce = true },       -- Ironbark
+        { spellID = 102351, type = "external", announce = false },      -- Cenarion Ward
     },
     ["HUNTER"] = {
         { spellID = 264667, type = "raid", announce = true },           -- Primal Rage
@@ -71,24 +72,24 @@ local SpellList = {
         { spellID = 204150, type = "raid,channeled", announce = true }, -- Aegis of Light (Protection)
     },
     ["PRIEST"] = {
-        { spellID = 586   , type = "defensive", announce = false },     -- Fade
-        { spellID = 19236 , type = "defensive", announce = false },     -- Desperate Prayer
+        { spellID = 586   , type = "defensive", announce = true },                  -- Fade
+        { spellID = 10060 , type = "external"     , announce = true },              -- Power Infusion
 
         -- Discipline
-        { spellID = 33206 , type = "external", announce = true },       -- Pain Suppresion
+        { spellID = 33206 , type = "external", announce = true },                   -- Pain Suppresion
         { spellID = 62618 , type = "raid,cast", announce = true, duration =  10 },  -- Power Word: Barrier
-        { spellID = 271466, type = "raid", announce = true },           -- Luminous Barrier
+        { spellID = 271466, type = "raid", announce = true },                       -- Luminous Barrier
         
         -- Holy
-        { spellID = 47788 , type = "external" , announce = true },      -- Guardian Spirit
-        { spellID = 27827 , type = "defensive", announce = true },      -- Spirit of Redemption
-        { spellID = 64843 , type = "raid,channeled", announce = true }, -- Divine Hymn
-		{ spellID = 64901 , type = "raid,channeled", announce = true }, -- Symbol of Hope
-        { spellID = 265202, type = "raid,cast", announce = false },     -- Holy Word: Salvation
+        { spellID = 47788 , type = "external" , announce = true },                  -- Guardian Spirit
+        { spellID = 27827 , type = "defensive", announce = true },                  -- Spirit of Redemption
+        { spellID = 64843 , type = "raid,channeled", announce = true },             -- Divine Hymn
+		{ spellID = 64901 , type = "raid,channeled", announce = true },             -- Symbol of Hope
+        { spellID = 265202, type = "raid,cast", announce = false },                 -- Holy Word: Salvation
         
         -- Shadow
-        { spellID = 15286 , type = "raid", announce = true },           -- Vampiric Embrace
-		{ spellID = 47585 , type = "defensive", announce = true },      -- Dispersion
+        { spellID = 15286 , type = "raid", announce = true },                       -- Vampiric Embrace
+		{ spellID = 47585 , type = "defensive", announce = false },                 -- Dispersion
     },
     ["ROGUE"] = {},
     ["SHAMAN"] = {
@@ -137,10 +138,6 @@ local CombatEvents = {
     -- UNIT_DISSIPATES = true,
 }
 
-local playerGUID = nil
-local playerClass = nil
-local chatType = nil
-
 local band = bit.band
 local bor = bit.bor
 local format = string.format
@@ -149,6 +146,7 @@ local tinsert = table.insert
 local tsort = table.sort
 
 local COMBATLOG_FILTER_TOTEM = bor(COMBATLOG_OBJECT_TYPE_GUARDIAN, COMBATLOG_OBJECT_AFFILIATION_MINE)
+local COMBATLOG_FILTER_PLAYER = _G.COMBATLOG_OBJECT_TYPE_PLAYER
 ----------------------------------------------------------------
 -- OnUpdate
 -- Reference: http://wowwiki.wikia.com/wiki/Using_OnUpdate_correctly on January 21th, 2019
@@ -238,8 +236,10 @@ f:SetScript("OnEvent", function (self, event, ...)
 end)
 
 function f:PLAYER_LOGIN()
-    playerGUID = UnitGUID("player")
-    playerClass = select(2, UnitClass("player"))
+    self.unit = "player" 
+    self.guid = UnitGUID(self.unit)
+    self.class = select(2, UnitClass("player"))
+    self.chatType = nil
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
@@ -249,30 +249,29 @@ function f:PLAYER_ENTERING_WORLD()
     if (inInstance) and (C.SpellAnnounce.GroupChat) then
         if (instanceType == "raid") then
             if (IsInRaid()) then
-                chatType = "RAID"
+                self.chatType = "RAID"
             else
-                chatType = "SAY"
+                self.chatType = "SAY"
             end
         elseif (inInstance == "party") then
             if (IsInGroup(LE_PARTY_CATEGORY_INSTANCE)) then
-                chatType = "INSTANCE_CHAT"
+                self.chatType = "INSTANCE_CHAT"
             elseif (IsInGroup()) then
-                chatType = "PARTY"
+                self.chatType = "PARTY"
             else
-                chatType = "SAY"
+                self.chatType = "SAY"
             end
         end
     else
-        chatType = "SAY"
+        self.chatType = "SAY"
     end
 end
 
 function f:COMBAT_LOG_EVENT_UNFILTERED()
-    local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
-    destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
+    local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
 
     if (eventType:find("SPELL")) then
-        
+
         -- some spells return nil destination if casted with out a locked target
         if (not destName) then
             destGUID = sourceGUID
@@ -282,10 +281,12 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
         end
 
         -- ignore spell casted by others and aren't targeting the player
-        if (sourceGUID ~= playerGUID) and (destGUID ~= playerGUID) then return end
+        if (sourceGUID ~= self.guid and destGUID ~= self.guid) then return end
 
         -- get caster class
-        local class = sourceGUID:find("Player") and select(2, GetPlayerInfoByGUID(sourceGUID)) or "ALL"
+        -- local isPlayer = sourceGUID:find("Player") 
+        local isPlayer = (sourceGUID ~= nil) and string.find(sourceGUID, "Player")
+        local class = isPlayer and select(2, GetPlayerInfoByGUID(sourceGUID)) or "ALL"
 
         -- get extra combatlog info
         local spellID, spellName, spellSchool = select(12, CombatLogGetCurrentEventInfo())
@@ -305,12 +306,12 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
             if (type == "raid") then
                 if (eventType == "SPELL_CAST_SUCCESS") then
                     -- announce only spell casted by the player
-                    if  (sourceGUID == playerGUID) then
+                    if  (sourceGUID == self.guid) then
                         if (arg1 == "channeled") then
-                            SendChatMessage(format("Channeling %s!", spellText), chat)
+                            self:SendChatMessage("Channeling %s!", spellText)
                         elseif (arg1 == "cast") then
                             local duration = uptime
-                            SendChatMessage(format("%s (%ds) up!", spellText, duration), chatType)
+                            self:SendChatMessage("%s (%ds) up!", spellText, duration)
 
                             if (duration and duration > 0) then
                                 tinsert(WaitTable, { duration = duration, fmt = "%s over!", args = { spellName } })
@@ -320,19 +321,19 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
                 elseif (eventType == "SPELL_AURA_APPLIED") and (not arg1) then
                     -- announce spells that apply affects to a large group of people
                     local unit = GetUnit(destFlags)
-                    local filter = (sourceGUID == playerGUID) and "HELPFUL|PLAYER" or "HELPFUL"
+                    local filter = (sourceGUID == self.guid) and "HELPFUL|PLAYER" or "HELPFUL"
                     local duration = select(5, SearchUnitAura(spellID, unit, filter))
-                    if (destGUID == playerGUID) then
-                        SendChatMessage(format("%s (%ds) up!", spellText, duration), chatType)
+                    if (destGUID == self.guid) then
+                        self:SendChatMessage("%s (%ds) up!", spellText, duration)
                     end
                 elseif (eventType == "SPELL_AURA_REMOVED") and (arg1 ~= "summon") then
                     -- announce only when the unit is the player
-                    if (destGUID == playerGUID) then
-                        SendChatMessage(format("%s over!", spellText), chatType)
+                    if (destGUID == self.guid) then
+                        self:SendChatMessage("%s over!", spellText)
                     end
                 elseif (eventType == "SPELL_SUMMON") then
-                    if (sourceGUID == playerGUID) then
-                        SendChatMessage(format("%s up!", spellText), chatType)
+                    if (sourceGUID == self.guid) then
+                        self:SendChatMessage("%s up!", spellText)
 
                         -- define a limit
                         local duration = SummonThreshold
@@ -365,65 +366,66 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
             elseif (type == "external") then
                 if (eventType == "SPELL_AURA_APPLIED") then
                     local unit = GetUnit(destFlags)
-                    local filter = (sourceGUID == playerGUID) and "HELPFUL|PLAYER" or "HELPFUL"
+                    local filter = (sourceGUID == self.guid) and "HELPFUL|PLAYER" or "HELPFUL"
                     local duration = select(5, SearchUnitAura(spellID, unit, filter))
-                    if (sourceGUID == playerGUID) then
-                        if (destGUID == playerGUID) then
-                            SendChatMessage(format("%s (%ds) up!", spellText, duration), chatType)
+                    if (sourceGUID == self.guid) then
+                        if (destGUID == self.guid) then
+                            self:SendChatMessage("%s (%ds) up!", spellText, duration)
                         else
-                            SendChatMessage(format("%s (%ds) casted on %s!", spellText, duration, destName), chatType)
+                            self:SendChatMessage("%s (%ds) casted on %s!", spellText, duration, destName)
                         end
                     else
-                        if (destGUID == playerGUID) then
-                            SendChatMessage(format("%s (%s) on me!", spellText, duration), chatType)
+                        if (destGUID == self.guid) then
+                            self:SendChatMessage("%s (%s) on me!", spellText, duration)
                         end
                     end
                 elseif (eventType == "SPELL_AURA_REMOVED") then
-                    if (sourceGUID == playerGUID) then
-                        if (destGUID == playerGUID) then
-                            SendChatMessage(format("%s over!", spellText), chatType)
+                    if (sourceGUID == self.guid) then
+                        if (destGUID == self.guid) then
+                            self:SendChatMessage("%s over!", spellText)
                         else
-                            SendChatMessage(format("%s on %s is over!", spellText, destName), chatType)
+                            self:SendChatMessage("%s on %s is over!", spellText, destName)
                         end
                     else
-                        if (destGUID == playerGUID) then
-                            SendChatMessage(format("%s on me is over!", spellText), chatType)
+                        if (destGUID == self.guid) then
+                            self:SendChatMessage("%s on me is over!", spellText)
                         end
                     end
                 elseif (eventType == "SPELL_HEAL") then
-                    if (sourceGUID == playerGUID) then
+                    if (sourceGUID == self.guid) then
                         local amount, overhealing, absorbed, critical = select(15, CombatLogGetCurrentEventInfo())
-                        SendChatMessage(format("%s healed %s for %d!", spellText, destName, amount), chatType)
+                        self:SendChatMessage("%s healed %s for %d!", spellText, destName, amount)
                     end
                 end
 
             -- defensive cooldowns
             elseif (type == "defensive") or (type == "buff") then
-                if (sourceGUID == playerGUID) and (destGUID == playerGUID) then
+                if (sourceGUID == self.guid) and (destGUID == self.guid) then
                     if (eventType == "SPELL_AURA_APPLIED") then
                         local duration = select(5, SearchUnitAura(spellID, "player", "HELPFUL"))
-                        SendChatMessage(format("%s (%ds) up!", spellText, duration))
+                        print(eventType, spellID, spellName, types, sourceGUID, destGUID, duration)
+                        self:SendChatMessage("%s (%ds) up!", spellText, duration)
                     elseif (eventType == "SPELL_AURA_REMOVED") then
-                        SendChatMessage(format("%s over!", spellText))
+                        self:SendChatMessage("%s over!", spellText)
                     end
                 end
             
             -- resurrect
             elseif (type == "resurrect") then
-                if (sourceGUID == playerGUID) then
+                if (sourceGUID == self.guid) then
                     if (eventType == "SPELL_RESURRECT") then
-                        SendChatMessage(format("Casting %s on %s!", spellText, destName), chatType)
+                        self:SendChatMessage("Casting %s on %s!", spellText, destName)
                     end
                 end
 
             -- debuffs
             elseif (type == "debuff") then
-                if (sourceGUID ~= playerGUID) and (destGUID == playerGUID) then
+                if (sourceGUID ~= self.guid) and (destGUID == self.guid) then
                     if (eventType == "SPELL_AURA_APPLIED") then
                         local duration = select(5, SearchUnitAura(spellID, "player", "HARMFUL"))
-                        SendChatMessage(format("%s (%ds) up!", spellText, duration))
+                        self:SendChatMessage("%s (%ds) up!", spellText, duration)
                     elseif (eventType == "SPELL_AURA_REMOVED") then
-                        SendChatMessage(format("%s over!", spellText))
+                        self:SendChatMessage("%s over!", spellText)
                     end
                 end
             end
@@ -436,7 +438,7 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
             if (eventType == "UNIT_DIED") or (eventType == "UNIT_DESTROYED") then
                 for index, unit in pairs(SummonedUnits) do
                     if (unit.name == destName) then
-                        SendChatMessage(format("%s is over!", destName), chatType)
+                        self:SendChatMessage("%s is over!", destName)
                         -- remove unit from table
                         tremove(SummonedUnits, index)
                     end
@@ -444,4 +446,9 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
             end
         end
     end
+end
+
+function f:SendChatMessage(fmt, ...)
+    local text = format(fmt, ...)
+    SendChatMessage(text, self.chatType)
 end

@@ -1,13 +1,14 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
-local Class = select(2, UnitClass("player"))
 
-local SOUL_SHARDS = 5
+local class = select(2, UnitClass("player"))
 
 ----------------------------------------------------------------
 -- Warlock Class Resources
 ----------------------------------------------------------------
-if (Class ~= "WARLOCK") then return end
+if (class ~= "WARLOCK" or not T.Retail or not C.UnitFrames.ClassBar) then return end
+
+local SOUL_SHARDS = 5
 
 local basePlayer = UnitFrames.Player
 

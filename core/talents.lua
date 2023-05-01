@@ -1,10 +1,14 @@
 local T, C, L = Tukui:unpack()
-local GetNumTalentTabs, GetTalentTree, GetTalentTabInfo = GetNumTalentTabs, GetTalentTree, GetTalentTabInfo
 
-if (not T.Classic) then return end
 ----------------------------------------------------------------
 -- Talents
 ----------------------------------------------------------------
+if (T.Retail) then return end
+
+local GetTalentTree = _G.GetTalentTree
+local GetTalentTabInfo = _G.GetTalentTabInfo
+local GetNumTalentTabs = _G.GetNumTalentTabs
+
 local Talents = {}
 
 Talents.GetTalentTree = function()
@@ -33,12 +37,12 @@ Talents.isPaladinTank = function()
 end
 
 Talents.isPriestHealer = function()
-    local disc, holy, shadow = GetTalentTree()
+    local disc, holy, shadow = Talents.GetTalentTree()
     return (disc + holy > shadow)
 end
 
 Talents.isShamanHealer = function()
-    local elemental, enhancement, restoration = GetTalentTree()
+    local elemental, enhancement, restoration = Talents.GetTalentTree()
     return (restoration > elemental and restoration > enhancement)
 end
 
