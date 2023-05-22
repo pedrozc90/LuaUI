@@ -1,7 +1,7 @@
 ## Interface: 30401
 ## Author: Luaerror
 ## Version: 10.0
-## Title: |cffb3ff19LuaUI|r
+## Title: |cffb3ff19LuaUI - Wrath|r
 ## Notes: External Tukui Edit
 ## Website: https://github.com/pedrozc90/LuaUI
 ## RequiredDeps: Tukui

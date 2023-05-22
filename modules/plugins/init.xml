@@ -6,4 +6,5 @@
     <Script file="screenshots.lua"/>
     <Script file="spell_announce.lua"/>
     <Script file="spell_tracker.lua"/>
+    <Script file="tracer.lua"/>
 </Ui>

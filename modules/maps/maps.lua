@@ -46,7 +46,15 @@ function Minimap:StyleMinimap()
 
         if (QueueStatusButton) then
             QueueStatusButton:ClearAllPoints()
+            QueueStatusButton:SetParent(UIParent)
+            QueueStatusButton:SetScale(0.85)
             QueueStatusButton:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -20)
+
+            hooksecurefunc(QueueStatusButton, "UpdatePosition", function(self)
+                self:ClearAllPoints()
+                self:SetParent(UIParent)
+                self:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -20)
+            end)
         end
 
         if (MiniMapInstanceDifficulty) then

@@ -83,8 +83,8 @@ function UnitFrames:Player()
     Power.Background:SetTexture(PowerTexture)
     Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))
 
-    Power.Value:ClearAllPoints()
-    Power.Value:SetParent(Health)
+    Power.Value = Power:CreateFontString(nil, "OVERLAY")
+    Power.Value:SetFontObject(T.GetFont(C.UnitFrames.Font))
     Power.Value:SetPoint("LEFT", Health, "LEFT", 5, 0)
     Power.Value:SetJustifyH("LEFT")
 

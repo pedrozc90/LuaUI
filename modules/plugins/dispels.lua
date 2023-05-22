@@ -19,6 +19,12 @@ local CombatEvents = {
 -- list of spell to announce when dispeled
 local DispellList = {}
 
+-- Cataclysm
+if (T.Interface >= 40000) then
+    -- The Vortex Pinacle
+    DispellList[87618] = true                   -- Static Cling
+end
+
 -- Mists of Pandaria
 if (T.Interface >= 50000) then
     -- Temple of the Jade Serpent
@@ -45,12 +51,19 @@ if (T.Interface >= 50000) then
     DispellList[143791] = true                  -- Corrosive Blood
 end
 
+-- Battle of Azeroth
+if (T.Interface >= 80000) then
+    -- Freehold
+    DispellList[257908] = true                  -- Oiled Blade
+end
+
 -- Dragonflight
 if (T.Interface >= 100000) then
     -- Algeth'ar Academy
     DispellList[389033] = true                  -- Lasher Toxin
 
     -- Brackenhide Hollow
+    DispellList[381379] = true                  -- Decayed Senses
 
     -- Halls of Infusion
 

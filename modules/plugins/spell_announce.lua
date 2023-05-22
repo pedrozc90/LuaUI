@@ -8,71 +8,72 @@ if (not C.SpellAnnounce.Enable) then return end
 
 local SpellList = {
     ["DEATHKNIGHT"] = {
-        { spellID = 61999, type = "resurrect", announce = true },       -- Raise Ally
+        { spellID = 61999, type = "resurrect", announce = true },                   -- Raise Ally
 
         -- Blood
-        { spellID = 48707, type = "defensive", announce = true },       -- Anti-Magic Shell
-        { spellID = 48792, type = "defensive", announce = true },       -- Icebound Fortitude
-        { spellID = 55233, type = "defensive", announce = true },       -- Vampiric Blood
+        { spellID = 48707, type = "defensive", announce = true },                   -- Anti-Magic Shell
+        { spellID = 48792, type = "defensive", announce = true },                   -- Icebound Fortitude
+        { spellID = 55233, type = "defensive", announce = true },                   -- Vampiric Blood
     },
     ["DEMONHUNTER"] = {
         -- Havoc
-        { spellID = 196718, type = "raid", announce = true, duration = 8 },  -- Darkness
+        { spellID = 196718, type = "raid", announce = true, duration = 8 },         -- Darkness
     },
     ["DRUID"] = {
-        { spellID = 20484, type = "resurrect", announce = true },       -- Rebirth
+        { spellID = 20484, type = "resurrect", announce = true },                   -- Rebirth
 
         -- Balance
-        { spellID = 29166, type = "external", announce = true },        -- Innervate
+        { spellID = 29166, type = "external", announce = true },                    -- Innervate
 
         -- Guardian
-        { spellID = 61336, type = "defensive", announce = true },       -- Survival Instincts
+        { spellID = 61336, type = "defensive", announce = true },                   -- Survival Instincts
 
         -- Restoration
-        { spellID = 740   , type = "raid,channeled", announce = true }, -- Tranquility
-        { spellID = 102342, type = "external", announce = true },       -- Ironbark
-        { spellID = 102351, type = "external", announce = false },      -- Cenarion Ward
+        { spellID = 740   , type = "raid,channeled", announce = true },             -- Tranquility
+        { spellID = 102342, type = "external", announce = true },                   -- Ironbark
+        { spellID = 102351, type = "external", announce = false },                  -- Cenarion Ward
     },
+    ["EVOKER"] = {},
     ["HUNTER"] = {
-        { spellID = 264667, type = "raid", announce = true },           -- Primal Rage
+        { spellID = 264667, type = "raid", announce = true },                       -- Primal Rage
     },
     ["MAGE"] = {
-        { spellID = 45438 , type = "defensive", announce = true },      -- Ice Block
-        { spellID = 80353 , type = "raid", announce = true },           -- Time Warp
+        { spellID = 45438 , type = "defensive", announce = true },                  -- Ice Block
+        { spellID = 80353 , type = "raid", announce = true },                       -- Time Warp
     },
     ["MONK"] = {
         -- Brewmaster
-        { spellID = 115295, type = "defensive", announce = false },     -- Guard
-        { spellID = 120954, type = "defensive", announce = true  },     -- Fortigying Brew
-        { spellID = 122278, type = "defensive", announce = true },      -- Dampen Harm
-        { spellID = 115176, type = "raid,channeled", announce = true }, -- Zen Meditation
+        { spellID = 115295, type = "defensive", announce = false },                 -- Guard
+        { spellID = 120954, type = "defensive", announce = true  },                 -- Fortigying Brew
+        { spellID = 122278, type = "defensive", announce = false },                 -- Dampen Harm
+        { spellID = 115176, type = "raid,channeled", announce = true },             -- Zen Meditation
 
         -- Mistweaver
-        { spellID = 122783, type = "defensive", announce = false },     -- Diffuse Magic
-        { spellID = 243435, type = "defensive", announce = false },     -- Fortifying Brew
-        { spellID = 116849, type = "external", announce = true },       -- Life Cocoon
-        { spellID = 191837, type = "raid,channeled", announce = false },-- Essence Font
+        { spellID = 122783, type = "defensive", announce = false },                 -- Diffuse Magic
+        { spellID = 243435, type = "defensive", announce = false },                 -- Fortifying Brew
+        { spellID = 116849, type = "external", announce = true },                   -- Life Cocoon
+        { spellID = 191837, type = "raid,channeled", announce = false },            -- Essence Font
     },
     ["PALADIN"] = {
         -- All Specs
-        { spellID = 642   , type = "defensive", announce = true },      -- Divine Shield
-        { spellID = 1022  , type = "external", announce = true },       -- Blessing of Protection
-        { spellID = 1044  , type = "external", announce = true },       -- Blessing of Freedom
-        { spellID = 6940  , type = "external", announce = true },       -- Blessing of Sacrifice
-        { spellID = 204018, type = "external", announce = true },       -- Blessing of Spellwarding
+        { spellID = 642   , type = "defensive", announce = true },                  -- Divine Shield
+        { spellID = 1022  , type = "external", announce = true },                   -- Blessing of Protection
+        { spellID = 1044  , type = "external", announce = true },                   -- Blessing of Freedom
+        { spellID = 6940  , type = "external", announce = true },                   -- Blessing of Sacrifice
+        { spellID = 204018, type = "external", announce = true },                   -- Blessing of Spellwarding
 
         -- Holy
-        { spellID = 498   , type = "defensive", announce = true },      -- Divine Protection
-        { spellID = 31821 , type = "raid", announce = true },           -- Aura Mastery
+        { spellID = 498   , type = "defensive", announce = true },                  -- Divine Protection
+        { spellID = 31821 , type = "raid", announce = true },                       -- Aura Mastery
         { spellID = 114158, type = "raid,cast", announce = true, duration = 14 },   -- Light's Hammer (Holy)
 
         -- Protection
-        { spellID = 31850 , type = "defensive", announce = true },      -- Ardent Defender
-        { spellID = 86659 , type = "defensive", announce = true },      -- Guardian of Ancient Kings
-        { spellID = 204150, type = "raid,channeled", announce = true }, -- Aegis of Light (Protection)
+        { spellID = 31850 , type = "defensive", announce = true },                  -- Ardent Defender
+        { spellID = 86659 , type = "defensive", announce = true },                  -- Guardian of Ancient Kings
+        { spellID = 204150, type = "raid,channeled", announce = true },             -- Aegis of Light (Protection)
     },
     ["PRIEST"] = {
-        { spellID = 586   , type = "defensive", announce = true },                  -- Fade
+        { spellID = 586   , type = "defensive", announce = false },                 -- Fade
         { spellID = 10060 , type = "external"     , announce = true },              -- Power Infusion
 
         -- Discipline
@@ -93,29 +94,29 @@ local SpellList = {
     },
     ["ROGUE"] = {},
     ["SHAMAN"] = {
-        { spellID = 2825  , type = "raid", announce = true },           -- Bloodlust (Horde)
-        { spellID = 32182 , type = "raid", announce = true },           -- Heroism (Alliance)
-        { spellID = 108271, type = "defensive", announce = false },     -- Astral Shift
+        { spellID = 2825  , type = "raid", announce = true },                       -- Bloodlust (Horde)
+        { spellID = 32182 , type = "raid", announce = true },                       -- Heroism (Alliance)
+        { spellID = 108271, type = "defensive", announce = false },                 -- Astral Shift
 
         -- Elemental
-        { spellID = 108281, type = "raid", announce = true },           -- Ancestral Guidance
+        { spellID = 108281, type = "raid", announce = true },                       -- Ancestral Guidance
         
         -- Restoration
-        { spellID = 98008 , type = "raid,summon", announce = true },    -- Spirit Link Totem
-        { spellID = 108280, type = "raid,summon", announce = true },    -- Healing Tide Totem
-        { spellID = 157153, type = "raid,summon", announce = true },    -- Cloudburst Totem
-        { spellID = 198838, type = "raid,summon", announce = true },    -- Earthen Wall Totem
-        { spellID = 207399, type = "raid,summon", announce = true },    -- Ancestral Protection Totem
+        { spellID = 98008 , type = "raid,summon", announce = true },                -- Spirit Link Totem
+        { spellID = 108280, type = "raid,summon", announce = true },                -- Healing Tide Totem
+        { spellID = 157153, type = "raid,summon", announce = true },                -- Cloudburst Totem
+        { spellID = 198838, type = "raid,summon", announce = true },                -- Earthen Wall Totem
+        { spellID = 207399, type = "raid,summon", announce = true },                -- Ancestral Protection Totem
     },
     ["WARLOCK"] = {
-        { spellID = 20707 , type = "resurrect", announce = true },      -- Soulstone
+        { spellID = 20707 , type = "resurrect", announce = true },                  -- Soulstone
     },
     ["WARRIOR"] = {
-        { spellID = 97463 , type = "raid", announce = true },           -- Rallying Cry
+        { spellID = 97463 , type = "raid", announce = true },                       -- Rallying Cry
 
         -- Protection
-        { spellID = 871   , type = "defensive", announce = true },      -- Shield Wall
-        { spellID = 12975 , type = "defensive", announce = true },      -- Last Stand
+        { spellID = 871   , type = "defensive", announce = true },                  -- Shield Wall
+        { spellID = 12975 , type = "defensive", announce = true },                  -- Last Stand
     },
     ["ALL"] = {}
 }
@@ -403,7 +404,6 @@ function f:COMBAT_LOG_EVENT_UNFILTERED()
                 if (sourceGUID == self.guid) and (destGUID == self.guid) then
                     if (eventType == "SPELL_AURA_APPLIED") then
                         local duration = select(5, SearchUnitAura(spellID, "player", "HELPFUL"))
-                        print(eventType, spellID, spellName, types, sourceGUID, destGUID, duration)
                         self:SendChatMessage("%s (%ds) up!", spellText, duration)
                     elseif (eventType == "SPELL_AURA_REMOVED") then
                         self:SendChatMessage("%s over!", spellText)

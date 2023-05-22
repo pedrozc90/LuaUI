@@ -74,7 +74,6 @@ end
 
 -- configure blizzard combat text
 function Install:SetupCombatText()
-    print("setting floating combat text")
     -- Combat Text
     SetCVar("enableFloatingCombatText", 1)
     SetCVar("floatingCombatTextAllSpellMechanics", 0)

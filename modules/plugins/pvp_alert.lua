@@ -50,8 +50,8 @@ local SpellList = {
 }
 
 local CombatEvents = {
-SPELL_CAST_START = true,
-SPELL_CAST_SUCCESS = true,
+    SPELL_CAST_START = true,
+    SPELL_CAST_SUCCESS = true
 }
 
 local playerGUID = nil
