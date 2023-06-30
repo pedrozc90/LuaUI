@@ -1,0 +1,12 @@
+[submodule "modules/plugins/dispels"]
+	path = modules/plugins/dispels
+	url = git@github.com:pedrozc90/dispels.git
+	branch = master
+[submodule "modules/plugins/interrupts"]
+	path = modules/plugins/interrupts
+	url = git@github.com:pedrozc90/interrupts.git
+	branch = master
+[submodule "modules/plugins/screenshots"]
+	path = modules/plugins/screenshots
+	url = git@github.com:pedrozc90/screenshots.git
+	branch = master

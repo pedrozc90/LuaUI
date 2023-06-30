@@ -74,7 +74,7 @@ local SpellList = {
     },
     ["PRIEST"] = {
         { spellID = 586   , type = "defensive", announce = false },                 -- Fade
-        { spellID = 10060 , type = "external"     , announce = true },              -- Power Infusion
+        { spellID = 10060 , type = "external", announce = false },                  -- Power Infusion
 
         -- Discipline
         { spellID = 33206 , type = "external", announce = true },                   -- Pain Suppresion
