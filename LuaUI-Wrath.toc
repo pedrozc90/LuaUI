@@ -66,9 +66,17 @@ modules\unitframes\core.lua
 modules\unitframes\tags.lua
 modules\unitframes\layout.lua
 
-modules\unitframes\core.lua
-modules\unitframes\tags.lua
-modules\unitframes\layout.lua
+modules\unitframes\elements\additional_power.lua
+modules\unitframes\elements\alternative_power.lua
+modules\unitframes\elements\auras.lua
+modules\unitframes\elements\castbar.lua
+modules\unitframes\elements\combat_text.lua
+modules\unitframes\elements\combo_points.lua
+modules\unitframes\elements\health.lua
+modules\unitframes\elements\indicators.lua
+modules\unitframes\elements\portrait.lua
+modules\unitframes\elements\power.lua
+modules\unitframes\elements\totem.lua
 
 modules\unitframes\classes\deathknight.lua
 modules\unitframes\classes\druid.lua
@@ -94,11 +102,10 @@ modules\unitframes\units\nameplates.lua
 modules\unitframes\groups\party.lua
 modules\unitframes\groups\raid.lua
 
-modules\plugins\combatlog.lua
-modules\plugins\dispels.lua
-modules\plugins\interrupts.lua
+modules\plugins\dispels\init.xml
+modules\plugins\interrupts\init.xml
+modules\plugins\screenshots\init.xml
 modules\plugins\pvp_alert.lua
-modules\plugins\screenshots.lua
 modules\plugins\spell_announce.lua
 modules\plugins\spell_tracker.lua
 

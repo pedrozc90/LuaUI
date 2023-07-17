@@ -35,3 +35,25 @@ T.EqualSizes = function(width, number, spacing)
     local delta = (size - floor(size)) * number
     return floor(size), floor(delta)
 end
+
+T.GetSize = function(unit)
+    if (unit) then
+        if (unit == "player") then
+            return C.UnitFrames.PlayerWidth, C.UnitFrames.PlayerHeight
+        elseif (unit == "target") then
+            return C.UnitFrames.TargetWidth, C.UnitFrames.TargetHeight
+        elseif (unit == "targettarget") then
+            return C.UnitFrames.TargetOfTargetWidth, C.UnitFrames.TargetOfTargetHeight
+        elseif (unit == "pet") then
+            return C.UnitFrames.PetWidth, C.UnitFrames.PetHeight
+        elseif (unit == "focus") then
+            return C.UnitFrames.FocusWidth, C.UnitFrames.FocusHeight
+        elseif (unit == "focustarget") then
+            return C.UnitFrames.FocusTargetWidth, C.UnitFrames.FocusTargetHeight
+        elseif (unit:find("arena%d")) then
+            return C.UnitFrames.ArenaWidth, C.UnitFrames.ArenaHeight
+        elseif (unit:find("boss%d")) then
+            return C.UnitFrames.BossWidth, C.UnitFrames.BossHeight
+        end
+    end
+end

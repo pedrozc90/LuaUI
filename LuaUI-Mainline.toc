@@ -1,4 +1,4 @@
-## Interface: 100100
+## Interface: 100105
 ## Author: Luaerror
 ## Version: 10.1
 ## Title: |cffb3ff19LuaUI|r
@@ -15,6 +15,5 @@
 core/init.lua
 config/config.lua
 medias/medias.lua
-
 core/init.xml
 modules/init.xml

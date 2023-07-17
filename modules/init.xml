@@ -46,6 +46,18 @@
     <Script file="modules\unitframes\tags.lua"/>
     <Script file="modules\unitframes\layout.lua"/>
 
+    <Script file="modules\unitframes\elements\additional_power.lua"/>
+    <Script file="modules\unitframes\elements\alternative_power.lua"/>
+    <Script file="modules\unitframes\elements\auras.lua"/>
+    <Script file="modules\unitframes\elements\castbar.lua"/>
+    <Script file="modules\unitframes\elements\combat_text.lua"/>
+    <Script file="modules\unitframes\elements\combo_points.lua"/>
+    <Script file="modules\unitframes\elements\health.lua"/>
+    <Script file="modules\unitframes\elements\indicators.lua"/>
+    <Script file="modules\unitframes\elements\portrait.lua"/>
+    <Script file="modules\unitframes\elements\power.lua"/>
+    <Script file="modules\unitframes\elements\totem.lua"/>
+
     <Script file="modules\unitframes\classes\deathknight.lua"/>
     <Script file="modules\unitframes\classes\demonhunter.lua"/>
     <Script file="modules\unitframes\classes\druid.lua"/>

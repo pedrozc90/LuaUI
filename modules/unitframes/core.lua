@@ -9,14 +9,32 @@ local match = string.match
 ----------------------------------------------------------------
 -- Health
 ----------------------------------------------------------------
+function UnitFrames:GetSize(unit)
+    if (unit == "player") then
+        return C.UnitFrames.PlayerWidth, C.UnitFrames.PlayerHeight
+    elseif (unit == "target") then
+        return C.UnitFrames.TargetWidth, C.UnitFrames.TargetHeight
+    elseif (unit == "targettarget") then
+        return C.UnitFrames.TargetOfTargetWidth, C.UnitFrames.TargetOfTargetHeight
+    elseif (unit == "pet") then
+        return C.UnitFrames.PetWidth, C.UnitFrames.PetHeight
+    elseif (unit == "focus") then
+        return C.UnitFrames.FocusWidth, C.UnitFrames.FocusHeight
+    elseif (unit:find("arena%d")) then
+        return C.UnitFrames.ArenaWidth, C.UnitFrames.ArenaHeight
+    elseif (unit:find("boss%d")) then
+        return C.UnitFrames.BossWidth, C.UnitFrames.BossHeight
+    end
+end
+
 function UnitFrames:PreUpdateHealth(unit)
     local UniColor = C.Lua.UniColor
     local HostileColor = C["UnitFrames"].TargetEnemyHostileColor
-
+    
     if ((UniColor == true) or (HostileColor ~= true)) then
         return
     end
-
+    
     if UnitIsEnemy(unit, "player") then
         self.colorClass = false
     else
@@ -31,14 +49,14 @@ function UnitFrames:PostCreateAuraBar(bar)
     -- second, we edit it
     if (not bar.Backdrop) then
         bar.spark:Kill()
-
+        
         bar:CreateBackdrop("Transparent")
         bar.Backdrop:SetOutside()
         bar.icon:ClearAllPoints()
         bar.icon:SetPoint("RIGHT", bar, "LEFT", -(self.gap or 3), 0)
         bar.icon:SetSize(self.height, self.height)
         bar.icon:SetTexCoord(unpack(T.IconCoord))
-
+        
         bar.button = CreateFrame("Frame", nil, bar)
         bar.button:CreateBackdrop()
         bar.button:SetOutside(bar.icon)
@@ -46,27 +64,14 @@ function UnitFrames:PostCreateAuraBar(bar)
     end
 end
 
--- local UpdateBuffsHeaderPosition = function(self, height)
---     local Parent = self:GetParent()
---     local Buffs = Parent.Buffs
---     local AuraBars = Parent.AuraBars
+local basePostCreateAura = UnitFrames.PostCreateAura
+function UnitFrames:PostCreateAura(button, unit)
+    basePostCreateAura(self, button, unit)
 
--- 	if (Buffs) then
---         Buffs:ClearAllPoints()
---         Buffs:SetPoint("BOTTOMLEFT", Parent, "TOPLEFT", -1, height)
---     elseif (AuraBars) then
---         AuraBars:ClearAllPoints()
---         AuraBars:SetPoint("BOTTOMLEFT", Parent, "TOPLEFT", -1, height)
---     end
--- end
-
--- function UnitFrames:MoveBuffHeaderUp()
---     UpdateBuffsHeaderPosition(self, self:GetHeight() + 5)
--- end
-
--- function UnitFrames:MoveBuffHeaderDown()
---     UpdateBuffsHeaderPosition(self, 3)
--- end
+    if (button and button.Shadow) then
+        button.Shadow:Kill()
+    end
+end
 
 ----------------------------------------------------------------
 -- Group Role
@@ -84,97 +89,33 @@ function UnitFrames:UpdateGroupRole(role)
     end
 end
 
--- ----------------------------------------------------------------
--- -- Highlights
--- ----------------------------------------------------------------
--- local SelectHighlightColor = function(unit)
---     if UnitIsUnit("focus", unit) then
---         return { 0.65, 0.65, 0.65, 1 }
---     elseif UnitIsUnit("target", unit) then
---         return { 0.32, 0.65, 0.32, 1 }
---     end
---     return C.General.BorderColor
--- end
+----------------------------------------------------------------
+-- Highlight
+----------------------------------------------------------------
+-- function UnitFrames:Highlight()
+-- 	-- local Highlight = self.Highlight or self.Shadow
 
--- -- change target party/raid units border color.
--- -- function UnitFrames:Highlight()
--- --     print(self:GetName())
--- --     if (not self.Backdrop) then return end
+-- 	-- if not Highlight then
+-- 	-- 	return
+-- 	-- end
 
--- --     local r, g, b, a = unpack(SelectHighlightColor(self.unit))
-
--- --     print(self:GetName(), self.Backdrop ~= nil, self.Backdrop.BorderTop ~= nil, "color", r, g, b, a)
-
--- --     if (self.Backdrop.BorderTop) then
--- --         self.Backdrop:SetBorderColor(r, g, b, a or 1)
--- --     else
--- --         self.Backdrop:SetBackdropColor(r, g, b, a or 1)
--- --     end
--- -- end
-
--- -- -- change target nameplate border color.
--- -- function UnitFrames:HighlightPlate()
--- --     local HealthBackdrop = self.Health.Backdrop
--- --     local PowerBackdrop = self.Power.Backdrop
--- --     local colors = T.Colors.assets["Highlight"]
-
--- --     if (HealthBackdrop) then
--- --         if (UnitIsUnit("target", self.unit)) then
--- --             HealthBackdrop:SetBackdropBorderColor(unpack(colors["target"]))
--- --         else
--- --             HealthBackdrop:SetBackdropBorderColor(unpack(colors["none"]))
--- --         end
--- --     end
-
--- --     if (PowerBackdrop) then
--- --         if (UnitIsUnit("target", self.unit)) then
--- --             PowerBackdrop:SetBackdropBorderColor(unpack(colors["target"]))
--- --         else
--- --             PowerBackdrop:SetBackdropBorderColor(unpack(colors["none"]))
--- --         end
--- --     end
--- -- end
-
--- ----------------------------------------------------------------
--- -- NamePlates
--- ----------------------------------------------------------------
--- function UnitFrames:DisplayNameplatePowerAndCastBar(unit, cur, min, max)
--- 	if (not unit) then unit = self:GetParent().unit end
--- 	if (not unit) then return end
-
--- 	if not cur then
--- 		cur, max = UnitPower(unit), UnitPowerMax(unit)
--- 	end
-
--- 	local CurrentPower = cur
--- 	local MaxPower = max
--- 	local Nameplate = self:GetParent()
--- 	local PowerBar = Nameplate.Power
--- 	local CastBar = Nameplate.Castbar
--- 	local Health = Nameplate.Health
--- 	local IsPowerHidden = PowerBar.IsHidden
-
---     -- check if unit has a power bar
---     if (not CastBar:IsShown()) and (CurrentPower and CurrentPower == 0) and (MaxPower and MaxPower == 0) then
--- 		if (not IsPowerHidden) then
--- 			Health:ClearAllPoints()
---             Health:SetPoint("TOPLEFT", Nameplate, "TOPLEFT", 0, 0)
---             Health:SetPoint("TOPRIGHT", Nameplate, "TOPRIGHT", 0, 0)
---             Health:SetHeight(C["NamePlates"].Height)
-
--- 			PowerBar:Hide()
--- 			PowerBar.IsHidden = true
--- 		end
+-- 	if UnitIsUnit("target", self.unit) then
+--         print("HIGHTLIGH")
+-- 		-- if self.Backdrop then
+--         --     print("HIGHTLIGH", "UNIT", "SHOW")
+-- 		-- 	self.Backdrop:SetBorderColor(1, 1, 0, 1)
+-- 		-- else
+--             print("HIGHTLIGH", "UNIT", "HIDE")
+-- 			self.Backdrop:SetBorderColor(unpack(C.UnitFrames.HighlightColor))
+-- 		-- end
 -- 	else
--- 		if (IsPowerHidden) then
--- 			Health:ClearAllPoints()
---             Health:SetPoint("TOPLEFT", Nameplate, "TOPLEFT", 0, 0)
---             Health:SetPoint("TOPRIGHT", Nameplate, "TOPRIGHT", 0, 0)
---             Health:SetHeight(C["NamePlates"].Height - 4)
-
--- 			PowerBar:Show()
--- 			PowerBar.IsHidden = false
--- 		end
+-- 		-- if self.Backdrop then
+--         --     print("HIGHTLIGH", "SHOW")
+-- 		-- 	self.Backdrop:SetBorderColor(1, 1, 0, 1)
+-- 		-- else
+--             print("HIGHTLIGH", "HIDE")
+-- 			self.Backdrop:SetBorderColor(unpack(C.General.BorderColor))
+-- 		-- end
 -- 	end
 -- end
 
@@ -235,8 +176,6 @@ function UnitFrames:CreateUnits()
     -- second, we edit it
     if (not C.UnitFrames.Enable) then return end
 
-    -- local Anchor = UnitFrames.Anchor
-
     local Player = self.Units.Player
     local Target = self.Units.Target
     local TargetOfTarget = self.Units.TargetOfTarget
@@ -257,33 +196,33 @@ function UnitFrames:CreateUnits()
 
         Player:ClearAllPoints()
         Player:SetPoint("BOTTOM", T.PetHider, "BOTTOM", -xPos, yPos)
-        Player:SetSize(unpack(C.Units.Player))
+        Player:SetSize(C.UnitFrames.PlayerWidth, C.UnitFrames.PlayerHeight)
 
         Target:ClearAllPoints()
         Target:SetPoint("BOTTOM", T.PetHider, "BOTTOM", xPos, yPos)
-        Target:SetSize(unpack(C.Units.Target))
+        Target:SetSize(C.UnitFrames.TargetWidth, C.UnitFrames.TargetHeight)
 
         TargetOfTarget:ClearAllPoints()
         TargetOfTarget:SetPoint("BOTTOM", T.PetHider, "BOTTOM", 0, yPos)
-        TargetOfTarget:SetSize(unpack(C.Units.TargetOfTarget))
+        TargetOfTarget:SetSize(C.UnitFrames.TargetOfTargetWidth, C.UnitFrames.TargetOfTargetHeight)
     end
 
     Pet:ClearAllPoints()
-    Pet:SetPoint("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 4)
-    Pet:SetSize(unpack(C.Units.Pet))
+    Pet:SetPoint("BOTTOMRIGHT", RightChatBG, "TOPRIGHT", 0, 25)
+    Pet:SetSize(C.UnitFrames.PetWidth, C.UnitFrames.PetHeight)
 
     Focus:ClearAllPoints()
-    Focus:SetPoint("BOTTOMLEFT", RightChatBG, "TOPLEFT", 0, 4)
-    Focus:SetSize(unpack(C.Units.Focus))
+    Focus:SetPoint("BOTTOMLEFT", RightChatBG, "TOPLEFT", 0, 25)
+    Focus:SetSize(C.UnitFrames.FocusWidth, C.UnitFrames.FocusHeight)
 
     FocusTarget:ClearAllPoints()
-    FocusTarget:SetPoint("BOTTOM", Focus, "TOP", 0, 34)
-    FocusTarget:SetSize(unpack(C.Units.FocusTarget))
+    FocusTarget:SetPoint("BOTTOM", Focus, "TOP", 0, 26)
+    FocusTarget:SetSize(C.UnitFrames.FocusTargetWidth, C.UnitFrames.FocusTargetHeight)
 
     if (C.UnitFrames.Arena) then
         for i = 1, 5 do
             Arena[i]:ClearAllPoints()
-            Arena[i]:SetSize(unpack(C.Units.Arena))
+            Arena[i]:SetSize(C.UnitFrames.ArenaWidth, C.UnitFrames.ArenaHeight)
             if (i == 1) then
                 Arena[i]:SetPoint("TOPRIGHT", UIParent, "RIGHT", -525, 275)
             else
@@ -295,7 +234,7 @@ function UnitFrames:CreateUnits()
     if (C.UnitFrames.Boss) then
         for i = 1, 5 do
             Boss[i]:ClearAllPoints()
-            Boss[i]:SetSize(unpack(C.Units.Boss))
+            Boss[i]:SetSize(C.UnitFrames.BossWidth, C.UnitFrames.BossHeight)
             if (i == 1) then
                 Boss[i]:SetPoint("TOPRIGHT", UIParent, "RIGHT", -525, 275)
             else

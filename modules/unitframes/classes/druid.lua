@@ -15,23 +15,14 @@ function UnitFrames:Player()
 	basePlayer(self)
 
 	-- second, we edit it
+	local Health = self.Health
 	local DruidMana = self.DruidMana
-	
-    local Texture = T.GetTexture(C.Textures.UFPowerTexture)
-
-	-- DruidMana:ClearAllPoints()
-    -- DruidMana:SetFrameStrata(self.Health:GetFrameStrata())
-	-- DruidMana:SetHeight(self.Power:GetHeight())
-	-- DruidMana:SetPoint("LEFT")
-	-- DruidMana:SetPoint("RIGHT")
-	-- DruidMana:SetPoint("BOTTOM")
-	-- DruidMana:SetStatusBarTexture(Texture)
-	-- DruidMana:SetStatusBarColor(T.Colors.power["MANA"][1], T.Colors.power["MANA"][2], T.Colors.power["MANA"][3])
-
-	-- DruidMana.bg = DruidMana:CreateTexture(nil, "BACKGROUND")
-	-- DruidMana.bg:SetPoint("LEFT")
-	-- DruidMana.bg:SetPoint("RIGHT")
-	-- DruidMana.bg:SetPoint("BOTTOM")
-	-- DruidMana.bg:SetPoint("TOP", 0, 1)
-	-- DruidMana.bg:SetColorTexture(T.Colors.power["MANA"][1] * .2, T.Colors.power["MANA"][2] * .2, T.Colors.power["MANA"][3] * .2)
+	if (DruidMana) then
+		DruidMana:ClearAllPoints()
+		DruidMana:SetPoint("BOTTOMLEFT", Health, "BOTTOMLEFT", 0, 0)
+		DruidMana:SetPoint("BOTTOMRIGHT", Health, "BOTTOMRIGHT", 0, 0)
+		DruidMana:SetHeight(2)
+		DruidMana:CreateBackdrop()
+    	DruidMana.Backdrop:SetOutside()
+	end
 end

@@ -23,18 +23,6 @@ C["Lua"] = {
     ["HealerLayout"] = true                         -- enables healing raid layout.
 }
 
--- UnitsFrames Size
-C["Units"] = {
-    ["Player"]          = { 265, 30 },              -- set player unitframe size.
-    ["Target"]          = { 265, 30 },              -- set target unitframe size.
-    ["TargetOfTarget"]  = { 177, 30 },              -- set targetoftarget unitframe size.
-    ["Pet"]             = { 181, 25 },              -- set pet unitframe size.
-    ["Focus"]           = { 205, 25 },              -- set focus unitframe size.
-    ["FocusTarget"]     = { 205, 25 },              -- set focustarget unitframe size.
-    ["Arena"]           = { 205, 25 },              -- set arena unitframe size.
-    ["Boss"]            = { 205, 25 }               -- set boss unitframe size.
-}
-
 -- Action Bars
 C["ActionBars"].StanceBarBackground = false         -- enables stance bar background.
 
@@ -55,15 +43,30 @@ C["Raid"].ShowSolo = true                           -- display raid frame when p
 C["Raid"].TestAuraWatch = false                     -- force to show aurawatch debuff. (use for testing)
 C["Raid"].GroupRoles = true                         -- enables group role icon on raid frame.
 
--- -- Tooltips
+-- Tooltips
 C["Tooltips"].ShowSpellID = true                    -- enables spells, items, quest ids on tooltips.
 
-C["UnitFrames"].UnlinkPetCastBar = false            -- enable
-C["UnitFrames"].UnlinkBossCastBar = false           -- enable
-C["UnitFrames"].UnlinkArenaCastBar = false          -- enable
+-- UnitFrames
 C["UnitFrames"].ClassBarWidth = 225
 C["UnitFrames"].ClassBarHeight = 14
 C["UnitFrames"].ClassBarAnchor = { "CENTER", UIParent, "BOTTOM", 0, 289 }
+C["UnitFrames"].PowerHeight = 5
+C["UnitFrames"].PlayerWidth = 265
+C["UnitFrames"].PlayerHeight = 30
+C["UnitFrames"].TargetWidth = 265
+C["UnitFrames"].TargetHeight = 30
+C["UnitFrames"].TargetOfTargetWidth = 177
+C["UnitFrames"].TargetOfTargetHeight = 30
+C["UnitFrames"].PetWidth = 181
+C["UnitFrames"].PetHeight = 25
+C["UnitFrames"].FocusWidth = 205
+C["UnitFrames"].FocusHeight = 25
+C["UnitFrames"].FocusTargetWidth = 205
+C["UnitFrames"].FocusTargetHeight = 25
+C["UnitFrames"].ArenaWidth = 205
+C["UnitFrames"].ArenaHeight = 25
+C["UnitFrames"].BossWidth = 205
+C["UnitFrames"].BossHeight = 25
 
 ----------------------------------------------------------------
 -- Plugins Settings
@@ -391,7 +394,7 @@ C["UnitFrames"].HealCommAbsorbColor = { 0.31, 0.45, 0.63, 0.40 }    -- { 207/255
 C["UnitFrames"].RaidIconSize = 24
 C["UnitFrames"].Boss = true
 C["UnitFrames"].Arena = true
-C["UnitFrames"].HighlightSize = 10
+C["UnitFrames"].HighlightSize = 3
 C["UnitFrames"].HighlightColor = { 0, 1, 0 }
 C["UnitFrames"].RangeAlpha = 0.3
 C["UnitFrames"].Smoothing = true
