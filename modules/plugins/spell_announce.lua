@@ -58,7 +58,7 @@ local SpellList = {
         -- All Specs
         { spellID = 642   , type = "defensive", announce = true },                  -- Divine Shield
         { spellID = 1022  , type = "external", announce = true },                   -- Blessing of Protection
-        { spellID = 1044  , type = "external", announce = true },                   -- Blessing of Freedom
+        { spellID = 1044  , type = "external", announce = false },                   -- Blessing of Freedom
         { spellID = 6940  , type = "external", announce = true },                   -- Blessing of Sacrifice
         { spellID = 204018, type = "external", announce = true },                   -- Blessing of Spellwarding
 
