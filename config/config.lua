@@ -345,7 +345,7 @@ C["Textures"].NPCastTexture = "Tukui"
 -- UnitFrames
 C["UnitFrames"].Enable = true
 C["UnitFrames"].TotemBar = (T.MyClass == "SHAMAN") and true or false
-C["UnitFrames"].TotemBarStyle.Value = "On Screen"
+C["UnitFrames"].TotemBarStyle.Value = "On Player"
 C["UnitFrames"].ClassBar = true
 C["UnitFrames"].PlayerAuraBars = false
 C["UnitFrames"].ScrollingCombatText = false

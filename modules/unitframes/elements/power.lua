@@ -26,18 +26,11 @@ function UnitFrames:SetupPower()
         Power.Value:SetPoint("LEFT", self.Health, "LEFT", 5, 0)
         Power.Value:SetJustifyH("LEFT")
     end
-    -- self.Power.Value:SetPoint("LEFT", self.Health, "LEFT", 4, 0)
-    -- if (Power.Value) then
-    --     Power.Value:ClearAllPoints()
-    --     Power.Value:SetParent(Power)
-    --     Power.Value:SetPoint("LEFT", self.Health, "LEFT", 5, 0)
-    --     Power.Value:SetJustifyH("LEFT")
-    -- else
-    --     Power.Value = Power:CreateFontString(nil, "OVERLAY")
-    --     Power.Value:SetFontObject(T.GetFont(C.UnitFrames.Font))
-    --     Power.Value:SetPoint("LEFT", self.Health, "LEFT", 5, 0)
-    --     Power.Value:SetJustifyH("LEFT")
-    -- end
+
+    -- Power.Value = Power:CreateFontString(nil, "OVERLAY")
+    -- Power.Value:SetFontObject(T.GetFont(C.UnitFrames.Font))
+    -- Power.Value:SetPoint("LEFT", self.Health, "LEFT", 5, 0)
+    -- Power.Value:SetJustifyH("LEFT")
 
     Power.frequentUpdates = true
     Power.colorDisconnected = true
