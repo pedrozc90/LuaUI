@@ -23,6 +23,11 @@ end
 
 Talents.isDruidHealer = function()
     local balance, feral_combat, restoration = Talents.GetTalentTree()
+    return (restoration > balance and restoration > feral_combat)
+end
+
+Talents.isDruidTank = function()
+    local balance, feral_combat, restoration = Talents.GetTalentTree()
     return (feral_combat > balance and feral_combat > restoration)
 end
 
