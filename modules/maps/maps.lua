@@ -39,23 +39,33 @@ function Minimap:StyleMinimap()
         local GuildInstanceDifficulty = GuildInstanceDifficulty
         local HelpOpenTicketButton = HelpOpenTicketButton
 
+        local TukuiQueueStatusHolder = TukuiQueueStatusHolder
+
         if (QueueStatusMinimapButton) then
             QueueStatusMinimapButton:ClearAllPoints()
             QueueStatusMinimapButton:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 3, -3)
         end
 
-        if (QueueStatusButton) then
-            QueueStatusButton:ClearAllPoints()
-            QueueStatusButton:SetParent(UIParent)
-            QueueStatusButton:SetScale(0.85)
-            QueueStatusButton:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -20)
-
-            hooksecurefunc(QueueStatusButton, "UpdatePosition", function(self)
-                self:ClearAllPoints()
-                self:SetParent(UIParent)
-                self:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -20)
-            end)
+        if (TukuiQueueStatusHolder) then
+            TukuiQueueStatusHolder:ClearAllPoints()
+            TukuiQueueStatusHolder:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -20)
         end
+
+        if (QueueStatusButton) then
+            QueueStatusButton:SetScale(0.85)
+        end
+        -- if (QueueStatusButton) then
+        --     QueueStatusButton:ClearAllPoints()
+        --     QueueStatusButton:SetParent(UIParent)
+        --     QueueStatusButton:SetScale(0.85)
+        --     QueueStatusButton:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -20)
+
+        --     hooksecurefunc(QueueStatusButton, "SetPoint", function(self)
+        --         self:ClearAllPoints()
+        --         self:SetParent(UIParent)
+        --         self:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -20)
+        --     end)
+        -- end
 
         if (MiniMapInstanceDifficulty) then
             MiniMapInstanceDifficulty:ClearAllPoints()
