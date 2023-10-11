@@ -16,6 +16,7 @@ function UnitFrames:Player()
 
     -- second, we edit it
     local Health = self.Health
+    local Width, Height = C.UnitFrames.PlayerWidth, C.UnitFrames.PlayerHeight
 
     self.Panel:Kill()
     self.Shadow:Kill()
@@ -30,7 +31,7 @@ function UnitFrames:Player()
     UnitFrames.SetupHealth(self)
     UnitFrames.SetupPower(self)
     UnitFrames.SetupAdditionalPower(self)
-    UnitFrames.SetupPlayerAuras(self)
+    UnitFrames.SetupPlayerAuras(self, Width)
     UnitFrames.SetupCastBar(self)
     UnitFrames.SetupPortrait(self)
     UnitFrames.SetupComboPoints(self)

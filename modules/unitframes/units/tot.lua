@@ -13,6 +13,7 @@ function UnitFrames:TargetOfTarget()
 
     -- second, we edit it
     local Health = self.Health
+    local Width, Height = C.UnitFrames.TargetOfTargetWidth, C.UnitFrames.TargetOfTargetHeight
     
     self.Shadow:Kill()
     self.Panel:Kill()
@@ -26,6 +27,6 @@ function UnitFrames:TargetOfTarget()
     
     UnitFrames.SetupHealth(self)
     UnitFrames.SetupPower(self)
-    UnitFrames.SetupPlayerAuras(self)
+    UnitFrames.SetupPlayerAuras(self, Width)
     UnitFrames.SetupRaidTargetIndicator(self)
 end

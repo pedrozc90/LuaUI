@@ -1,12 +1,12 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
 
-function UnitFrames:SetupPlayerAuras()
+function UnitFrames:SetupPlayerAuras(Width)
     local AuraBars = self.AuraBars
     local Debuffs = self.Debuffs
     local Buffs = self.Buffs
 
-    local Width = C.UnitFrames.PlayerWidth
+    --local Width = C.UnitFrames.PlayerWidth
 
     if (AuraBars) then
 		AuraBars:ClearAllPoints()
@@ -21,19 +21,19 @@ function UnitFrames:SetupPlayerAuras()
 
     local AuraSize = 27
     local AuraSpacing = 3
-    local AuraPerRow = 9
-    local AuraWidth = (AuraPerRow * AuraSize) + ((AuraPerRow - 1) * AuraSpacing)
+    local AuraPerRow = math.ceil((Width + AuraSpacing) / (AuraSize + AuraSpacing))
+    -- local AuraWidth = (AuraPerRow * AuraSize) + ((AuraPerRow - 1) * AuraSpacing)
 
     if (Buffs) then
         Buffs:ClearAllPoints()
         Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -1, AuraSpacing)
         Buffs:SetHeight(AuraSize)
-        Buffs:SetWidth(AuraWidth)
+        Buffs:SetWidth(Width)
 
         Buffs.size = AuraSize
         Buffs.spacing = AuraSpacing
-        Buffs.num = 32
-        Buffs.numRow = ceil(Buffs.num / AuraPerRow)
+        Buffs.num = 2 * AuraPerRow
+        Buffs.numRow = AuraPerRow
         Buffs.initialAnchor = "TOPLEFT"
         Buffs.onlyShowPlayer = C.UnitFrames.OnlySelfBuffs
         Buffs.isCancellable = true
@@ -50,7 +50,7 @@ function UnitFrames:SetupPlayerAuras()
     if (Debuffs) then
         Debuffs:ClearAllPoints()
         Debuffs:SetHeight(AuraSize)
-        Debuffs:SetWidth(AuraWidth)
+        Debuffs:SetWidth(Width)
 
         if (self.Buffs) then
             Debuffs:SetPoint("BOTTOMLEFT", self.Buffs, "TOPLEFT", 0, 18)
@@ -60,8 +60,8 @@ function UnitFrames:SetupPlayerAuras()
 
         Debuffs.size = AuraSize
         Debuffs.spacing = AuraSpacing
-        Debuffs.num = 16
-        Debuffs.numRow = ceil(Debuffs.num / AuraPerRow)
+        Debuffs.num = AuraPerRow
+        Debuffs.numRow = AuraPerRow
         Debuffs.initialAnchor = "TOPRIGHT"
         Debuffs["growth-y"] = "UP"
         Debuffs["growth-x"] = "LEFT"
