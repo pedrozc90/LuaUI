@@ -3,6 +3,7 @@ local UnitFrames = T.UnitFrames
 local ActionBars = T.ActionBars
 local Chat = T.Chat
 local Class = select(2, UnitClass("player"))
+local Colors = T.Colors
 
 local match = string.match
 
@@ -90,36 +91,6 @@ function UnitFrames:UpdateGroupRole(role)
 end
 
 ----------------------------------------------------------------
--- Highlight
-----------------------------------------------------------------
--- function UnitFrames:Highlight()
--- 	-- local Highlight = self.Highlight or self.Shadow
-
--- 	-- if not Highlight then
--- 	-- 	return
--- 	-- end
-
--- 	if UnitIsUnit("target", self.unit) then
---         print("HIGHTLIGH")
--- 		-- if self.Backdrop then
---         --     print("HIGHTLIGH", "UNIT", "SHOW")
--- 		-- 	self.Backdrop:SetBorderColor(1, 1, 0, 1)
--- 		-- else
---             print("HIGHTLIGH", "UNIT", "HIDE")
--- 			self.Backdrop:SetBorderColor(unpack(C.UnitFrames.HighlightColor))
--- 		-- end
--- 	else
--- 		-- if self.Backdrop then
---         --     print("HIGHTLIGH", "SHOW")
--- 		-- 	self.Backdrop:SetBorderColor(1, 1, 0, 1)
--- 		-- else
---             print("HIGHTLIGH", "HIDE")
--- 			self.Backdrop:SetBorderColor(unpack(C.General.BorderColor))
--- 		-- end
--- 	end
--- end
-
-----------------------------------------------------------------
 -- UnitFrames Anchor
 ----------------------------------------------------------------
 local baseCreateUnits = UnitFrames.CreateUnits
@@ -138,14 +109,11 @@ function UnitFrames:RaidDefaultPosition()
         
         Raid:ClearAllPoints()
         Raid:SetParent(T.PetHider)
-        -- Raid:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 1, 3)
         Raid:SetPoint("BOTTOMLEFT", T.PetHider, "BOTTOMLEFT", xOffset, yOffset)
-        -- Raid:SetPoint("BOTTOM", T.PetHider, "BOTTOM", 0, 300)
 
         if (RaidPet) then
             RaidPet:ClearAllPoints()
             RaidPet:SetParent(T.PetHider)
-            -- RaidPet:SetPoint("TOPLEFT", Raid, "TOPRIGHT", C.Raid.Padding, 0)
             RaidPet:SetPoint("TOPLEFT", Raid, "TOPRIGHT", C.Raid.Padding, 0)
         end
     end
@@ -156,14 +124,11 @@ function UnitFrames:RaidDefaultPosition()
 
         Raid40:ClearAllPoints()
         Raid40:SetParent(T.PetHider)
-        -- Raid40:SetPoint("BOTTOMLEFT", LeftChatBG, "TOPLEFT", 1, 3)
         Raid40:SetPoint("BOTTOMLEFT", T.PetHider, "BOTTOMLEFT", xOffset, yOffset)
-        -- Raid40:SetPoint("BOTTOM", T.PetHider, "BOTTOM", 0, 300)
 
         if (Raid40Pet) then
             Raid40Pet:ClearAllPoints()
             Raid40Pet:SetParent(T.PetHider)
-            -- Raid40Pet:SetPoint("TOPLEFT", Raid40, "TOPRIGHT", C.Raid.Padding40, 0)
             Raid40Pet:SetPoint("TOPLEFT", Raid40, "TOPRIGHT", C.Raid.Padding40, 0)
         end
     end
