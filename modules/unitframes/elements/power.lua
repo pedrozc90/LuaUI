@@ -18,19 +18,19 @@ function UnitFrames:SetupPower()
     Power.Background:SetTexture(Texture)
     Power.Background:SetColorTexture(unpack(C.General.BackgroundColor))
     
-    if (Power.Value) then
-        Power.Value = nil
+    -- if (Power.Value) then
+    --     Power.Value = nil
         
-        Power.Value = Power:CreateFontString(nil, "OVERLAY")
-        Power.Value:SetFontObject(T.GetFont(C.UnitFrames.Font))
-        Power.Value:SetPoint("LEFT", self.Health, "LEFT", 5, 0)
-        Power.Value:SetJustifyH("LEFT")
-    end
+    --     Power.Value = Power:CreateFontString(nil, "OVERLAY")
+    --     Power.Value:SetFontObject(T.GetFont(C.UnitFrames.Font))
+    --     Power.Value:SetPoint("LEFT", self.Health, "LEFT", 5, 0)
+    --     Power.Value:SetJustifyH("LEFT")
+    -- end
 
-    -- Power.Value = Power:CreateFontString(nil, "OVERLAY")
-    -- Power.Value:SetFontObject(T.GetFont(C.UnitFrames.Font))
-    -- Power.Value:SetPoint("LEFT", self.Health, "LEFT", 5, 0)
-    -- Power.Value:SetJustifyH("LEFT")
+    Power.Value = Power:CreateFontString(nil, "OVERLAY")
+    Power.Value:SetFontObject(T.GetFont(C.UnitFrames.Font))
+    Power.Value:SetPoint("LEFT", self.Health, "LEFT", 5, 0)
+    Power.Value:SetJustifyH("LEFT")
 
     Power.frequentUpdates = true
     Power.colorDisconnected = true
