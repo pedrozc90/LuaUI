@@ -1,4 +1,4 @@
-## Interface: 11404
+## Interface: 11500
 ## Author: Luaerror
 ## Version: 10.2
 ## Title: |cffb3ff19LuaUI - Classic|r
