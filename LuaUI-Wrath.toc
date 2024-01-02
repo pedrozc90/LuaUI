@@ -105,9 +105,9 @@ modules\unitframes\groups\raid.lua
 modules\plugins\dispels\init.xml
 modules\plugins\interrupts\init.xml
 modules\plugins\screenshots\init.xml
+modules\plugins\tooltips\init.xml
 modules\plugins\pvp_alert.lua
 modules\plugins\spell_announce.lua
 modules\plugins\spell_tracker.lua
 
-modules\tooltip\spell_ids.lua
 modules\tooltip\tooltips.lua

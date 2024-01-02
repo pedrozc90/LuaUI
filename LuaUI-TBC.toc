@@ -1,6 +1,6 @@
 ## Interface: 20504
 ## Author: Luaerror
-## Version: 10.2
+## Version: 3.0.0
 ## Title: |cffb3ff19LuaUI - TBC|r
 ## Notes: External Tukui Edit
 ## Website: https://github.com/pedrozc90/LuaUI
@@ -104,9 +104,9 @@ modules\unitframes\groups\raid.lua
 modules\plugins\dispels\init.xml
 modules\plugins\interrupts\init.xml
 modules\plugins\screenshots\init.xml
+modules\plugins\tooltips\init.xml
 modules\plugins\pvp_alert.lua
 modules\plugins\spell_announce.lua
 modules\plugins\spell_tracker.lua
 
-modules\tooltip\spell_ids.lua
 modules\tooltip\tooltips.lua
