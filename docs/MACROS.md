@@ -1,5 +1,25 @@
 # Macros
 
+## Macros
+
+```lua
+#showtooltip
+/cast [known: 120644] Halo; [known: 122121] Divine Star; Purify
+```
+
+| Spell Name            | Spell ID |
+|:---------------------:|:--------:|
+| Void Tendrils         | 108920   |
+| Vampiric Embrace      | 15286    |
+| Leap of Faith         | 73325    |
+| Angelic Feather       | 121536   |
+| Silence               | 15487    |
+| Mind Sear             | 48045    |
+| Mind Spike            | 73510    |
+| Shadow Crash          | 205385   |
+| Void Torrent          | 263165   |
+| Mass Dispel           | 32375    |
+
 ## Action Bar Swap
 
 ```lua

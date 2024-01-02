@@ -1,6 +1,6 @@
-## Interface: 30402
+## Interface: 30403
 ## Author: Luaerror
-## Version: 10.2
+## Version: 3.0.0
 ## Title: |cffb3ff19LuaUI - Wrath|r
 ## Notes: External Tukui Edit
 ## Website: https://github.com/pedrozc90/LuaUI
