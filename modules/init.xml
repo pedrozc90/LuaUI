@@ -89,7 +89,6 @@
     <Include file="modules\plugins\init.xml"/>
 
     <!-- Tooltip -->
-    <Script file="modules\tooltip\spell_ids.lua"/>
     <Script file="modules\tooltip\tooltips.lua"/>
 
 </Ui>

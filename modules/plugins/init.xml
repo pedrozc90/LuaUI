@@ -2,6 +2,7 @@
     <Include file="dispels/init.xml"/>
     <Include file="interrupts/init.xml"/>
     <Include file="screenshots/init.xml"/>
+    <Include file="tooltips/init.xml"/>
     <Script file="pvp_alert.lua"/>
     <Script file="spell_announce.lua"/>
     <Script file="spell_tracker.lua"/>

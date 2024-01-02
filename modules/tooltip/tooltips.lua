@@ -7,7 +7,6 @@ local Tooltips = T.Tooltips
 local baseCreateAnchor = Tooltips.CreateAnchor
 local baseSetTooltipDefaultAnchor = Tooltips.SetTooltipDefaultAnchor
 local baseSkinHealthBar = Tooltips.SkinHealthBar
-local baseEnable = Tooltips.Enable
 
 function Tooltips:CreateAnchor()
 	-- first, we call the base function
@@ -61,14 +60,5 @@ function Tooltips:SkinHealthBar()
 	if (C.Tooltips.UnitHealthText) then
 		HealthBar.Text:SetFontObject(T.GetFont(C.Tooltips.HealthFont))
 		HealthBar.Text:SetPoint("CENTER", HealthBar, "CENTER", 0, 6)
-	end
-end
-
-function Tooltips:Enable()
-	-- first, we call the base function
-	baseEnable(self)
-
-	if (C.Tooltips.ShowSpellID) then
-		self:AddSpellID()
 	end
 end

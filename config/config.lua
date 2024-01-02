@@ -43,9 +43,6 @@ C["Raid"].ShowSolo = true                           -- display raid frame when p
 C["Raid"].TestAuraWatch = false                     -- force to show aurawatch debuff. (use for testing)
 C["Raid"].GroupRoles = true                         -- enables group role icon on raid frame.
 
--- Tooltips
-C["Tooltips"].ShowSpellID = true                    -- enables spells, items, quest ids on tooltips.
-
 -- UnitFrames
 C["UnitFrames"].ClassBarWidth = 225
 C["UnitFrames"].ClassBarHeight = 14

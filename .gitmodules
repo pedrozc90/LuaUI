@@ -10,3 +10,7 @@
 	path = modules/plugins/screenshots
 	url = git@github.com:pedrozc90/screenshots.git
 	branch = master
+[submodule "modules/plugins/tooltips"]
+	path = modules/plugins/tooltips
+	url = git@github.com:pedrozc90/tooltips.git
+	branch = master
