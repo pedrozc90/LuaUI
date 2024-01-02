@@ -2,7 +2,7 @@
 
 ## Description:
 
-LuaUI is an external edit for [**Tukui**](https://www.tukui.org/), a minimalistic user interface for [**World of Warcraft - Shadowlands (Patch 9.0.2)**](https://worldofwarcraft.com/en-us/)
+LuaUI is an external edit for [**Tukui**](https://www.tukui.org/), a minimalistic user interface for [**World of Warcraft**](https://worldofwarcraft.com/en-us/)
 
 <p align="center">
     <a href="https://i.imgur.com/52edNKs.jpg">
@@ -10,15 +10,14 @@ LuaUI is an external edit for [**Tukui**](https://www.tukui.org/), a minimalisti
     </a>
 </p>
 
-## Classic
+## Versions
 
-Interface for [**World of Warcraft Classic**](https://worldofwarcraft.com/en-us/wowclassic) can be found at branch [classic](https://github.com/PedroZC90/LuaUI/tree/classic)
-
-**obs.:** Requires [**Tukui Classic**](https://www.tukui.org/classic-addons.php?id=1) or on [GitLab](https://git.tukui.org/Tukz/Tukui/-/tree/Classic)
+- World of Warcraft Dragonflight - version `10.2.0`
+- World of Warcraft Classic - version `1.15.0`
 
 ## Features:
 
-+ Supports **Tukui 20.16+**
++ Supports [**Tukui 20.41**](https://github.com/tukui-org/Tukui) and higher
 + Embedded Plugins:
     - **ScreenShot Taker**: *takes screenshots of events such as Achievements Earned, Completed Raid, Encounters and Level Up*
     - **Interrupt Announce**
@@ -26,11 +25,12 @@ Interface for [**World of Warcraft Classic**](https://worldofwarcraft.com/en-us/
     - **Spell Announce**
     - **PvP Alert**
     - **Raid Cooldowns**
+    - **Tooltips Extra Data** (SpellIDs, ItemIDs, etc.)
 
 ## Install:
 
 1. Download the latest version of [**Tukui**](https://www.tukui.org/)
-2. Download the latest version of [**LuaUI**](https://github.com/PedroZC90/LuaUI)
+2. Download the latest version of [**LuaUI**](https://github.com/pedroZC90/LuaUI)
 3. Backup your **Interface** and **WTF** folders.
 4. Delete **Cache** and **WTF** folders for a clean install.
 5. Copy/Paste **Tukui** and **LuaUI** folders into WoW interface folder (*../World of Warcraft/_retail_/Interface/AddOns*)
@@ -38,4 +38,4 @@ Interface for [**World of Warcraft Classic**](https://worldofwarcraft.com/en-us/
 
 ## License:
 
-Please see [LICENSE](https://github.com/PedroZC90/LuaUI/tree/master/LICENSE) file.
+Please see [LICENSE](./LICENSE) file.
