@@ -1,5 +1,10 @@
-FILENAME := actions-$(REF_NAME).zip
-EXCLUDES := '.git/*' '.github/*' '.gitignore' '.gitattributes' '.gitmodules' Makefile 'docs/*'
+FILENAME := temp.zip
+
+EXCLUDES := '.git/*' '.github/*' '.gitignore' '.gitattributes' '.gitmodules' 'docs/*' Makefile
+EXCLUDES += $(addprefix modules/plugins/dispels/, '.git' '.github/*' '.gitignore' '.gitattributes' Makefile)
+EXCLUDES += $(addprefix modules/plugins/interrupts/, '.git' '.github/*' '.gitignore' '.gitattributes' Makefile)
+EXCLUDES += $(addprefix modules/plugins/screenshots/, '.git' '.github/*' '.gitignore' '.gitattributes' Makefile)
+EXCLUDES += $(addprefix modules/plugins/tooltips/, '.git' '.github/*' '.gitignore' '.gitattributes' Makefile)
 
 .PHONY: changelog
 changelog:
@@ -7,7 +12,7 @@ changelog:
 
 .PHONY: zip
 zip:
-	@echo "Creating $(TAG) zip file..."
+	@echo "Creating zip file..."
 	@zip -r $(FILENAME) * -x $(addprefix -x ,$(EXCLUDES))
 	@echo "$(FILENAME) created successfully."
 
