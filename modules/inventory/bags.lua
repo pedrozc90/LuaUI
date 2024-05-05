@@ -46,7 +46,9 @@ function Bags:CreateContainer(storagetype, ...)
     local ButtonSpacing = C.Bags.Spacing
     local ItemsPerRow = C.Bags.ItemsPerRow
 
-    Container.Backdrop:SetBackdropColor(BackdropR, BackdropG, BackdropB, BackdropA)
+    if (Container.Backdrop) then
+        Container.Backdrop:SetBackdropColor(BackdropR, BackdropG, BackdropB, BackdropA)
+    end
 
     if (storagetype == "Bag") then
         local BagsContainer = Container.BagsContainer
@@ -56,11 +58,11 @@ function Bags:CreateContainer(storagetype, ...)
         local ToggleBags = Container.ToggleBags
         local Keys = Container.Keys
 
-        Container:ClearAllPoints()
-        Container:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -10, 35)
+        -- Container:ClearAllPoints()
+        -- Container:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -10, 35)
 
-        BagsContainer:ClearAllPoints()
-        BagsContainer:SetPoint("TOPRIGHT", Container, "TOPLEFT", -5, 0)
+        -- BagsContainer:ClearAllPoints()
+        -- BagsContainer:SetPoint("TOPRIGHT", Container, "TOPLEFT", -5, 0)
 
         for _, Button in pairs(BlizzardBags) do
             if (Button) then
