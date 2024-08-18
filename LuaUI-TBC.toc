@@ -1,6 +1,6 @@
 ## Interface: 20504
 ## Author: Luaerror
-## Version: 3.0.0
+## Version: 3.1.0
 ## Title: |cffb3ff19LuaUI - TBC|r
 ## Notes: External Tukui Edit
 ## Website: https://github.com/pedrozc90/LuaUI
