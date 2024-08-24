@@ -1,6 +1,8 @@
 local T, C, L = Tukui:unpack()
 local UnitFrames = T.UnitFrames
 
+local HOLY_POWERS = _G.HOLY_POWERS or 5
+
 local class = select(2, UnitClass("player"))
 
 ----------------------------------------------------------------
@@ -31,10 +33,11 @@ function UnitFrames:Player()
 	HolyPower:SetWidth(Width)
 	HolyPower:SetHeight(Height)
 
+	local MAX = UnitPowerMax('player', Enum.PowerType.HolyPower)
 	local Spacing = 1
 	local Size, Delta = T.EqualSizes(Width, HOLY_POWERS, Spacing)
 
-	for i = 1, HOLY_POWERS do
+	for i = 1, MAX do
 		HolyPower[i]:ClearAllPoints()
 		HolyPower[i]:SetHeight(Height)
 		HolyPower[i]:SetStatusBarColor(unpack(T.Colors.power["HOLY_POWER"]))

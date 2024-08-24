@@ -244,7 +244,7 @@ C["Misc"].TalkingHeadEnable = false
 C["Misc"].UIErrorSize = 16
 C["Misc"].UIErrorFont = "Tukui Outline"
 C["Misc"].MicroToggle.Value = "ALT-M"
-C["Misc"].MicroStyle.Value = "Game Menu"
+C["Misc"].MicroStyle.Value = "None"
 C["Misc"].ObjectiveTracker = true
 
 -- Maps
