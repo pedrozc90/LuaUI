@@ -1,16 +1,15 @@
-## Interface: 100207
+## Interface: 100207, 110002
 ## Author: Luaerror
-## Version: 3.1.0
-## Title: |cffb3ff19LuaUI|r
-## Notes: External Tukui Edit
-## Website: https://github.com/pedrozc90/LuaUI
+## Version: 3.2.0
+## Title: |cffff8000LuaUI|r
+## Notes: Tukui Mod
 ## RequiredDeps: Tukui
 ## SavedVariables: LuaUIData
 ## SavedVariablesPerCharacter: LuaUIDataPerChar
+## IconTexture: Interface\ICONS\Talentspec_Druid_Balance
+
 ## X-Website: https://github.com/pedrozc90/LuaUI
-## X-Maintainer: pedrozc90
-## X-LuaUI-ProjectID: 1
-## X-LuaUI-ProjectFolders: LuaUI
+## X-Maintainer: Luaerror
 
 core/init.lua
 config/config.lua
