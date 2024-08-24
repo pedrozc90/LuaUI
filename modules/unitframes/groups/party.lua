@@ -111,7 +111,7 @@ function UnitFrames:Party()
     -- Auras
     if C.Party.Buffs then
         local AuraSize = FrameHeight + 2
-        local AuraSpacing = 1
+        local AuraSpacing = 3
         local AuraPerRow = 7
         local AuraWidth = (AuraPerRow * AuraSize) + ((AuraPerRow - 1) * AuraSpacing)
 

@@ -95,45 +95,6 @@ end
 ----------------------------------------------------------------
 local baseCreateUnits = UnitFrames.CreateUnits
 
-function UnitFrames:RaidDefaultPosition()
-    local LeftChatBG = Chat.Panels.LeftChat
-
-    local Raid = self.Headers.Raid
-    local RaidPet = self.Headers.RaidPet
-    local Raid40 = self.Headers.Raid40
-    local Raid40Pet = self.Headers.Raid40Pet
-
-    if (Raid) then
-        local xOffset = C.Lua.ScreenMargin or 5
-        local yOffset = C.Chat.LeftHeight + xOffset + 3
-        
-        Raid:ClearAllPoints()
-        Raid:SetParent(T.PetHider)
-        Raid:SetPoint("BOTTOMLEFT", T.PetHider, "BOTTOMLEFT", xOffset, yOffset)
-
-        if (RaidPet) then
-            RaidPet:ClearAllPoints()
-            RaidPet:SetParent(T.PetHider)
-            RaidPet:SetPoint("TOPLEFT", Raid, "TOPRIGHT", C.Raid.Padding, 0)
-        end
-    end
-
-    if (Raid40) then
-        local xOffset = C.Lua.ScreenMargin or 5
-        local yOffset = C.Chat.LeftHeight + xOffset + 3
-
-        Raid40:ClearAllPoints()
-        Raid40:SetParent(T.PetHider)
-        Raid40:SetPoint("BOTTOMLEFT", T.PetHider, "BOTTOMLEFT", xOffset, yOffset)
-
-        if (Raid40Pet) then
-            Raid40Pet:ClearAllPoints()
-            Raid40Pet:SetParent(T.PetHider)
-            Raid40Pet:SetPoint("TOPLEFT", Raid40, "TOPRIGHT", C.Raid.Padding40, 0)
-        end
-    end
-end
-
 function UnitFrames:CreateUnits()
     -- first, we call the base function
     baseCreateUnits(self)
@@ -150,11 +111,10 @@ function UnitFrames:CreateUnits()
     local Arena = self.Units.Arena
     local Boss = self.Units.Boss
 
-    local ActionBar1 = _G["TukuiActionBar1"]            -- ActionBars.Bars.Bar1
-    local ActionBar2Left = _G["TukuiActionBar2Left"]    -- ActionBars.Bars.Bar2Left
-    local ActionBar2Right = _G["TukuiActionBar2Right"]  -- ActionBars.Bars.Bar2Right
     local RightChatBG = Chat.Panels.RightChat
     local LeftChatBG = Chat.Panels.LeftChat
+
+    local RaidHolder = self:CreateRaidHolder()
 
     do
         local xPos, yPos = 312, 75
@@ -208,22 +168,28 @@ function UnitFrames:CreateUnits()
         end
     end
 
-    if (C.Party.Enable) then
-        local Party = self.Headers.Party
-        local Pet = self.Headers.RaidPet
-
-        Party:ClearAllPoints()
+    local Party = self.Headers.Party
+    
+    if Party then
         Party:SetParent(T.PetHider)
+        Party:ClearAllPoints()
         Party:SetPoint("LEFT", T.PetHider, "LEFT", 7, 150)
-
-        if (C.Party.ShowPets) then
-            Pet:ClearAllPoints()
-            Pet:SetParent(T.PetHider)
-            Pet:SetPoint("TOPLEFT", T.PetHider, "TOPLEFT", 7, -28)
-        end
     end
 
-    if (C.Raid.Enable) then
-        self:RaidDefaultPosition()
+    local Raid = self.Headers.Raid
+    local RaidPet = self.Headers.RaidPet
+    local Raid40 = self.Headers.Raid40
+    local Raid40Pet = self.Headers.Raid40Pet
+    
+    if (Raid) then
+        Raid:SetParent(RaidHolder)
+        Raid:ClearAllPoints()
+        Raid:SetPoint("BOTTOMLEFT", RaidHolder, "BOTTOMLEFT", 0, 0)
+    end
+
+    if (Raid40) then
+        Raid40:SetParent(RaidHolder)
+        Raid40:ClearAllPoints()
+        Raid40:SetPoint("BOTTOMLEFT", RaidHolder, "BOTTOMLEFT", 0, 0)
     end
 end
