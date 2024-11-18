@@ -15,7 +15,7 @@ Talents.GetTalentTree = function()
     local result = {}
     local NUM_TALENT_TABS = GetNumTalentTabs()
     for tabIndex = 1, NUM_TALENT_TABS do
-        local name, _, points, _ = GetTalentTabInfo(tabIndex)
+        local id, name, _, points, _ = GetTalentTabInfo(tabIndex)
         result[tabIndex] = points
     end
     return unpack(result)
